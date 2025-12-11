@@ -65,8 +65,8 @@ public class GraphFragment extends Fragment {
         binding.webView.addJavascriptInterface(new WebAppInterface(requireContext()), "Android");
 
         // 수정 후 코드
-        binding.webView.loadUrl("http://113.198.85.6/graph/" + DatabaseUtils.getPersistentDeviceDatabaseName(getContext()));
-        Log.d("WEBVIEW_URL", "http://113.198.85.6/graph/" + DatabaseUtils.getPersistentDeviceDatabaseName(getContext()));
+        binding.webView.loadUrl("http://10.0.2.2:8081/graph/" + DatabaseUtils.getPersistentDeviceDatabaseName(getContext()));
+        Log.d("WEBVIEW_URL", "http://10.0.2.2:8081/graph/" + DatabaseUtils.getPersistentDeviceDatabaseName(getContext()));
 
         return root;
     }

@@ -44,13 +44,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class WebRequestManager {
-    private static final String Webserver_BASE_URL = "http://113.198.85.6"; // web 서버의 기본 url
+    private static final String WEB_SERVER_BASE_URL = "http://10.0.2.2:8081";
     private static WebRequestManager webImageUploader;
     private ApiService webService;
 
     private WebRequestManager(){
-        //this.aiService = AIHttpService.getInstance(AIserver_BASE_URL);
-        this.webService = HttpHelper.getInstance(Webserver_BASE_URL).getRetrofit().create(ApiService.class);
+        this.webService = HttpHelper.getInstance(WEB_SERVER_BASE_URL).getRetrofit().create(ApiService.class);
     }
 
     public ApiService getWebService(){

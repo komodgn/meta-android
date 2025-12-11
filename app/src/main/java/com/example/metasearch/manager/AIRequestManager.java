@@ -33,7 +33,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AIRequestManager {
-    private static final String AIserver_BASE_URL = "http://113.198.85.5"; // ai 서버의 기본 url
+    private static final String AI_SERVER_BASE_URL = "http://10.0.2.2:8080";
     private static AIRequestManager aiImageUploader;
     private ImageAnalyzeListManager imageAnalyzeListManager;
     private AnalyzedImageListDatabaseHelper analyzedImageListDatabaseHelper;
@@ -44,7 +44,7 @@ public class AIRequestManager {
 
     private AIRequestManager(Context context){
         //this.aiService = AIHttpService.getInstance(AIserver_BASE_URL);
-        this.aiService = HttpHelper.getInstance(AIserver_BASE_URL).getRetrofit().create(ApiService.class);
+        this.aiService = HttpHelper.getInstance(AI_SERVER_BASE_URL).getRetrofit().create(ApiService.class);
         this.analyzedImageListDatabaseHelper = AnalyzedImageListDatabaseHelper.getInstance(context);
 
         this.imageAnalyzeListManager = ImageAnalyzeListManager.getInstance(context);

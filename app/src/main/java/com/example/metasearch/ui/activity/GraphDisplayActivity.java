@@ -75,12 +75,12 @@ public class GraphDisplayActivity extends AppCompatActivity {
         binding.webView2.getSettings().setLoadWithOverviewMode(true);  // WebView 화면크기에 맞추도록 설정 - setUseWideViewPort 와 같이 써야함
         binding.webView2.getSettings().setUseWideViewPort(true);  // wide viewport 설정 - setLoadWithOverviewMode 와 같이 써야함
 
-        Log.d("IMAGENAME", "http://113.198.85.6/entityTripleGraph/" +
+        Log.d("IMAGENAME", "http://10.0.2.2:8081/entityTripleGraph/" +
                 DatabaseUtils.getPersistentDeviceDatabaseName(this) + "/" + imageName);
         // JavascriptInterface 추가
         binding.webView2.addJavascriptInterface(new WebAppInterface(this), "Android");
 
-        binding.webView2.loadUrl("http://113.198.85.6/entityTripleGraph/" +
+        binding.webView2.loadUrl("http://10.0.2.2:8081/entityTripleGraph/" +
                 DatabaseUtils.getPersistentDeviceDatabaseName(this) + "/" + imageName);
 
     }
