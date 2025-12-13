@@ -1,36 +1,15 @@
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.metasearch.android.application)
+    alias(libs.plugins.metasearch.android.application.compose)
+    alias(libs.plugins.metasearch.android.hilt)
+    // -------------리팩토링 중
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
     namespace = "com.example.metasearch"
-    compileSdk = 34
 
-    defaultConfig {
-        applicationId = "com.example.metasearch"
-//        minSdk = 33
-        minSdk = 30
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
+    // -------------리팩토링 중
     buildFeatures {
         viewBinding = true
         dataBinding = true
@@ -38,6 +17,12 @@ android {
     }
 }
 
+ksp {
+    arg("circuit.codegen.mode", "hilt")
+    arg("enableDataBinding", "true")
+}
+
+// -------------리팩토링 중
 dependencies {
 
     // Retrofit dependency
@@ -50,17 +35,17 @@ dependencies {
 
     implementation("androidx.work:work-runtime:2.9.0")
 
-    //neo4j dependency
+    // neo4j dependency
     implementation("org.neo4j.driver:neo4j-java-driver:4.4.0")
-    //fragment dependency
+    // fragment dependency
     implementation("androidx.fragment:fragment-ktx:1.6.2")
-    //CircleImageView dependency
+    // CircleImageView dependency
     implementation("de.hdodenhof:circleimageview:3.1.0")
-    //PhotoView dependency
+    // PhotoView dependency
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
-    //SplashScreen dependency
+    // SplashScreen dependency
     implementation("androidx.core:core-splashscreen:1.0.1")
-    //SpinKit dependency
+    // SpinKit dependency
     implementation("com.github.ybq:Android-SpinKit:1.4.0")
     // Glide dependency
     implementation("com.github.bumptech.glide:glide:4.16.0")
@@ -83,5 +68,4 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("androidx.work:work-runtime:2.9.0")
-
 }
