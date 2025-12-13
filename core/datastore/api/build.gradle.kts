@@ -5,6 +5,6 @@ android {
     namespace = "com.example.metasearch.core.datastore.api"
 }
 
-dependencies{
+dependencies {
     implementation(projects.core.model)
 }

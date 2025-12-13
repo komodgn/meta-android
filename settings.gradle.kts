@@ -29,5 +29,3 @@ include(":core:datastore:api")
 include(":core:datastore:impl")
 include(":core:network")
 include(":core:model")
-
-include(":feature:main")

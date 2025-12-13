@@ -6,6 +6,6 @@ android {
     namespace = "com.example.metasearch.core.data.api"
 }
 
-dependencies{
+dependencies {
     implementation(projects.core.model)
 }
