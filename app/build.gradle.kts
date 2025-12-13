@@ -68,4 +68,11 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("androidx.work:work-runtime:2.9.0")
+
+    implementation(projects.core.data.api)
+    implementation(projects.core.data.impl)
+    implementation(projects.core.datastore.api)
+    implementation(projects.core.datastore.impl)
+    implementation(projects.core.model)
+    implementation(projects.core.network)
 }

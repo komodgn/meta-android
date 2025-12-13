@@ -22,3 +22,12 @@ dependencyResolutionManagement {
 }
 
 include(":app")
+
+include(":core:data:api")
+include(":core:data:impl")
+include(":core:datastore:api")
+include(":core:datastore:impl")
+include(":core:network")
+include(":core:model")
+
+include(":feature:main")
