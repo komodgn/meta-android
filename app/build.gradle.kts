@@ -75,4 +75,13 @@ dependencies {
     implementation(projects.core.datastore.impl)
     implementation(projects.core.model)
     implementation(projects.core.network)
+
+    implementation(projects.feature.screens)
+    implementation(projects.feature.home)
+    implementation(projects.feature.detail)
+    implementation(projects.feature.search)
+    implementation(projects.feature.main)
+    implementation(projects.feature.person)
+    implementation(projects.feature.graph)
+    implementation(projects.feature.webview)
 }
