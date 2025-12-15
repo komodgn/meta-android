@@ -75,6 +75,7 @@ dependencies {
     implementation(projects.core.datastore.api)
     implementation(projects.core.datastore.impl)
     implementation(projects.core.room.api)
+    implementation(projects.core.room.impl)
     implementation(projects.core.model)
     implementation(projects.core.network)
     implementation(projects.core.ui)
