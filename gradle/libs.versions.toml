@@ -38,6 +38,8 @@ coreKtx = "1.17.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 
+truth = "1.1.5"
+
 junitJupiterApi = "6.0.1"
 mockitoCore = "5.21.0"
 mockitoKotlin = "6.1.0"
@@ -95,6 +97,8 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
+
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junitJupiterApi" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiterApi" }
