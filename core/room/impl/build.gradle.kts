@@ -7,6 +7,10 @@ plugins {
 
 android {
     namespace = "com.example.metasearch.core.room.impl"
+
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 }
 
 ksp {
@@ -20,4 +24,9 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+
+    androidTestImplementation(libs.truth)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 }
