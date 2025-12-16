@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.example.metasearch.feature.search"
 }
+
+ksp {
+    arg("circuit.codegen.mode", "hilt")
+}
