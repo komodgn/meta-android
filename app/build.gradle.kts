@@ -82,6 +82,7 @@ dependencies {
     implementation(projects.core.designsystem)
 
     implementation(projects.feature.screens)
+    implementation(projects.feature.splash)
     implementation(projects.feature.home)
     implementation(projects.feature.detail)
     implementation(projects.feature.search)
@@ -89,4 +90,9 @@ dependencies {
     implementation(projects.feature.person)
     implementation(projects.feature.graph)
     implementation(projects.feature.webview)
+
+    implementation(libs.bundles.circuit)
+
+    api(libs.circuit.codegen.annotation)
+    ksp(libs.circuit.codegen.ksp)
 }

@@ -17,11 +17,11 @@ internal class AndroidFeatureConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-//                implementationProject(":core:common")
-//                implementationProject(":core:designsystem")
-//                implementationProject(":core:ui")
+                implementationProject(":core:common")
+                implementationProject(":core:designsystem")
+                implementationProject(":core:ui")
                 implementationProject(":core:model")
-//                implementationProject(":feature:screens")
+                implementationProject(":feature:screens")
 
                 implementation(libs.bundles.circuit)
                 api(libs.circuit.codegen.annotation)
