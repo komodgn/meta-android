@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="person_label">인물</string>
+    <string name="search_label">검색</string>
+    <string name="home_label">홈</string>
+    <string name="graph_label">그래프</string>
+</resources>
