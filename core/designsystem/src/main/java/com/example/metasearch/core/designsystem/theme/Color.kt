@@ -1,5 +1,6 @@
 package com.example.metasearch.core.designsystem.theme
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
 val Black = Color(0xFF000000)
@@ -16,3 +17,14 @@ val Neutral700 = Color(0xFF404040)
 val Neutral800 = Color(0xFF262626)
 val Neutral900 = Color(0xFF171717)
 val Neutral950 = Color(0xFF0A0A0A)
+
+@Immutable
+data class MetaSearchColorScheme(
+    val basePrimary: Color = White,
+    val bgPrimary: Color = Neutral900,
+    val bgPrimaryPressed: Color = Neutral700,
+    val bgDisabled: Color = Neutral200,
+    val contentPrimary: Color = Neutral800,
+    val borderPrimary: Color = Neutral200,
+    val divider: Color = Neutral200,
+)
