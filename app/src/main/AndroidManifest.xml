@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
-        android:name="com.example.metasearch.Application"
+        android:name="com.example.metasearch.App"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -26,11 +26,7 @@
         android:theme="@style/Theme.MetaSearch"
         android:networkSecurityConfig="@xml/network_security_config">
 
-        <activity android:name="com.example.metasearch.ui.activity.PersonPhotosActivity" />
-        <activity android:name="com.example.metasearch.ui.activity.CircleToSearchActivity" />
-        <activity android:name="com.example.metasearch.ui.activity.ImageDisplayActivity" />
-        <activity android:name="com.example.metasearch.ui.activity.GraphDisplayActivity" />
-
     </application>
 
 </manifest>
+
