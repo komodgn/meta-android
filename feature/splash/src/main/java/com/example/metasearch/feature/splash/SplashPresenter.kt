@@ -19,9 +19,7 @@ class SplashPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): SplashUiState {
-        fun handleEvent(event: SplashUiEvent) {
-
-        }
+        fun handleEvent(event: SplashUiEvent) = Unit
 
         fun goToNextScreen() {
             navigator.resetRoot(HomeScreen)

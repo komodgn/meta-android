@@ -52,11 +52,11 @@ fun MetaSearchMainBottomBar(
                     MetaSearchTheme.radius.lg,
                 ),
             )
-            .background(Black.copy(alpha = 0.8f))
+            .background(Black.copy(alpha = 0.8f)),
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
 //                .navigationBarsPadding(),
         ) {
             Spacer(

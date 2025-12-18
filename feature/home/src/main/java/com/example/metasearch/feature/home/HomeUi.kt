@@ -34,9 +34,7 @@ fun HomeUi(
         },
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+            modifier = Modifier.padding(innerPadding),
         ) {
             Text("HOME")
         }
@@ -50,7 +48,7 @@ private fun HomeUiPreview() {
         HomeUi(
             state = HomeUiState(
                 eventSink = {},
-            )
+            ),
         )
     }
 }

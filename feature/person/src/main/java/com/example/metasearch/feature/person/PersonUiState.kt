@@ -10,6 +10,6 @@ data class PersonUiState(
 
 sealed interface PersonUiEvent : CircuitUiEvent {
     data class OnTabClick(
-        val screen: Screen
+        val screen: Screen,
     ) : PersonUiEvent
 }

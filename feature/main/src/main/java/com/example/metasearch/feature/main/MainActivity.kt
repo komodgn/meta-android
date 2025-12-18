@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val systemUiController = rememberSystemUiController()
 
-            LaunchedEffect (Unit) {
+            LaunchedEffect(Unit) {
                 systemUiController.setSystemBarsColor(
                     color = Color.Transparent,
                     darkIcons = true,

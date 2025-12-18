@@ -33,9 +33,9 @@ fun PersonUi(
                 currentTab = MetaSearchMainTabItem.PERSON,
             )
         },
-    ) {
+    ) { innerPadding ->
         Column(
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier.padding(innerPadding),
         ) {
             Text("person screen")
         }

@@ -19,7 +19,7 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 @Composable
 fun SplashUi(
     modifier: Modifier = Modifier,
-    state: SplashUiState,
+    // state: SplashUiState,
 ) {
     Box(
         modifier = modifier
@@ -30,7 +30,7 @@ fun SplashUi(
         Image(
             modifier = Modifier.width(200.dp),
             contentDescription = "MetaSearch App Logo",
-            painter = painterResource(com.example.metasearch.core.designsystem.R.drawable.ic_launcher_foreground)
+            painter = painterResource(com.example.metasearch.core.designsystem.R.drawable.ic_launcher_foreground),
         )
     }
 }

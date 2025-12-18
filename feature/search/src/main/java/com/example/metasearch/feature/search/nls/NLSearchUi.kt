@@ -32,10 +32,10 @@ fun NLSearchUi(
                     state.eventSink(NLSearchUiEvent.OnTabClick(it.screen))
                 },
             )
-        }
-    ) {
+        },
+    ) { innerPadding ->
         Column(
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier.padding(innerPadding),
         ) {
             Text("NLSearch")
         }
@@ -49,7 +49,7 @@ private fun NLSearchUiPreview() {
         NLSearchUi(
             state = NLSearchUiState(
                 eventSink = {},
-            )
+            ),
         )
     }
 }

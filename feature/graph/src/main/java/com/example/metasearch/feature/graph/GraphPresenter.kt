@@ -32,6 +32,6 @@ class GraphPresenter @AssistedInject constructor(
     @CircuitInject(GraphScreen::class, ActivityRetainedComponent::class)
     @AssistedFactory
     fun interface Factory {
-        fun create(navigator: Navigator) : GraphPresenter
+        fun create(navigator: Navigator): GraphPresenter
     }
 }

@@ -1,6 +1,5 @@
 package com.example.metasearch.feature.person
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import com.example.metasearch.feature.screens.PersonScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -32,6 +31,6 @@ class PersonPresenter @AssistedInject constructor(
     @CircuitInject(PersonScreen::class, ActivityRetainedComponent::class)
     @AssistedFactory
     fun interface Factory {
-        fun create(navigator: Navigator) : PersonPresenter
+        fun create(navigator: Navigator): PersonPresenter
     }
 }

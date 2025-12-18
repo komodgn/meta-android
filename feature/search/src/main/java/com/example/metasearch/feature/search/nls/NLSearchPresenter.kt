@@ -32,6 +32,6 @@ class NLSearchPresenter @AssistedInject constructor(
     @CircuitInject(NLSearchScreen::class, ActivityRetainedComponent::class)
     @AssistedFactory
     fun interface Factory {
-        fun create(navigator: Navigator) : NLSearchPresenter
+        fun create(navigator: Navigator): NLSearchPresenter
     }
 }

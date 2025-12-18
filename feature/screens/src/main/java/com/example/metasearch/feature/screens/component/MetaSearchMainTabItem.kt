@@ -4,10 +4,10 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.example.metasearch.feature.screens.GraphScreen
 import com.example.metasearch.feature.screens.HomeScreen
-import com.example.metasearch.feature.screens.PersonScreen
-import com.slack.circuit.runtime.screen.Screen
-import com.example.metasearch.feature.screens.R
 import com.example.metasearch.feature.screens.NLSearchScreen
+import com.example.metasearch.feature.screens.PersonScreen
+import com.example.metasearch.feature.screens.R
+import com.slack.circuit.runtime.screen.Screen
 
 enum class MetaSearchMainTabItem(
     @DrawableRes val iconResId: Int,

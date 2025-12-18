@@ -1,7 +1,6 @@
 package com.example.metasearch.feature.graph
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,10 +30,10 @@ fun GraphUi(
                     state.eventSink(GraphUiEvent.OnTabClick(it.screen))
                 },
             )
-        }
-    ) {
+        },
+    ) { innerPadding ->
         Column(
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier.padding(innerPadding),
         ) {
             Text("graph scree")
         }
@@ -48,7 +47,7 @@ private fun GraphUiPreview() {
         GraphUi(
             state = GraphUiState(
                 eventSink = {},
-            )
+            ),
         )
     }
 }
