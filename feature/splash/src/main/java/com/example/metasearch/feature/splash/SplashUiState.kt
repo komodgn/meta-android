@@ -5,8 +5,6 @@ import com.slack.circuit.runtime.CircuitUiState
 
 data class SplashUiState(
     val eventSink: (SplashUiEvent) -> Unit,
-): CircuitUiState
+) : CircuitUiState
 
-sealed interface SplashUiEvent: CircuitUiEvent {
-    data object OnNavigationToNextScreen: SplashUiEvent
-}
+sealed interface SplashUiEvent : CircuitUiEvent

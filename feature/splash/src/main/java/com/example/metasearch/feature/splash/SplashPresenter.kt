@@ -15,22 +15,22 @@ import kotlinx.coroutines.delay
 
 class SplashPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
-): Presenter<SplashUiState> {
+) : Presenter<SplashUiState> {
 
     @Composable
     override fun present(): SplashUiState {
         fun handleEvent(event: SplashUiEvent) {
-            when (event) {
-                SplashUiEvent.OnNavigationToNextScreen -> {
-                    navigator.resetRoot(HomeScreen)
-                }
-            }
+
+        }
+
+        fun goToNextScreen() {
+            navigator.resetRoot(HomeScreen)
         }
 
         LaunchedEffect(Unit) {
-            delay(2000)
+            delay(2000L)
 
-            handleEvent(SplashUiEvent.OnNavigationToNextScreen)
+            goToNextScreen()
         }
 
         return SplashUiState(
