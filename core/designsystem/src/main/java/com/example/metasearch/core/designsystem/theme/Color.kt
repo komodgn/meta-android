@@ -18,6 +18,8 @@ val Neutral800 = Color(0xFF262626)
 val Neutral900 = Color(0xFF171717)
 val Neutral950 = Color(0xFF0A0A0A)
 
+val LightPink = Color(0xFFfde6eb)
+
 @Immutable
 data class MetaSearchColorScheme(
     val basePrimary: Color = White,
