@@ -11,6 +11,6 @@ ksp {
 }
 
 dependencies {
-    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.compose.system.ui.controller)
     implementation(libs.androidx.core.splashscreen)
 }
