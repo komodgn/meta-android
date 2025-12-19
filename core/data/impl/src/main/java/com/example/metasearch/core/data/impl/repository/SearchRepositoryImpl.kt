@@ -1,15 +1,25 @@
 package com.example.metasearch.core.data.impl.repository
 
+import android.content.Context
+import com.example.metasearch.core.common.constants.PromptConstants
 import com.example.metasearch.core.data.api.repository.DatabaseNameRepository
 import com.example.metasearch.core.data.api.repository.SearchRepository
 import com.example.metasearch.core.data.impl.mapper.toModel
+import com.example.metasearch.core.data.impl.util.CypherQueryGenerator
+import com.example.metasearch.core.data.impl.util.GalleryImageManager
 import com.example.metasearch.core.model.CircleModel
+import com.example.metasearch.core.model.NLSearchResult
 import com.example.metasearch.core.network.request.Circle as RequestCircle
 import com.example.metasearch.core.model.SearchResult
 import com.example.metasearch.core.network.request.DetectedObjectsRequest
 import com.example.metasearch.core.network.request.FocusingSearchRequest
+import com.example.metasearch.core.network.request.NLQueryRequest
+import com.example.metasearch.core.network.request.OpenAIMessage
+import com.example.metasearch.core.network.request.OpenAIRequest
 import com.example.metasearch.core.network.service.AIService
+import com.example.metasearch.core.network.service.OpenAIService
 import com.example.metasearch.core.network.service.WebService
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -23,11 +33,13 @@ import kotlin.collections.map
 internal class SearchRepositoryImpl @Inject constructor(
     private val aiService: AIService,
     private val webService: WebService,
+    private val openAIService: OpenAIService,
     private val databaseNameRepository: DatabaseNameRepository,
+    @ApplicationContext private val context: Context,
 ) : SearchRepository {
     override suspend fun focusingSearch(
         imageFile: File,
-        circles: List<CircleModel>
+        circles: List<CircleModel>,
     ): Result<SearchResult> = runCatching {
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
@@ -52,9 +64,40 @@ internal class SearchRepositoryImpl @Inject constructor(
             request = DetectedObjectsRequest(
                 dbName = dbName,
                 properties = detectionResponse.detectedObjects,
-            )
+            ),
         )
 
         finalResult?.toModel() ?: SearchResult(emptyList())
+    }
+
+    override suspend fun nlSearch(
+        query: String,
+    ): Result<NLSearchResult> = runCatching {
+        if (query.isBlank()) return@runCatching NLSearchResult(emptyList())
+
+        val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
+
+        val fullPrompt = PromptConstants.NL_SEARCH_BASIC_PROMPT + query
+        val openAIResponse = openAIService.createChatCompletion(
+            request = OpenAIRequest(
+                model = "gpt-3.5-turbo",
+                messages = listOf(OpenAIMessage(role = "user", content = fullPrompt)),
+            ),
+        )
+
+        val text = openAIResponse.choices.firstOrNull()?.message?.content?.trim() ?: ""
+        if (text == "0" || text.isEmpty()) return@runCatching NLSearchResult(emptyList())
+
+        val entities = text.split(",").map { it.trim() }
+        val neo4jQuery = CypherQueryGenerator.createCypherQueryForEntities(entities)
+
+        val response = webService.sendCypherQuery(
+            request = NLQueryRequest(
+                dbName = dbName,
+                query = neo4jQuery,
+            ),
+        )
+
+        response.toModel(this.context)
     }
 }

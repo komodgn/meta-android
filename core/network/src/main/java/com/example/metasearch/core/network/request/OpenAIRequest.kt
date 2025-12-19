@@ -5,7 +5,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class OpenAIRequest(
     val model: String,
-    val prompt: String,
-    val temperature: Double,
-    val maxTokens: Int,
+    val messages: List<OpenAIMessage>,
+)
+
+@Serializable
+data class OpenAIMessage(
+    val role: String,
+    val content: String,
 )

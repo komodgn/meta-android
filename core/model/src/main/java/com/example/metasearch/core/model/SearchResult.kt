@@ -12,3 +12,8 @@ data class PhotoGroup(
     val categoryName: String,
     val photoNames: List<String>,
 )
+
+@Stable
+data class NLSearchResult(
+    val matchedUris: List<String>,
+)

@@ -99,10 +99,30 @@ internal object NetworkModule {
         return aiRetrofit.create(AIService::class.java)
     }
 
+    @Named("OpenAIOkHttpClient")
+    @Singleton
+    @Provides
+    internal fun provideOpenAIOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .connectTimeout(MAX_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
+            .readTimeout(MAX_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
+            .writeTimeout(MAX_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("Authorization", "Bearer ${BuildConfig.OPENAI_API_KEY}")
+                    .build()
+                chain.proceed(request)
+            }
+            .build()
+    }
+
     @Singleton
     @Provides
     internal fun provideOpenAIRetrofit(
-        okHttpClient: OkHttpClient,
+        @Named("OpenAIOkHttpClient") okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(OPENAI_SERVER_BASE_URL)
