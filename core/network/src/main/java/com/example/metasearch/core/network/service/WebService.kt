@@ -5,6 +5,7 @@ import com.example.metasearch.core.network.request.DeleteEntityRequest
 import com.example.metasearch.core.network.request.DetectedObjectsRequest
 import com.example.metasearch.core.network.request.NLQueryRequest
 import com.example.metasearch.core.network.request.PersonFrequencyRequest
+import com.example.metasearch.core.network.request.PersonSearchRequest
 import com.example.metasearch.core.network.response.ChangeNameResponse
 import com.example.metasearch.core.network.response.DeleteEntityResponse
 import com.example.metasearch.core.network.response.PersonFrequencyResponse
@@ -12,8 +13,6 @@ import com.example.metasearch.core.network.response.PhotoNameResponse
 import com.example.metasearch.core.network.response.PhotoResponse
 import com.example.metasearch.core.network.response.TripleResponse
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
@@ -34,25 +33,42 @@ public interface WebService {
     ): PhotoNameResponse
 
     @POST("personsearch")
-    fun sendPersonData(@Body body: RequestBody?): Call<MutableList<String?>?>?
+    suspend fun sendPersonData(
+        @Body request: PersonSearchRequest,
+    ): List<String>
 
     @POST("changename")
-    fun changeName(@Body request: ChangeNameRequest?): Call<ChangeNameResponse?>?
+    suspend fun changeName(
+        @Body request: ChangeNameRequest,
+    ): ChangeNameResponse
 
     @POST("/api/peoplefrequency")
-    fun getPersonFrequency(@Body request: PersonFrequencyRequest?): Call<PersonFrequencyResponse?>?
+    suspend fun getPersonFrequency(
+        @Body request: PersonFrequencyRequest,
+    ): PersonFrequencyResponse
 
     @GET("/api/photoTripleData/{dbName}/{photoName}")
-    fun fetchTripleData(@Path("dbName") dbName: String?, @Path("photoName") photoName: String?): Call<TripleResponse?>?
+    suspend fun fetchTripleData(
+        @Path("dbName") dbName: String,
+        @Path("photoName") photoName: String,
+    ): TripleResponse
 
     @POST("neo4j/deleteEntity/")
-    fun deleteEntity(@Body request: DeleteEntityRequest?): Call<DeleteEntityResponse?>?
+    suspend fun deleteEntity(
+        @Body request: DeleteEntityRequest,
+    ): DeleteEntityResponse
 
     @Multipart
     @POST("android/uploadimg")
-    fun uploadWebAddImage(@Part image: MultipartBody.Part?, @Query("dbName") dbName: String?): Call<Void?>?
+    suspend fun uploadWebAddImage(
+        @Part image: MultipartBody.Part,
+        @Query("dbName") dbName: String,
+    )
 
     @Multipart
     @POST("android/deleteimg")
-    fun uploadWebDeleteImage(@Part filename: MultipartBody.Part?, @Part("dbName") dbName: RequestBody?): Call<Void?>?
+    suspend fun uploadWebDeleteImage(
+        @Part filename: MultipartBody.Part,
+        @Part("dbName") dbName: String,
+    )
 }

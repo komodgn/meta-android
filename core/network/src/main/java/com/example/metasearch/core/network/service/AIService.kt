@@ -21,31 +21,46 @@ public interface AIService {
 
     @Multipart
     @POST("android/delete_person")
-    fun deletePerson(@Part("dbName") dbName: RequestBody?, @Part("deletePerson") deletePerson: RequestBody?): Call<Void?>?
+    suspend fun deletePerson(
+        @Part("dbName") dbName: RequestBody,
+        @Part("deletePerson") deletePerson: RequestBody,
+    )
 
     @Multipart
     @POST("android/upload_add")
-    fun uploadAddImage(@Part image: MultipartBody.Part?, @Part("dbName") dbName: RequestBody?): Call<Void?>?
+    suspend fun uploadAddImage(
+        @Part image: MultipartBody.Part,
+        @Part("dbName") dbName: RequestBody,
+    )
 
     @Multipart
     @POST("android/upload_delete")
-    fun uploadDeleteImage(@Part filename: MultipartBody.Part?, @Part("dbName") dbName: RequestBody?): Call<Void?>?
+    suspend fun uploadDeleteImage(
+        @Part filename: MultipartBody.Part,
+        @Part("dbName") dbName: RequestBody,
+    )
 
     @Multipart
     @POST("android/upload_database")
-    fun uploadDatabaseImage(@Part filename: MultipartBody.Part?, @Part("dbName") dbName: RequestBody?): Call<Void?>?
+    suspend fun uploadDatabaseImage(
+        @Part filename: MultipartBody.Part,
+        @Part("dbName") dbName: RequestBody,
+    )
 
     @Multipart
     @POST("android/upload_first")
-    fun uploadFirst(@Part("first") first: RequestBody?, @Part("dbName") dbName: RequestBody?): Call<Void?>?
+    suspend fun uploadFirst(
+        @Part("first") first: RequestBody,
+        @Part("dbName") dbName: RequestBody,
+    )
 
     @Multipart
     @POST("android/upload_finish")
-    fun uploadFinish(
-        @Part("finish") finish: RequestBody?,
-        @Part("dbName") dbName: RequestBody?,
-        @Part("rowCount") rowCount: RequestBody?,
-    ): Call<UploadResponse?>?
+    suspend fun uploadFinish(
+        @Part("finish") finish: RequestBody,
+        @Part("dbName") dbName: RequestBody,
+        @Part("rowCount") rowCount: RequestBody,
+    ): UploadResponse
 
 //    @Multipart
 //    @POST("android/upload_person_name")
