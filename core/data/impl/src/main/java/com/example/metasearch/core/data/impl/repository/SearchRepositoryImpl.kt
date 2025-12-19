@@ -6,10 +6,8 @@ import com.example.metasearch.core.data.api.repository.DatabaseNameRepository
 import com.example.metasearch.core.data.api.repository.SearchRepository
 import com.example.metasearch.core.data.impl.mapper.toModel
 import com.example.metasearch.core.data.impl.util.CypherQueryGenerator
-import com.example.metasearch.core.data.impl.util.GalleryImageManager
 import com.example.metasearch.core.model.CircleModel
 import com.example.metasearch.core.model.NLSearchResult
-import com.example.metasearch.core.network.request.Circle as RequestCircle
 import com.example.metasearch.core.model.SearchResult
 import com.example.metasearch.core.network.request.DetectedObjectsRequest
 import com.example.metasearch.core.network.request.FocusingSearchRequest
@@ -28,6 +26,7 @@ import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.map
+import com.example.metasearch.core.network.request.Circle as RequestCircle
 
 @Singleton
 internal class SearchRepositoryImpl @Inject constructor(

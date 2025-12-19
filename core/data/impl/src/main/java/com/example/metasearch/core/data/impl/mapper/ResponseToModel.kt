@@ -29,7 +29,7 @@ internal fun PhotoResponse.toModel(): SearchResult {
                 PhotoGroup(
                     categoryName = "#$category",
                     photoNames = filteredNames,
-                )
+                ),
             )
         }
     }
