@@ -28,6 +28,8 @@ dependencies {
     implementation(projects.core.data.api)
     implementation(projects.core.datastore.api)
 
+    implementation(libs.okhttp)
+
     // 코루틴 테스트 유틸리티
     testImplementation(libs.kotlinx.coroutines.test)
 

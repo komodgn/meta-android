@@ -2,6 +2,8 @@ package com.example.metasearch.core.network.service
 
 import com.example.metasearch.core.network.request.ChangeNameRequest
 import com.example.metasearch.core.network.request.DeleteEntityRequest
+import com.example.metasearch.core.network.request.DetectedObjectsRequest
+import com.example.metasearch.core.network.request.NLQueryRequest
 import com.example.metasearch.core.network.request.PersonFrequencyRequest
 import com.example.metasearch.core.network.response.ChangeNameResponse
 import com.example.metasearch.core.network.response.DeleteEntityResponse
@@ -22,10 +24,14 @@ import retrofit2.http.Query
 
 public interface WebService {
     @POST("android/circleToSearch")
-    fun sendDetectedObjects(@Body detectedObjects: RequestBody?): Call<PhotoResponse?>?
+    fun sendDetectedObjects(
+        @Body request: DetectedObjectsRequest,
+    ): PhotoResponse
 
     @POST("/nlqsearch")
-    fun sendCypherQuery(@Body body: RequestBody?): Call<PhotoNameResponse?>?
+    suspend fun sendCypherQuery(
+        @Body request: NLQueryRequest
+    ): PhotoNameResponse
 
     @POST("personsearch")
     fun sendPersonData(@Body body: RequestBody?): Call<MutableList<String?>?>?

@@ -1,5 +1,6 @@
 package com.example.metasearch.core.network.service
 
+import com.example.metasearch.core.network.request.FocusingSearchRequest
 import com.example.metasearch.core.network.response.CircleDetectionResponse
 import com.example.metasearch.core.network.response.UploadResponse
 import okhttp3.MultipartBody
@@ -12,11 +13,11 @@ import retrofit2.http.Part
 public interface AIService {
     @Multipart
     @POST("android/circle_search")
-    fun uploadImageAndCircles(
-        @Part image: MultipartBody.Part?,
-        @Part("dbName") dbName: RequestBody?,
-        @Part("circles") circles: RequestBody?,
-    ): Call<CircleDetectionResponse?>?
+    suspend fun uploadImageAndCircles(
+        @Part image: MultipartBody.Part,
+        @Part("dbName") dbName: RequestBody,
+        @Part("circles") request: FocusingSearchRequest,
+    ): CircleDetectionResponse
 
     @Multipart
     @POST("android/delete_person")
