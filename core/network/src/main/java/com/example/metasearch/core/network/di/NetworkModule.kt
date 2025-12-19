@@ -103,7 +103,7 @@ internal object NetworkModule {
     @Singleton
     @Provides
     internal fun provideOpenAIOkHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .connectTimeout(MAX_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
