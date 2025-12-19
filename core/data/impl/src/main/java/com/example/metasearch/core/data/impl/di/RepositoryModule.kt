@@ -1,7 +1,9 @@
 package com.example.metasearch.core.data.impl.di
 
 import com.example.metasearch.core.data.api.repository.DatabaseNameRepository
+import com.example.metasearch.core.data.api.repository.SearchRepository
 import com.example.metasearch.core.data.impl.repository.DatabaseNameRepositoryImpl
+import com.example.metasearch.core.data.impl.repository.SearchRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,4 +16,8 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindDatabaseNameRepository(deviceIdRepositoryImpl: DatabaseNameRepositoryImpl): DatabaseNameRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSearchRepository(searchRepositoryImpl: SearchRepositoryImpl): SearchRepository
 }
