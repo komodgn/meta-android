@@ -29,7 +29,7 @@ public interface WebService {
 
     @POST("/nlqsearch")
     suspend fun sendCypherQuery(
-        @Body request: NLQueryRequest
+        @Body request: NLQueryRequest,
     ): PhotoNameResponse
 
     @POST("personsearch")
