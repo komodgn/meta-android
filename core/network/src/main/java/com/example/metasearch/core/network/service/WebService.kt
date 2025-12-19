@@ -24,7 +24,7 @@ import retrofit2.http.Query
 
 public interface WebService {
     @POST("android/circleToSearch")
-    fun sendDetectedObjects(
+    suspend fun sendDetectedObjects(
         @Body request: DetectedObjectsRequest,
     ): PhotoResponse
 
