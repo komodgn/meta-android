@@ -89,7 +89,9 @@ internal class SearchRepositoryImpl @Inject constructor(
         if (text == "0" || text.isEmpty()) return@runCatching NLSearchResult(emptyList())
 
         val entities = text.split(",").map { it.trim() }
-        val neo4jQuery = CypherQueryGenerator.createCypherQueryForEntities(entities)
+        val neo4jQuery = CypherQueryGenerator.generateQueryByKeywords(
+            keywords = entities,
+        )
 
         val response = webService.sendCypherQuery(
             request = NLQueryRequest(
