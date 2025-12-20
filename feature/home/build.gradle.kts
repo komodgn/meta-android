@@ -9,3 +9,8 @@ android {
 ksp {
     arg("circuit.codegen.mode", "hilt")
 }
+
+dependencies {
+    implementation(projects.core.data.api)
+    implementation(libs.coil.compose)
+}

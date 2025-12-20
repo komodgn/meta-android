@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_screen_header">Visualize Me By Photo</string>
+    <string name="home_screen_person_scroll_view_title">내가 좋아하는 사람들</string>
+    <string name="home_screen_gallery_grid_view_title">갤러리 사진</string>
+</resources>
