@@ -1,12 +1,15 @@
 package com.example.metasearch.core.data.impl.mapper
 
 import android.content.Context
+import com.example.metasearch.core.common.utils.normalizePhoneNumber
 import com.example.metasearch.core.data.impl.util.GalleryImageManager
 import com.example.metasearch.core.model.NLSearchResult
+import com.example.metasearch.core.model.PersonModel
 import com.example.metasearch.core.model.PhotoGroup
 import com.example.metasearch.core.model.SearchResult
 import com.example.metasearch.core.network.response.PhotoNameResponse
 import com.example.metasearch.core.network.response.PhotoResponse
+import com.example.metasearch.core.room.api.relations.PersonWithFaces
 
 internal fun PhotoResponse.toModel(): SearchResult {
     val commonList = photos.commonPhotos.distinct()
@@ -44,4 +47,22 @@ internal fun PhotoNameResponse.toModel(context: Context): NLSearchResult {
     ).map { it.toString() }
 
     return NLSearchResult(matchedUris = matchedUris)
+}
+
+internal fun PersonWithFaces.toModel(callDurations: Map<String, Long>): PersonModel {
+    val normalizedPhone = normalizePhoneNumber(this.person.phoneNumber)
+    val totalDuration = callDurations.getOrDefault(normalizedPhone, 0L)
+
+    return PersonModel(
+        id = this.person.id.toInt(),
+        imageName = this.faces.first().imageName,
+        image = this.faces.first().imageData,
+        inputName = this.person.inputName,
+        phone = this.person.phoneNumber,
+        homeDisplay = this.person.isHomeDisplay,
+        photoCount = 0,
+        totalDuration = totalDuration,
+        normalizedScore = 0.0,
+        thumbnailImage = this.faces.firstOrNull()?.thumbnailData,
+    )
 }
