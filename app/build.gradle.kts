@@ -29,8 +29,6 @@ dependencies {
 //    implementation("com.github.bumptech.glide:glide:4.16.0")
 //    // CardView dependency
 //    implementation("androidx.cardview:cardview:1.0.0")
-//    // StyleableToast dependency
-//    implementation("io.github.muddz:styleabletoast:2.4.0")
 //    // ColorPickerDialog dependency
 //    implementation("me.jfenn.ColorPickerDialog:base:0.2.2")
 
