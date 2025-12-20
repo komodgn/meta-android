@@ -34,11 +34,17 @@ internal object NetworkModule {
 
     @Singleton
     @Provides
-    internal fun provideOkHttpClient(): OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
+    internal fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
+    }
 
+    @Singleton
+    @Provides
+    internal fun provideOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             .connectTimeout(MAX_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
             .readTimeout(MAX_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
@@ -50,11 +56,9 @@ internal object NetworkModule {
     @Named("AIOkHttpClient")
     @Singleton
     @Provides
-    internal fun provideAIOkHttpClient(): OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-
+    internal fun provideAIOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             .connectTimeout(MAX_TIMEOUT_SECONDS_AI, TimeUnit.SECONDS)
             .readTimeout(MAX_TIMEOUT_SECONDS_AI, TimeUnit.SECONDS)
@@ -63,6 +67,7 @@ internal object NetworkModule {
             .build()
     }
 
+    @Named("WebRetrofit")
     @Singleton
     @Provides
     internal fun provideWebRetrofit(
@@ -77,10 +82,11 @@ internal object NetworkModule {
 
     @Singleton
     @Provides
-    internal fun provideWebService(webRetrofit: Retrofit): WebService {
+    internal fun provideWebService(@Named("WebRetrofit") webRetrofit: Retrofit): WebService {
         return webRetrofit.create(WebService::class.java)
     }
 
+    @Named("AIRetrofit")
     @Singleton
     @Provides
     internal fun provideAIRetrofit(
@@ -95,7 +101,7 @@ internal object NetworkModule {
 
     @Singleton
     @Provides
-    internal fun provideAIService(aiRetrofit: Retrofit): AIService {
+    internal fun provideAIService(@Named("AIRetrofit") aiRetrofit: Retrofit): AIService {
         return aiRetrofit.create(AIService::class.java)
     }
 
@@ -119,6 +125,7 @@ internal object NetworkModule {
             .build()
     }
 
+    @Named("OpenAIRetrofit")
     @Singleton
     @Provides
     internal fun provideOpenAIRetrofit(
@@ -133,7 +140,7 @@ internal object NetworkModule {
 
     @Singleton
     @Provides
-    internal fun provideOpenAIService(openAIRetrofit: Retrofit): OpenAIService {
+    internal fun provideOpenAIService(@Named("OpenAIRetrofit") openAIRetrofit: Retrofit): OpenAIService {
         return openAIRetrofit.create(OpenAIService::class.java)
     }
 }
