@@ -1,0 +1,118 @@
+package com.example.metasearch.core.ui.component
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import com.example.metasearch.core.designsystem.annotation.ComponentPreview
+import com.example.metasearch.core.designsystem.component.MetaSearchButton
+import com.example.metasearch.core.designsystem.theme.LightPink
+import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
+import com.example.metasearch.core.designsystem.theme.Neutral500
+import com.example.metasearch.core.designsystem.theme.Rose
+import com.example.metasearch.core.designsystem.theme.White
+
+@Composable
+fun MetaSearchDialog(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+    onConfirmRequest: () -> Unit = {},
+    dismissButtonText: String,
+    confirmButtonText: String? = null,
+    title: String? = null,
+    content: @Composable (() -> Unit)? = null,
+    properties: DialogProperties = DialogProperties(),
+) {
+    Dialog(
+        onDismissRequest = onDismissRequest,
+        properties = properties,
+    ) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(
+                    MetaSearchTheme.radius.lg,
+                ))
+                .background(White)
+                .border(
+                    width = MetaSearchTheme.border.border2,
+                    color = LightPink,
+                    shape = RoundedCornerShape(
+                        MetaSearchTheme.radius.lg,
+                    )
+                )
+                .padding(
+                    MetaSearchTheme.spacing.spacing6,
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            title?.let {
+                Text(
+                    text = title,
+                    color = Rose,
+                    style = MetaSearchTheme.typography.titleLarge,
+                )
+            }
+            content?.let {
+                Box(
+                    modifier = Modifier.padding(
+                        bottom = MetaSearchTheme.spacing.spacing6,
+                    ),
+                ) {
+                    it()
+                }
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(
+                    MetaSearchTheme.spacing.spacing3,
+                )
+            ) {
+                MetaSearchButton(
+                    modifier = Modifier.weight(1f),
+                    text = dismissButtonText,
+                    onClick = onDismissRequest,
+                    contentColor = Neutral500,
+                )
+
+                confirmButtonText?.let {
+                    MetaSearchButton(
+                        modifier = Modifier.weight(1f),
+                        text = it,
+                        onClick = onConfirmRequest,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@ComponentPreview
+@Composable
+private fun MetaSearchDialogPreview() {
+    MetaSearchTheme {
+        MetaSearchDialog(
+            title = "권한 요청",
+            content = {
+                "앱을 이용하려면 권한 설정이 필요합니다."
+            },
+            onDismissRequest = {},
+            dismissButtonText = "닫기",
+            confirmButtonText = "설정으로 이동"
+        )
+    }
+}

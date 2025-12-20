@@ -18,7 +18,11 @@ val Neutral800 = Color(0xFF262626)
 val Neutral900 = Color(0xFF171717)
 val Neutral950 = Color(0xFF0A0A0A)
 
+val LightGrey = Color(0xFFEFEFEF)
 val LightPink = Color(0xFFfde6eb)
+val Pink = Color(0xFFFD8692)
+val HotPink = Color(0xFFF92960)
+val Rose = Color(0xFFDD8789)
 
 @Immutable
 data class MetaSearchColorScheme(

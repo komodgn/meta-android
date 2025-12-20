@@ -20,6 +20,9 @@ lifecycleRuntimeKtx = "2.10.0"
 androidxDataStore = "1.2.0"
 coreSplashscreen = "1.2.0"
 
+## Permisson
+accompanistPermissions = "0.37.3"
+
 ## Kotlin Symbol Processing
 ksp = "2.2.20-2.0.3"
 
@@ -86,6 +89,8 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
+
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdkLibs"}
 
