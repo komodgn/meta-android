@@ -1,19 +1,35 @@
 package com.example.metasearch.feature.search.nls
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.example.metasearch.core.designsystem.annotation.DevicePreview
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
+import com.example.metasearch.core.designsystem.theme.Neutral500
 import com.example.metasearch.core.ui.MetaSearchScaffold
+import com.example.metasearch.core.ui.component.MetaSearchDialog
+import com.example.metasearch.core.ui.component.MetaSearchLoadingIndicator
 import com.example.metasearch.feature.screens.NLSearchScreen
 import com.example.metasearch.feature.screens.component.MetaSearchMainBottomBar
 import com.example.metasearch.feature.screens.component.MetaSearchMainTabItem
+import com.example.metasearch.feature.search.nls.component.NLSearchHeader
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
+import com.example.metasearch.feature.search.R
+import com.example.metasearch.feature.search.nls.component.NLSearchTextField
 
 @CircuitInject(NLSearchScreen::class, ActivityRetainedComponent::class)
 @Composable
@@ -33,10 +49,73 @@ fun NLSearchUi(
             )
         },
     ) { innerPadding ->
-        Column(
-            modifier = modifier.padding(innerPadding),
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
         ) {
-            Text("NLSearch")
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+            ) {
+                NLSearchHeader()
+
+                NLSearchTextField(
+                    modifier = modifier,
+                    inputString = state.inputString,
+                    onInputChange = {
+                        state.eventSink(
+                            NLSearchUiEvent.OnInputChange(it)
+                        )
+                    },
+                    onSearchClick = {
+                        state.eventSink(NLSearchUiEvent.OnNLSearchClick(state.inputString))
+                    }
+                )
+
+                Text(
+                    modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
+                    text = stringResource(R.string.nl_search_screen_result_label),
+                    color = Neutral500,
+                )
+                LazyVerticalGrid(
+                    modifier = Modifier.fillMaxSize(),
+                    columns = GridCells.Fixed(5),
+                ) {
+                    items(state.resultImages) { uriString ->
+                        AsyncImage(
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .padding(1.dp)
+                                .clickable {
+                                    state.eventSink(NLSearchUiEvent.OnImageClick(uriString))
+                                },
+                            model = uriString,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                        )
+                    }
+                }
+
+                if (state.isLoading) {
+                    MetaSearchLoadingIndicator()
+                }
+
+                if (state.errorMessage.isNotBlank()) {
+                    MetaSearchDialog(
+                        title = stringResource(R.string.nl_search_screen_error_dialog_title),
+                        content = {
+                            Text(
+                                text = state.errorMessage,
+                            )
+                        },
+                        onDismissRequest = {
+                            state.eventSink(NLSearchUiEvent.OnDialogCloseButtonClick)
+                        },
+                        dismissButtonText = stringResource(R.string.nl_search_screen_dialog_close_button),
+                    )
+                }
+            }
         }
     }
 }
@@ -47,6 +126,7 @@ private fun NLSearchUiPreview() {
     MetaSearchTheme {
         NLSearchUi(
             state = NLSearchUiState(
+                isLoading = true,
                 eventSink = {},
             ),
         )

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nl_search_screen_header">검색</string>
+    <string name="nl_search_text_field_placeholder">여름 밤에 서울에서 찍은 음식 사진</string>
+    <string name="nl_search_screen_result_label">검색 결과</string>
+    <string name="nl_search_screen_dialog_close_button">닫기</string>
+    <string name="nl_search_screen_empty_result_message">검색 결과가 없습니다.</string>
+    <string name="nl_search_screen_error_dialog_title">검색 실패</string>
+    <string name="nl_search_screen_error_message">검색 결과가 없습니다. 다시 시도해주세요.</string>
+
+    <string name="focusing_search_button_text">포커싱 검색</string>
+</resources>
