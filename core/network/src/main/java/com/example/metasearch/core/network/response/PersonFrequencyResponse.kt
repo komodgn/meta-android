@@ -1,10 +1,18 @@
 package com.example.metasearch.core.network.response
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class PersonFrequencyResponse(
-    val name: String,
-    val entityType: String,
+    @SerialName("frequencies")
+    val frequencies: List<Frequency>,
+)
+
+@Serializable
+data class Frequency(
+    @SerialName("personName")
+    val personName: String,
+    @SerialName("frequency")
     val frequency: Int,
 )

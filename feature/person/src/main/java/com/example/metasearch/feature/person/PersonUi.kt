@@ -3,12 +3,12 @@ package com.example.metasearch.feature.person
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.metasearch.core.designsystem.annotation.DevicePreview
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.ui.MetaSearchScaffold
+import com.example.metasearch.feature.person.component.PersonHeader
 import com.example.metasearch.feature.screens.PersonScreen
 import com.example.metasearch.feature.screens.component.MetaSearchMainBottomBar
 import com.example.metasearch.feature.screens.component.MetaSearchMainTabItem
@@ -36,7 +36,7 @@ fun PersonUi(
         Column(
             modifier = modifier.padding(innerPadding),
         ) {
-            Text("person screen")
+            PersonHeader()
         }
     }
 }

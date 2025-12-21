@@ -17,3 +17,28 @@ data object PersonScreen : Screen
 
 @Parcelize
 data object NLSearchScreen : Screen
+
+@Parcelize
+data class PersonDetailScreen(
+    val personId: Int,
+) : Screen
+
+@Parcelize
+data class PhotoDetailScreen(
+    val imageUriString: String,
+) : Screen
+
+@Parcelize
+data class FocusingSearchScreen(
+    val imageUriString: String,
+) : Screen
+
+@Parcelize
+data class GraphDetailScreen(
+    val imageUriString: String,
+) : Screen
+
+@Parcelize
+data class WebViewScreen(
+    val url: String,
+) : Screen
