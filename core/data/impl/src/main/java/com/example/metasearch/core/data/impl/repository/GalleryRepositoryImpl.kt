@@ -24,7 +24,7 @@ internal class GalleryRepositoryImpl @Inject constructor(
             projection,
             null,
             null,
-            "${MediaStore.Images.Media.DATE_ADDED} DESC"
+            "${MediaStore.Images.Media.DATE_ADDED} DESC",
         )?.use { cursor ->
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
             while (cursor.moveToNext()) {
@@ -35,7 +35,7 @@ internal class GalleryRepositoryImpl @Inject constructor(
         imageUris
     }
 
-    override suspend fun getFileName(uri: Uri): String? = withContext(Dispatchers.IO){
+    override suspend fun getFileName(uri: Uri): String? = withContext(Dispatchers.IO) {
         val projection = arrayOf(MediaStore.Images.Media.DISPLAY_NAME)
         context.contentResolver.query(
             uri,
@@ -43,11 +43,53 @@ internal class GalleryRepositoryImpl @Inject constructor(
             null,
             null,
             null,
-            )?.use { cursor ->
-                if (cursor.moveToFirst()) {
-                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME))
-                } else null
+        )?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME))
+            } else {
+                null
+            }
         }
     }
 
+    override suspend fun findMatchedUri(photoName: String): Uri? = withContext(Dispatchers.IO) {
+        val projection = arrayOf(MediaStore.Images.Media._ID)
+        val selection = "${MediaStore.Images.Media.DISPLAY_NAME} = ?"
+        val selectionArgs = arrayOf(photoName)
+
+        context.contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            selection,
+            selectionArgs,
+            null,
+        )?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID))
+                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+            } else null
+        }
+    }
+
+    override suspend fun findMatchedUris(photoNames: List<String>): List<Uri> = withContext(Dispatchers.IO) {
+        val allImages = mutableMapOf<String, Uri>()
+        val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DISPLAY_NAME)
+
+        context.contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            null,
+            null,
+            null,
+        )?.use { cursor ->
+            val idCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+            val nameCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
+            while (cursor.moveToNext()) {
+                val id = cursor.getLong(idCol)
+                val name = cursor.getString(nameCol)
+                allImages[name] = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+            }
+        }
+        photoNames.mapNotNull { allImages[it] }
+    }
 }
