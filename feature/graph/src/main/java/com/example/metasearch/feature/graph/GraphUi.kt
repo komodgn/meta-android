@@ -78,18 +78,21 @@ fun GraphUi(
                             override fun onReceivedSslError(
                                 view: WebView?,
                                 handler: SslErrorHandler?,
-                                error: SslError?
+                                error: SslError?,
                             ) {
                                 handler?.proceed()
                             }
                         }
 
-                        addJavascriptInterface(object {
-                            @JavascriptInterface
-                            fun receivePhotoName(photoName: String) {
-                                state.eventSink(GraphUiEvent.OnPhotoSelected(photoName))
-                            }
-                        }, "Android")
+                        addJavascriptInterface(
+                            object {
+                                @JavascriptInterface
+                                fun receivePhotoName(photoName: String) {
+                                    state.eventSink(GraphUiEvent.OnPhotoSelected(photoName))
+                                }
+                            },
+                            "Android",
+                        )
                     }
                 },
                 update = { webView ->

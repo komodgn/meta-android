@@ -60,13 +60,9 @@ class FocusingSearchPresenter @AssistedInject constructor(
                     }
                 }
 
-                is FocusingSearchUiEvent.OnCircleAdded -> {
-                    circles = circles + event.circle
-                }
+                is FocusingSearchUiEvent.OnCircleAdded -> circles = circles + event.circle
 
-                is FocusingSearchUiEvent.OnImageClick -> navigator.goTo(
-                    PhotoDetailScreen(event.imageUriString)
-                )
+                is FocusingSearchUiEvent.OnImageClick -> navigator.goTo(PhotoDetailScreen(event.imageUriString))
 
                 FocusingSearchUiEvent.OnCircleResetClick -> {
                     circles = emptyList()

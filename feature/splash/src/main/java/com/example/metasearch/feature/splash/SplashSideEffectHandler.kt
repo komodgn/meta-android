@@ -16,7 +16,7 @@ import kotlinx.coroutines.delay
 fun SplashSideEffectHandler(
     state: SplashUiState,
     permissionState: MultiplePermissionsState,
-    context: Context = LocalContext.current
+    context: Context = LocalContext.current,
 ) {
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
 

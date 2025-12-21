@@ -12,7 +12,7 @@ data class SplashUiState(
 
 sealed interface SplashUiEvent : CircuitUiEvent {
     data class PermissionResult(
-        val allGranted: Boolean
+        val allGranted: Boolean,
     ) : SplashUiEvent
     data object OnConfirmSettings : SplashUiEvent
     data object OnResetSettingsNavigation : SplashUiEvent

@@ -30,11 +30,11 @@ import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.designsystem.theme.Neutral500
 import com.example.metasearch.core.ui.MetaSearchScaffold
 import com.example.metasearch.core.ui.component.MetaSearchDialog
+import com.example.metasearch.feature.detail.R
+import com.example.metasearch.feature.detail.graph.component.GraphDetailHeader
 import com.example.metasearch.feature.screens.GraphDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
-import com.example.metasearch.feature.detail.R
-import com.example.metasearch.feature.detail.graph.component.GraphDetailHeader
 
 @SuppressLint("SetJavaScriptEnabled")
 @CircuitInject(GraphDetailScreen::class, ActivityRetainedComponent::class)
@@ -70,7 +70,8 @@ fun GraphDetailUi(
                                 fun receivePhotoName(photoName: String) {
                                     state.eventSink(GraphDetailUiEvent.OnPhotoSelected(photoName))
                                 }
-                            }, "Android"
+                            },
+                            "Android",
                         )
                     }
                 },
@@ -78,7 +79,7 @@ fun GraphDetailUi(
                     if (state.webViewUrl.isNotEmpty() && webView.url != state.webViewUrl) {
                         webView.loadUrl(state.webViewUrl)
                     }
-                }
+                },
             )
 
             if (state.selectedImages.isNotEmpty()) {
@@ -102,7 +103,7 @@ fun GraphDetailUi(
                                 .aspectRatio(1f)
                                 .clip(RoundedCornerShape(8.dp))
                                 .clickable { state.eventSink(GraphDetailUiEvent.OnImageClick(uriString)) },
-                            contentScale = ContentScale.Crop
+                            contentScale = ContentScale.Crop,
                         )
                     }
                 }
@@ -130,7 +131,7 @@ private fun GraphDetailUi() {
                 webViewUrl = "https://www.google.com",
                 selectedImages = listOf("sample_uri_1", "sample_uri_2"),
                 eventSink = {},
-            )
+            ),
         )
     }
 }

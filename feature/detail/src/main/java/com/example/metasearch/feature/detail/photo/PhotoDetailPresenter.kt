@@ -32,9 +32,9 @@ class PhotoDetailPresenter @AssistedInject constructor(
 
                 is PhotoDetailUiEvent.OnGraphButtonClick -> navigator.goTo(
                     GraphDetailScreen(
-                        imageUriString = screen.imageUriString,
-//                        imageUriString = "https://www.google.com",
-                    )
+//                        imageUriString = screen.imageUriString,
+                        imageUriString = "https://www.google.com",
+                    ),
                 )
 
                 is PhotoDetailUiEvent.OnFocusingSearchClick -> navigator.goTo(

@@ -59,8 +59,7 @@ class PersonRepositoryImpl @Inject constructor(
         val maxDuration = people.maxOf { it.totalDuration }.coerceAtLeast(1L)
 
         return people.map { person ->
-            val normalizedScore = ((person.photoCount.toDouble() / maxPhotoCount) +
-                (person.totalDuration.toDouble() / maxDuration)) / 2.0
+            val normalizedScore = ((person.photoCount.toDouble() / maxPhotoCount) + (person.totalDuration.toDouble() / maxDuration)) / 2.0
             person.copy(normalizedScore = normalizedScore)
         }.sortedByDescending { it.normalizedScore }
     }
@@ -83,8 +82,8 @@ class PersonRepositoryImpl @Inject constructor(
             val response = webService.getPersonFrequency(
                 PersonFrequencyRequest(
                     dbName = dbName,
-                    personNames = localModels.map { it.inputName }
-                )
+                    personNames = localModels.map { it.inputName },
+                ),
             )
 
             val updatedModels = localModels.map { personModel ->
@@ -93,7 +92,7 @@ class PersonRepositoryImpl @Inject constructor(
                 }
 
                 personModel.copy(
-                    photoCount = matchedFrequency?.frequency ?: 0
+                    photoCount = matchedFrequency?.frequency ?: 0,
                 )
             }
 

@@ -12,5 +12,7 @@ ksp {
 
 dependencies {
     implementation(projects.core.data.api)
+
+    implementation(libs.androidx.work.runtime)
     implementation(libs.coil.compose)
 }

@@ -79,7 +79,7 @@ private fun SplashUiPreview() {
             state = SplashUiState(
                 eventSink = {},
                 showRationaleDialog = true,
-            )
+            ),
         )
     }
 }

@@ -1,7 +1,6 @@
 package com.example.metasearch.core.designsystem.component
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -26,37 +25,30 @@ fun MetaSearchToast(
     message: String,
     isVisible: Boolean,
 ) {
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = fadeIn() + slideInVertically(),
-        exit = fadeOut() + slideOutVertically(),
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center,
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center,
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = fadeIn() + slideInVertically(initialOffsetY = { it / 2 }),
+            exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 2 }),
         ) {
-            AnimatedVisibility(
-                visible = isVisible,
-                enter = fadeIn(animationSpec = tween(300)),
-                exit = fadeOut(animationSpec = tween(300)),
+            Surface(
+                color = Color.Black.copy(alpha = 0.6f),
+                shape = RoundedCornerShape(MetaSearchTheme.radius.full),
+                modifier = modifier.padding(horizontal = MetaSearchTheme.spacing.spacing8),
             ) {
-                Surface(
-                    color = Color.Black.copy(alpha = 0.5f),
-                    shape = RoundedCornerShape(
-                        MetaSearchTheme.radius.full,
+                Text(
+                    text = message,
+                    color = LightPink,
+                    style = MetaSearchTheme.typography.captionSmall,
+                    modifier = Modifier.padding(
+                        horizontal = MetaSearchTheme.spacing.spacing4,
+                        vertical = MetaSearchTheme.spacing.spacing2,
                     ),
-                    modifier = modifier.padding(horizontal = MetaSearchTheme.spacing.spacing8),
-                ) {
-                    Text(
-                        text = message,
-                        color = LightPink,
-                        style = MetaSearchTheme.typography.captionSmall,
-                        modifier = Modifier.padding(
-                            horizontal = MetaSearchTheme.spacing.spacing4,
-                            vertical = MetaSearchTheme.spacing.spacing2,
-                        ),
-                    )
-                }
+                )
             }
         }
     }

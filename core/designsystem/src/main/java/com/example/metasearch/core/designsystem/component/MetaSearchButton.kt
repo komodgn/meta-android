@@ -40,7 +40,7 @@ fun MetaSearchButton(
             color = contentColor,
             style = MetaSearchTheme.typography.labelLarge.copy(
                 fontWeight = FontWeight.Bold,
-            )
+            ),
         )
     }
 }

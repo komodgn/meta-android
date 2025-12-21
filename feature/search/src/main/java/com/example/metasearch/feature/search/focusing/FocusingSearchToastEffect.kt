@@ -7,7 +7,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun FocusingSearchToastEffect(
     isCirclesEmpty: Boolean,
-    eventSink: (FocusingSearchUiEvent) -> Unit
+    eventSink: (FocusingSearchUiEvent) -> Unit,
 ) {
     LaunchedEffect(Unit) {
         if (isCirclesEmpty) {

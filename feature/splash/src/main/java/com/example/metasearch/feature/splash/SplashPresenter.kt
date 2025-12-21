@@ -36,7 +36,7 @@ class SplashPresenter @AssistedInject constructor(
             listOf(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.READ_CALL_LOG,
-                Manifest.permission.READ_CONTACTS
+                Manifest.permission.READ_CONTACTS,
             )
         }
 

@@ -33,9 +33,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import coil3.compose.AsyncImage
 import com.example.metasearch.core.designsystem.annotation.DevicePreview
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
+import com.example.metasearch.core.designsystem.theme.Neutral500
+import com.example.metasearch.core.model.PersonModel
 import com.example.metasearch.core.ui.MetaSearchScaffold
 import com.example.metasearch.core.ui.component.MetaSearchLoadingIndicator
 import com.example.metasearch.feature.home.component.HomeHeader
@@ -44,9 +47,6 @@ import com.example.metasearch.feature.screens.component.MetaSearchMainBottomBar
 import com.example.metasearch.feature.screens.component.MetaSearchMainTabItem
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
-import androidx.core.net.toUri
-import com.example.metasearch.core.designsystem.theme.Neutral500
-import com.example.metasearch.core.model.PersonModel
 
 @CircuitInject(HomeScreen::class, ActivityRetainedComponent::class)
 @Composable
@@ -76,7 +76,7 @@ fun HomeUi(
                     .fillMaxWidth()
                     .clickable(
                         indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
+                        interactionSource = remember { MutableInteractionSource() },
                     ) {
                         state.eventSink(HomeUiEvent.OnPersonSectionExpand)
                     }
@@ -92,7 +92,7 @@ fun HomeUi(
                 Icon(
                     painter = if (state.isExpanded) painterResource(R.drawable.ic_up) else painterResource(R.drawable.ic_down),
                     contentDescription = "Up And Down Arrow Icon",
-                    tint = Neutral500
+                    tint = Neutral500,
                 )
             }
 
@@ -107,7 +107,7 @@ fun HomeUi(
                             image = person.image,
                             onClick = {
                                 state.eventSink(HomeUiEvent.OnPersonClick(person.id))
-                            }
+                            },
                         )
                     }
                 }
@@ -150,7 +150,7 @@ private fun PersonCircleItem(
     name: String,
     image: ByteArray?,
     onClick: () -> Unit,
-){
+) {
     Column(
         modifier = modifier
             .clickable(
@@ -174,7 +174,7 @@ private fun PersonCircleItem(
             color = Neutral500,
             textAlign = TextAlign.Center,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

@@ -1,7 +1,6 @@
 package com.example.metasearch.feature.home
 
 import android.net.Uri
-import android.util.Log.v
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -35,6 +34,7 @@ class HomePresenter @AssistedInject constructor(
     override fun present(): HomeUiState {
         val scope = rememberCoroutineScope()
         var isLoading by remember { mutableStateOf(false) }
+        var isAnalyzing by remember { mutableStateOf(false) }
         var isExpanded by remember { mutableStateOf(false) }
 
         val localPersons by personRepository.getHomeDisplayPersons().collectAsState(initial = emptyList())
@@ -64,12 +64,32 @@ class HomePresenter @AssistedInject constructor(
                 }
 
                 is HomeUiEvent.OnPersonClick -> navigator.goTo(
-                    PersonDetailScreen(event.personId)
+                    PersonDetailScreen(
+                        event.personId,
+                    ),
                 )
 
                 is HomeUiEvent.OnImageClick -> navigator.goTo(
-                    PhotoDetailScreen(event.imageUriString)
+                    PhotoDetailScreen(
+                        event.imageUriString,
+                    ),
                 )
+
+                HomeUiEvent.OnStartAnalysisClicked -> {
+//                    val constraints = Constraints.Builder()
+//                        .setRequiredNetworkType(NetworkType.CONNECTED)
+//                        .build()
+
+//                    val analysisWorkRequest = OneTimeWorkRequestBuilder<ImageAnalysisWorker>()
+//                        .setConstraints(constraints)
+//                        .build()
+//
+//                    WorkManager.getInstance(context).enqueueUniqueWork(
+//                        "ImageAnalysisWork",
+//                        ExistingWorkPolicy.KEEP,
+//                        analysisWorkRequest
+//                    )
+                }
 
                 is HomeUiEvent.OnTabClick -> navigator.resetRoot(event.screen)
             }
@@ -77,6 +97,7 @@ class HomePresenter @AssistedInject constructor(
 
         return HomeUiState(
             isLoading = isLoading,
+            isAnalyzing = isAnalyzing,
             isExpanded = isExpanded,
             persons = displayPersons,
             images = images,

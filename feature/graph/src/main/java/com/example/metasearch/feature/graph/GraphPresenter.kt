@@ -32,11 +32,11 @@ class GraphPresenter @AssistedInject constructor(
         var errorMessage by remember { mutableStateOf("") }
         val coroutineScope = rememberCoroutineScope()
         val imageNotFoundMessage = stringResource(R.string.graph_screen_image_not_found_error)
-        val MAX_IMAGES = 10
+        val maxImages = 10
 
         LaunchedEffect(Unit) {
-//            webViewUrl = "https://www.google.com"
-            webViewUrl = graphRepository.getFullGraphWebViewUrl()
+            webViewUrl = "https://www.google.com"
+//            webViewUrl = graphRepository.getFullGraphWebViewUrl()
         }
 
         fun handleEvent(event: GraphUiEvent) {
@@ -47,7 +47,7 @@ class GraphPresenter @AssistedInject constructor(
                         if (uri != null) {
                             val uriString = uri.toString()
                             if (!selectedImages.contains(uriString)) {
-                                selectedImages = (listOf(uriString) + selectedImages).take(MAX_IMAGES)
+                                selectedImages = (listOf(uriString) + selectedImages).take(maxImages)
                             }
                         } else {
                             errorMessage = imageNotFoundMessage

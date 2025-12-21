@@ -32,11 +32,11 @@ class GraphDetailPresenter @AssistedInject constructor(
         var selectedImages by remember { mutableStateOf(listOf<String>()) }
         var errorMessage by remember { mutableStateOf("") }
         val failedToFindImage = stringResource(R.string.graph_detail_screen_error)
-        val MAX_IMAGES = 10
+        val maxImages = 10
 
         LaunchedEffect(Unit) {
-//            webViewUrl = screen.imageUriString
-            webViewUrl = graphRepository.getDetailGraphWebViewUrl(screen.imageUriString)
+            webViewUrl = screen.imageUriString
+//            webViewUrl = graphRepository.getDetailGraphWebViewUrl(screen.imageUriString)
         }
 
         fun handleEvent(event: GraphDetailUiEvent) {
@@ -48,7 +48,7 @@ class GraphDetailPresenter @AssistedInject constructor(
                         if (uri != null) {
                             val uriString = uri.toString()
                             if (!selectedImages.contains(uriString)) {
-                                selectedImages = (listOf(uriString) + selectedImages).take(MAX_IMAGES)
+                                selectedImages = (listOf(uriString) + selectedImages).take(maxImages)
                             }
                         } else {
                             errorMessage = failedToFindImage

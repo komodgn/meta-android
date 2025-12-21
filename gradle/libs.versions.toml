@@ -20,6 +20,7 @@ lifecycleRuntimeKtx = "2.10.0"
 androidxDataStore = "1.2.0"
 coreSplashscreen = "1.2.0"
 
+
 ## Permisson
 accompanistPermissions = "0.37.3"
 
@@ -79,9 +80,11 @@ ktlintEngine = "0.50.0"
 detektPlugin = "1.23.8"
 appcompat = "1.7.1"
 material = "1.13.0"
+workRuntime = "2.11.0"
 
 [libraries]
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

@@ -51,7 +51,7 @@ fun FocusingSearchUi(
 
     FocusingSearchToastEffect(
         isCirclesEmpty = state.circles?.isEmpty() == true,
-        eventSink = state.eventSink
+        eventSink = state.eventSink,
     )
 
     MetaSearchScaffold(
@@ -64,7 +64,7 @@ fun FocusingSearchUi(
                         FocusingSearchBottomBarItem.COLOR -> state.eventSink(FocusingSearchUiEvent.OnColorClick)
                         FocusingSearchBottomBarItem.RESET -> state.eventSink(FocusingSearchUiEvent.OnCircleResetClick)
                     }
-                }
+                },
             )
         },
     ) { innerPadding ->
@@ -100,21 +100,21 @@ fun FocusingSearchUi(
                                         CircleModel(
                                             centerX = currentCenter.x,
                                             centerY = currentCenter.y,
-                                            radius = currentRadius
-                                        )
-                                    )
+                                            radius = currentRadius,
+                                        ),
+                                    ),
                                 )
                                 isDrawing = false
                                 currentRadius = 0f
                             },
                         )
-                    }
+                    },
             ) {
                 AsyncImage(
                     model = state.imageUriString,
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit
+                    contentScale = ContentScale.Fit,
                 )
 
                 Canvas(modifier = Modifier.fillMaxSize()) {
@@ -123,7 +123,7 @@ fun FocusingSearchUi(
                             color = White,
                             radius = circle.radius,
                             center = Offset(circle.centerX, circle.centerY),
-                            style = Stroke(width = 4.dp.toPx())
+                            style = Stroke(width = 4.dp.toPx()),
                         )
                     }
 
@@ -132,7 +132,7 @@ fun FocusingSearchUi(
                             color = White.copy(alpha = 0.5f),
                             radius = currentRadius,
                             center = currentCenter,
-                            style = Stroke(width = 4.dp.toPx())
+                            style = Stroke(width = 4.dp.toPx()),
                         )
                     }
                 }
@@ -140,7 +140,7 @@ fun FocusingSearchUi(
                 MetaSearchToast(
                     isVisible = state.isToastVisible,
                     message = stringResource(R.string.focusing_search_screen_toast_message),
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier.align(Alignment.Center),
                 )
             }
 
@@ -150,7 +150,7 @@ fun FocusingSearchUi(
                     result = result,
                     onImageClick = { uri ->
                         state.eventSink(FocusingSearchUiEvent.OnImageClick(uri))
-                    }
+                    },
                 )
             }
 

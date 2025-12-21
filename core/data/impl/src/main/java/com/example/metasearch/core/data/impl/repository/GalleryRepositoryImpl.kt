@@ -67,7 +67,9 @@ internal class GalleryRepositoryImpl @Inject constructor(
             if (cursor.moveToFirst()) {
                 val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID))
                 ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-            } else null
+            } else {
+                null
+            }
         }
     }
 

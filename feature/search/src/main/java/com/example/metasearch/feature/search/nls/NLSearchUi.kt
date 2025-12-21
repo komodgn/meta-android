@@ -25,11 +25,11 @@ import com.example.metasearch.core.ui.component.MetaSearchLoadingIndicator
 import com.example.metasearch.feature.screens.NLSearchScreen
 import com.example.metasearch.feature.screens.component.MetaSearchMainBottomBar
 import com.example.metasearch.feature.screens.component.MetaSearchMainTabItem
+import com.example.metasearch.feature.search.R
 import com.example.metasearch.feature.search.nls.component.NLSearchHeader
+import com.example.metasearch.feature.search.nls.component.NLSearchTextField
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
-import com.example.metasearch.feature.search.R
-import com.example.metasearch.feature.search.nls.component.NLSearchTextField
 
 @CircuitInject(NLSearchScreen::class, ActivityRetainedComponent::class)
 @Composable
@@ -64,13 +64,11 @@ fun NLSearchUi(
                     modifier = modifier,
                     inputString = state.inputString,
                     onInputChange = {
-                        state.eventSink(
-                            NLSearchUiEvent.OnInputChange(it)
-                        )
+                        state.eventSink(NLSearchUiEvent.OnInputChange(it))
                     },
                     onSearchClick = {
                         state.eventSink(NLSearchUiEvent.OnNLSearchClick(state.inputString))
-                    }
+                    },
                 )
 
                 Text(

@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import com.example.metasearch.core.data.api.repository.SearchRepository
 import com.example.metasearch.feature.screens.NLSearchScreen
 import com.example.metasearch.feature.screens.PhotoDetailScreen
+import com.example.metasearch.feature.search.R
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -18,7 +19,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
 import kotlinx.coroutines.launch
-import com.example.metasearch.feature.search.R
 
 class NLSearchPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
@@ -37,9 +37,7 @@ class NLSearchPresenter @AssistedInject constructor(
 
         fun handleEvent(event: NLSearchUiEvent) {
             when (event) {
-                is NLSearchUiEvent.OnInputChange -> {
-                    inputString = event.inputString
-                }
+                is NLSearchUiEvent.OnInputChange -> inputString = event.inputString
 
                 is NLSearchUiEvent.OnNLSearchClick -> {
                     if (inputString.isBlank()) return
@@ -61,21 +59,13 @@ class NLSearchPresenter @AssistedInject constructor(
                     }
                 }
 
-                NLSearchUiEvent.OnDialogCloseButtonClick -> {
-                    errorMessage = ""
-                }
+                NLSearchUiEvent.OnDialogCloseButtonClick -> errorMessage = ""
 
                 is NLSearchUiEvent.OnImageClick -> {
-                    navigator.goTo(
-                        PhotoDetailScreen(
-                            event.imageUriString,
-                        )
-                    )
+                    navigator.goTo(PhotoDetailScreen(event.imageUriString))
                 }
 
-                is NLSearchUiEvent.OnTabClick -> {
-                    navigator.resetRoot(event.screen)
-                }
+                is NLSearchUiEvent.OnTabClick -> navigator.resetRoot(event.screen)
             }
         }
 

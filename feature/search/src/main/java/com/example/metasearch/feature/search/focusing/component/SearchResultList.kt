@@ -21,7 +21,6 @@ import coil3.compose.AsyncImage
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.designsystem.theme.Neutral500
 import com.example.metasearch.core.model.SearchResult
-import com.example.metasearch.feature.search.focusing.FocusingSearchUiEvent
 
 @Composable
 internal fun SearchResultList(
