@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="person_detail_screen_change_profile_image_success_toast_message">프로필 사진이 변경되었습니다.</string>
+    <string name="person_detail_screen_edit_success_toast_message">인물 정보가 저장되었습니다.</string>
+
+    <string name="photo_detail_screen_header">Visualize Me By Photo</string>
+    <string name="photo_detail_screen_bottom_item_openai">설명</string>
+    <string name="photo_detail_screen_bottom_item_graph">탐색</string>
+    <string name="photo_detail_screen_bottom_item_focusing">빠른 검색</string>
+    <string name="photo_detail_screen_bottom_item_share">공유</string>
+</resources>
