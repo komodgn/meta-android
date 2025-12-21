@@ -13,6 +13,7 @@ import com.example.metasearch.core.designsystem.annotation.DevicePreview
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.ui.MetaSearchScaffold
 import com.example.metasearch.feature.detail.photo.component.PhotoDetailBottomBar
+import com.example.metasearch.feature.detail.photo.component.PhotoDetailBottomBarItem
 import com.example.metasearch.feature.detail.photo.component.PhotoDetailHeader
 import com.example.metasearch.feature.screens.PhotoDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -28,7 +29,16 @@ fun PhotoDetailUi(
         modifier = modifier,
         bottomBar = {
             PhotoDetailBottomBar(
-                onTabClick = {},
+                onTabClick = { tab ->
+                    when (tab) {
+                        PhotoDetailBottomBarItem.OPEN_AI -> TODO()
+                        PhotoDetailBottomBarItem.GRAPH -> {
+                            state.eventSink(PhotoDetailUiEvent.OnGraphButtonClick)
+                        }
+                        PhotoDetailBottomBarItem.FOCUSING_SEARCH -> TODO()
+                        PhotoDetailBottomBarItem.SHARE -> TODO()
+                    }
+                },
             )
         },
     ) { innerPadding ->

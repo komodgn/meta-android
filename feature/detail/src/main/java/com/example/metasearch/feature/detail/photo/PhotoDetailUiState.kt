@@ -20,9 +20,7 @@ sealed interface PhotoDetailUiEvent : CircuitUiEvent {
     /**
      *  개별 그래프 확인 버튼 클릭
      */
-    data class OnGraphButtonClick(
-        val imageUriString: String,
-    ) : PhotoDetailUiEvent
+    data object OnGraphButtonClick : PhotoDetailUiEvent
 
     /**
      * 포커싱 검색 버튼 클릭

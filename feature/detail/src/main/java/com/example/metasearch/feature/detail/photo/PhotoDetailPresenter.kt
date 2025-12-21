@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.example.metasearch.feature.screens.FocusingSearchScreen
+import com.example.metasearch.feature.screens.GraphDetailScreen
 import com.example.metasearch.feature.screens.PhotoDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
@@ -19,6 +20,7 @@ class PhotoDetailPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
     @Assisted private val screen: PhotoDetailScreen,
 ) : Presenter<PhotoDetailUiState> {
+
     @Composable
     override fun present(): PhotoDetailUiState {
         var isLoading by remember { mutableStateOf(false) }
@@ -28,7 +30,12 @@ class PhotoDetailPresenter @AssistedInject constructor(
             when (event) {
                 is PhotoDetailUiEvent.OnCreateImageDescriptionButtonClick -> TODO()
 
-                is PhotoDetailUiEvent.OnGraphButtonClick -> TODO()
+                is PhotoDetailUiEvent.OnGraphButtonClick -> navigator.goTo(
+                    GraphDetailScreen(
+                        imageUriString = screen.imageUriString,
+//                        imageUriString = "https://www.google.com",
+                    )
+                )
 
                 is PhotoDetailUiEvent.OnFocusingSearchClick -> navigator.goTo(
                     FocusingSearchScreen(
