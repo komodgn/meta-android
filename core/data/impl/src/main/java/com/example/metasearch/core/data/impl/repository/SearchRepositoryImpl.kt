@@ -1,8 +1,8 @@
 package com.example.metasearch.core.data.impl.repository
 
-import android.content.Context
 import com.example.metasearch.core.common.constants.PromptConstants
 import com.example.metasearch.core.data.api.repository.DatabaseNameRepository
+import com.example.metasearch.core.data.api.repository.GalleryRepository
 import com.example.metasearch.core.data.api.repository.SearchRepository
 import com.example.metasearch.core.data.impl.mapper.toModel
 import com.example.metasearch.core.data.impl.util.CypherQueryGenerator
@@ -17,7 +17,6 @@ import com.example.metasearch.core.network.request.OpenAIRequest
 import com.example.metasearch.core.network.service.AIService
 import com.example.metasearch.core.network.service.OpenAIService
 import com.example.metasearch.core.network.service.WebService
-import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -25,7 +24,6 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.map
 import com.example.metasearch.core.network.request.Circle as RequestCircle
 
 @Singleton
@@ -33,8 +31,8 @@ internal class SearchRepositoryImpl @Inject constructor(
     private val aiService: AIService,
     private val webService: WebService,
     private val openAIService: OpenAIService,
+    private val galleryRepository: GalleryRepository,
     private val databaseNameRepository: DatabaseNameRepository,
-    @ApplicationContext private val context: Context,
 ) : SearchRepository {
     override suspend fun focusingSearch(
         imageFile: File,
@@ -66,7 +64,14 @@ internal class SearchRepositoryImpl @Inject constructor(
             ),
         )
 
-        finalResult?.toModel() ?: SearchResult(emptyList())
+        val searchResult = finalResult?.toModel() ?: SearchResult(emptyList())
+
+        val updatedGroups = searchResult.groups.map { group ->
+            val matchedUris = galleryRepository.findMatchedUris(group.photoNames)
+            group.copy(photoNames = matchedUris.map { it.toString() })
+        }.filter { it.photoNames.isNotEmpty() }
+
+        SearchResult(groups = updatedGroups)
     }
 
     override suspend fun nlSearch(
@@ -99,6 +104,10 @@ internal class SearchRepositoryImpl @Inject constructor(
             ),
         )
 
-        response.toModel(this.context)
+        val photoNames = response.toModel()
+
+        val matchedUris = galleryRepository.findMatchedUris(photoNames)
+
+        NLSearchResult(matchedUris = matchedUris.map { it.toString() })
     }
 }
