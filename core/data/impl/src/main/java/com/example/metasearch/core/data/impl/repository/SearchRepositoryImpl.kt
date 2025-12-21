@@ -34,6 +34,7 @@ internal class SearchRepositoryImpl @Inject constructor(
     private val galleryRepository: GalleryRepository,
     private val databaseNameRepository: DatabaseNameRepository,
 ) : SearchRepository {
+
     override suspend fun focusingSearch(
         imageFile: File,
         circles: List<CircleModel>,

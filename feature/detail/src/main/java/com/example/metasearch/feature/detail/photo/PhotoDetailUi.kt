@@ -2,7 +2,6 @@ package com.example.metasearch.feature.detail.photo
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -35,7 +34,9 @@ fun PhotoDetailUi(
                         PhotoDetailBottomBarItem.GRAPH -> {
                             state.eventSink(PhotoDetailUiEvent.OnGraphButtonClick)
                         }
-                        PhotoDetailBottomBarItem.FOCUSING_SEARCH -> TODO()
+                        PhotoDetailBottomBarItem.FOCUSING_SEARCH -> {
+                            state.eventSink(PhotoDetailUiEvent.OnFocusingSearchClick(state.imageUriString))
+                        }
                         PhotoDetailBottomBarItem.SHARE -> TODO()
                     }
                 },

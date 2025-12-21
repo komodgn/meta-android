@@ -23,7 +23,7 @@ sealed interface PhotoDetailUiEvent : CircuitUiEvent {
     data object OnGraphButtonClick : PhotoDetailUiEvent
 
     /**
-     * 포커싱 검색 버튼 클릭
+     * 포커싱 검색 화면으로 이동
      */
     data class OnFocusingSearchClick(
         val imageUriString: String,

@@ -8,5 +8,9 @@
     <string name="nl_search_screen_error_dialog_title">검색 실패</string>
     <string name="nl_search_screen_error_message">검색 결과가 없습니다. 다시 시도해주세요.</string>
 
-    <string name="focusing_search_button_text">포커싱 검색</string>
+    <string name="focusing_search_screen_header">포커싱 검색</string>
+    <string name="focusing_search_screen_toast_message">드래그 해서 원을 그려주세요.</string>
+    <string name="focusing_search_button_text">검색</string>
+    <string name="focusing_search_change_circle_color_button">색 변경</string>
+    <string name="focusing_search_circle_reset_button">다시 그리기</string>
 </resources>

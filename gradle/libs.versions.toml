@@ -52,6 +52,9 @@ composeBom = "2025.12.00"
 composeStableMarker = "1.0.7"
 constraintlayoutCompose = "1.1.1"
 
+## Coil
+coilCompose = "3.3.0"
+
 ## Circuit
 circuit = "0.31.0"
 
@@ -137,6 +140,8 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detektPlugin" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
