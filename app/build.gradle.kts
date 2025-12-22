@@ -54,7 +54,7 @@ dependencies {
     implementation(projects.feature.webview)
 
     implementation(libs.bundles.circuit)
-    
+
     api(libs.circuit.codegen.annotation)
     ksp(libs.circuit.codegen.ksp)
 }

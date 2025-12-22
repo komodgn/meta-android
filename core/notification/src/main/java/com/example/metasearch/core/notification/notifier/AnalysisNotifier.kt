@@ -22,7 +22,9 @@ class AnalysisNotifier @Inject constructor(
 
     init {
         val channel = NotificationChannel(
-            CHANNEL_ID, "이미지 분석", NotificationManager.IMPORTANCE_DEFAULT
+            CHANNEL_ID,
+            "이미지 분석",
+            NotificationManager.IMPORTANCE_DEFAULT,
         )
         notificationManager.createNotificationChannel(channel)
     }

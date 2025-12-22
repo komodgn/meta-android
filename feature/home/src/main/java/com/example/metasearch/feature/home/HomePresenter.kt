@@ -77,7 +77,7 @@ class HomePresenter @AssistedInject constructor(
                     WorkManager.getInstance(context).enqueueUniqueWork(
                         "ImageAnalysisWork",
                         ExistingWorkPolicy.KEEP,
-                        workRequest
+                        workRequest,
                     )
                 }
 
