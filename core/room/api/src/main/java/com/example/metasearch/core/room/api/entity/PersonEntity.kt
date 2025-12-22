@@ -9,6 +9,9 @@ data class PersonEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
 
+    @ColumnInfo(name = "name")
+    val name: String,
+
     @ColumnInfo(name = "input_name")
     val inputName: String,
 

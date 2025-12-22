@@ -20,7 +20,7 @@ internal class GraphRepositoryImpl @Inject constructor(
     override suspend fun getFullGraphWebViewUrl(): String {
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
-        return "${webServerBaseUrl}graph/$dbName"
+        return "$webServerBaseUrl/graph/$dbName"
     }
 
     override suspend fun getDetailGraphWebViewUrl(imageUriString: String): String {
@@ -29,7 +29,7 @@ internal class GraphRepositoryImpl @Inject constructor(
 
         val fileName = galleryRepository.getFileName(uri) ?: ""
 
-        return "${webServerBaseUrl}entityTripleGraph/$dbName/$fileName"
+        return "$webServerBaseUrl/entityTripleGraph/$dbName/$fileName"
     }
 
     override suspend fun getTripleData(photoName: String) {

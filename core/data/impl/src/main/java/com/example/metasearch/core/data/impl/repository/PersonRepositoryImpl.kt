@@ -102,4 +102,10 @@ class PersonRepositoryImpl @Inject constructor(
             normalizeScores(localModels)
         }
     }
+
+    override suspend fun getMismatchedNames(): Map<String, String> {
+        return personDao.getMismatchedNames().associate {
+            it.name to it.inputName
+        }
+    }
 }

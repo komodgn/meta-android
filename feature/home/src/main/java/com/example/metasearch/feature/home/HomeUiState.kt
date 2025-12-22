@@ -17,6 +17,11 @@ data class HomeUiState(
 
 sealed interface HomeUiEvent : CircuitUiEvent {
     /**
+     * 이미지 분석 요청 버튼 클릭
+     */
+    data object OnStartAnalysisClicked : HomeUiEvent
+
+    /**
      * 상단 인물 리스트 영역 클릭
      */
     data object OnPersonSectionExpand : HomeUiEvent
@@ -41,9 +46,4 @@ sealed interface HomeUiEvent : CircuitUiEvent {
     data class OnTabClick(
         val screen: Screen,
     ) : HomeUiEvent
-
-    /**
-     * 이미지 분석 버튼 클릭
-     */
-    data object OnStartAnalysisClicked : HomeUiEvent
 }

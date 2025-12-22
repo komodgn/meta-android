@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.core.room.impl)
     implementation(projects.core.model)
     implementation(projects.core.network)
+    implementation(projects.core.notification)
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
 

@@ -31,6 +31,7 @@ dependencies {
     implementation(projects.core.room.api)
 
     implementation(libs.okhttp)
+    implementation(libs.androidx.work.runtime)
 
     // 코루틴 테스트 유틸리티
     testImplementation(libs.kotlinx.coroutines.test)

@@ -9,9 +9,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.metasearch.core.data.api.repository.GalleryRepository
+import com.example.metasearch.core.data.api.repository.ImageAnalysisRepository
 import com.example.metasearch.core.data.api.repository.PersonRepository
 import com.example.metasearch.core.model.PersonModel
+import com.example.metasearch.feature.home.worker.ImageAnalysisWorker
 import com.example.metasearch.feature.screens.HomeScreen
 import com.example.metasearch.feature.screens.PersonDetailScreen
 import com.example.metasearch.feature.screens.PhotoDetailScreen
@@ -28,17 +36,23 @@ class HomePresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
     private val galleryRepository: GalleryRepository,
     private val personRepository: PersonRepository,
+    private val imageAnalysisRepository: ImageAnalysisRepository,
 ) : Presenter<HomeUiState> {
 
     @Composable
     override fun present(): HomeUiState {
         val scope = rememberCoroutineScope()
+        val context = LocalContext.current
+
         var isLoading by remember { mutableStateOf(false) }
-        var isAnalyzing by remember { mutableStateOf(false) }
+        val isAnalyzing by remember(context) {
+            imageAnalysisRepository.getAnalysisStatus(context)
+        }.collectAsState(initial = false)
         var isExpanded by remember { mutableStateOf(false) }
 
         val localPersons by personRepository.getHomeDisplayPersons().collectAsState(initial = emptyList())
         var displayPersons by remember { mutableStateOf<List<PersonModel>>(emptyList()) }
+
         var images by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
         LaunchedEffect(localPersons) {
@@ -51,6 +65,22 @@ class HomePresenter @AssistedInject constructor(
 
         fun handleEvent(event: HomeUiEvent) {
             when (event) {
+                HomeUiEvent.OnStartAnalysisClicked -> {
+                    val constraints = Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build()
+
+                    val workRequest = OneTimeWorkRequestBuilder<ImageAnalysisWorker>()
+                        .setConstraints(constraints)
+                        .build()
+
+                    WorkManager.getInstance(context).enqueueUniqueWork(
+                        "ImageAnalysisWork",
+                        ExistingWorkPolicy.KEEP,
+                        workRequest,
+                    )
+                }
+
                 HomeUiEvent.OnPersonSectionExpand -> {
                     isExpanded = !isExpanded
 
@@ -74,22 +104,6 @@ class HomePresenter @AssistedInject constructor(
                         event.imageUriString,
                     ),
                 )
-
-                HomeUiEvent.OnStartAnalysisClicked -> {
-//                    val constraints = Constraints.Builder()
-//                        .setRequiredNetworkType(NetworkType.CONNECTED)
-//                        .build()
-
-//                    val analysisWorkRequest = OneTimeWorkRequestBuilder<ImageAnalysisWorker>()
-//                        .setConstraints(constraints)
-//                        .build()
-//
-//                    WorkManager.getInstance(context).enqueueUniqueWork(
-//                        "ImageAnalysisWork",
-//                        ExistingWorkPolicy.KEEP,
-//                        analysisWorkRequest
-//                    )
-                }
 
                 is HomeUiEvent.OnTabClick -> navigator.resetRoot(event.screen)
             }

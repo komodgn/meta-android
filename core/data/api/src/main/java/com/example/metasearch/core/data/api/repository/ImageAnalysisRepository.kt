@@ -1,0 +1,9 @@
+package com.example.metasearch.core.data.api.repository
+
+import android.content.Context
+import kotlinx.coroutines.flow.Flow
+
+interface ImageAnalysisRepository {
+    fun getAnalysisStatus(context: Context): Flow<Boolean>
+    suspend fun runFullAnalysis()
+}

@@ -7,4 +7,6 @@ interface PersonRepository {
     fun getHomeDisplayPersons(): Flow<List<PersonModel>>
 
     suspend fun fetchAndSyncPhotoCount(localModels: List<PersonModel>): List<PersonModel>
+
+    suspend fun getMismatchedNames(): Map<String, String>
 }

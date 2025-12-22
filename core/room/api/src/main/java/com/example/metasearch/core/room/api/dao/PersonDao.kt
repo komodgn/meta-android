@@ -9,6 +9,11 @@ import com.example.metasearch.core.room.api.entity.PersonEntity
 import com.example.metasearch.core.room.api.relations.PersonWithFaces
 import kotlinx.coroutines.flow.Flow
 
+data class NamePair(
+    val name: String,
+    val inputName: String,
+)
+
 @Dao
 interface PersonDao {
     @Insert
@@ -53,12 +58,16 @@ interface PersonDao {
         homeDisplay: Boolean,
     ): Int
 
+    @Query("SELECT name, input_name AS inputName FROM persons WHERE name != input_name")
+    suspend fun getMismatchedNames(): List<NamePair>
+
     @Transaction
     suspend fun insertPersonAndFace(
         imageName: String,
         imageBytes: ByteArray,
     ) {
         val newPersonEntity = PersonEntity(
+            name = imageName,
             inputName = imageName,
             phoneNumber = "",
             isHomeDisplay = false,

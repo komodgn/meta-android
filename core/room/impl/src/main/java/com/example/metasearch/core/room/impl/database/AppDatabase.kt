@@ -14,7 +14,7 @@ import com.example.metasearch.core.room.api.entity.PersonEntity
         FaceEntity::class,
         AnalyzedImageEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {

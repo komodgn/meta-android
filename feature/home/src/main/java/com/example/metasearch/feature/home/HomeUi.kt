@@ -69,7 +69,12 @@ fun HomeUi(
         Column(
             modifier = Modifier.padding(innerPadding),
         ) {
-            HomeHeader()
+            HomeHeader(
+                onUploadClick = {
+                    state.eventSink(HomeUiEvent.OnStartAnalysisClicked)
+                },
+                isAnalyzing = state.isAnalyzing,
+            )
 
             Row(
                 modifier = Modifier
