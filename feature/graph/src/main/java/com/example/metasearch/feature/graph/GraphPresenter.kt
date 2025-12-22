@@ -35,8 +35,8 @@ class GraphPresenter @AssistedInject constructor(
         val maxImages = 10
 
         LaunchedEffect(Unit) {
-            webViewUrl = "https://www.google.com"
-//            webViewUrl = graphRepository.getFullGraphWebViewUrl()
+//            webViewUrl = "https://www.google.com"
+            webViewUrl = graphRepository.getFullGraphWebViewUrl()
         }
 
         fun handleEvent(event: GraphUiEvent) {
