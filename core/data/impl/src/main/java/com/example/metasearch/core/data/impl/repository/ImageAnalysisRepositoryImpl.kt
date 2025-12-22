@@ -43,7 +43,7 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
     }
 
     override suspend fun runFullAnalysis() = withContext(Dispatchers.IO) {
-        Log.d(tag,"runFullAnalysis 함수 실행");
+        Log.d(tag, "runFullAnalysis 함수 실행")
 
         val currentGalleryPaths = galleryRepository.getAllGalleryPaths()
         val alreadyAnalyzedPaths = analyzedImageDao.getAllAnalyzedPaths()
@@ -54,8 +54,8 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
             path !in alreadyAnalyzedPaths &&
                 (path.endsWith(".jpg", true) || path.endsWith(".jpeg", true) || path.endsWith(".png", true))
         }
-        Log.d(tag,"deletePaths size : "+deletePaths.size);
-        Log.d(tag,"addPaths size : "+addPaths.size);
+        Log.d(tag, "deletePaths size : " + deletePaths.size)
+        Log.d(tag, "addPaths size : " + addPaths.size)
 
         if (deletePaths.isEmpty() && addPaths.isEmpty()) return@withContext
 
@@ -63,8 +63,8 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
             val fileNamePart = createMultipartBodyPartFromFilePath("deleteImage", path)
             val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
 
-            webService.uploadWebDeleteImage(fileNamePart, dbName)
-            aiService.uploadDeleteImage(fileNamePart, dbNameBody)
+            runCatching { webService.uploadWebDeleteImage(fileNamePart, dbName) }
+            runCatching { aiService.uploadDeleteImage(fileNamePart, dbNameBody) }
 
             analyzedImageDao.deletePath(path)
         }
@@ -74,8 +74,8 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
             val aiImagePart = createMultipartBodyPartFromFilePath("addImage", path)
             val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
 
-            webService.uploadWebAddImage(webImagePart, dbName)
-            aiService.uploadAddImage(aiImagePart, dbNameBody)
+            runCatching { webService.uploadWebAddImage(webImagePart, dbName) }
+            runCatching { aiService.uploadAddImage(aiImagePart, dbNameBody) }
 
             analyzedImageDao.insertPath(AnalyzedImageEntity(imagePath = path))
         }
@@ -84,7 +84,7 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
         val countBody = "0".toRequestBody("text/plain".toMediaTypeOrNull())
 
-        aiService.uploadFinish(finishBody, dbNameBody, countBody)
+        runCatching { aiService.uploadFinish(finishBody, dbNameBody, countBody) }
 
         val mismatchedNames = personRepository.getMismatchedNames()
         mismatchedNames.forEach { (oldName, newName) ->
