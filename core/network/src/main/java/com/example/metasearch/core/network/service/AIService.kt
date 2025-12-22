@@ -28,14 +28,14 @@ public interface AIService {
     @Multipart
     @POST("android/upload_add")
     suspend fun uploadAddImage(
-        @Part image: MultipartBody.Part,
+        @Part addImage: MultipartBody.Part,
         @Part("dbName") dbName: RequestBody,
     )
 
     @Multipart
     @POST("android/upload_delete")
     suspend fun uploadDeleteImage(
-        @Part filename: MultipartBody.Part,
+        @Part("deleteImage") filename: MultipartBody.Part,
         @Part("dbName") dbName: RequestBody,
     )
 

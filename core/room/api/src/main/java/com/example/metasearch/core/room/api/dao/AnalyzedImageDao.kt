@@ -8,12 +8,12 @@ import com.example.metasearch.core.room.api.entity.AnalyzedImageEntity
 
 @Dao
 interface AnalyzedImageDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertImagePath(entity: AnalyzedImageEntity): Long
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPath(path: AnalyzedImageEntity): Long
 
-    @Query("DELETE FROM analyzed_images WHERE image_path = :imagePath")
-    suspend fun deleteImagePath(imagePath: String): Int
+    @Query("DELETE FROM analyzed_images WHERE image_path = :path")
+    suspend fun deletePath(path: String): Int
 
     @Query("SELECT image_path FROM analyzed_images")
-    suspend fun getAllImagePaths(): List<String>
+    suspend fun getAllAnalyzedPaths(): List<String>
 }
