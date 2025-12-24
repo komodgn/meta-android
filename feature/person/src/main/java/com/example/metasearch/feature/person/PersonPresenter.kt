@@ -48,9 +48,7 @@ class PersonPresenter @AssistedInject constructor(
 
                 is PersonUiEvent.OnPersonSearchClick -> TODO()
 
-                is PersonUiEvent.OnPersonClick -> navigator.goTo(
-                    PersonDetailScreen(event.personId)
-                )
+                is PersonUiEvent.OnPersonClick -> navigator.goTo(PersonDetailScreen(event.personId))
 
                 is PersonUiEvent.OnTabClick -> {
                     navigator.resetRoot(event.screen)

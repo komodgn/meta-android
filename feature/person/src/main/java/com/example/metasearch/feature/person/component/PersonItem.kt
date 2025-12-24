@@ -35,7 +35,7 @@ internal fun PersonItem(
             .fillMaxWidth()
             .clickable { onClick() }
             .padding(MetaSearchTheme.spacing.spacing2),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AsyncImage(
             model = person.faces.firstOrNull()?.imageData,
@@ -45,7 +45,7 @@ internal fun PersonItem(
                 .aspectRatio(1f)
                 .clip(CircleShape)
                 .background(Neutral200),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
 
         Spacer(modifier = Modifier.height(MetaSearchTheme.spacing.spacing2))
@@ -56,7 +56,7 @@ internal fun PersonItem(
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

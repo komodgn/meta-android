@@ -58,15 +58,15 @@ fun PersonUi(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 items(
                     state.people,
-                    key = { it.id }
+                    key = { it.id },
                 ) { person ->
                     PersonItem(
                         person = person,
-                        onClick = { state.eventSink(PersonUiEvent.OnPersonClick(person.id)) }
+                        onClick = { state.eventSink(PersonUiEvent.OnPersonClick(person.id)) },
                     )
                 }
             }

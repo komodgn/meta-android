@@ -201,8 +201,8 @@ private fun HomeUiPreview() {
                                 id = 101L,
                                 personId = 1L,
                                 imageName = "face1.jpg",
-                                imageData = byteArrayOf()
-                            )
+                                imageData = byteArrayOf(),
+                            ),
                         ),
                         isHomeDisplay = true,
                     ),
@@ -215,8 +215,8 @@ private fun HomeUiPreview() {
                                 id = 102L,
                                 personId = 2L,
                                 imageName = "face2.jpg",
-                                imageData = byteArrayOf()
-                            )
+                                imageData = byteArrayOf(),
+                            ),
                         ),
                         isHomeDisplay = true,
                     ),
@@ -229,8 +229,8 @@ private fun HomeUiPreview() {
                                 id = 103L,
                                 personId = 3L,
                                 imageName = "face3.jpg",
-                                imageData = byteArrayOf()
-                            )
+                                imageData = byteArrayOf(),
+                            ),
                         ),
                         isHomeDisplay = true,
                     ),

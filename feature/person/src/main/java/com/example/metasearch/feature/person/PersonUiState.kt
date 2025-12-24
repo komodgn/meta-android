@@ -32,7 +32,7 @@ sealed interface PersonUiEvent : CircuitUiEvent {
      */
     data class OnPersonClick(
         val personId: Long,
-    ): PersonUiEvent
+    ) : PersonUiEvent
 
     /**
      * 하단 네비 탭 클릭

@@ -56,8 +56,8 @@ internal fun PersonWithFaces.toModel(callDurations: Map<String, Long>): PersonMo
                 id = faceEntity.id,
                 personId = faceEntity.personId,
                 imageName = faceEntity.imageName,
-                imageData = faceEntity.imageData
+                imageData = faceEntity.imageData,
             )
-        }
+        },
     )
 }
