@@ -19,9 +19,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.metasearch.core.designsystem.annotation.ComponentPreview
+import com.example.metasearch.core.designsystem.theme.Blue500
 import com.example.metasearch.core.designsystem.theme.LightGrey
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
-import com.example.metasearch.core.designsystem.theme.Neutral500
 import com.example.metasearch.core.designsystem.theme.Neutral800
 import com.example.metasearch.feature.home.R
 
@@ -54,7 +54,7 @@ fun HomeHeader(
                     Icon(
                         modifier = Modifier.size(24.dp),
                         painter = painterResource(R.drawable.ic_upload),
-                        tint = Neutral500,
+                        tint = Blue500,
                         contentDescription = "Upload Icon",
                     )
                 }

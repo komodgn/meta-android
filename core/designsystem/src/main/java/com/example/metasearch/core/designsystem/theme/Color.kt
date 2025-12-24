@@ -23,6 +23,7 @@ val LightPink = Color(0xFFfde6eb)
 val Pink = Color(0xFFFD8692)
 val HotPink = Color(0xFFF92960)
 val Rose = Color(0xFFDD8789)
+val Blue500 = Color(0xFF4493F8)
 
 @Immutable
 data class MetaSearchColorScheme(

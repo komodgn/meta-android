@@ -31,6 +31,10 @@ interface PersonDao {
     fun getPersonsWithFaces(): Flow<List<PersonWithFaces>>
 
     @Transaction
+    @Query("SELECT * FROM persons ORDER BY input_name ASC")
+    fun getAllPersonsWithFaces(): Flow<List<PersonWithFaces>>
+
+    @Transaction
     @Query("SELECT * FROM persons WHERE input_name = :inputName LIMIT 1")
     suspend fun getPersonWithFacesByInputName(
         inputName: String,
@@ -82,6 +86,9 @@ interface PersonDao {
         )
         insertFace(newFaceEntity)
     }
+
+    @Query("SELECT COUNT(*) FROM persons")
+    suspend fun getPersonCount(): Int
 
     @Query("SELECT * FROM persons WHERE id = :personId")
     suspend fun getPersonById(
