@@ -20,7 +20,7 @@ data object NLSearchScreen : Screen
 
 @Parcelize
 data class PersonDetailScreen(
-    val personId: Int,
+    val personId: Long,
 ) : Screen
 
 @Parcelize

@@ -1,6 +1,6 @@
 package com.example.metasearch.core.data.impl.mapper
 
-import com.example.metasearch.core.common.utils.normalizePhoneNumber
+import com.example.metasearch.core.model.FaceModel
 import com.example.metasearch.core.model.PersonModel
 import com.example.metasearch.core.model.PhotoGroup
 import com.example.metasearch.core.model.SearchResult
@@ -42,19 +42,22 @@ internal fun PhotoNameResponse.toModel(): List<String> {
 }
 
 internal fun PersonWithFaces.toModel(callDurations: Map<String, Long>): PersonModel {
-    val normalizedPhone = normalizePhoneNumber(this.person.phoneNumber)
-    val totalDuration = callDurations.getOrDefault(normalizedPhone, 0L)
+    val totalDuration = callDurations[person.phoneNumber] ?: 0L
 
     return PersonModel(
-        id = this.person.id.toInt(),
-        imageName = this.faces.first().imageName,
-        image = this.faces.first().imageData,
-        inputName = this.person.inputName,
-        phone = this.person.phoneNumber,
-        homeDisplay = this.person.isHomeDisplay,
-        photoCount = 0,
+        id = person.id,
+        name = person.name,
+        inputName = person.inputName,
+        phoneNumber = person.phoneNumber,
+        isHomeDisplay = person.isHomeDisplay,
         totalDuration = totalDuration,
-        normalizedScore = 0.0,
-        thumbnailImage = this.faces.firstOrNull()?.thumbnailData,
+        faces = faces.map { faceEntity ->
+            FaceModel(
+                id = faceEntity.id,
+                personId = faceEntity.personId,
+                imageName = faceEntity.imageName,
+                imageData = faceEntity.imageData
+            )
+        }
     )
 }
