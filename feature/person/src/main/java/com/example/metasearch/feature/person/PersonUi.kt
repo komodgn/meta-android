@@ -1,14 +1,23 @@
 package com.example.metasearch.feature.person
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.metasearch.core.designsystem.annotation.DevicePreview
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
+import com.example.metasearch.core.model.PersonModel
 import com.example.metasearch.core.ui.MetaSearchScaffold
 import com.example.metasearch.feature.person.component.PersonHeader
+import com.example.metasearch.feature.person.component.PersonItem
+import com.example.metasearch.feature.person.component.PersonSearchTextField
 import com.example.metasearch.feature.screens.PersonScreen
 import com.example.metasearch.feature.screens.component.MetaSearchMainBottomBar
 import com.example.metasearch.feature.screens.component.MetaSearchMainTabItem
@@ -37,6 +46,30 @@ fun PersonUi(
             modifier = modifier.padding(innerPadding),
         ) {
             PersonHeader()
+
+            PersonSearchTextField(
+                inputString = state.inputPersonNameString,
+                onInputChange = { state.eventSink(PersonUiEvent.OnInputChange(it)) },
+                onSearchClick = { state.eventSink(PersonUiEvent.OnPersonSearchClick(state.inputPersonNameString)) },
+            )
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(
+                    state.people,
+                    key = { it.id }
+                ) { person ->
+                    PersonItem(
+                        person = person,
+                        onClick = { state.eventSink(PersonUiEvent.OnPersonClick(person.id)) }
+                    )
+                }
+            }
         }
     }
 }
@@ -47,6 +80,32 @@ private fun PersonUiPreview() {
     MetaSearchTheme {
         PersonUi(
             state = PersonUiState(
+                people = listOf(
+                    PersonModel(
+                        id = 1L,
+                        name = "춘식이",
+                        inputName = "춘식이",
+                        isHomeDisplay = true,
+                    ),
+                    PersonModel(
+                        id = 2L,
+                        name = "춘식이2",
+                        inputName = "춘식이2",
+                        isHomeDisplay = true,
+                    ),
+                    PersonModel(
+                        id = 3L,
+                        name = "춘식이3",
+                        inputName = "춘식이3",
+                        isHomeDisplay = true,
+                    ),
+                    PersonModel(
+                        id = 4L,
+                        name = "춘식이4",
+                        inputName = "춘식이4",
+                        isHomeDisplay = true,
+                    ),
+                ),
                 eventSink = {},
             ),
         )
