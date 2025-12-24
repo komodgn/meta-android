@@ -2,6 +2,7 @@ package com.example.metasearch.core.network.service
 
 import com.example.metasearch.core.network.request.FocusingSearchRequest
 import com.example.metasearch.core.network.response.CircleDetectionResponse
+import com.example.metasearch.core.network.response.CommonResponse
 import com.example.metasearch.core.network.response.UploadResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -30,14 +31,14 @@ public interface AIService {
     suspend fun uploadAddImage(
         @Part addImage: MultipartBody.Part,
         @Part("dbName") dbName: RequestBody,
-    )
+    ): CommonResponse
 
     @Multipart
     @POST("android/upload_delete")
     suspend fun uploadDeleteImage(
         @Part("deleteImage") filename: MultipartBody.Part,
         @Part("dbName") dbName: RequestBody,
-    )
+    ): CommonResponse
 
     @Multipart
     @POST("android/upload_database")
