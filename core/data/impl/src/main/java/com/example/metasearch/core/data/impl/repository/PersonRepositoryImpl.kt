@@ -64,6 +64,13 @@ class PersonRepositoryImpl @Inject constructor(
         }.sortedByDescending { it.normalizedScore }
     }
 
+    override fun getAllPersons(): Flow<List<PersonModel>> = personDao
+        .getAllPersonsWithFaces().map { personWithFacesList ->
+            val callDurations = getCallDurations()
+
+            personWithFacesList.map { it.toModel(callDurations) }
+        }
+
     override fun getHomeDisplayPersons(): Flow<List<PersonModel>> = personDao
         .getPersonsWithFaces().map { personWithFacesList ->
             val callDurations = getCallDurations()
@@ -74,6 +81,14 @@ class PersonRepositoryImpl @Inject constructor(
 
             normalizeScores(models)
         }
+
+    override suspend fun getPersonCount(): Int = personDao.getPersonCount()
+
+    override suspend fun addAnalyzedPerson(imageName: String, imageBytes: ByteArray) {
+        if (!personDao.isNameExists(imageName)) {
+            personDao.insertPersonAndFace(imageName, imageBytes)
+        }
+    }
 
     override suspend fun fetchAndSyncPhotoCount(localModels: List<PersonModel>): List<PersonModel> {
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
