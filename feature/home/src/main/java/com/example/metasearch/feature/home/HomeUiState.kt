@@ -30,7 +30,7 @@ sealed interface HomeUiEvent : CircuitUiEvent {
      * 상단 인물 클릭
      */
     data class OnPersonClick(
-        val personId: Int,
+        val personId: Long,
     ) : HomeUiEvent
 
     /**

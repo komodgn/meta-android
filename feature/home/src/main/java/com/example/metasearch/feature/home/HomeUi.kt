@@ -38,6 +38,7 @@ import coil3.compose.AsyncImage
 import com.example.metasearch.core.designsystem.annotation.DevicePreview
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.designsystem.theme.Neutral500
+import com.example.metasearch.core.model.FaceModel
 import com.example.metasearch.core.model.PersonModel
 import com.example.metasearch.core.ui.MetaSearchScaffold
 import com.example.metasearch.core.ui.component.MetaSearchLoadingIndicator
@@ -109,7 +110,7 @@ fun HomeUi(
                     items(state.persons) { person ->
                         PersonCircleItem(
                             name = person.inputName,
-                            image = person.image,
+                            image = person.faces.firstOrNull()?.imageData,
                             onClick = {
                                 state.eventSink(HomeUiEvent.OnPersonClick(person.id))
                             },
@@ -192,60 +193,46 @@ private fun HomeUiPreview() {
             state = HomeUiState(
                 persons = listOf(
                     PersonModel(
-                        id = 1,
+                        id = 1L,
+                        name = "person1",
                         inputName = "할미쬬",
-                        image = byteArrayOf(),
-                        imageName = "",
-                        homeDisplay = true,
+                        faces = listOf(
+                            FaceModel(
+                                id = 101L,
+                                personId = 1L,
+                                imageName = "face1.jpg",
+                                imageData = byteArrayOf()
+                            )
+                        ),
+                        isHomeDisplay = true,
                     ),
                     PersonModel(
-                        id = 2,
+                        id = 2L,
+                        name = "person2",
                         inputName = "춘식이",
-                        image = byteArrayOf(),
-                        imageName = "",
-                        homeDisplay = true,
+                        faces = listOf(
+                            FaceModel(
+                                id = 102L,
+                                personId = 2L,
+                                imageName = "face2.jpg",
+                                imageData = byteArrayOf()
+                            )
+                        ),
+                        isHomeDisplay = true,
                     ),
                     PersonModel(
-                        id = 3,
-                        inputName = "좀비쬬",
-                        image = byteArrayOf(),
-                        imageName = "",
-                        homeDisplay = true,
-                    ),
-                    PersonModel(
-                        id = 4,
-                        inputName = "고구마",
-                        image = byteArrayOf(),
-                        imageName = "",
-                        homeDisplay = true,
-                    ),
-                    PersonModel(
-                        id = 5,
-                        inputName = "할미쬬",
-                        image = byteArrayOf(),
-                        imageName = "",
-                        homeDisplay = true,
-                    ),
-                    PersonModel(
-                        id = 6,
-                        inputName = "춘식이",
-                        image = byteArrayOf(),
-                        imageName = "",
-                        homeDisplay = true,
-                    ),
-                    PersonModel(
-                        id = 7,
-                        inputName = "좀비쬬",
-                        image = byteArrayOf(),
-                        imageName = "",
-                        homeDisplay = true,
-                    ),
-                    PersonModel(
-                        id = 8,
-                        inputName = "고구마",
-                        image = byteArrayOf(),
-                        imageName = "",
-                        homeDisplay = true,
+                        id = 3L,
+                        name = "person3",
+                        inputName = "춘구마",
+                        faces = listOf(
+                            FaceModel(
+                                id = 103L,
+                                personId = 3L,
+                                imageName = "face3.jpg",
+                                imageData = byteArrayOf()
+                            )
+                        ),
+                        isHomeDisplay = true,
                     ),
                 ),
                 images = List(20) {
