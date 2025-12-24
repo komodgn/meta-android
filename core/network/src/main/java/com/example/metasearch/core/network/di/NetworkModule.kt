@@ -36,7 +36,7 @@ internal object NetworkModule {
     @Provides
     internal fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+            level = HttpLoggingInterceptor.Level.HEADERS
         }
     }
 
@@ -71,7 +71,7 @@ internal object NetworkModule {
     @Singleton
     @Provides
     internal fun provideWebRetrofit(
-        okHttpClient: OkHttpClient,
+        @Named("AIOkHttpClient") okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.WEB_SERVER_BASE_URL)
