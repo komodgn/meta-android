@@ -1,6 +1,7 @@
 package com.example.metasearch.core.data.impl.repository
 
 import android.content.Context
+import android.util.Base64.decode
 import android.util.Log
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
@@ -50,41 +51,81 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
         val deletePaths = alreadyAnalyzedPaths.filter { it !in currentGalleryPaths }
-        val addPaths = currentGalleryPaths.filter { path ->
-            path !in alreadyAnalyzedPaths &&
-                (path.endsWith(".jpg", true) || path.endsWith(".jpeg", true) || path.endsWith(".png", true))
-        }
-        Log.d(tag, "deletePaths size : " + deletePaths.size)
-        Log.d(tag, "addPaths size : " + addPaths.size)
-
-        if (deletePaths.isEmpty() && addPaths.isEmpty()) return@withContext
-
         deletePaths.forEach { path ->
             val fileNamePart = createMultipartBodyPartFromFilePath("deleteImage", path)
             val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
 
-            runCatching { webService.uploadWebDeleteImage(fileNamePart, dbName) }
-            runCatching { aiService.uploadDeleteImage(fileNamePart, dbNameBody) }
+            val webSuccess = runCatching { webService.uploadWebDeleteImage(fileNamePart, dbName) }.isSuccess
+            val aiSuccess = runCatching { aiService.uploadDeleteImage(fileNamePart, dbNameBody) }.isSuccess
 
-            analyzedImageDao.deletePath(path)
+            if (webSuccess && aiSuccess) { analyzedImageDao.deletePath(path) }
         }
 
-        addPaths.forEach { path ->
-            val webImagePart = createMultipartBodyPartFromFilePath("image", path)
-            val aiImagePart = createMultipartBodyPartFromFilePath("addImage", path)
-            val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
-
-            runCatching { webService.uploadWebAddImage(webImagePart, dbName) }
-            runCatching { aiService.uploadAddImage(aiImagePart, dbNameBody) }
-
-            analyzedImageDao.insertPath(AnalyzedImageEntity(imagePath = path))
+        val addPaths = currentGalleryPaths.filter { path ->
+            path !in alreadyAnalyzedPaths &&
+                (path.endsWith(".jpg", true) || path.endsWith(".jpeg", true) || path.endsWith(".png", true))
         }
+        if (addPaths.isEmpty()) return@withContext
 
-        val finishBody = "true".toRequestBody("text/plain".toMediaTypeOrNull())
-        val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
-        val countBody = "0".toRequestBody("text/plain".toMediaTypeOrNull())
+        val chunkSize = 10
+        addPaths.chunked(chunkSize).forEachIndexed { index, chunk ->
+            Log.d(tag, "청크 처리 중: ${index + 1}번째 묶음 (${chunk.size}개)")
 
-        runCatching { aiService.uploadFinish(finishBody, dbNameBody, countBody) }
+            val successfulPathsInChunk = mutableListOf<String>()
+            var isChunkAllUploadSuccess = true
+
+            for (path in chunk) {
+                val webImagePart = createMultipartBodyPartFromFilePath("image", path)
+                val aiImagePart = createMultipartBodyPartFromFilePath("addImage", path)
+                val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
+
+                val webSuccess = runCatching { webService.uploadWebAddImage(webImagePart, dbName) }.isSuccess
+                val aiSuccess = runCatching { aiService.uploadAddImage(aiImagePart, dbNameBody) }
+
+                if (aiSuccess.isSuccess) {
+                    successfulPathsInChunk.add(path)
+                } else {
+                    isChunkAllUploadSuccess = false
+                    Log.e(tag, "업로드 실패로 인한 청크 중단: $path")
+                    break
+                }
+            }
+
+            if (isChunkAllUploadSuccess) {
+                val currentPersonCount = personRepository.getPersonCount()
+                val finishBody = "true".toRequestBody("text/plain".toMediaTypeOrNull())
+                val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
+                val countBody = currentPersonCount.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+
+                val finishResult = runCatching {
+                    aiService.uploadFinish(finishBody, dbNameBody, countBody)
+                }
+
+                val finishResponse = finishResult.getOrNull()
+
+                if (finishResult.isFailure) {
+                    Log.e(tag, "uploadFinish 실제 에러 원인: ${finishResult.exceptionOrNull()?.message}")
+                }
+
+                if (finishResponse != null) {
+                    finishResponse.images.forEach { personResult ->
+                        Log.d(tag, "데이터 수신됨: ${personResult.imageName}")
+                        if (personResult.isFaceExit && personResult.imageName != null && personResult.imageBytes != null) {
+                            val decodedBytes = decode(personResult.imageBytes, android.util.Base64.DEFAULT)
+                            personRepository.addAnalyzedPerson(personResult.imageName!!, decodedBytes)
+                            Log.d(tag, "addAnalyzedPerson 호출 완료")
+                        }
+                    }
+
+                    successfulPathsInChunk.forEach { path ->
+                        analyzedImageDao.insertPath(AnalyzedImageEntity(imagePath = path))
+                    }
+                    Log.d(tag, "${index + 1}번째 청크 완료 및 로컬 DB 반영 성공")
+                } else {
+                    Log.e(tag, "${index + 1}번째 청크 uploadFinish 실패. 다음 분석에서 재시도")
+                }
+            }
+        }
 
         val mismatchedNames = personRepository.getMismatchedNames()
         mismatchedNames.forEach { (oldName, newName) ->
