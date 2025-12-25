@@ -5,6 +5,11 @@
 - Focusing Search
 - Natural Language Search
 
+|Search|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/c90afda9-8bb4-4e2d-a03a-6eeb6a74491b" width="250"/> |
+|Natural Language Search|
+
 ## Local Settings
 - local.properties
 ```.properties
