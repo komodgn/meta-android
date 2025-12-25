@@ -23,4 +23,18 @@ data class FaceModel(
     val imageName: String,
     val imageData: ByteArray,
     val phoneNumber: String = "",
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is FaceModel) return false
+        if (id != other.id) return false
+        if (!imageData.contentEquals(other.imageData)) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + imageData.contentHashCode()
+        return result
+    }
+}
