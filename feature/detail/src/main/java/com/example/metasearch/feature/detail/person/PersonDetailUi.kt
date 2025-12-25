@@ -20,11 +20,11 @@ import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.designsystem.theme.Neutral500
 import com.example.metasearch.core.model.PersonModel
 import com.example.metasearch.core.ui.MetaSearchScaffold
+import com.example.metasearch.feature.detail.R
 import com.example.metasearch.feature.detail.person.component.PersonDetailHeader
 import com.example.metasearch.feature.screens.PersonDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
-import com.example.metasearch.feature.detail.R
 
 @CircuitInject(PersonDetailScreen::class, ActivityRetainedComponent::class)
 @Composable
@@ -44,8 +44,6 @@ fun PersonDetailUi(
                     state.eventSink(PersonDetailUiEvent.OnHeaderBackClick)
                 },
             )
-
-
 
             Text(
                 modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
@@ -84,9 +82,6 @@ private fun PersonDetailUiPreview() {
                     id = 1L,
                     name = "춘식이",
                     inputName = "춘식이",
-                ),
-                photoUris = listOf(
-
                 ),
                 eventSink = {},
             ),

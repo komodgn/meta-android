@@ -140,7 +140,7 @@ class PersonRepositoryImpl @Inject constructor(
             PersonSearchRequest(
                 dbName = dbName,
                 personName = personName,
-            )
+            ),
         )
     }
 }
