@@ -10,10 +10,14 @@ import com.example.metasearch.core.data.api.repository.PersonRepository
 import com.example.metasearch.core.data.impl.mapper.toModel
 import com.example.metasearch.core.model.PersonModel
 import com.example.metasearch.core.network.request.PersonFrequencyRequest
+import com.example.metasearch.core.network.request.PersonSearchRequest
 import com.example.metasearch.core.network.service.WebService
 import com.example.metasearch.core.room.api.dao.PersonDao
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -82,6 +86,11 @@ class PersonRepositoryImpl @Inject constructor(
             normalizeScores(models)
         }
 
+    override fun getPersonById(personId: Long): Flow<PersonModel?> = flow {
+        val personWithFaces = personDao.getPersonWithFacesById(personId)
+        emit(personWithFaces?.toModel(emptyMap()))
+    }.flowOn(Dispatchers.IO)
+
     override suspend fun getPersonCount(): Int = personDao.getPersonCount()
 
     override suspend fun addAnalyzedPerson(imageName: String, imageBytes: ByteArray) {
@@ -122,5 +131,16 @@ class PersonRepositoryImpl @Inject constructor(
         return personDao.getMismatchedNames().associate {
             it.name to it.inputName
         }
+    }
+
+    override suspend fun getPersonPhotoNames(personName: String): Result<List<String>> = runCatching {
+        val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
+
+        webService.sendPersonData(
+            PersonSearchRequest(
+                dbName = dbName,
+                personName = personName,
+            )
+        )
     }
 }

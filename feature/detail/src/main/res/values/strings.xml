@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="person_detail_screen_grid_label">관련 사진</string>
     <string name="person_detail_screen_change_profile_image_success_toast_message">프로필 사진이 변경되었습니다.</string>
     <string name="person_detail_screen_edit_success_toast_message">인물 정보가 저장되었습니다.</string>
 

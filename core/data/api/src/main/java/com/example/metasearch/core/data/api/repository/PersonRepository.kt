@@ -9,6 +9,11 @@ interface PersonRepository {
     fun getHomeDisplayPersons(): Flow<List<PersonModel>>
 
     /**
+     * ID로 단일 인물 정보 조회
+     */
+    fun getPersonById(personId: Long): Flow<PersonModel?>
+
+    /**
      * @return 분석 완료 후 저장된 인물 수
      */
     suspend fun getPersonCount(): Int
@@ -21,4 +26,9 @@ interface PersonRepository {
     suspend fun fetchAndSyncPhotoCount(localModels: List<PersonModel>): List<PersonModel>
 
     suspend fun getMismatchedNames(): Map<String, String>
+
+    /**
+     * @return 해당 인물이 포함된 사진 파일명 리스트
+     */
+    suspend fun getPersonPhotoNames(personName: String): Result<List<String>>
 }
