@@ -127,4 +127,7 @@ interface PersonDao {
     suspend fun deletePersonByInputName(
         inputName: String,
     )
+
+    @Query("DELETE FROM persons WHERE id = :personId")
+    suspend fun deletePersonById(personId: Long)
 }

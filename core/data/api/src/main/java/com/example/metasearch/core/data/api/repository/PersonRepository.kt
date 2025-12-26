@@ -28,6 +28,11 @@ interface PersonRepository {
     suspend fun getMismatchedNames(): Map<String, String>
 
     /**
+     * 분석된 인물 삭제
+     */
+    suspend fun deleteAnalyzedPerson(person: PersonModel): Result<Unit>
+
+    /**
      * @return 해당 인물이 포함된 사진 파일명 리스트
      */
     suspend fun getPersonPhotoNames(personName: String): Result<List<String>>

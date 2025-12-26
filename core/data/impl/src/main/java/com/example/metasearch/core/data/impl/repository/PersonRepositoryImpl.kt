@@ -9,8 +9,10 @@ import com.example.metasearch.core.data.api.repository.DatabaseNameRepository
 import com.example.metasearch.core.data.api.repository.PersonRepository
 import com.example.metasearch.core.data.impl.mapper.toModel
 import com.example.metasearch.core.model.PersonModel
+import com.example.metasearch.core.network.request.DeleteEntityRequest
 import com.example.metasearch.core.network.request.PersonFrequencyRequest
 import com.example.metasearch.core.network.request.PersonSearchRequest
+import com.example.metasearch.core.network.service.AIService
 import com.example.metasearch.core.network.service.WebService
 import com.example.metasearch.core.room.api.dao.PersonDao
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -19,10 +21,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
 class PersonRepositoryImpl @Inject constructor(
     private val personDao: PersonDao,
+    private val aiService: AIService,
     private val webService: WebService,
     private val databaseNameRepository: DatabaseNameRepository,
     @ApplicationContext private val context: Context,
@@ -130,6 +136,21 @@ class PersonRepositoryImpl @Inject constructor(
     override suspend fun getMismatchedNames(): Map<String, String> {
         return personDao.getMismatchedNames().associate {
             it.name to it.inputName
+        }
+    }
+
+    override suspend fun deleteAnalyzedPerson(person: PersonModel): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
+
+            webService.deleteEntity(DeleteEntityRequest(dbName, person.inputName))
+
+            aiService.deletePerson(
+                dbName.toRequestBody("text/plain".toMediaTypeOrNull()),
+                person.name.toRequestBody("text/plain".toMediaTypeOrNull()),
+            )
+
+            personDao.deletePersonById(person.id)
         }
     }
 
