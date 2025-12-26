@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -76,27 +77,29 @@ fun NLSearchUi(
                     text = stringResource(R.string.nl_search_screen_result_label),
                     color = Neutral500,
                 )
-                LazyVerticalGrid(
-                    modifier = Modifier.fillMaxSize(),
-                    columns = GridCells.Fixed(5),
-                ) {
-                    items(state.resultImages) { uriString ->
-                        AsyncImage(
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .padding(1.dp)
-                                .clickable {
-                                    state.eventSink(NLSearchUiEvent.OnImageClick(uriString))
-                                },
-                            model = uriString,
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                        )
+                Box(modifier = Modifier.fillMaxSize()) {
+                    LazyVerticalGrid(
+                        modifier = Modifier.fillMaxSize(),
+                        columns = GridCells.Fixed(5),
+                    ) {
+                        items(state.resultImages) { uriString ->
+                            AsyncImage(
+                                modifier = Modifier
+                                    .aspectRatio(1f)
+                                    .padding(1.dp)
+                                    .clickable {
+                                        state.eventSink(NLSearchUiEvent.OnImageClick(uriString))
+                                    },
+                                model = uriString,
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                            )
+                        }
                     }
-                }
 
-                if (state.isLoading) {
-                    MetaSearchLoadingIndicator()
+                    if (state.isLoading) {
+                        MetaSearchLoadingIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
                 }
 
                 if (state.errorMessage.isNotBlank()) {
