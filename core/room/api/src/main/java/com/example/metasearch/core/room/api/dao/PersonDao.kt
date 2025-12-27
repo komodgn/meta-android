@@ -24,7 +24,7 @@ interface PersonDao {
     @Insert
     suspend fun insertFace(
         face: FaceEntity,
-    )
+    ): Long
 
     @Transaction
     @Query("SELECT * FROM persons")
@@ -62,6 +62,24 @@ interface PersonDao {
         homeDisplay: Boolean,
     ): Int
 
+    @Query(
+        """
+        UPDATE persons
+        SET input_name = :newName,
+            phone_number = :newPhone,
+            is_home_display = :isHome,
+            representative_face_id = :faceId
+        WHERE id = :personId
+        """,
+    )
+    suspend fun updatePersonFullInfo(
+        personId: Long,
+        newName: String,
+        newPhone: String,
+        isHome: Boolean,
+        faceId: Long?,
+    ): Int
+
     @Query("SELECT name, input_name AS inputName FROM persons WHERE name != input_name")
     suspend fun getMismatchedNames(): List<NamePair>
 
@@ -70,21 +88,17 @@ interface PersonDao {
         imageName: String,
         imageBytes: ByteArray,
     ) {
-        val newPersonEntity = PersonEntity(
-            name = imageName,
-            inputName = imageName,
-            phoneNumber = "",
-            isHomeDisplay = false,
+        val personId = insertPerson(PersonEntity(name = imageName, inputName = imageName))
+        val faceId = insertFace(
+            FaceEntity(
+                personId = personId,
+                imageName = imageName,
+                imageData = imageBytes,
+                phoneNumber = "",
+            ),
         )
-        val personId = insertPerson(newPersonEntity)
 
-        val newFaceEntity = FaceEntity(
-            personId = personId,
-            imageName = imageName,
-            imageData = imageBytes,
-            phoneNumber = "",
-        )
-        insertFace(newFaceEntity)
+        updateRepresentativeFace(personId, faceId)
     }
 
     @Query("SELECT COUNT(*) FROM persons")
@@ -122,6 +136,9 @@ interface PersonDao {
         inputName: String,
         thumbnailData: ByteArray,
     ): Int
+
+    @Query("UPDATE persons SET representative_face_id = :faceId WHERE id = :personId")
+    suspend fun updateRepresentativeFace(personId: Long, faceId: Long)
 
     @Query("DELETE FROM persons WHERE input_name = :inputName")
     suspend fun deletePersonByInputName(

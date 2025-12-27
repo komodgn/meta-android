@@ -20,4 +20,7 @@ data class PersonEntity(
 
     @ColumnInfo(name = "is_home_display")
     val isHomeDisplay: Boolean = false,
+
+    @ColumnInfo(name = "representative_face_id")
+    val representativeFaceId: Long? = null,
 )

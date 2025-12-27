@@ -56,7 +56,7 @@ fun PersonUi(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(innerPadding),
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -117,7 +117,6 @@ fun PersonUi(
                 )
             }
         }
-
     }
 }
 
