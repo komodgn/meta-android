@@ -1,6 +1,5 @@
 package com.example.metasearch.core.data.impl.repository
 
-import android.R.attr.tag
 import android.content.Context
 import android.util.Base64.decode
 import android.util.Log
@@ -35,6 +34,7 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
     private val webService: WebService,
 ) : ImageAnalysisRepository {
     private val tag = "ImageAnalysisRepo"
+    private val chunkSize = 10
 
     override fun getAnalysisStatus(context: Context): Flow<Boolean> {
         return WorkManager.getInstance(context)
@@ -58,7 +58,7 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         }
 
         if (addPaths.isNotEmpty()) {
-            addPaths.chunked(10).forEachIndexed { index, chunk ->
+            addPaths.chunked(chunkSize).forEachIndexed { index, chunk ->
                 uploadImageChunk(index, chunk, dbName)
             }
         }
@@ -119,11 +119,15 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
 
         runCatching { aiService.uploadFinish(finishBody, dbNameBody, countBody) }
             .onSuccess { response ->
+                Log.d(tag, "서버로부터 수신한 인물 수: ${response.images.size}")
+
                 response.images.forEach { person ->
-                    if (person.isFaceExit && person.imageName != null && person.imageBytes != null) {
-                        val decodedBytes = decode(person.imageBytes, android.util.Base64.DEFAULT)
-                        personRepository.addAnalyzedPerson(person.imageName!!, decodedBytes)
-                    }
+                    runCatching {
+                        if (person.isFaceExit && person.imageName != null && person.imageBytes != null) {
+                            val decodedBytes = decode(person.imageBytes, android.util.Base64.DEFAULT)
+                            personRepository.addAnalyzedPerson(person.imageName!!, decodedBytes)
+                        }
+                    }.onFailure { e -> Log.e(tag, "인물 개별 저장 실패: ${person.imageName}", e) }
                 }
                 successfulPaths.forEach { analyzedImageDao.insertPath(AnalyzedImageEntity(imagePath = it)) }
                 Log.d(tag, "${index + 1}번째 청크 완료 및 DB 반영 성공")
@@ -133,7 +137,7 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
 
     private suspend fun syncMismatchedNames(dbName: String) {
         personRepository.getMismatchedNames().forEach { (oldName, newName) ->
-            runCatching { webService.changeName(ChangeNameRequest(dbName, oldName, newName)) }
+            runCatching { webService.changePersonName(ChangeNameRequest(dbName, oldName, newName)) }
         }
     }
 
