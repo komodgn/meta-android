@@ -7,7 +7,8 @@ import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 
 data class HomeUiState(
-    val isLoading: Boolean = false,
+    val isPersonLoading: Boolean = false,
+    val isGalleryLoading: Boolean = false,
     val isAnalyzing: Boolean = false,
     val isExpanded: Boolean = false,
     val persons: List<PersonModel> = emptyList(),

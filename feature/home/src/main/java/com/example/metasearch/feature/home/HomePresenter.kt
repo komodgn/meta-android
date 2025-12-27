@@ -39,12 +39,19 @@ class HomePresenter @AssistedInject constructor(
     private val imageAnalysisRepository: ImageAnalysisRepository,
 ) : Presenter<HomeUiState> {
 
+    @CircuitInject(HomeScreen::class, ActivityRetainedComponent::class)
+    @AssistedFactory
+    fun interface Factory {
+        fun create(navigator: Navigator): HomePresenter
+    }
+
     @Composable
     override fun present(): HomeUiState {
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
 
-        var isLoading by remember { mutableStateOf(false) }
+        var isGalleryLoading by remember { mutableStateOf(false) }
+        var isPersonLoading by remember { mutableStateOf(false) }
         val isAnalyzing by remember(context) {
             imageAnalysisRepository.getAnalysisStatus(context)
         }.collectAsState(initial = false)
@@ -55,12 +62,12 @@ class HomePresenter @AssistedInject constructor(
 
         var images by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
-        LaunchedEffect(localPersons) {
-            displayPersons = localPersons
-        }
-
         LaunchedEffect(Unit) {
             images = galleryRepository.getAllGalleryImages()
+        }
+
+        LaunchedEffect(localPersons) {
+            displayPersons = localPersons
         }
 
         fun handleEvent(event: HomeUiEvent) {
@@ -86,9 +93,9 @@ class HomePresenter @AssistedInject constructor(
 
                     if (isExpanded) {
                         scope.launch {
-                            isLoading = true
+                            isPersonLoading = true
                             displayPersons = personRepository.fetchAndSyncPhotoCount(displayPersons)
-                            isLoading = false
+                            isPersonLoading = false
                         }
                     }
                 }
@@ -110,18 +117,13 @@ class HomePresenter @AssistedInject constructor(
         }
 
         return HomeUiState(
-            isLoading = isLoading,
+            isGalleryLoading = isGalleryLoading,
+            isPersonLoading = isPersonLoading,
             isAnalyzing = isAnalyzing,
             isExpanded = isExpanded,
             persons = displayPersons,
             images = images,
             eventSink = ::handleEvent,
         )
-    }
-
-    @CircuitInject(HomeScreen::class, ActivityRetainedComponent::class)
-    @AssistedFactory
-    fun interface Factory {
-        fun create(navigator: Navigator): HomePresenter
     }
 }
