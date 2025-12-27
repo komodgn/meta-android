@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import com.example.metasearch.core.designsystem.annotation.ComponentPreview
 import com.example.metasearch.core.designsystem.theme.Black
-import com.example.metasearch.core.designsystem.theme.LightPink
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
+import com.example.metasearch.core.designsystem.theme.Neutral300
 
 @Composable
 fun MetaSearchLoadingIndicator(
@@ -21,11 +21,11 @@ fun MetaSearchLoadingIndicator(
         modifier = modifier
             .fillMaxSize()
             .zIndex(1000f)
-            .background(Black.copy(alpha = 0.6f)),
+            .background(Black.copy(alpha = 0.1f)),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
-            color = LightPink,
+            color = Neutral300,
         )
     }
 }

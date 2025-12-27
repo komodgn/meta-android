@@ -1,6 +1,7 @@
 package com.example.metasearch.feature.person.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.metasearch.core.designsystem.annotation.ComponentPreview
 import com.example.metasearch.core.designsystem.theme.Black
+import com.example.metasearch.core.designsystem.theme.LightGrey
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.designsystem.theme.Neutral200
 import com.example.metasearch.core.model.PersonModel
@@ -59,7 +60,8 @@ internal fun PersonItem(
                     .fillMaxWidth()
                     .aspectRatio(1f)
                     .clip(CircleShape)
-                    .background(Neutral200),
+                    .background(Neutral200)
+                    .border(2.dp, LightGrey, CircleShape),
                 contentScale = ContentScale.Crop,
             )
 
@@ -68,7 +70,7 @@ internal fun PersonItem(
                 contentDescription = "Delete Icon",
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .size(28.dp)
+                    .size(26.dp)
                     .padding(MetaSearchTheme.spacing.spacing1)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
@@ -76,7 +78,7 @@ internal fun PersonItem(
                     ) {
                         onDeleteClick()
                     },
-                tint = Black.copy(alpha = 0.6f),
+                tint = Black.copy(alpha = 0.7f),
             )
         }
 
