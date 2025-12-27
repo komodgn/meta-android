@@ -38,7 +38,7 @@ public interface WebService {
     ): List<String>
 
     @POST("changename")
-    suspend fun changeName(
+    suspend fun changePersonName(
         @Body request: ChangeNameRequest,
     ): ChangeNameResponse
 

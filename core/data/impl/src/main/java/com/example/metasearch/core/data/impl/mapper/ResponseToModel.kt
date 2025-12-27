@@ -6,7 +6,10 @@ import com.example.metasearch.core.model.PhotoGroup
 import com.example.metasearch.core.model.SearchResult
 import com.example.metasearch.core.network.response.PhotoNameResponse
 import com.example.metasearch.core.network.response.PhotoResponse
+import com.example.metasearch.core.room.api.entity.FaceEntity
+import com.example.metasearch.core.room.api.entity.PersonEntity
 import com.example.metasearch.core.room.api.relations.PersonWithFaces
+import kotlin.collections.map
 
 internal fun PhotoResponse.toModel(): SearchResult {
     val commonList = photos.commonPhotos.distinct()
@@ -61,3 +64,21 @@ internal fun PersonWithFaces.toModel(callDurations: Map<String, Long>): PersonMo
         },
     )
 }
+
+internal fun PersonEntity.toModel(faces: List<FaceEntity>) = PersonModel(
+    id = id,
+    name = name,
+    inputName = inputName,
+    phoneNumber = phoneNumber,
+    isHomeDisplay = isHomeDisplay,
+    representativeFaceId = representativeFaceId,
+    faces = faces.map { it.toModel() },
+)
+
+internal fun FaceEntity.toModel() = FaceModel(
+    id = id,
+    personId = personId,
+    imageName = imageName,
+    imageData = imageData,
+    phoneNumber = phoneNumber,
+)

@@ -9,6 +9,7 @@ import com.example.metasearch.core.data.api.repository.DatabaseNameRepository
 import com.example.metasearch.core.data.api.repository.PersonRepository
 import com.example.metasearch.core.data.impl.mapper.toModel
 import com.example.metasearch.core.model.PersonModel
+import com.example.metasearch.core.network.request.ChangeNameRequest
 import com.example.metasearch.core.network.request.DeleteEntityRequest
 import com.example.metasearch.core.network.request.PersonFrequencyRequest
 import com.example.metasearch.core.network.request.PersonSearchRequest
@@ -163,5 +164,35 @@ class PersonRepositoryImpl @Inject constructor(
                 personName = personName,
             ),
         )
+    }
+
+    override suspend fun isNameExists(inputName: String): Boolean = personDao.isNameExists(inputName)
+
+    override suspend fun updatePersonFullInfo(
+        personId: Long,
+        newName: String,
+        newPhone: String,
+        isHome: Boolean,
+        faceId: Long?,
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            personDao.updatePersonFullInfo(
+                personId = personId,
+                newName = newName,
+                newPhone = newPhone,
+                isHome = isHome,
+                faceId = faceId,
+            )
+            Unit
+        }
+    }
+
+    override suspend fun changePersonNameOnServer(oldName: String, newName: String): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
+
+            webService.changePersonName(ChangeNameRequest(dbName, oldName, newName))
+            Unit
+        }
     }
 }
