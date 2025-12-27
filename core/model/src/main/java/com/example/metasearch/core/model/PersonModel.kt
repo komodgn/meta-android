@@ -12,9 +12,13 @@ data class PersonModel(
     val photoCount: Int = 0,
     val totalDuration: Long = 0,
     val normalizedScore: Double = 0.0,
+    val representativeFaceId: Long? = null,
     // 1:N 관계 반영
     val faces: List<FaceModel> = emptyList(),
-)
+) {
+    val representativeFace: FaceModel?
+        get() = faces.find { it.id == representativeFaceId } ?: faces.firstOrNull()
+}
 
 @Stable
 data class FaceModel(

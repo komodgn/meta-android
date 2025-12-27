@@ -8,6 +8,9 @@ import com.slack.circuit.runtime.screen.Screen
 data class PersonUiState(
     val isLoading: Boolean = false,
     val inputPersonNameString: String = "",
+    val showDeleteDialog: Boolean = false,
+    val pendingDeletePersonName: String = "",
+    val showToast: Boolean = false,
     val people: List<PersonModel> = emptyList(),
     val eventSink: (PersonUiEvent) -> Unit,
 ) : CircuitUiState
@@ -28,6 +31,20 @@ sealed interface PersonUiEvent : CircuitUiEvent {
     ) : PersonUiEvent
 
     /**
+     * 인물 삭제 버튼 클릭
+     */
+    data class OnPersonDeleteClick(
+        val personId: Long,
+    ) : PersonUiEvent
+
+    /**
+     * 삭제 확인 다이얼로그의 삭제 버튼 클릭 이벤트
+     */
+    data object OnPersonDeleteConfirm : PersonUiEvent
+
+    data object OnPersonDeleteCancel : PersonUiEvent
+
+    /**
      * 클릭한 인물의 모든 사진을 볼 수 있는 상세 화면으로 이동
      */
     data class OnPersonClick(
@@ -40,4 +57,6 @@ sealed interface PersonUiEvent : CircuitUiEvent {
     data class OnTabClick(
         val screen: Screen,
     ) : PersonUiEvent
+
+    data object HideToast : PersonUiEvent
 }

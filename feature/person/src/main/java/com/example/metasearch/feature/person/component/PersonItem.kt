@@ -1,52 +1,86 @@
 package com.example.metasearch.feature.person.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.metasearch.core.designsystem.annotation.ComponentPreview
+import com.example.metasearch.core.designsystem.theme.Black
+import com.example.metasearch.core.designsystem.theme.LightGrey
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.designsystem.theme.Neutral200
 import com.example.metasearch.core.model.PersonModel
+import com.example.metasearch.feature.person.R
 
 @Composable
 internal fun PersonItem(
     person: PersonModel,
     onClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClick() }
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+            ) { onClick() }
             .padding(MetaSearchTheme.spacing.spacing2),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        AsyncImage(
-            model = person.faces.firstOrNull()?.imageData,
-            contentDescription = person.inputName,
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)
-                .clip(CircleShape)
-                .background(Neutral200),
-            contentScale = ContentScale.Crop,
-        )
+        Box(modifier = Modifier.fillMaxWidth()) {
+            AsyncImage(
+                model = person.faces.firstOrNull()?.imageData,
+                contentDescription = person.inputName,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .clip(CircleShape)
+                    .background(Neutral200)
+                    .border(2.dp, LightGrey, CircleShape),
+                contentScale = ContentScale.Crop,
+            )
+
+            Icon(
+                painter = painterResource(id = R.drawable.ic_cross_circle),
+                contentDescription = "Delete Icon",
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .size(26.dp)
+                    .padding(MetaSearchTheme.spacing.spacing1)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                    ) {
+                        onDeleteClick()
+                    },
+                tint = Black.copy(alpha = 0.7f),
+            )
+        }
 
         Spacer(modifier = Modifier.height(MetaSearchTheme.spacing.spacing2))
 
@@ -71,6 +105,7 @@ private fun PersonItemPreview() {
                 name = "춘식이",
                 inputName = "춘식이",
             ),
+            onDeleteClick = {},
             onClick = {},
         )
     }

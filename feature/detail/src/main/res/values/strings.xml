@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="person_detail_screen_grid_label">관련 사진</string>
-    <string name="person_detail_screen_change_profile_image_success_toast_message">프로필 사진이 변경되었습니다.</string>
+    <string name="person_detail_screen_person_info_update_dialog_title">인물 정보 업데이트</string>
+    <string name="person_detail_screen_person_name_placeholder">이름</string>
+    <string name="person_detail_screen_phone_number_placeholder">전화번호</string>
+    <string name="person_detail_screen_is_home_display_label">내가 좋아하는 사람</string>
+    <string name="person_detail_screen_save_button">저장</string>
+    <string name="person_detail_screen_cancel_button">취소</string>
     <string name="person_detail_screen_edit_success_toast_message">인물 정보가 저장되었습니다.</string>
+    <string name="person_detail_screen_profile_update_dialog_title">프로필 사진 변경</string>
+    <string name="person_detail_screen_profile_update_success_toast_message">프로필 사진이 변경되었습니다.</string>
 
     <string name="graph_detail_screen_header">사진 속 정보</string>
     <string name="graph_detail_screen_bottom_selected_image_label">선택된 이미지</string>
@@ -13,6 +20,6 @@
     <string name="photo_detail_screen_header">Visualize Me By Photo</string>
     <string name="photo_detail_screen_bottom_item_openai">설명</string>
     <string name="photo_detail_screen_bottom_item_graph">탐색</string>
-    <string name="photo_detail_screen_bottom_item_focusing">빠른 검색</string>
+    <string name="photo_detail_screen_bottom_item_focusing">포커싱 검색</string>
     <string name="photo_detail_screen_bottom_item_share">공유</string>
 </resources>
