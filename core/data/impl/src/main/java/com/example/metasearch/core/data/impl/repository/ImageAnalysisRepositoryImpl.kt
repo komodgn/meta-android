@@ -58,8 +58,17 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         }
 
         if (addPaths.isNotEmpty()) {
+            val allSuccessfulPaths = mutableListOf<String>()
+
             addPaths.chunked(chunkSize).forEachIndexed { index, chunk ->
-                uploadImageChunk(index, chunk, dbName)
+                val successfulInChunk = uploadOnlyImageChunk(index, chunk, dbName)
+                allSuccessfulPaths.addAll(successfulInChunk)
+
+                if (successfulInChunk.size != chunk.size) return@forEachIndexed
+            }
+
+            if (allSuccessfulPaths.isNotEmpty()) {
+                processAnalysisFinish(allSuccessfulPaths, dbName)
             }
         }
 
@@ -79,25 +88,19 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun uploadImageChunk(index: Int, chunk: List<String>, dbName: String) {
-        Log.d(tag, "청크 처리 중: ${index + 1}번째 (${chunk.size}개)")
-        val successfulPathsInChunk = mutableListOf<String>()
-        var isAllSuccess = true
+    private suspend fun uploadOnlyImageChunk(index: Int, chunk: List<String>, dbName: String): List<String> {
+        Log.d(tag, "청크 전송 중: ${index + 1}번째 (${chunk.size}개)")
+        val successfulPaths = mutableListOf<String>()
 
         for (path in chunk) {
-            val isSuccess = uploadSingleImage(path, dbName)
-            if (isSuccess) {
-                successfulPathsInChunk.add(path)
+            if (uploadSingleImage(path, dbName)) {
+                successfulPaths.add(path)
             } else {
-                isAllSuccess = false
-                Log.e(tag, "업로드 실패로 인한 청크 중단: $path")
+                Log.e(tag, "업로드 실패: $path")
                 break
             }
         }
-
-        if (isAllSuccess) {
-            processAnalysisFinish(index, successfulPathsInChunk, dbName)
-        }
+        return successfulPaths
     }
 
     private suspend fun uploadSingleImage(path: String, dbName: String): Boolean {
@@ -111,7 +114,7 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         return aiResult.isSuccess
     }
 
-    private suspend fun processAnalysisFinish(index: Int, successfulPaths: List<String>, dbName: String) {
+    private suspend fun processAnalysisFinish(successfulPaths: List<String>, dbName: String) {
         val personCount = personRepository.getPersonCount()
         val finishBody = "true".toRequestBody("text/plain".toMediaTypeOrNull())
         val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -130,9 +133,9 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
                     }.onFailure { e -> Log.e(tag, "인물 개별 저장 실패: ${person.imageName}", e) }
                 }
                 successfulPaths.forEach { analyzedImageDao.insertPath(AnalyzedImageEntity(imagePath = it)) }
-                Log.d(tag, "${index + 1}번째 청크 완료 및 DB 반영 성공")
+                Log.d(tag, "전체 분석 및 DB 반영 완료")
             }
-            .onFailure { Log.e(tag, "${index + 1}번째 청크 finish 실패: ${it.message}") }
+            .onFailure { Log.e(tag, "최종 finish 실패: ${it.message}") }
     }
 
     private suspend fun syncMismatchedNames(dbName: String) {
