@@ -51,7 +51,7 @@ RELEASE_AI_SERVER_URL=
 -  Module Strategy: Feature-based Multi-Module
 
 ### Project Dependency Graph
-<img width="2456" height="383" alt="project-dependency-graph" src="https://github.com/user-attachments/assets/6f7f98fe-cd6e-42df-aef5-b263f0b188c8" />
+<img width="2452" height="383" alt="project-dependency-graph" src="https://github.com/user-attachments/assets/dbbd3ba7-8df1-4411-9875-3c59fe4ac70e" />
 
 ## Project Structure
 ```text
