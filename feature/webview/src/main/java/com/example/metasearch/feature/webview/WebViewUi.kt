@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,29 +25,40 @@ fun WebViewUi(
     MetaSearchScaffold(
         modifier = modifier,
     ) { innerPadding ->
-        Column(
-            modifier = Modifier.padding(innerPadding),
-        ) {
-            AndroidView(
-                factory = { context ->
-                    WebView(context).apply {
-                        layoutParams = ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                        )
+        WebViewUiContent(
+            state = state,
+            innerPadding = innerPadding,
+        )
+    }
+}
 
-                        webViewClient = WebViewClient()
-                        settings.apply {
-                            javaScriptEnabled = true
-                            domStorageEnabled = true
-                            useWideViewPort = true
-                            loadWithOverviewMode = true
-                        }
-                        loadUrl(state.url)
+@Composable
+private fun WebViewUiContent(
+    state: WebViewUiState,
+    innerPadding: PaddingValues,
+) {
+    Column(
+        modifier = Modifier.padding(innerPadding),
+    ) {
+        AndroidView(
+            factory = { context ->
+                WebView(context).apply {
+                    layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                    )
+
+                    webViewClient = WebViewClient()
+                    settings.apply {
+                        javaScriptEnabled = true
+                        domStorageEnabled = true
+                        useWideViewPort = true
+                        loadWithOverviewMode = true
                     }
-                },
-            )
-        }
+                    loadUrl(state.url)
+                }
+            },
+        )
     }
 }
 

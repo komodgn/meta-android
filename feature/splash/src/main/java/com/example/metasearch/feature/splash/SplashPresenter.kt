@@ -21,6 +21,12 @@ class SplashPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
 ) : Presenter<SplashUiState> {
 
+    @CircuitInject(SplashScreen::class, ActivityRetainedComponent::class)
+    @AssistedFactory
+    fun interface Factory {
+        fun create(navigator: Navigator): SplashPresenter
+    }
+
     @Composable
     override fun present(): SplashUiState {
         var showRationaleDialog by remember { mutableStateOf(false) }
@@ -75,11 +81,5 @@ class SplashPresenter @AssistedInject constructor(
             navigateToSettings = navigateToSettings,
             eventSink = ::handleEvent,
         )
-    }
-
-    @CircuitInject(SplashScreen::class, ActivityRetainedComponent::class)
-    @AssistedFactory
-    fun interface Factory {
-        fun create(navigator: Navigator): SplashPresenter
     }
 }

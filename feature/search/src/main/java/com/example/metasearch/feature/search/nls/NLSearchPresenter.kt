@@ -25,6 +25,12 @@ class NLSearchPresenter @AssistedInject constructor(
     private val searchRepository: SearchRepository,
 ) : Presenter<NLSearchUiState> {
 
+    @CircuitInject(NLSearchScreen::class, ActivityRetainedComponent::class)
+    @AssistedFactory
+    fun interface Factory {
+        fun create(navigator: Navigator): NLSearchPresenter
+    }
+
     @Composable
     override fun present(): NLSearchUiState {
         val scope = rememberCoroutineScope()
@@ -76,11 +82,5 @@ class NLSearchPresenter @AssistedInject constructor(
             resultImages = resultImages,
             eventSink = ::handleEvent,
         )
-    }
-
-    @CircuitInject(NLSearchScreen::class, ActivityRetainedComponent::class)
-    @AssistedFactory
-    fun interface Factory {
-        fun create(navigator: Navigator): NLSearchPresenter
     }
 }

@@ -11,14 +11,6 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 class WebViewPresenter @AssistedInject constructor(
 //    @Assisted private val navigator: Navigator,
 ) : Presenter<WebViewUiState> {
-    @Composable
-    override fun present(): WebViewUiState {
-        fun handleEvent(event: WebViewUiEvent) = Unit
-
-        return WebViewUiState(
-            eventSink = ::handleEvent,
-        )
-    }
 
     @CircuitInject(WebViewScreen::class, ActivityRetainedComponent::class)
     @AssistedFactory
@@ -26,5 +18,14 @@ class WebViewPresenter @AssistedInject constructor(
         fun create(
 //            navigator: Navigator,
         ): WebViewPresenter
+    }
+
+    @Composable
+    override fun present(): WebViewUiState {
+        fun handleEvent(event: WebViewUiEvent) = Unit
+
+        return WebViewUiState(
+            eventSink = ::handleEvent,
+        )
     }
 }

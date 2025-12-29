@@ -21,6 +21,15 @@ class PhotoDetailPresenter @AssistedInject constructor(
     @Assisted private val screen: PhotoDetailScreen,
 ) : Presenter<PhotoDetailUiState> {
 
+    @CircuitInject(PhotoDetailScreen::class, ActivityRetainedComponent::class)
+    @AssistedFactory
+    fun interface Factory {
+        fun create(
+            screen: PhotoDetailScreen,
+            navigator: Navigator,
+        ): PhotoDetailPresenter
+    }
+
     @Composable
     override fun present(): PhotoDetailUiState {
         var isLoading by remember { mutableStateOf(false) }
@@ -33,7 +42,6 @@ class PhotoDetailPresenter @AssistedInject constructor(
                 is PhotoDetailUiEvent.OnGraphButtonClick -> navigator.goTo(
                     GraphDetailScreen(
                         imageUriString = screen.imageUriString,
-//                        imageUriString = "https://www.google.com",
                     ),
                 )
 
@@ -54,14 +62,5 @@ class PhotoDetailPresenter @AssistedInject constructor(
             imageUriString = imageUriString,
             eventSink = ::handleEvent,
         )
-    }
-
-    @CircuitInject(PhotoDetailScreen::class, ActivityRetainedComponent::class)
-    @AssistedFactory
-    fun interface Factory {
-        fun create(
-            screen: PhotoDetailScreen,
-            navigator: Navigator,
-        ): PhotoDetailPresenter
     }
 }

@@ -36,7 +36,6 @@ import com.example.metasearch.feature.screens.GraphDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
 
-@SuppressLint("SetJavaScriptEnabled")
 @CircuitInject(GraphDetailScreen::class, ActivityRetainedComponent::class)
 @Composable
 fun GraphDetailUi(
@@ -46,70 +45,10 @@ fun GraphDetailUi(
     MetaSearchScaffold(
         modifier = modifier,
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding),
-        ) {
-            GraphDetailHeader(
-                onBackClick = {
-                    state.eventSink(GraphDetailUiEvent.OnBackClick)
-                },
-            )
-
-            AndroidView(
-                modifier = Modifier
-                    .weight(1f).fillMaxWidth(),
-                factory = { context ->
-                    WebView(context).apply {
-                        settings.javaScriptEnabled = true
-                        webViewClient = WebViewClient()
-
-                        addJavascriptInterface(
-                            object {
-                                @JavascriptInterface
-                                fun receivePhotoName(photoName: String) {
-                                    state.eventSink(GraphDetailUiEvent.OnPhotoSelected(photoName))
-                                }
-                            },
-                            "Android",
-                        )
-                    }
-                },
-                update = { webView ->
-                    if (state.webViewUrl.isNotEmpty() && webView.url != state.webViewUrl) {
-                        webView.loadUrl(state.webViewUrl)
-                    }
-                },
-            )
-
-            if (state.selectedImages.isNotEmpty()) {
-                Text(
-                    modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
-                    text = stringResource(R.string.graph_detail_screen_bottom_selected_image_label),
-                    color = Neutral500,
-                )
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(120.dp),
-                    contentPadding = PaddingValues(MetaSearchTheme.spacing.spacing4),
-                    horizontalArrangement = Arrangement.spacedBy(MetaSearchTheme.spacing.spacing2),
-                ) {
-                    items(state.selectedImages) { uriString ->
-                        AsyncImage(
-                            model = uriString,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .clip(RoundedCornerShape(8.dp))
-                                .clickable { state.eventSink(GraphDetailUiEvent.OnImageClick(uriString)) },
-                            contentScale = ContentScale.Crop,
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(MetaSearchTheme.spacing.spacing4))
-            }
-        }
+        GraphDetailUiContent(
+            state = state,
+            innerPadding = innerPadding,
+        )
 
         if (state.errorMessage.isNotBlank()) {
             MetaSearchDialog(
@@ -118,6 +57,76 @@ fun GraphDetailUi(
                 content = { Text(state.errorMessage) },
                 dismissButtonText = stringResource(R.string.graph_detail_screen_dialog_close_button),
             )
+        }
+    }
+}
+
+@SuppressLint("SetJavaScriptEnabled")
+@Composable
+private fun GraphDetailUiContent(
+    state: GraphDetailUiState,
+    innerPadding: PaddingValues,
+) {
+    Column(
+        modifier = Modifier.padding(innerPadding),
+    ) {
+        GraphDetailHeader(
+            onBackClick = {
+                state.eventSink(GraphDetailUiEvent.OnBackClick)
+            },
+        )
+        AndroidView(
+            modifier = Modifier
+                .weight(1f).fillMaxWidth(),
+            factory = { context ->
+                WebView(context).apply {
+                    settings.javaScriptEnabled = true
+                    webViewClient = WebViewClient()
+
+                    addJavascriptInterface(
+                        object {
+                            @JavascriptInterface
+                            fun receivePhotoName(photoName: String) {
+                                state.eventSink(GraphDetailUiEvent.OnPhotoSelected(photoName))
+                            }
+                        },
+                        "Android",
+                    )
+                }
+            },
+            update = { webView ->
+                if (state.webViewUrl.isNotEmpty() && webView.url != state.webViewUrl) {
+                    webView.loadUrl(state.webViewUrl)
+                }
+            },
+        )
+
+        if (state.selectedImages.isNotEmpty()) {
+            Text(
+                modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
+                text = stringResource(R.string.graph_detail_screen_bottom_selected_image_label),
+                color = Neutral500,
+            )
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp),
+                contentPadding = PaddingValues(MetaSearchTheme.spacing.spacing4),
+                horizontalArrangement = Arrangement.spacedBy(MetaSearchTheme.spacing.spacing2),
+            ) {
+                items(state.selectedImages) { uriString ->
+                    AsyncImage(
+                        model = uriString,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable { state.eventSink(GraphDetailUiEvent.OnImageClick(uriString)) },
+                        contentScale = ContentScale.Crop,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(MetaSearchTheme.spacing.spacing4))
         }
     }
 }

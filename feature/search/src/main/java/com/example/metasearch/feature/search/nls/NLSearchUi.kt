@@ -3,6 +3,7 @@ package com.example.metasearch.feature.search.nls
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -50,72 +51,85 @@ fun NLSearchUi(
             )
         },
     ) { innerPadding ->
-        Box(
+        NLSearchUiContent(
+            modifier = modifier,
+            state = state,
+            innerPadding = innerPadding,
+        )
+    }
+}
+
+@Composable
+private fun NLSearchUiContent(
+    modifier: Modifier = Modifier,
+    state: NLSearchUiState,
+    innerPadding: PaddingValues,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding),
+    ) {
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+                .fillMaxSize(),
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-            ) {
-                NLSearchHeader()
+            NLSearchHeader()
 
-                NLSearchTextField(
-                    modifier = modifier,
-                    inputString = state.inputString,
-                    onInputChange = {
-                        state.eventSink(NLSearchUiEvent.OnInputChange(it))
-                    },
-                    onSearchClick = {
-                        state.eventSink(NLSearchUiEvent.OnNLSearchClick(state.inputString))
-                    },
-                )
+            NLSearchTextField(
+                modifier = modifier,
+                inputString = state.inputString,
+                onInputChange = {
+                    state.eventSink(NLSearchUiEvent.OnInputChange(it))
+                },
+                onSearchClick = {
+                    state.eventSink(NLSearchUiEvent.OnNLSearchClick(state.inputString))
+                },
+            )
 
-                Text(
-                    modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
-                    text = stringResource(R.string.nl_search_screen_result_label),
-                    color = Neutral500,
-                )
-                Box(modifier = Modifier.fillMaxSize()) {
-                    LazyVerticalGrid(
-                        modifier = Modifier.fillMaxSize(),
-                        columns = GridCells.Fixed(5),
-                    ) {
-                        items(state.resultImages) { uriString ->
-                            AsyncImage(
-                                modifier = Modifier
-                                    .aspectRatio(1f)
-                                    .padding(1.dp)
-                                    .clickable {
-                                        state.eventSink(NLSearchUiEvent.OnImageClick(uriString))
-                                    },
-                                model = uriString,
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                            )
-                        }
-                    }
-
-                    if (state.isLoading) {
-                        MetaSearchLoadingIndicator(modifier = Modifier.align(Alignment.Center))
+            Text(
+                modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
+                text = stringResource(R.string.nl_search_screen_result_label),
+                color = Neutral500,
+            )
+            Box(modifier = Modifier.fillMaxSize()) {
+                LazyVerticalGrid(
+                    modifier = Modifier.fillMaxSize(),
+                    columns = GridCells.Fixed(5),
+                ) {
+                    items(state.resultImages) { uriString ->
+                        AsyncImage(
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .padding(1.dp)
+                                .clickable {
+                                    state.eventSink(NLSearchUiEvent.OnImageClick(uriString))
+                                },
+                            model = uriString,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                        )
                     }
                 }
 
-                if (state.errorMessage.isNotBlank()) {
-                    MetaSearchDialog(
-                        title = stringResource(R.string.nl_search_screen_error_dialog_title),
-                        content = {
-                            Text(
-                                text = state.errorMessage,
-                            )
-                        },
-                        onDismissRequest = {
-                            state.eventSink(NLSearchUiEvent.OnDialogCloseButtonClick)
-                        },
-                        dismissButtonText = stringResource(R.string.nl_search_screen_dialog_close_button),
-                    )
+                if (state.isLoading) {
+                    MetaSearchLoadingIndicator(modifier = Modifier.align(Alignment.Center))
                 }
+            }
+
+            if (state.errorMessage.isNotBlank()) {
+                MetaSearchDialog(
+                    title = stringResource(R.string.nl_search_screen_error_dialog_title),
+                    content = {
+                        Text(
+                            text = state.errorMessage,
+                        )
+                    },
+                    onDismissRequest = {
+                        state.eventSink(NLSearchUiEvent.OnDialogCloseButtonClick)
+                    },
+                    dismissButtonText = stringResource(R.string.nl_search_screen_dialog_close_button),
+                )
             }
         }
     }
