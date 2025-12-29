@@ -1,12 +1,15 @@
 package com.example.metasearch.feature.search.focusing
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
+import com.example.metasearch.core.common.utils.toFile
 import com.example.metasearch.core.data.api.repository.SearchRepository
 import com.example.metasearch.core.model.CircleModel
 import com.example.metasearch.core.model.SearchResult
@@ -20,7 +23,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
 import kotlinx.coroutines.launch
-import java.io.File
 
 class FocusingSearchPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
@@ -28,34 +30,53 @@ class FocusingSearchPresenter @AssistedInject constructor(
     private val searchRepository: SearchRepository,
 ) : Presenter<FocusingSearchUiState> {
 
+    @CircuitInject(FocusingSearchScreen::class, ActivityRetainedComponent::class)
+    @AssistedFactory
+    fun interface Factory {
+        fun create(
+            screen: FocusingSearchScreen,
+            navigator: Navigator,
+        ): FocusingSearchPresenter
+    }
+
     @Composable
     override fun present(): FocusingSearchUiState {
+        val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
 
         var isLoading by remember { mutableStateOf(false) }
         var isToastVisible by remember { mutableStateOf(false) }
 
         val imageUriString by remember { mutableStateOf(screen.imageUriString) }
-
         var circles by remember { mutableStateOf(listOf<CircleModel>()) }
-
         var searchResult by remember { mutableStateOf<SearchResult?>(null) }
 
+        val tag = "FocusingPresenter"
+
         fun handleEvent(event: FocusingSearchUiEvent) {
+            Log.d(tag, "handleEvent: $event")
             when (event) {
                 FocusingSearchUiEvent.OnSearchClick -> {
                     coroutineScope.launch {
                         isLoading = true
-                        val file = File(screen.imageUriString.toUri().path ?: "")
-
-                        searchRepository.focusingSearch(
-                            imageFile = file,
-                            circles = circles,
-                        ).onSuccess {
-                            searchResult = it
+                        try {
+                            val uri = screen.imageUriString.toUri()
+                            val file = uri.toFile(context)
+                            searchRepository.focusingSearch(
+                                imageFile = file,
+                                circles = circles,
+                            ).onSuccess {
+                                searchResult = it
+                                isLoading = false
+                                file.delete()
+                                Log.d(tag, searchResult!!.groups.size.toString())
+                            }.onFailure {
+                                isLoading = false
+                                Log.e(tag, "검색 실패: ${it.message}")
+                            }
+                        } catch (e: Exception) {
                             isLoading = false
-                        }.onFailure {
-                            isLoading = false
+                            Log.e(tag, "파일 변환 실패: ${e.message}")
                         }
                     }
                 }
@@ -87,14 +108,5 @@ class FocusingSearchPresenter @AssistedInject constructor(
             searchResult = searchResult,
             eventSink = ::handleEvent,
         )
-    }
-
-    @CircuitInject(FocusingSearchScreen::class, ActivityRetainedComponent::class)
-    @AssistedFactory
-    fun interface Factory {
-        fun create(
-            screen: FocusingSearchScreen,
-            navigator: Navigator,
-        ): FocusingSearchPresenter
     }
 }

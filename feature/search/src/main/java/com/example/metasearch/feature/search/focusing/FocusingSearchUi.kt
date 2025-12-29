@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -45,10 +47,6 @@ fun FocusingSearchUi(
     modifier: Modifier = Modifier,
     state: FocusingSearchUiState,
 ) {
-    var currentCenter by remember { mutableStateOf(Offset.Zero) }
-    var currentRadius by remember { mutableFloatStateOf(0f) }
-    var isDrawing by remember { mutableStateOf(false) }
-
     FocusingSearchToastEffect(
         isCirclesEmpty = state.circles?.isEmpty() == true,
         eventSink = state.eventSink,
@@ -68,95 +66,119 @@ fun FocusingSearchUi(
             )
         },
     ) { innerPadding ->
-        Column(
-            modifier = Modifier.padding(innerPadding),
-        ) {
-            FocusingSearchHeader(
-                onBackClick = {
-                    state.eventSink(FocusingSearchUiEvent.OnBackClick)
-                },
-            )
+        FocusingSearchUiContent(
+            state = state,
+            innerPadding = innerPadding,
+        )
 
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .pointerInput(Unit) {
-                        detectDragGestures(
-                            onDragStart = { offset ->
-                                currentCenter = offset
-                                isDrawing = true
-                            },
-                            onDrag = { change, _ ->
-                                change.consume()
+        if (state.isLoading) {
+            MetaSearchLoadingIndicator()
+        }
+    }
+}
 
-                                val xDiff = change.position.x - currentCenter.x
-                                val yDiff = change.position.y - currentCenter.y
-                                currentRadius = sqrt(xDiff * xDiff + yDiff * yDiff)
-                            },
-                            onDragEnd = {
+@Composable
+private fun FocusingSearchUiContent(
+    state: FocusingSearchUiState,
+    innerPadding: PaddingValues,
+) {
+    var currentCenter by remember { mutableStateOf(Offset.Zero) }
+    var currentRadius by remember { mutableFloatStateOf(0f) }
+    var isDrawing by remember { mutableStateOf(false) }
+
+    var size by remember { mutableStateOf(androidx.compose.ui.unit.IntSize.Zero) }
+
+    Column(
+        modifier = Modifier.padding(innerPadding),
+    ) {
+        FocusingSearchHeader(
+            onBackClick = {
+                state.eventSink(FocusingSearchUiEvent.OnBackClick)
+            },
+        )
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .onGloballyPositioned { coordinates ->
+                    size = coordinates.size
+                }
+                .pointerInput(Unit) {
+                    detectDragGestures(
+                        onDragStart = { offset ->
+                            currentCenter = offset
+                            isDrawing = true
+                        },
+                        onDrag = { change, _ ->
+                            change.consume()
+
+                            val xDiff = change.position.x - currentCenter.x
+                            val yDiff = change.position.y - currentCenter.y
+                            currentRadius = sqrt(xDiff * xDiff + yDiff * yDiff)
+                        },
+                        onDragEnd = {
+                            if (size.width > 0 && size.height > 0) {
+                                val normalizedX = currentCenter.x / size.width
+                                val normalizedY = currentCenter.y / size.height
+                                val normalizedRadius = currentRadius / maxOf(size.width, size.height)
+
                                 state.eventSink(
                                     FocusingSearchUiEvent.OnCircleAdded(
                                         CircleModel(
-                                            centerX = currentCenter.x,
-                                            centerY = currentCenter.y,
-                                            radius = currentRadius,
+                                            centerX = normalizedX,
+                                            centerY = normalizedY,
+                                            radius = normalizedRadius,
                                         ),
                                     ),
                                 )
-                                isDrawing = false
-                                currentRadius = 0f
-                            },
-                        )
-                    },
-            ) {
-                AsyncImage(
-                    model = state.imageUriString,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit,
-                )
-
-                Canvas(modifier = Modifier.fillMaxSize()) {
-                    state.circles?.forEach { circle ->
-                        drawCircle(
-                            color = White,
-                            radius = circle.radius,
-                            center = Offset(circle.centerX, circle.centerY),
-                            style = Stroke(width = 4.dp.toPx()),
-                        )
-                    }
-
-                    if (isDrawing) {
-                        drawCircle(
-                            color = White.copy(alpha = 0.5f),
-                            radius = currentRadius,
-                            center = currentCenter,
-                            style = Stroke(width = 4.dp.toPx()),
-                        )
-                    }
+                            }
+                            isDrawing = false
+                            currentRadius = 0f
+                        },
+                    )
+                },
+        ) {
+            AsyncImage(
+                model = state.imageUriString,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Fit,
+            )
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                state.circles?.forEach { circle ->
+                    drawCircle(
+                        color = White,
+                        radius = circle.radius * maxOf(size.width, size.height).toFloat(),
+                        center = Offset(circle.centerX * size.width, circle.centerY * size.height),
+                        style = Stroke(width = 4.dp.toPx()),
+                    )
                 }
 
-                MetaSearchToast(
-                    isVisible = state.isToastVisible,
-                    message = stringResource(R.string.focusing_search_screen_toast_message),
-                    modifier = Modifier.align(Alignment.Center),
-                )
+                if (isDrawing) {
+                    drawCircle(
+                        color = White.copy(alpha = 0.5f),
+                        radius = currentRadius,
+                        center = currentCenter,
+                        style = Stroke(width = 4.dp.toPx()),
+                    )
+                }
             }
 
-            state.searchResult?.let { result ->
-                SearchResultList(
-                    modifier = Modifier.weight(1f),
-                    result = result,
-                    onImageClick = { uri ->
-                        state.eventSink(FocusingSearchUiEvent.OnImageClick(uri))
-                    },
-                )
-            }
+            MetaSearchToast(
+                isVisible = state.isToastVisible,
+                message = stringResource(R.string.focusing_search_screen_toast_message),
+                modifier = Modifier.align(Alignment.Center),
+            )
+        }
 
-            if (state.isLoading) {
-                MetaSearchLoadingIndicator()
-            }
+        state.searchResult?.let { result ->
+            SearchResultList(
+                modifier = Modifier.weight(1f),
+                result = result,
+                onImageClick = { uri ->
+                    state.eventSink(FocusingSearchUiEvent.OnImageClick(uri))
+                },
+            )
         }
     }
 }
