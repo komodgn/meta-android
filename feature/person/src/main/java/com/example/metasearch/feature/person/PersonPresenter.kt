@@ -25,6 +25,12 @@ class PersonPresenter @AssistedInject constructor(
     private val personRepository: PersonRepository,
 ) : Presenter<PersonUiState> {
 
+    @CircuitInject(PersonScreen::class, ActivityRetainedComponent::class)
+    @AssistedFactory
+    fun interface Factory {
+        fun create(navigator: Navigator): PersonPresenter
+    }
+
     @Composable
     override fun present(): PersonUiState {
         val scope = rememberCoroutineScope()
@@ -104,11 +110,5 @@ class PersonPresenter @AssistedInject constructor(
             people = filteredPeople,
             eventSink = ::handleEvent,
         )
-    }
-
-    @CircuitInject(PersonScreen::class, ActivityRetainedComponent::class)
-    @AssistedFactory
-    fun interface Factory {
-        fun create(navigator: Navigator): PersonPresenter
     }
 }

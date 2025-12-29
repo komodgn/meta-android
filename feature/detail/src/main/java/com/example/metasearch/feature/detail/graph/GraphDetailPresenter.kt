@@ -26,6 +26,15 @@ class GraphDetailPresenter @AssistedInject constructor(
     private val graphRepository: GraphRepository,
 ) : Presenter<GraphDetailUiState> {
 
+    @CircuitInject(GraphDetailScreen::class, ActivityRetainedComponent::class)
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            screen: GraphDetailScreen,
+            navigator: Navigator,
+        ): GraphDetailPresenter
+    }
+
     @Composable
     override fun present(): GraphDetailUiState {
         var webViewUrl by remember { mutableStateOf("") }
@@ -35,7 +44,6 @@ class GraphDetailPresenter @AssistedInject constructor(
         val maxImages = 10
 
         LaunchedEffect(Unit) {
-//            webViewUrl = screen.imageUriString
             webViewUrl = graphRepository.getDetailGraphWebViewUrl(screen.imageUriString)
         }
 
@@ -72,14 +80,5 @@ class GraphDetailPresenter @AssistedInject constructor(
             errorMessage = errorMessage,
             eventSink = ::handleEvent,
         )
-    }
-
-    @CircuitInject(GraphDetailScreen::class, ActivityRetainedComponent::class)
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            screen: GraphDetailScreen,
-            navigator: Navigator,
-        ): GraphDetailPresenter
     }
 }

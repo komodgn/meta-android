@@ -25,6 +25,14 @@ class GraphPresenter @AssistedInject constructor(
     private val graphRepository: GraphRepository,
 ) : Presenter<GraphUiState> {
 
+    @CircuitInject(GraphScreen::class, ActivityRetainedComponent::class)
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            navigator: Navigator,
+        ): GraphPresenter
+    }
+
     @Composable
     override fun present(): GraphUiState {
         var webViewUrl by remember { mutableStateOf("") }
@@ -71,13 +79,5 @@ class GraphPresenter @AssistedInject constructor(
             errorMessage = errorMessage,
             eventSink = ::handleEvent,
         )
-    }
-
-    @CircuitInject(GraphScreen::class, ActivityRetainedComponent::class)
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            navigator: Navigator,
-        ): GraphPresenter
     }
 }

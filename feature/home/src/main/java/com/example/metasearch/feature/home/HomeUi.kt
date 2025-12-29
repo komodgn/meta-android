@@ -62,103 +62,116 @@ fun HomeUi(
             )
         },
     ) { innerPadding ->
-        Column(
-            modifier = Modifier.padding(innerPadding),
-        ) {
-            HomeHeader(
-                onUploadClick = {
-                    state.eventSink(HomeUiEvent.OnStartAnalysisClicked)
-                },
-                isAnalyzing = state.isAnalyzing,
-            )
+        HomeUiContent(
+            state = state,
+            innerPadding = innerPadding,
+        )
+    }
+}
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() },
-                    ) {
-                        state.eventSink(HomeUiEvent.OnPersonSectionExpand)
-                    }
-                    .padding(MetaSearchTheme.spacing.spacing2),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
-                    text = stringResource(R.string.home_screen_person_scroll_view_title),
-                    color = Neutral500,
-                )
-                Icon(
-                    modifier = Modifier.size(20.dp),
-                    painter = if (state.isExpanded) painterResource(R.drawable.ic_up) else painterResource(R.drawable.ic_down),
-                    contentDescription = "Up And Down Arrow Icon",
-                    tint = Neutral500,
-                )
-            }
-
-            AnimatedVisibility(state.isExpanded) {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.CenterStart,
+@Composable
+private fun HomeUiContent(
+    state: HomeUiState,
+    innerPadding: PaddingValues,
+) {
+    Column(
+        modifier = Modifier.padding(innerPadding),
+    ) {
+        HomeHeader(
+            onUploadClick = {
+                state.eventSink(HomeUiEvent.OnStartAnalysisClicked)
+            },
+            isAnalyzing = state.isAnalyzing,
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() },
                 ) {
-                    if (state.persons.isEmpty()) {
-                        Text(
-                            modifier = Modifier.padding(MetaSearchTheme.spacing.spacing4),
-                            text = stringResource(R.string.home_screen_person_scroll_view_empty_content),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Neutral500,
-                        )
-                    } else {
-                        LazyRow(
-                            contentPadding = PaddingValues(horizontal = MetaSearchTheme.spacing.spacing4),
-                            horizontalArrangement = Arrangement.spacedBy(MetaSearchTheme.spacing.spacing3),
-                        ) {
-                            items(state.persons) { person ->
-                                PersonCircleItem(
-                                    name = person.inputName,
-                                    image = person.representativeFace?.imageData ?: person.faces.firstOrNull()?.imageData,
-                                    onClick = {
-                                        state.eventSink(HomeUiEvent.OnPersonClick(person.id))
-                                    },
-                                )
-                            }
+                    state.eventSink(HomeUiEvent.OnPersonSectionExpand)
+                }
+                .padding(MetaSearchTheme.spacing.spacing2),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
+                text = stringResource(R.string.home_screen_person_scroll_view_title),
+                color = Neutral500,
+            )
+            Icon(
+                modifier = Modifier.size(20.dp),
+                painter = if (state.isExpanded) painterResource(R.drawable.ic_up) else painterResource(R.drawable.ic_down),
+                contentDescription = "Up And Down Arrow Icon",
+                tint = Neutral500,
+            )
+        }
+
+        AnimatedVisibility(state.isExpanded) {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                if (state.persons.isEmpty()) {
+                    Text(
+                        modifier = Modifier.padding(MetaSearchTheme.spacing.spacing4),
+                        text = stringResource(R.string.home_screen_person_scroll_view_empty_content),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Neutral500,
+                    )
+                } else {
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = MetaSearchTheme.spacing.spacing4),
+                        horizontalArrangement = Arrangement.spacedBy(MetaSearchTheme.spacing.spacing3),
+                    ) {
+                        items(state.persons) { person ->
+                            PersonCircleItem(
+                                name = person.inputName,
+                                image = person.representativeFace?.imageData ?: person.faces.firstOrNull()?.imageData,
+                                onClick = {
+                                    state.eventSink(HomeUiEvent.OnPersonClick(person.id))
+                                },
+                            )
                         }
                     }
                 }
             }
+        }
 
-            Text(
-                modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
-                text = stringResource(R.string.home_screen_gallery_grid_view_title),
-                color = Neutral500,
-            )
-            Box(
+        Text(
+            modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
+            text = stringResource(
+                R.string.home_screen_gallery_grid_view_title,
+                state.images.size,
+            ),
+            color = Neutral500,
+        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
+                columns = GridCells.Fixed(5),
             ) {
-                LazyVerticalGrid(
-                    modifier = Modifier.fillMaxSize(),
-                    columns = GridCells.Fixed(5),
-                ) {
-                    items(state.images) { uri ->
-                        AsyncImage(
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .padding(1.dp)
-                                .clickable {
-                                    state.eventSink(HomeUiEvent.OnImageClick(uri.toString()))
-                                },
-                            model = uri,
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                        )
-                    }
+                items(state.images) { uri ->
+                    AsyncImage(
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .padding(1.dp)
+                            .clickable {
+                                state.eventSink(HomeUiEvent.OnImageClick(uri.toString()))
+                            },
+                        model = uri,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                    )
                 }
+            }
 
-                if (state.isGalleryLoading) {
-                    MetaSearchLoadingIndicator(modifier = Modifier.align(Alignment.Center))
-                }
+            if (state.isGalleryLoading) {
+                MetaSearchLoadingIndicator(modifier = Modifier.align(Alignment.Center))
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.example.metasearch.feature.detail.photo
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -43,27 +44,36 @@ fun PhotoDetailUi(
             )
         },
     ) { innerPadding ->
-        Column(
-            modifier = Modifier.padding(innerPadding),
-        ) {
-            PhotoDetailHeader(
-                onBackClick = {
-                    state.eventSink(PhotoDetailUiEvent.OnBackClick)
-                },
-            )
+        PhotoDetailUiContent(
+            state = state,
+            innerPadding = innerPadding,
+        )
+    }
+}
 
-            AsyncImage(
-                model = state.imageUriString,
-                contentDescription = "Photo Detail Screen Image",
-                modifier = Modifier
-                    .weight(1f),
-                contentScale = ContentScale.Crop,
-            )
-
-            Spacer(
-                modifier = Modifier.height(MetaSearchTheme.spacing.spacing6),
-            )
-        }
+@Composable
+private fun PhotoDetailUiContent(
+    state: PhotoDetailUiState,
+    innerPadding: PaddingValues,
+) {
+    Column(
+        modifier = Modifier.padding(innerPadding),
+    ) {
+        PhotoDetailHeader(
+            onBackClick = {
+                state.eventSink(PhotoDetailUiEvent.OnBackClick)
+            },
+        )
+        AsyncImage(
+            model = state.imageUriString,
+            contentDescription = "Photo Detail Screen Image",
+            modifier = Modifier
+                .weight(1f),
+            contentScale = ContentScale.Crop,
+        )
+        Spacer(
+            modifier = Modifier.height(MetaSearchTheme.spacing.spacing6),
+        )
     }
 }
 

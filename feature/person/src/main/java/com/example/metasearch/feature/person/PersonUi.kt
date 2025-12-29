@@ -53,70 +53,81 @@ fun PersonUi(
             )
         },
     ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-        ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                PersonHeader()
+        PersonUiContent(
+            state = state,
+            innerPadding = innerPadding,
+        )
+    }
 
-                PersonSearchTextField(
-                    inputString = state.inputPersonNameString,
-                    onInputChange = { state.eventSink(PersonUiEvent.OnInputChange(it)) },
-                    onSearchClick = { state.eventSink(PersonUiEvent.OnPersonSearchClick(state.inputPersonNameString)) },
+    if (state.showDeleteDialog) {
+        MetaSearchDialog(
+            title = stringResource(R.string.person_delete_dialog_title),
+            content = {
+                Text(
+                    text = stringResource(
+                        R.string.person_delete_dialog_content,
+                        state.pendingDeletePersonName,
+                    ),
                 )
+            },
+            onConfirmRequest = {
+                state.eventSink(PersonUiEvent.OnPersonDeleteConfirm)
+            },
+            onDismissRequest = {
+                state.eventSink(PersonUiEvent.OnPersonDeleteCancel)
+            },
+            confirmButtonText = stringResource(R.string.person_delete_dialog_confirm_button),
+            dismissButtonText = stringResource(R.string.person_delete_dialog_cancel_button),
+        )
+    }
+}
 
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(3),
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
-                    items(
-                        state.people,
-                        key = { it.id },
-                    ) { person ->
-                        PersonItem(
-                            person = person,
-                            onClick = { state.eventSink(PersonUiEvent.OnPersonClick(person.id)) },
-                            onDeleteClick = { state.eventSink(PersonUiEvent.OnPersonDeleteClick(person.id)) },
-                        )
-                    }
-                }
-            }
+@Composable
+private fun PersonUiContent(
+    state: PersonUiState,
+    innerPadding: PaddingValues,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            PersonHeader()
 
-            MetaSearchToast(
-                modifier = Modifier.align(Alignment.Center),
-                isVisible = state.showToast,
-                message = stringResource(R.string.person_delete_failed_toast_message),
+            PersonSearchTextField(
+                inputString = state.inputPersonNameString,
+                onInputChange = { state.eventSink(PersonUiEvent.OnInputChange(it)) },
+                onSearchClick = { state.eventSink(PersonUiEvent.OnPersonSearchClick(state.inputPersonNameString)) },
             )
 
-            if (state.showDeleteDialog) {
-                MetaSearchDialog(
-                    title = stringResource(R.string.person_delete_dialog_title),
-                    content = {
-                        Text(
-                            text = stringResource(
-                                R.string.person_delete_dialog_content,
-                                state.pendingDeletePersonName,
-                            ),
-                        )
-                    },
-                    onConfirmRequest = {
-                        state.eventSink(PersonUiEvent.OnPersonDeleteConfirm)
-                    },
-                    onDismissRequest = {
-                        state.eventSink(PersonUiEvent.OnPersonDeleteCancel)
-                    },
-                    confirmButtonText = stringResource(R.string.person_delete_dialog_confirm_button),
-                    dismissButtonText = stringResource(R.string.person_delete_dialog_cancel_button),
-                )
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                items(
+                    state.people,
+                    key = { it.id },
+                ) { person ->
+                    PersonItem(
+                        person = person,
+                        onClick = { state.eventSink(PersonUiEvent.OnPersonClick(person.id)) },
+                        onDeleteClick = { state.eventSink(PersonUiEvent.OnPersonDeleteClick(person.id)) },
+                    )
+                }
             }
         }
+
+        MetaSearchToast(
+            modifier = Modifier.align(Alignment.Center),
+            isVisible = state.showToast,
+            message = stringResource(R.string.person_delete_failed_toast_message),
+        )
     }
 }
 
