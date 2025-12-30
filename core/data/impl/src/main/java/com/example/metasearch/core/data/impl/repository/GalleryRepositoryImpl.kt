@@ -35,28 +35,6 @@ internal class GalleryRepositoryImpl @Inject constructor(
         imageUris
     }
 
-    override suspend fun getAllGalleryPaths(): List<String> = withContext(Dispatchers.IO) {
-        val imagePaths = mutableListOf<String>()
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-
-        context.contentResolver.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            projection,
-            null,
-            null,
-            "${MediaStore.Images.Media.DATE_ADDED} DESC",
-        )?.use { cursor ->
-            val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            while (cursor.moveToNext()) {
-                val path = cursor.getString(dataColumn)
-                if (!path.isNullOrEmpty()) {
-                    imagePaths.add(path)
-                }
-            }
-        }
-        imagePaths
-    }
-
     override suspend fun getFileName(uri: Uri): String? = withContext(Dispatchers.IO) {
         val projection = arrayOf(MediaStore.Images.Media.DISPLAY_NAME)
         context.contentResolver.query(
