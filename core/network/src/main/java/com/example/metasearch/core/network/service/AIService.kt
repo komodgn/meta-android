@@ -61,12 +61,4 @@ public interface AIService {
         @Part("dbName") dbName: RequestBody,
         @Part("rowCount") rowCount: RequestBody,
     ): UploadResponse
-
-//    @Multipart
-//    @POST("android/upload_person_name")
-//    fun upload_person_name(
-//        @Part("dbName") dbName: RequestBody?,
-//        @Part("oldName") oldName: RequestBody?,
-//        @Part("newName") newName: RequestBody?,
-//    ): Call<Void?>?
 }

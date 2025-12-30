@@ -1,10 +1,13 @@
 package com.example.metasearch.core.data.impl.repository
 
 import android.content.Context
+import android.net.Uri
 import android.util.Base64.decode
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.example.metasearch.core.common.utils.toFile
 import com.example.metasearch.core.data.api.repository.DatabaseNameRepository
 import com.example.metasearch.core.data.api.repository.GalleryRepository
 import com.example.metasearch.core.data.api.repository.ImageAnalysisRepository
@@ -14,6 +17,7 @@ import com.example.metasearch.core.network.service.AIService
 import com.example.metasearch.core.network.service.WebService
 import com.example.metasearch.core.room.api.dao.AnalyzedImageDao
 import com.example.metasearch.core.room.api.entity.AnalyzedImageEntity
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -22,9 +26,9 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import java.io.File
 import javax.inject.Inject
 
+@Suppress("LongParameterList")
 class ImageAnalysisRepositoryImpl @Inject constructor(
     private val analyzedImageDao: AnalyzedImageDao,
     private val galleryRepository: GalleryRepository,
@@ -32,6 +36,7 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
     private val personRepository: PersonRepository,
     private val aiService: AIService,
     private val webService: WebService,
+    @ApplicationContext private val context: Context,
 ) : ImageAnalysisRepository {
     private val tag = "ImageAnalysisRepo"
     private val chunkSize = 10
@@ -47,21 +52,22 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
     override suspend fun runFullAnalysis() = withContext(Dispatchers.IO) {
         Log.d(tag, "runFullAnalysis 함수 실행")
 
-        val currentGalleryPaths = galleryRepository.getAllGalleryPaths()
+        val currentGalleryUris = galleryRepository.getAllGalleryImages()
+        val currentGalleryUrisString = currentGalleryUris.map { it.toString() }
         val alreadyAnalyzedPaths = analyzedImageDao.getAllAnalyzedPaths()
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
-        deleteMissingImages(alreadyAnalyzedPaths, currentGalleryPaths, dbName)
+        deleteMissingImages(alreadyAnalyzedPaths, currentGalleryUrisString, dbName)
 
-        val addPaths = currentGalleryPaths.filter { path ->
-            path !in alreadyAnalyzedPaths && isImageFile(path)
+        val addUris = currentGalleryUris.filter { uri ->
+            uri.toString() !in alreadyAnalyzedPaths
         }
 
-        if (addPaths.isNotEmpty()) {
+        if (addUris.isNotEmpty()) {
             val allSuccessfulPaths = mutableListOf<String>()
 
-            addPaths.chunked(chunkSize).forEachIndexed { index, chunk ->
-                val successfulInChunk = uploadOnlyImageChunk(index, chunk, dbName)
+            addUris.chunked(chunkSize).forEachIndexed { index, chunk ->
+                val successfulInChunk = uploadOnlyImageChunk(context, index, chunk, dbName)
                 allSuccessfulPaths.addAll(successfulInChunk)
 
                 if (successfulInChunk.size != chunk.size) return@forEachIndexed
@@ -77,41 +83,59 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
 
     private suspend fun deleteMissingImages(alreadyPaths: List<String>, currentPaths: List<String>, dbName: String) {
         val deletePaths = alreadyPaths.filter { it !in currentPaths }
-        deletePaths.forEach { path ->
-            val fileNamePart = createMultipartBodyPartFromFilePath("deleteImage", path)
+        deletePaths.forEach { pathString ->
+            val uri = pathString.toUri()
+            val tempFile = uri.toFile(context)
+            val requestFile = tempFile.asRequestBody("image/*".toMediaTypeOrNull())
+            val fileNamePart = MultipartBody.Part.createFormData("deleteImage", tempFile.name, requestFile)
+
             val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
 
             val webSuccess = runCatching { webService.uploadWebDeleteImage(fileNamePart, dbName) }.isSuccess
             val aiSuccess = runCatching { aiService.uploadDeleteImage(fileNamePart, dbNameBody) }.isSuccess
 
-            if (webSuccess && aiSuccess) analyzedImageDao.deletePath(path)
+            if (webSuccess && aiSuccess) analyzedImageDao.deletePath(pathString)
+
+            tempFile.delete()
         }
     }
 
-    private suspend fun uploadOnlyImageChunk(index: Int, chunk: List<String>, dbName: String): List<String> {
+    private suspend fun uploadOnlyImageChunk(context: Context, index: Int, chunk: List<Uri>, dbName: String): List<String> {
         Log.d(tag, "청크 전송 중: ${index + 1}번째 (${chunk.size}개)")
         val successfulPaths = mutableListOf<String>()
 
-        for (path in chunk) {
-            if (uploadSingleImage(path, dbName)) {
-                successfulPaths.add(path)
+        for (uri in chunk) {
+            if (uploadSingleImage(context, uri, dbName)) {
+                successfulPaths.add(uri.toString())
             } else {
-                Log.e(tag, "업로드 실패: $path")
+                Log.e(tag, "업로드 실패: $uri")
                 break
             }
         }
         return successfulPaths
     }
 
-    private suspend fun uploadSingleImage(path: String, dbName: String): Boolean {
-        val webImagePart = createMultipartBodyPartFromFilePath("image", path)
-        val aiImagePart = createMultipartBodyPartFromFilePath("addImage", path)
-        val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
+    private suspend fun uploadSingleImage(context: Context, uri: Uri, dbName: String): Boolean {
+        val tempFile = uri.toFile(context)
 
-        runCatching { webService.uploadWebAddImage(webImagePart, dbName) }
-        val aiResult = runCatching { aiService.uploadAddImage(aiImagePart, dbNameBody) }
+        return try {
+            val originalFileName = galleryRepository.getFileName(uri) ?: "unknown.jpg"
 
-        return aiResult.isSuccess
+            val webImagePart = createMultipartBodyPartFromUri(context, "image", uri, originalFileName)
+            val aiImagePart = createMultipartBodyPartFromUri(context, "addImage", uri, originalFileName)
+            val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
+
+            webService.uploadWebAddImage(webImagePart, dbName)
+            aiService.uploadAddImage(aiImagePart, dbNameBody)
+
+            Log.d(tag, "서버 전송 성공 (파일명: $originalFileName): $uri")
+            true
+        } catch (e: Exception) {
+            Log.e(tag, "서버 전송 실패 원인: ${e.message}", e)
+            false
+        } finally {
+            tempFile.delete()
+        }
     }
 
     private suspend fun processAnalysisFinish(successfulPaths: List<String>, dbName: String) {
@@ -128,7 +152,11 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
                     runCatching {
                         if (person.isFaceExit && person.imageName != null && person.imageBytes != null) {
                             val decodedBytes = decode(person.imageBytes, android.util.Base64.DEFAULT)
+                            Log.d(tag, "Repository 저장 시도: ${person.imageName}")
                             personRepository.addAnalyzedPerson(person.imageName!!, decodedBytes)
+                            Log.d(tag, "DB 저장 함수 호출 완료: ${person.imageName}")
+                        } else {
+                            Log.w(tag, "저장 스킵됨: 얼굴없음(${!person.isFaceExit}) 또는 데이터가 null임")
                         }
                     }.onFailure { e -> Log.e(tag, "인물 개별 저장 실패: ${person.imageName}", e) }
                 }
@@ -144,12 +172,10 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun isImageFile(path: String): Boolean =
-        path.endsWith(".jpg", true) || path.endsWith(".jpeg", true) || path.endsWith(".png", true)
-
-    private fun createMultipartBodyPartFromFilePath(name: String, path: String): MultipartBody.Part {
-        val file = File(path)
+    private fun createMultipartBodyPartFromUri(context: Context, name: String, uri: Uri, fileName: String): MultipartBody.Part {
+        val file = uri.toFile(context)
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-        return MultipartBody.Part.createFormData(name, file.name, requestFile)
+
+        return MultipartBody.Part.createFormData(name, fileName, requestFile)
     }
 }
