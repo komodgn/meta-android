@@ -127,9 +127,12 @@ private fun HomeUiContent(
                         horizontalArrangement = Arrangement.spacedBy(MetaSearchTheme.spacing.spacing3),
                     ) {
                         items(state.persons) { person ->
+                            val displayImage = person.representativeFace?.imageData
+                                ?: person.faces.firstOrNull()?.imageData
+
                             PersonCircleItem(
                                 name = person.inputName,
-                                image = person.representativeFace?.imageData ?: person.faces.firstOrNull()?.imageData,
+                                image = displayImage,
                                 onClick = {
                                     state.eventSink(HomeUiEvent.OnPersonClick(person.id))
                                 },

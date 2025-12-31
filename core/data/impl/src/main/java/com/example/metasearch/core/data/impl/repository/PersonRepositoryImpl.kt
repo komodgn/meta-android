@@ -19,7 +19,6 @@ import com.example.metasearch.core.room.api.dao.PersonDao
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -93,10 +92,10 @@ class PersonRepositoryImpl @Inject constructor(
             normalizeScores(models)
         }
 
-    override fun getPersonById(personId: Long): Flow<PersonModel?> = flow {
-        val personWithFaces = personDao.getPersonWithFacesById(personId)
-        emit(personWithFaces?.toModel(emptyMap()))
-    }.flowOn(Dispatchers.IO)
+    override fun getPersonById(personId: Long): Flow<PersonModel?> =
+        personDao.getPersonWithFacesFlow(personId)
+            .map { it?.toModel(emptyMap()) }
+            .flowOn(Dispatchers.IO)
 
     override suspend fun getPersonCount(): Int = personDao.getPersonCount()
 
@@ -176,15 +175,39 @@ class PersonRepositoryImpl @Inject constructor(
         faceId: Long?,
     ): Result<Unit> = withContext(Dispatchers.IO) {
         runCatching {
-            personDao.updatePersonFullInfo(
-                personId = personId,
-                newName = newName,
-                newPhone = newPhone,
-                isHome = isHome,
-                faceId = faceId,
-            )
+            val currentPersonEntity = personDao.getPersonById(personId)
+            val oldName = currentPersonEntity?.inputName ?: ""
+
+            val targetPersonId = personDao.getPersonIdByName(newName)
+
+            if (targetPersonId != null && targetPersonId != personId) {
+                personDao.mergePersons(
+                    sourceId = personId,
+                    targetId = targetPersonId,
+                    newPhone = newPhone,
+                    isHome = isHome,
+                )
+
+                if (faceId != null) {
+                    personDao.updateRepresentativeFace(targetPersonId, faceId)
+                }
+
+                val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
+                webService.changePersonName(ChangeNameRequest(dbName, oldName, newName))
+            } else {
+                personDao.updatePersonFullInfo(personId, newName, newPhone, isHome, faceId)
+
+                if (oldName != newName && oldName.isNotEmpty()) {
+                    val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
+                    webService.changePersonName(ChangeNameRequest(dbName, oldName, newName))
+                }
+            }
             Unit
         }
+    }
+
+    override suspend fun updateRepresentativeFace(personId: Long, faceId: Long): Result<Unit> = runCatching {
+        personDao.updateRepresentativeFace(personId, faceId)
     }
 
     override suspend fun changePersonNameOnServer(oldName: String, newName: String): Result<Unit> = withContext(Dispatchers.IO) {

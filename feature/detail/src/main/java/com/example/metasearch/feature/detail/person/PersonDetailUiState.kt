@@ -10,6 +10,7 @@ data class PersonDetailUiState(
     val person: PersonModel? = null,
     val photoUris: List<Uri> = emptyList(),
     val showEditDialog: Boolean = false,
+    val showMergeConfirmDialog: Boolean = false,
     val editName: String = "",
     val editPhone: String = "",
     val editIsHomeDisplay: Boolean = false,
@@ -45,6 +46,16 @@ sealed interface PersonDetailUiEvent : CircuitUiEvent {
     data class OnEditHomeDisplayChange(
         val isHomeDisplay: Boolean,
     ) : PersonDetailUiEvent
+
+    /**
+     * 인물 이름 중복 저장 확인 다이얼로그 여는 이벤트
+     */
+    data object OnConfirmMergeSave : PersonDetailUiEvent
+
+    /**
+     * 인물 이름 중복 저장 확인 다이얼로그 닫는 이벤트
+     */
+    data object OnDismissMergeDialog : PersonDetailUiEvent
 
     /**
      * 클릭한 사진으로 프로필 이미지 변경

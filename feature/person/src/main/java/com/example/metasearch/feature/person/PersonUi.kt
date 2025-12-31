@@ -137,6 +137,7 @@ private fun PersonUiPreview() {
     MetaSearchTheme {
         PersonUi(
             state = PersonUiState(
+                showDeleteDialog = true,
                 people = listOf(
                     PersonModel(
                         id = 1L,

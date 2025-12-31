@@ -42,9 +42,25 @@ interface PersonDao {
 
     @Transaction
     @Query("SELECT * FROM persons WHERE id = :personId")
-    suspend fun getPersonWithFacesById(
-        personId: Long,
-    ): PersonWithFaces?
+    fun getPersonWithFacesFlow(personId: Long): Flow<PersonWithFaces?>
+
+    @Transaction
+    suspend fun mergePersons(sourceId: Long, targetId: Long, newPhone: String, isHome: Boolean) {
+        updateFacesPersonId(sourceId, targetId)
+
+        updatePersonBasicInfo(targetId, newPhone, isHome)
+
+        deletePersonById(sourceId)
+    }
+
+    @Query("UPDATE faces SET person_id = :targetId WHERE person_id = :sourceId")
+    suspend fun updateFacesPersonId(sourceId: Long, targetId: Long)
+
+    @Query("UPDATE persons SET phone_number = :phone, is_home_display = :isHome WHERE id = :personId")
+    suspend fun updatePersonBasicInfo(personId: Long, phone: String, isHome: Boolean)
+
+    @Query("SELECT id FROM persons WHERE input_name = :name LIMIT 1")
+    suspend fun getPersonIdByName(name: String): Long?
 
     @Query(
         """
