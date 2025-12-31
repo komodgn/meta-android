@@ -78,6 +78,21 @@ fun PersonDetailUi(
         )
     }
 
+    if (state.showMergeConfirmDialog) {
+        MetaSearchDialog(
+            title = stringResource(R.string.person_detail_merge_dialog_title),
+            content = {
+                Text(
+                    text = stringResource(R.string.person_detail_merge_dialog_content),
+                )
+            },
+            onDismissRequest = { state.eventSink(PersonDetailUiEvent.OnDismissMergeDialog) },
+            onConfirmRequest = { state.eventSink(PersonDetailUiEvent.OnConfirmMergeSave) },
+            dismissButtonText = stringResource(R.string.person_detail_merge_dialog_dismiss),
+            confirmButtonText = stringResource(R.string.person_detail_merge_dialog_confirm),
+        )
+    }
+
     if (state.showPhotoSelectDialog) {
         Dialog(onDismissRequest = { state.eventSink(PersonDetailUiEvent.OnPhotoSelectCancel) }) {
             Surface(
