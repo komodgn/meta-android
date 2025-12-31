@@ -57,7 +57,25 @@ class PersonDetailPresenter @AssistedInject constructor(
         var editPhone by rememberRetained { mutableStateOf("") }
         var editIsHomeDisplay by rememberRetained { mutableStateOf(false) }
         var editRepresentativeFaceId by rememberRetained { mutableStateOf<Long?>(null) }
+        var showMergeConfirmDialog by rememberRetained { mutableStateOf(false) }
         var showPhotoSelectDialog by rememberRetained { mutableStateOf(false) }
+
+        suspend fun savePersonInfo() {
+            val currentPerson = person ?: return
+
+            personRepository.updatePersonFullInfo(
+                personId = currentPerson.id,
+                newName = editName,
+                newPhone = editPhone,
+                isHome = editIsHomeDisplay,
+                faceId = editRepresentativeFaceId ?: currentPerson.representativeFaceId,
+            ).onSuccess {
+                if (editName != currentPerson.inputName) {
+                    personRepository.changePersonNameOnServer(currentPerson.inputName, editName)
+                }
+                showEditDialog = false
+            }
+        }
 
         fun handleEvent(event: PersonDetailUiEvent) {
             when (event) {
@@ -77,20 +95,9 @@ class PersonDetailPresenter @AssistedInject constructor(
                     val currentPerson = person ?: return
                     scope.launch {
                         if (editName != person?.inputName && personRepository.isNameExists(editName)) {
-                            return@launch
-                        }
-
-                        personRepository.updatePersonFullInfo(
-                            personId = person!!.id,
-                            newName = editName,
-                            newPhone = editPhone,
-                            isHome = editIsHomeDisplay,
-                            faceId = editRepresentativeFaceId ?: currentPerson.representativeFaceId,
-                        ).onSuccess {
-                            if (editName != person?.inputName) {
-                                personRepository.changePersonNameOnServer(person!!.inputName, editName)
-                            }
-                            showEditDialog = false
+                            showMergeConfirmDialog = true
+                        } else {
+                            savePersonInfo()
                         }
                     }
                 }
@@ -103,14 +110,20 @@ class PersonDetailPresenter @AssistedInject constructor(
 
                 PersonDetailUiEvent.OnEditCancel -> showEditDialog = false
 
+                PersonDetailUiEvent.OnConfirmMergeSave -> {
+                    scope.launch {
+                        savePersonInfo()
+                        showMergeConfirmDialog = false
+                    }
+                }
+
+                PersonDetailUiEvent.OnDismissMergeDialog -> showMergeConfirmDialog = false
+
                 is PersonDetailUiEvent.OnEditThumbnailClick -> {
                     val currentPerson = person ?: return
                     scope.launch {
-                        personRepository.updatePersonFullInfo(
+                        personRepository.updateRepresentativeFace(
                             personId = currentPerson.id,
-                            newName = currentPerson.inputName,
-                            newPhone = currentPerson.phoneNumber,
-                            isHome = currentPerson.isHomeDisplay,
                             faceId = event.faceId,
                         ).onSuccess {
                             showPhotoSelectDialog = false
@@ -135,6 +148,7 @@ class PersonDetailPresenter @AssistedInject constructor(
             editPhone = editPhone,
             editIsHomeDisplay = editIsHomeDisplay,
             editRepresentativeFaceId = editRepresentativeFaceId,
+            showMergeConfirmDialog = showMergeConfirmDialog,
             showPhotoSelectDialog = showPhotoSelectDialog,
             eventSink = ::handleEvent,
         )

@@ -47,5 +47,13 @@ interface PersonRepository {
         faceId: Long?,
     ): Result<Unit>
 
+    /**
+     * 인물 대표 사진 변경
+     */
+    suspend fun updateRepresentativeFace(
+        personId: Long,
+        faceId: Long,
+    ): Result<Unit>
+
     suspend fun changePersonNameOnServer(oldName: String, newName: String): Result<Unit>
 }

@@ -49,6 +49,7 @@ internal fun PersonWithFaces.toModel(callDurations: Map<String, Long>): PersonMo
 
     return PersonModel(
         id = person.id,
+        representativeFaceId = person.representativeFaceId,
         name = person.name,
         inputName = person.inputName,
         phoneNumber = person.phoneNumber,
