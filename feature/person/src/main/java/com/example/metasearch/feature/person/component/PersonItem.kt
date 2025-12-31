@@ -42,6 +42,11 @@ internal fun PersonItem(
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val displayImage = remember(person) {
+        person.faces.find { it.id == person.representativeFaceId }?.imageData
+            ?: person.faces.firstOrNull()?.imageData
+    }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -54,7 +59,7 @@ internal fun PersonItem(
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
             AsyncImage(
-                model = person.faces.firstOrNull()?.imageData,
+                model = displayImage,
                 contentDescription = person.inputName,
                 modifier = Modifier
                     .fillMaxWidth()
