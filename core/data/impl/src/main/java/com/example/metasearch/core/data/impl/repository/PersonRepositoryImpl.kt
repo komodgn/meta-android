@@ -187,7 +187,7 @@ class PersonRepositoryImpl @Inject constructor(
         newPhone: String,
         isHome: Boolean,
         faceId: Long?,
-    ): Result<Unit> = withContext(Dispatchers.IO) {
+    ): Result<Long> = withContext(Dispatchers.IO) {
         runCatching {
             val currentPersonEntity = personDao.getPersonById(personId)
             val oldName = currentPersonEntity?.inputName ?: ""
@@ -201,14 +201,15 @@ class PersonRepositoryImpl @Inject constructor(
                     targetId = targetPersonId,
                 )
                 webService.changePersonName(ChangeNameRequest(dbName, oldName, newName))
+                targetPersonId
             } else {
                 personDao.updatePersonFullInfo(personId, newName, newPhone, isHome, faceId)
 
                 if (oldName != newName && oldName.isNotEmpty()) {
                     webService.changePersonName(ChangeNameRequest(dbName, oldName, newName))
                 }
+                personId
             }
-            Unit
         }
     }
 

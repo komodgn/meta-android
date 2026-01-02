@@ -52,7 +52,7 @@ interface PersonRepository {
         newPhone: String,
         isHome: Boolean,
         faceId: Long?,
-    ): Result<Unit>
+    ): Result<Long>
 
     /**
      * 인물 대표 사진 변경

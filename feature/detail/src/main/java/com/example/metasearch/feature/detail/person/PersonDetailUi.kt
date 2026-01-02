@@ -38,6 +38,7 @@ import com.example.metasearch.core.designsystem.theme.Neutral500
 import com.example.metasearch.core.model.PersonModel
 import com.example.metasearch.core.ui.MetaSearchScaffold
 import com.example.metasearch.core.ui.component.MetaSearchDialog
+import com.example.metasearch.core.ui.component.MetaSearchLoadingIndicator
 import com.example.metasearch.feature.detail.R
 import com.example.metasearch.feature.detail.person.component.PersonDetailHeader
 import com.example.metasearch.feature.detail.person.component.PersonEditDialogContent
@@ -58,6 +59,10 @@ fun PersonDetailUi(
             state = state,
             innerPadding = innerPadding,
         )
+    }
+
+    if (state.isLoading) {
+        MetaSearchLoadingIndicator()
     }
 
     if (state.showEditDialog) {
@@ -208,12 +213,13 @@ private fun PersonDetailUiPreview() {
     MetaSearchTheme {
         PersonDetailUi(
             state = PersonDetailUiState(
+                isLoading = true,
                 person = PersonModel(
                     id = 1L,
                     name = "춘식이",
                     inputName = "춘식이",
                 ),
-                showPhotoSelectDialog = true,
+                showPhotoSelectDialog = false,
                 eventSink = {},
             ),
         )
