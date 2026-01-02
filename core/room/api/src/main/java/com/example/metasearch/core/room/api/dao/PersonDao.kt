@@ -26,6 +26,18 @@ interface PersonDao {
         face: FaceEntity,
     ): Long
 
+    /**
+     * 서버 응답(imageName)을 받았을 때 현재 누구에게 소속시켜야 할지 찾는 쿼리
+     */
+    @Query(
+        """
+            SELECT person_id FROM faces
+            WHERE image_name = :serverLabel
+            LIMIT 1
+        """,
+    )
+    suspend fun findCurrentPersonIdByServerLabel(serverLabel: String): Long?
+
     @Transaction
     @Query("SELECT * FROM persons")
     fun getPersonsWithFaces(): Flow<List<PersonWithFaces>>
@@ -45,10 +57,8 @@ interface PersonDao {
     fun getPersonWithFacesFlow(personId: Long): Flow<PersonWithFaces?>
 
     @Transaction
-    suspend fun mergePersons(sourceId: Long, targetId: Long, newPhone: String, isHome: Boolean) {
+    suspend fun mergePersons(sourceId: Long, targetId: Long) {
         updateFacesPersonId(sourceId, targetId)
-
-        updatePersonBasicInfo(targetId, newPhone, isHome)
 
         deletePersonById(sourceId)
     }
@@ -110,7 +120,6 @@ interface PersonDao {
                 personId = personId,
                 imageName = imageName,
                 imageData = imageBytes,
-                phoneNumber = "",
             ),
         )
 
@@ -141,17 +150,11 @@ interface PersonDao {
         imageName: String,
     ): String?
 
-    @Query(
-        """
-        UPDATE faces
-        SET thumbnail_data = :thumbnailData
-        WHERE person_id IN (SELECT id FROM persons WHERE input_name = :inputName)
-        """,
-    )
-    suspend fun updateFaceThumbnailsByPersonName(
-        inputName: String,
-        thumbnailData: ByteArray,
-    ): Int
+    /**
+     * 이전에 분석된 적 있는 imageName인지 확인하여 현재 주인(person_id)을 반환
+     */
+    @Query("SELECT person_id FROM faces WHERE image_name = :imageName LIMIT 1")
+    suspend fun findPersonIdByImageName(imageName: String): Long?
 
     @Query("UPDATE persons SET representative_face_id = :faceId WHERE id = :personId")
     suspend fun updateRepresentativeFace(personId: Long, faceId: Long)

@@ -18,6 +18,10 @@ interface PersonRepository {
      */
     suspend fun getPersonCount(): Int
 
+    suspend fun getPersonIdByImageName(imageName: String): Long?
+
+    suspend fun addFaceToExistingPerson(personId: Long, imageName: String, imageBytes: ByteArray): Long
+
     /**
      * AI 분석 결과로 받은 인물 정보 저장
      */

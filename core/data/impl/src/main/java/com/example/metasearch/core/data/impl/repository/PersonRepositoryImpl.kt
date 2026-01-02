@@ -16,6 +16,7 @@ import com.example.metasearch.core.network.request.PersonSearchRequest
 import com.example.metasearch.core.network.service.AIService
 import com.example.metasearch.core.network.service.WebService
 import com.example.metasearch.core.room.api.dao.PersonDao
+import com.example.metasearch.core.room.api.entity.FaceEntity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -99,6 +100,18 @@ class PersonRepositoryImpl @Inject constructor(
 
     override suspend fun getPersonCount(): Int = personDao.getPersonCount()
 
+    override suspend fun getPersonIdByImageName(imageName: String): Long? =
+        personDao.findPersonIdByImageName(imageName)
+
+    override suspend fun addFaceToExistingPerson(personId: Long, imageName: String, imageBytes: ByteArray) =
+        personDao.insertFace(
+            FaceEntity(
+                personId = personId,
+                imageName = imageName,
+                imageData = imageBytes,
+            ),
+        )
+
     override suspend fun addAnalyzedPerson(imageName: String, imageBytes: ByteArray) {
         if (!personDao.isNameExists(imageName)) {
             personDao.insertPersonAndFace(imageName, imageBytes)
@@ -177,6 +190,7 @@ class PersonRepositoryImpl @Inject constructor(
         runCatching {
             val currentPersonEntity = personDao.getPersonById(personId)
             val oldName = currentPersonEntity?.inputName ?: ""
+            val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
             val targetPersonId = personDao.getPersonIdByName(newName)
 
@@ -184,21 +198,12 @@ class PersonRepositoryImpl @Inject constructor(
                 personDao.mergePersons(
                     sourceId = personId,
                     targetId = targetPersonId,
-                    newPhone = newPhone,
-                    isHome = isHome,
                 )
-
-                if (faceId != null) {
-                    personDao.updateRepresentativeFace(targetPersonId, faceId)
-                }
-
-                val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
                 webService.changePersonName(ChangeNameRequest(dbName, oldName, newName))
             } else {
                 personDao.updatePersonFullInfo(personId, newName, newPhone, isHome, faceId)
 
                 if (oldName != newName && oldName.isNotEmpty()) {
-                    val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
                     webService.changePersonName(ChangeNameRequest(dbName, oldName, newName))
                 }
             }

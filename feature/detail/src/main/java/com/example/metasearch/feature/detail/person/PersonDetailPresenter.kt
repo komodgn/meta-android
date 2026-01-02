@@ -70,9 +70,6 @@ class PersonDetailPresenter @AssistedInject constructor(
                 isHome = editIsHomeDisplay,
                 faceId = editRepresentativeFaceId ?: currentPerson.representativeFaceId,
             ).onSuccess {
-                if (editName != currentPerson.inputName) {
-                    personRepository.changePersonNameOnServer(currentPerson.inputName, editName)
-                }
                 showEditDialog = false
             }
         }

@@ -12,6 +12,7 @@ import com.example.metasearch.core.data.api.repository.DatabaseNameRepository
 import com.example.metasearch.core.data.api.repository.GalleryRepository
 import com.example.metasearch.core.data.api.repository.ImageAnalysisRepository
 import com.example.metasearch.core.data.api.repository.PersonRepository
+import com.example.metasearch.core.datastore.api.datasource.PersonIndexDataSource
 import com.example.metasearch.core.network.request.ChangeNameRequest
 import com.example.metasearch.core.network.service.AIService
 import com.example.metasearch.core.network.service.WebService
@@ -33,6 +34,7 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
     private val analyzedImageDao: AnalyzedImageDao,
     private val galleryRepository: GalleryRepository,
     private val databaseNameRepository: DatabaseNameRepository,
+    private val personIndexDataSource: PersonIndexDataSource,
     private val personRepository: PersonRepository,
     private val aiService: AIService,
     private val webService: WebService,
@@ -139,22 +141,39 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
     }
 
     private suspend fun processAnalysisFinish(successfulPaths: List<String>, dbName: String) {
-        val personCount = personRepository.getPersonCount()
+        val lastIndex = personIndexDataSource.getLastPersonIndex()
+
+        Log.d(tag, lastIndex.toString())
         val finishBody = "true".toRequestBody("text/plain".toMediaTypeOrNull())
         val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
-        val countBody = personCount.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        val countBody = lastIndex.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
         runCatching { aiService.uploadFinish(finishBody, dbNameBody, countBody) }
             .onSuccess { response ->
                 Log.d(tag, "서버로부터 수신한 인물 수: ${response.images.size}")
 
+                val newMax = response.images
+                    .mapNotNull { it.imageName?.filter { c -> c.isDigit() }?.toIntOrNull() }
+                    .maxOrNull() ?: lastIndex
+
+                if (newMax > lastIndex) {
+                    personIndexDataSource.setLastPersonIndex(newMax)
+                }
+
                 response.images.forEach { person ->
                     runCatching {
                         if (person.isFaceExit && person.imageName != null && person.imageBytes != null) {
                             val decodedBytes = decode(person.imageBytes, android.util.Base64.DEFAULT)
-                            Log.d(tag, "Repository 저장 시도: ${person.imageName}")
-                            personRepository.addAnalyzedPerson(person.imageName!!, decodedBytes)
-                            Log.d(tag, "DB 저장 함수 호출 완료: ${person.imageName}")
+
+                            val existingPersonId = personRepository.getPersonIdByImageName(person.imageName!!)
+
+                            if (existingPersonId != null) {
+                                Log.d(tag, "기존 인물 매핑 성공: ${person.imageName} -> ID:$existingPersonId")
+                                personRepository.addFaceToExistingPerson(existingPersonId, person.imageName!!, decodedBytes)
+                            } else {
+                                Log.d(tag, "새로운 인물 생성: ${person.imageName}")
+                                personRepository.addAnalyzedPerson(person.imageName!!, decodedBytes)
+                            }
                         } else {
                             Log.w(tag, "저장 스킵됨: 얼굴없음(${!person.isFaceExit}) 또는 데이터가 null임")
                         }
