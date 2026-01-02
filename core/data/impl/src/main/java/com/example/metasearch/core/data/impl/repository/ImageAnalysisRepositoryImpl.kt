@@ -186,8 +186,12 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
     }
 
     private suspend fun syncMismatchedNames(dbName: String) {
-        personRepository.getMismatchedNames().forEach { (oldName, newName) ->
-            runCatching { webService.changePersonName(ChangeNameRequest(dbName, oldName, newName)) }
+        val mismatches = personRepository.getMismatchedFaceNames()
+
+        mismatches.forEach { (serverName, actualName) ->
+            runCatching {
+                webService.changePersonName(ChangeNameRequest(dbName, serverName, actualName))
+            }
         }
     }
 

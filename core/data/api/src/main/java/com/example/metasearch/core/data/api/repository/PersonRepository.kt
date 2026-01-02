@@ -29,7 +29,10 @@ interface PersonRepository {
 
     suspend fun fetchAndSyncPhotoCount(localModels: List<PersonModel>): List<PersonModel>
 
-    suspend fun getMismatchedNames(): Map<String, String>
+    /**
+     * 서버가 지정한 이름과 사용자가 지정한 이름이 다른 것 반환
+     */
+    suspend fun getMismatchedFaceNames(): List<Pair<String, String>>
 
     /**
      * 분석된 인물 삭제

@@ -103,19 +103,21 @@ class PersonRepositoryImpl @Inject constructor(
     override suspend fun getPersonIdByImageName(imageName: String): Long? =
         personDao.findPersonIdByImageName(imageName)
 
-    override suspend fun addFaceToExistingPerson(personId: Long, imageName: String, imageBytes: ByteArray) =
-        personDao.insertFace(
+    override suspend fun addFaceToExistingPerson(personId: Long, imageName: String, imageBytes: ByteArray): Long {
+        val currentPerson = personDao.getPersonById(personId)
+        val actualName = currentPerson?.inputName ?: imageName
+
+        return personDao.insertFace(
             FaceEntity(
                 personId = personId,
-                imageName = imageName,
+                imageName = actualName,
                 imageData = imageBytes,
             ),
         )
+    }
 
     override suspend fun addAnalyzedPerson(imageName: String, imageBytes: ByteArray) {
-        if (!personDao.isNameExists(imageName)) {
-            personDao.insertPersonAndFace(imageName, imageBytes)
-        }
+        personDao.insertPersonAndFace(imageName, imageBytes)
     }
 
     override suspend fun fetchAndSyncPhotoCount(localModels: List<PersonModel>): List<PersonModel> {
@@ -146,11 +148,10 @@ class PersonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMismatchedNames(): Map<String, String> {
-        return personDao.getMismatchedNames().associate {
-            it.name to it.inputName
+    override suspend fun getMismatchedFaceNames(): List<Pair<String, String>> =
+        personDao.getMismatchedFaceNames().map {
+            it.serverName to it.actualName
         }
-    }
 
     override suspend fun deleteAnalyzedPerson(person: PersonModel): Result<Unit> = withContext(Dispatchers.IO) {
         runCatching {

@@ -9,9 +9,9 @@ import com.example.metasearch.core.room.api.entity.PersonEntity
 import com.example.metasearch.core.room.api.relations.PersonWithFaces
 import kotlinx.coroutines.flow.Flow
 
-data class NamePair(
-    val name: String,
-    val inputName: String,
+data class NameMapping(
+    val serverName: String,
+    val actualName: String,
 )
 
 @Dao
@@ -74,6 +74,16 @@ interface PersonDao {
 
     @Query(
         """
+        SELECT person_id
+        FROM faces
+        WHERE image_name = :imageName
+        LIMIT 1
+        """,
+    )
+    suspend fun getPersonIdByImageName(imageName: String): Long?
+
+    @Query(
+        """
         UPDATE persons
         SET input_name = :newName,
             phone_number = :newPhoneNumber,
@@ -106,8 +116,16 @@ interface PersonDao {
         faceId: Long?,
     ): Int
 
-    @Query("SELECT name, input_name AS inputName FROM persons WHERE name != input_name")
-    suspend fun getMismatchedNames(): List<NamePair>
+    @Query(
+        """
+        SELECT DISTINCT f.image_name AS serverName, p.input_name AS actualName
+        FROM faces f
+        JOIN persons p ON f.person_id = p.id
+        WHERE f.image_name != p.input_name
+        AND f.image_name LIKE '인물%'
+        """,
+    )
+    suspend fun getMismatchedFaceNames(): List<NameMapping>
 
     @Transaction
     suspend fun insertPersonAndFace(
