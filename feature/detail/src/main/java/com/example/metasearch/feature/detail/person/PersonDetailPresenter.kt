@@ -16,6 +16,7 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
+import com.slack.circuit.runtime.resetRoot
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -42,7 +43,7 @@ class PersonDetailPresenter @AssistedInject constructor(
     override fun present(): PersonDetailUiState {
         val scope = rememberCoroutineScope()
 
-        val isLoading by remember { mutableStateOf(false) }
+        var isLoading by remember { mutableStateOf(false) }
         val person by personRepository.getPersonById(screen.personId).collectAsState(initial = null)
         val photoUris by produceState(initialValue = emptyList(), key1 = person?.inputName) {
             val nameToSearch = person?.inputName
@@ -69,11 +70,12 @@ class PersonDetailPresenter @AssistedInject constructor(
                 newPhone = editPhone,
                 isHome = editIsHomeDisplay,
                 faceId = editRepresentativeFaceId ?: currentPerson.representativeFaceId,
-            ).onSuccess {
-                if (editName != currentPerson.inputName) {
-                    personRepository.changePersonNameOnServer(currentPerson.inputName, editName)
-                }
+            ).onSuccess { finalPersonId ->
                 showEditDialog = false
+
+                if (finalPersonId != screen.personId) {
+                    navigator.resetRoot(PersonDetailScreen(finalPersonId))
+                }
             }
         }
 
@@ -112,8 +114,10 @@ class PersonDetailPresenter @AssistedInject constructor(
 
                 PersonDetailUiEvent.OnConfirmMergeSave -> {
                     scope.launch {
+                        isLoading = true
                         savePersonInfo()
                         showMergeConfirmDialog = false
+                        isLoading = false
                     }
                 }
 

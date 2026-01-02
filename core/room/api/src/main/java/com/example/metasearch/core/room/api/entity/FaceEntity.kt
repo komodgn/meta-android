@@ -31,22 +31,7 @@ data class FaceEntity(
 
     @ColumnInfo(name = "image_data")
     val imageData: ByteArray,
-
-    @ColumnInfo(name = "thumbnail_data")
-    val thumbnailData: ByteArray? = null,
-
-    @ColumnInfo(name = "phone_number")
-    val phoneNumber: String,
 ) {
-    private fun areThumbnailsEqual(other: FaceEntity): Boolean {
-        if (thumbnailData != null) {
-            if (other.thumbnailData == null) return false
-            return thumbnailData.contentEquals(other.thumbnailData)
-        } else {
-            return other.thumbnailData == null
-        }
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -56,9 +41,6 @@ data class FaceEntity(
         if (id != other.id) return false
         if (personId != other.personId) return false
         if (imageName != other.imageName) return false
-        if (!imageData.contentEquals(other.imageData)) return false
-
-        if (!areThumbnailsEqual(other)) return false
 
         return true
     }
@@ -68,7 +50,6 @@ data class FaceEntity(
         result = 31 * result + personId.hashCode()
         result = 31 * result + imageName.hashCode()
         result = 31 * result + imageData.contentHashCode()
-        result = 31 * result + (thumbnailData?.contentHashCode() ?: 0)
 
         return result
     }

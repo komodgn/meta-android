@@ -16,6 +16,7 @@ import com.example.metasearch.core.network.request.PersonSearchRequest
 import com.example.metasearch.core.network.service.AIService
 import com.example.metasearch.core.network.service.WebService
 import com.example.metasearch.core.room.api.dao.PersonDao
+import com.example.metasearch.core.room.api.entity.FaceEntity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -99,10 +100,24 @@ class PersonRepositoryImpl @Inject constructor(
 
     override suspend fun getPersonCount(): Int = personDao.getPersonCount()
 
+    override suspend fun getPersonIdByImageName(imageName: String): Long? =
+        personDao.findPersonIdByImageName(imageName)
+
+    override suspend fun addFaceToExistingPerson(personId: Long, imageName: String, imageBytes: ByteArray): Long {
+        val currentPerson = personDao.getPersonById(personId)
+        val actualName = currentPerson?.inputName ?: imageName
+
+        return personDao.insertFace(
+            FaceEntity(
+                personId = personId,
+                imageName = actualName,
+                imageData = imageBytes,
+            ),
+        )
+    }
+
     override suspend fun addAnalyzedPerson(imageName: String, imageBytes: ByteArray) {
-        if (!personDao.isNameExists(imageName)) {
-            personDao.insertPersonAndFace(imageName, imageBytes)
-        }
+        personDao.insertPersonAndFace(imageName, imageBytes)
     }
 
     override suspend fun fetchAndSyncPhotoCount(localModels: List<PersonModel>): List<PersonModel> {
@@ -133,11 +148,10 @@ class PersonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMismatchedNames(): Map<String, String> {
-        return personDao.getMismatchedNames().associate {
-            it.name to it.inputName
+    override suspend fun getMismatchedFaceNames(): List<Pair<String, String>> =
+        personDao.getMismatchedFaceNames().map {
+            it.serverName to it.actualName
         }
-    }
 
     override suspend fun deleteAnalyzedPerson(person: PersonModel): Result<Unit> = withContext(Dispatchers.IO) {
         runCatching {
@@ -173,10 +187,11 @@ class PersonRepositoryImpl @Inject constructor(
         newPhone: String,
         isHome: Boolean,
         faceId: Long?,
-    ): Result<Unit> = withContext(Dispatchers.IO) {
+    ): Result<Long> = withContext(Dispatchers.IO) {
         runCatching {
             val currentPersonEntity = personDao.getPersonById(personId)
             val oldName = currentPersonEntity?.inputName ?: ""
+            val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
             val targetPersonId = personDao.getPersonIdByName(newName)
 
@@ -184,25 +199,17 @@ class PersonRepositoryImpl @Inject constructor(
                 personDao.mergePersons(
                     sourceId = personId,
                     targetId = targetPersonId,
-                    newPhone = newPhone,
-                    isHome = isHome,
                 )
-
-                if (faceId != null) {
-                    personDao.updateRepresentativeFace(targetPersonId, faceId)
-                }
-
-                val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
                 webService.changePersonName(ChangeNameRequest(dbName, oldName, newName))
+                targetPersonId
             } else {
                 personDao.updatePersonFullInfo(personId, newName, newPhone, isHome, faceId)
 
                 if (oldName != newName && oldName.isNotEmpty()) {
-                    val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
                     webService.changePersonName(ChangeNameRequest(dbName, oldName, newName))
                 }
+                personId
             }
-            Unit
         }
     }
 

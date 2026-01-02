@@ -18,6 +18,10 @@ interface PersonRepository {
      */
     suspend fun getPersonCount(): Int
 
+    suspend fun getPersonIdByImageName(imageName: String): Long?
+
+    suspend fun addFaceToExistingPerson(personId: Long, imageName: String, imageBytes: ByteArray): Long
+
     /**
      * AI 분석 결과로 받은 인물 정보 저장
      */
@@ -25,7 +29,10 @@ interface PersonRepository {
 
     suspend fun fetchAndSyncPhotoCount(localModels: List<PersonModel>): List<PersonModel>
 
-    suspend fun getMismatchedNames(): Map<String, String>
+    /**
+     * 서버가 지정한 이름과 사용자가 지정한 이름이 다른 것 반환
+     */
+    suspend fun getMismatchedFaceNames(): List<Pair<String, String>>
 
     /**
      * 분석된 인물 삭제
@@ -45,7 +52,7 @@ interface PersonRepository {
         newPhone: String,
         isHome: Boolean,
         faceId: Long?,
-    ): Result<Unit>
+    ): Result<Long>
 
     /**
      * 인물 대표 사진 변경

@@ -4,3 +4,6 @@ import javax.inject.Qualifier
 
 @Qualifier
 annotation class DeviceDatastore
+
+@Qualifier
+annotation class PersonIndexDatastore

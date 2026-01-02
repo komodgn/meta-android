@@ -81,5 +81,4 @@ internal fun FaceEntity.toModel() = FaceModel(
     personId = personId,
     imageName = imageName,
     imageData = imageData,
-    phoneNumber = phoneNumber,
 )
