@@ -1,6 +1,5 @@
 package com.example.metasearch.core.ui.component
 
-import android.R.attr.onClick
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
