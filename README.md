@@ -4,11 +4,21 @@
 - Image Analysis
 - Focusing Search
 - Natural Language Search
+- Face Analytics
 
-|Search|Search|
+### Intelligent Search
+
+|자연어 검색|포커싱 검색|
 |:---:|:---:|
 |<img src="https://github.com/user-attachments/assets/c90afda9-8bb4-4e2d-a03a-6eeb6a74491b" width="250"/> |<img src="https://github.com/user-attachments/assets/b911e635-420a-4035-8b59-27f26baf9df6" width="280"/> |
-|Natural Language Search|Focusing Search|
+|자연어를 통한 복잡한 조건으로 정확한 검색|간단한 드래그 동작으로 쉽고 빠른 검색|
+
+### Person In My Gallery
+
+|인물 정보 통합 및 관리|개인화|인물 검색|
+|:---:|:---:|:---:|
+|<img src="https://github.com/user-attachments/assets/1d9a19a8-e605-4806-8bba-6bb2894f5f05" width="230"/> |<img src="https://github.com/user-attachments/assets/c8dab122-27c8-4251-8caa-83d8d96ed1a6" width="230"/> |<img src="https://github.com/user-attachments/assets/c8dab122-27c8-4251-8caa-83d8d96ed1a8" width="230"/> |
+|분석된 인물 통합 및 프로필 사진 변경|선호하는 인물로 등록하고 홈 화면에서 빠르게 접근|등록한 인물 이름으로 사진 검색|
 
 ## Local Settings
 - local.properties
