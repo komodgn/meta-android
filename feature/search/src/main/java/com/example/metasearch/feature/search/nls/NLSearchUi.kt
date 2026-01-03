@@ -1,10 +1,8 @@
 package com.example.metasearch.feature.search.nls
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -14,16 +12,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.example.metasearch.core.designsystem.annotation.DevicePreview
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.designsystem.theme.Neutral500
 import com.example.metasearch.core.ui.MetaSearchScaffold
 import com.example.metasearch.core.ui.component.MetaSearchDialog
 import com.example.metasearch.core.ui.component.MetaSearchLoadingIndicator
+import com.example.metasearch.core.ui.component.MetaSearchSquareImage
 import com.example.metasearch.feature.screens.NLSearchScreen
 import com.example.metasearch.feature.screens.component.MetaSearchMainBottomBar
 import com.example.metasearch.feature.screens.component.MetaSearchMainTabItem
@@ -98,16 +94,11 @@ private fun NLSearchUiContent(
                     columns = GridCells.Fixed(5),
                 ) {
                     items(state.resultImages) { uriString ->
-                        AsyncImage(
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .padding(1.dp)
-                                .clickable {
-                                    state.eventSink(NLSearchUiEvent.OnImageClick(uriString))
-                                },
+                        MetaSearchSquareImage(
                             model = uriString,
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
+                            onClick = {
+                                state.eventSink(NLSearchUiEvent.OnImageClick(uriString))
+                            },
                         )
                     }
                 }
@@ -141,7 +132,11 @@ private fun NLSearchUiPreview() {
     MetaSearchTheme {
         NLSearchUi(
             state = NLSearchUiState(
-                isLoading = true,
+                isLoading = false,
+                resultImages = listOf(
+                    "uri1",
+                    "uri2",
+                ),
                 eventSink = {},
             ),
         )
