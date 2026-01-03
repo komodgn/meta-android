@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,17 +24,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import coil3.compose.AsyncImage
 import com.example.metasearch.core.designsystem.annotation.DevicePreview
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.designsystem.theme.Neutral500
 import com.example.metasearch.core.ui.MetaSearchScaffold
 import com.example.metasearch.core.ui.component.MetaSearchLoadingIndicator
+import com.example.metasearch.core.ui.component.MetaSearchSquareImage
 import com.example.metasearch.feature.home.component.HomeHeader
 import com.example.metasearch.feature.home.component.PersonCircleItem
 import com.example.metasearch.feature.screens.HomeScreen
@@ -159,16 +157,11 @@ private fun HomeUiContent(
                 columns = GridCells.Fixed(5),
             ) {
                 items(state.images) { uri ->
-                    AsyncImage(
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .padding(1.dp)
-                            .clickable {
-                                state.eventSink(HomeUiEvent.OnImageClick(uri.toString()))
-                            },
+                    MetaSearchSquareImage(
                         model = uri,
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
+                        onClick = {
+                            state.eventSink(HomeUiEvent.OnImageClick(uri.toString()))
+                        },
                     )
                 }
             }

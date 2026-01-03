@@ -1,23 +1,18 @@
 package com.example.metasearch.feature.detail.person
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -25,20 +20,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import coil3.compose.AsyncImage
 import com.example.metasearch.core.designsystem.annotation.DevicePreview
-import com.example.metasearch.core.designsystem.theme.LightGrey
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.designsystem.theme.Neutral500
 import com.example.metasearch.core.model.PersonModel
 import com.example.metasearch.core.ui.MetaSearchScaffold
+import com.example.metasearch.core.ui.component.MetaSearchCircleImage
 import com.example.metasearch.core.ui.component.MetaSearchDialog
 import com.example.metasearch.core.ui.component.MetaSearchLoadingIndicator
+import com.example.metasearch.core.ui.component.MetaSearchSquareImage
 import com.example.metasearch.feature.detail.R
 import com.example.metasearch.feature.detail.person.component.PersonDetailHeader
 import com.example.metasearch.feature.detail.person.component.PersonEditDialogContent
@@ -123,21 +116,11 @@ fun PersonDetailUi(
                         contentPadding = PaddingValues(horizontal = MetaSearchTheme.spacing.spacing1),
                     ) {
                         items(state.person?.faces ?: emptyList()) { face ->
-                            AsyncImage(
+                            MetaSearchCircleImage(
                                 model = face.imageData,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(80.dp)
-                                    .clip(CircleShape)
-                                    .border(
-                                        width = 2.dp,
-                                        color = LightGrey,
-                                        shape = CircleShape,
-                                    )
-                                    .clickable {
-                                        state.eventSink(PersonDetailUiEvent.OnEditThumbnailClick(face.id))
-                                    },
-                                contentScale = ContentScale.Crop,
+                                onClick = {
+                                    state.eventSink(PersonDetailUiEvent.OnEditThumbnailClick(face.id))
+                                },
                             )
                         }
                     }
@@ -167,15 +150,11 @@ private fun PersonDetailContent(
                 .padding(vertical = MetaSearchTheme.spacing.spacing4),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            AsyncImage(
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape)
-                    .clickable { state.eventSink(PersonDetailUiEvent.OnThumbnailClick) }
-                    .border(2.dp, LightGrey, CircleShape),
+            MetaSearchCircleImage(
                 model = state.person?.representativeFace?.imageData,
-                contentDescription = "Representative Image",
-                contentScale = ContentScale.Crop,
+                onClick = {
+                    state.eventSink(PersonDetailUiEvent.OnThumbnailClick)
+                },
             )
         }
 
@@ -191,16 +170,11 @@ private fun PersonDetailContent(
             columns = GridCells.Fixed(5),
         ) {
             items(state.photoUris) { uri ->
-                AsyncImage(
-                    modifier = Modifier
-                        .aspectRatio(1f)
-                        .padding(1.dp)
-                        .clickable {
-                            state.eventSink(PersonDetailUiEvent.OnGridImageClick(uri))
-                        },
+                MetaSearchSquareImage(
                     model = uri,
-                    contentDescription = "Person Image",
-                    contentScale = ContentScale.Crop,
+                    onClick = {
+                        state.eventSink(PersonDetailUiEvent.OnGridImageClick(uri))
+                    },
                 )
             }
         }
@@ -213,7 +187,7 @@ private fun PersonDetailUiPreview() {
     MetaSearchTheme {
         PersonDetailUi(
             state = PersonDetailUiState(
-                isLoading = true,
+                isLoading = false,
                 person = PersonModel(
                     id = 1L,
                     name = "춘식이",
