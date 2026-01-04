@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64.decode
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.example.metasearch.core.common.utils.toFile
@@ -13,6 +14,7 @@ import com.example.metasearch.core.data.api.repository.ImageAnalysisRepository
 import com.example.metasearch.core.data.api.repository.PersonRepository
 import com.example.metasearch.core.datastore.api.datasource.PersonIndexDataSource
 import com.example.metasearch.core.network.request.ChangeNameRequest
+import com.example.metasearch.core.network.request.DeleteImageRequest
 import com.example.metasearch.core.network.service.AIService
 import com.example.metasearch.core.network.service.WebService
 import com.example.metasearch.core.room.api.dao.AnalyzedImageDao
@@ -95,21 +97,33 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         Log.d(tag, "삭제 대상 개수: ${deletePaths.size}개")
         deletePaths.forEachIndexed { index, pathString ->
             Log.d(tag, "이미지 삭제 중 (${index + 1}/${deletePaths.size}): $pathString")
-            val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
+
+            val uri = pathString.toUri()
+            val originalFileName = galleryRepository.getFileName(uri)
+            Log.d(tag, "Web 서버로 보낼 파일명: $originalFileName")
 
             val fileName = pathString.substringAfterLast('/')
-            val dummyRequestBody = "".toRequestBody("image/*".toMediaTypeOrNull())
+            Log.d(tag, "AI 서버로 보낼 파일명: $fileName")
 
-            val fileNamePart = MultipartBody.Part.createFormData("deleteImage", fileName, dummyRequestBody)
+            val finalFileName = if (originalFileName != null) {
+                "$originalFileName.jpg"
+            } else {
+                "$fileName.jpg"
+            }
 
-            val webSuccess = runCatching { webService.uploadWebDeleteImage(fileNamePart, dbName) }.isSuccess
-            val aiSuccess = runCatching { aiService.uploadDeleteImage(fileNamePart, dbNameBody) }.isSuccess
+            val webResponse = runCatching { webService.uploadWebDeleteImage(DeleteImageRequest(dbName, finalFileName)) }
+            webResponse.onFailure {
+                Log.e(tag, "Web 삭제 실패 원인: ${it.message}")
+            }
 
-            if (webSuccess && aiSuccess) {
+            val aiPart = MultipartBody.Part.createFormData("deleteImage", fileName, "".toRequestBody())
+            val aiSuccess = runCatching { aiService.uploadDeleteImage(aiPart, dbName.toRequestBody()) }.isSuccess
+
+            if (webResponse.isSuccess && aiSuccess) {
                 analyzedImageDao.deletePath(pathString)
                 Log.d(tag, "삭제 성공: $pathString")
             } else {
-                Log.e(tag, "삭제 실패 (Web: $webSuccess, AI: $aiSuccess): $pathString")
+                Log.e(tag, "삭제 실패 (Web: $webResponse, AI: $aiSuccess): $pathString")
             }
         }
     }
