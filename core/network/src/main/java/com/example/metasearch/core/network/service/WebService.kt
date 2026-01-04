@@ -2,6 +2,7 @@ package com.example.metasearch.core.network.service
 
 import com.example.metasearch.core.network.request.ChangeNameRequest
 import com.example.metasearch.core.network.request.DeleteEntityRequest
+import com.example.metasearch.core.network.request.DeleteImageRequest
 import com.example.metasearch.core.network.request.DetectedObjectsRequest
 import com.example.metasearch.core.network.request.NLQueryRequest
 import com.example.metasearch.core.network.request.PersonFrequencyRequest
@@ -65,10 +66,8 @@ public interface WebService {
         @Query("dbName") dbName: String,
     )
 
-    @Multipart
-    @POST("android/deleteimg")
+    @POST("deleteImage/")
     suspend fun uploadWebDeleteImage(
-        @Part filename: MultipartBody.Part,
-        @Part("dbName") dbName: String,
+        @Body request: DeleteImageRequest,
     )
 }
