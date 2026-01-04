@@ -2,6 +2,14 @@
 
 <img src="https://img.shields.io/badge/Kotlin-2.2.21-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
 
+## Demo
+
+### 일상 언어로 사진 검색
+<video src="https://github.com/user-attachments/assets/56c7dd41-de57-40ca-b7d3-4b4e7b8f23e8" width="400px"></video>
+
+### 등록한 인물 이름으로 사진 검색
+<video src="https://github.com/user-attachments/assets/228a8d81-05e6-4a41-9ea6-036703a5127e" width="400px"></video>
+
 ## Features
 - Image Analysis
 - Focusing Search
@@ -17,10 +25,10 @@
 
 ### Person In My Gallery
 
-|인물 정보 통합 및 관리|개인화|인물 검색|
-|:---:|:---:|:---:|
-|<img src="https://github.com/user-attachments/assets/1d9a19a8-e605-4806-8bba-6bb2894f5f05" width="230"/> |<img src="https://github.com/user-attachments/assets/c8dab122-27c8-4251-8caa-83d8d96ed1a6" width="230"/> |<img src="https://github.com/user-attachments/assets/c8dab122-27c8-4251-8caa-83d8d96ed1a8" width="230"/> |
-|분석된 인물 통합 및 프로필 사진 변경|선호하는 인물로 등록하고 홈 화면에서 빠르게 접근|등록한 인물 이름으로 사진 검색|
+|인물 정보 통합 및 관리|개인화|
+|:---:|:---:|
+|<img src="https://github.com/user-attachments/assets/1d9a19a8-e605-4806-8bba-6bb2894f5f05" width="230"/> |<img src="https://github.com/user-attachments/assets/c8dab122-27c8-4251-8caa-83d8d96ed1a6" width="230"/> |
+|분석된 인물 통합 및 프로필 사진 변경|선호하는 인물로 등록하고 홈 화면에서 빠르게 접근|
 
 ## Local Settings
 - local.properties
