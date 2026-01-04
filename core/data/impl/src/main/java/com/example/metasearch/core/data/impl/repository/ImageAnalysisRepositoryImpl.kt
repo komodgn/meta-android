@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64.decode
 import android.util.Log
-import androidx.core.net.toUri
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.example.metasearch.core.common.utils.toFile
@@ -52,18 +51,24 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
     }
 
     override suspend fun runFullAnalysis() = withContext(Dispatchers.IO) {
-        Log.d(tag, "runFullAnalysis 함수 실행")
+        Log.d(tag, "1. runFullAnalysis 함수 실행")
 
         val currentGalleryUris = galleryRepository.getAllGalleryImages()
+        Log.d(tag, "2. 갤러리 이미지 로드 완료: ${currentGalleryUris.size}개")
         val currentGalleryUrisString = currentGalleryUris.map { it.toString() }
+
         val alreadyAnalyzedPaths = analyzedImageDao.getAllAnalyzedPaths()
+        Log.d(tag, "3. 기존 분석 경로 로드 완료: ${alreadyAnalyzedPaths.size}개")
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
+        Log.d(tag, "5. 삭제 로직 시작")
         deleteMissingImages(alreadyAnalyzedPaths, currentGalleryUrisString, dbName)
+        Log.d(tag, "6. 삭제 로직 완료")
 
         val addUris = currentGalleryUris.filter { uri ->
             uri.toString() !in alreadyAnalyzedPaths
         }
+        Log.d(tag, "7. 추가할 이미지 수: ${addUris.size}")
 
         if (addUris.isNotEmpty()) {
             val allSuccessfulPaths = mutableListOf<String>()
@@ -78,6 +83,8 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
             if (allSuccessfulPaths.isNotEmpty()) {
                 processAnalysisFinish(allSuccessfulPaths, dbName)
             }
+        } else {
+            Log.d(tag, "8. 추가할 이미지가 없어 종료함")
         }
 
         syncMismatchedNames(dbName)
@@ -85,20 +92,25 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
 
     private suspend fun deleteMissingImages(alreadyPaths: List<String>, currentPaths: List<String>, dbName: String) {
         val deletePaths = alreadyPaths.filter { it !in currentPaths }
-        deletePaths.forEach { pathString ->
-            val uri = pathString.toUri()
-            val tempFile = uri.toFile(context)
-            val requestFile = tempFile.asRequestBody("image/*".toMediaTypeOrNull())
-            val fileNamePart = MultipartBody.Part.createFormData("deleteImage", tempFile.name, requestFile)
-
+        Log.d(tag, "삭제 대상 개수: ${deletePaths.size}개")
+        deletePaths.forEachIndexed { index, pathString ->
+            Log.d(tag, "이미지 삭제 중 (${index + 1}/${deletePaths.size}): $pathString")
             val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
+
+            val fileName = pathString.substringAfterLast('/')
+            val dummyRequestBody = "".toRequestBody("image/*".toMediaTypeOrNull())
+
+            val fileNamePart = MultipartBody.Part.createFormData("deleteImage", fileName, dummyRequestBody)
 
             val webSuccess = runCatching { webService.uploadWebDeleteImage(fileNamePart, dbName) }.isSuccess
             val aiSuccess = runCatching { aiService.uploadDeleteImage(fileNamePart, dbNameBody) }.isSuccess
 
-            if (webSuccess && aiSuccess) analyzedImageDao.deletePath(pathString)
-
-            tempFile.delete()
+            if (webSuccess && aiSuccess) {
+                analyzedImageDao.deletePath(pathString)
+                Log.d(tag, "삭제 성공: $pathString")
+            } else {
+                Log.e(tag, "삭제 실패 (Web: $webSuccess, AI: $aiSuccess): $pathString")
+            }
         }
     }
 
