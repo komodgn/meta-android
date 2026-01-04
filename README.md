@@ -1,5 +1,7 @@
 # Visualize Me By Photo
 
+<img src="https://img.shields.io/badge/Kotlin-2.2.21-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
+
 ## Features
 - Image Analysis
 - Focusing Search
