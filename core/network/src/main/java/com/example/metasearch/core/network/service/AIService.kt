@@ -36,7 +36,7 @@ public interface AIService {
     @Multipart
     @POST("android/upload_delete")
     suspend fun uploadDeleteImage(
-        @Part("deleteImage") filename: MultipartBody.Part,
+        @Part filename: MultipartBody.Part,
         @Part("dbName") dbName: RequestBody,
     ): CommonResponse
 
