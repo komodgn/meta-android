@@ -3,6 +3,7 @@ package com.example.metasearch.feature.detail.person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -16,7 +17,6 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
-import com.slack.circuit.runtime.resetRoot
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -44,7 +44,8 @@ class PersonDetailPresenter @AssistedInject constructor(
         val scope = rememberCoroutineScope()
 
         var isLoading by remember { mutableStateOf(false) }
-        val person by personRepository.getPersonById(screen.personId).collectAsState(initial = null)
+        var currentPersonId by remember { mutableLongStateOf(screen.personId) }
+        val person by personRepository.getPersonById(currentPersonId).collectAsState(initial = null)
         val photoUris by produceState(initialValue = emptyList(), key1 = person?.inputName) {
             val nameToSearch = person?.inputName
             if (nameToSearch != null) {
@@ -73,8 +74,8 @@ class PersonDetailPresenter @AssistedInject constructor(
             ).onSuccess { finalPersonId ->
                 showEditDialog = false
 
-                if (finalPersonId != screen.personId) {
-                    navigator.resetRoot(PersonDetailScreen(finalPersonId))
+                if (finalPersonId != currentPersonId) {
+                    currentPersonId = finalPersonId
                 }
             }
         }
