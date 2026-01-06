@@ -16,7 +16,7 @@ import com.example.metasearch.core.room.api.entity.PersonEntity
         FaceEntity::class,
         AnalyzedImageEntity::class,
     ],
-    version = 3,
+    version = 4,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -24,6 +24,12 @@ abstract class AppDatabase : RoomDatabase() {
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE persons ADD COLUMN representative_face INTEGER DEFAULT NULL")
+            }
+        }
+
+        val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE analyzed_images ADD COLUMN file_name TEXT NOT NULL DEFAULT 'unknown.jpg'")
             }
         }
     }
