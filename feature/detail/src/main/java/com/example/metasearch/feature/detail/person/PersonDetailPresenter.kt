@@ -1,6 +1,7 @@
 package com.example.metasearch.feature.detail.person
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -61,6 +62,16 @@ class PersonDetailPresenter @AssistedInject constructor(
         var editRepresentativeFaceId by rememberRetained { mutableStateOf<Long?>(null) }
         var showMergeConfirmDialog by rememberRetained { mutableStateOf(false) }
         var showPhotoSelectDialog by rememberRetained { mutableStateOf(false) }
+
+        var isInitialized by remember { mutableStateOf(false) }
+
+        LaunchedEffect(person) {
+            if (person != null) {
+                isInitialized = true
+            } else if (isInitialized && !isLoading) {
+                navigator.pop()
+            }
+        }
 
         suspend fun savePersonInfo() {
             val currentPerson = person ?: return
