@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64.decode
 import android.util.Log
-import androidx.core.net.toUri
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.example.metasearch.core.common.utils.toFile
@@ -21,8 +20,11 @@ import com.example.metasearch.core.room.api.dao.AnalyzedImageDao
 import com.example.metasearch.core.room.api.entity.AnalyzedImageEntity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -73,17 +75,15 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         Log.d(tag, "7. 추가할 이미지 수: ${addUris.size}")
 
         if (addUris.isNotEmpty()) {
-            val allSuccessfulPaths = mutableListOf<String>()
+            val allSuccessfulData = mutableListOf<Pair<String, String>>()
 
-            addUris.chunked(chunkSize).forEachIndexed { index, chunk ->
-                val successfulInChunk = uploadOnlyImageChunk(context, index, chunk, dbName)
-                allSuccessfulPaths.addAll(successfulInChunk)
-
-                if (successfulInChunk.size != chunk.size) return@forEachIndexed
+            addUris.chunked(chunkSize).forEach { chunk ->
+                val successfulInChunk = uploadOnlyImageChunk(context, chunk, dbName)
+                allSuccessfulData.addAll(successfulInChunk)
             }
 
-            if (allSuccessfulPaths.isNotEmpty()) {
-                processAnalysisFinish(allSuccessfulPaths, dbName)
+            if (allSuccessfulData.isNotEmpty()) {
+                processAnalysisFinish(allSuccessfulData, dbName)
             }
         } else {
             Log.d(tag, "8. 추가할 이미지가 없어 종료함")
@@ -98,65 +98,52 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         deletePaths.forEachIndexed { index, pathString ->
             Log.d(tag, "이미지 삭제 중 (${index + 1}/${deletePaths.size}): $pathString")
 
-            val uri = pathString.toUri()
-            val originalFileName = galleryRepository.getFileName(uri)
-            Log.d(tag, "Web 서버로 보낼 파일명: $originalFileName")
+            val savedFileName = analyzedImageDao.getFileNameByPath(pathString)
+            Log.d(tag, "서버로 보낼 파일명: $savedFileName")
 
-            val fileName = pathString.substringAfterLast('/')
-            Log.d(tag, "AI 서버로 보낼 파일명: $fileName")
-
-            val finalFileName = if (originalFileName != null) {
-                "$originalFileName.jpg"
-            } else {
-                "$fileName.jpg"
+            val webResult = runCatching {
+                webService.uploadWebDeleteImage(DeleteImageRequest(dbName, savedFileName ?: "unknown.jpg"))
             }
 
-            val webResponse = runCatching { webService.uploadWebDeleteImage(DeleteImageRequest(dbName, finalFileName)) }
-            webResponse.onFailure {
-                Log.e(tag, "Web 삭제 실패 원인: ${it.message}")
+            val aiPart = MultipartBody.Part.createFormData("deleteImage", savedFileName, "".toRequestBody())
+            val aiResult = runCatching {
+                aiService.uploadDeleteImage(aiPart, dbName.toRequestBody())
             }
 
-            val aiPart = MultipartBody.Part.createFormData("deleteImage", fileName, "".toRequestBody())
-            val aiSuccess = runCatching { aiService.uploadDeleteImage(aiPart, dbName.toRequestBody()) }.isSuccess
-
-            if (webResponse.isSuccess && aiSuccess) {
+            if (webResult.isSuccess && aiResult.isSuccess) {
                 analyzedImageDao.deletePath(pathString)
                 Log.d(tag, "삭제 성공: $pathString")
             } else {
-                Log.e(tag, "삭제 실패 (Web: $webResponse, AI: $aiSuccess): $pathString")
+                Log.e(tag, "삭제 실패 (Web: $webResult, AI: $aiResult): $pathString")
             }
         }
     }
 
-    private suspend fun uploadOnlyImageChunk(context: Context, index: Int, chunk: List<Uri>, dbName: String): List<String> {
-        Log.d(tag, "청크 전송 중: ${index + 1}번째 (${chunk.size}개)")
-        val successfulPaths = mutableListOf<String>()
-
-        for (uri in chunk) {
-            if (uploadSingleImage(context, uri, dbName)) {
-                successfulPaths.add(uri.toString())
-            } else {
-                Log.e(tag, "업로드 실패: $uri")
-                break
+    private suspend fun uploadOnlyImageChunk(
+        context: Context,
+        chunk: List<Uri>,
+        dbName: String,
+    ): List<Pair<String, String>> = supervisorScope {
+        chunk.map { uri ->
+            async {
+                val fileName = galleryRepository.getFileName(uri) ?: "unknown.jpg"
+                if (uploadSingleImage(context, uri, dbName, fileName)) uri.toString() to fileName else null
             }
-        }
-        return successfulPaths
+        }.awaitAll().filterNotNull()
     }
 
-    private suspend fun uploadSingleImage(context: Context, uri: Uri, dbName: String): Boolean {
+    private suspend fun uploadSingleImage(context: Context, uri: Uri, dbName: String, fileName: String): Boolean {
         val tempFile = uri.toFile(context)
 
         return try {
-            val originalFileName = galleryRepository.getFileName(uri) ?: "unknown.jpg"
-
-            val webImagePart = createMultipartBodyPartFromUri(context, "image", uri, originalFileName)
-            val aiImagePart = createMultipartBodyPartFromUri(context, "addImage", uri, originalFileName)
+            val webImagePart = createMultipartBodyPartFromUri(context, "image", uri, fileName)
+            val aiImagePart = createMultipartBodyPartFromUri(context, "addImage", uri, fileName)
             val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
 
             webService.uploadWebAddImage(webImagePart, dbName)
             aiService.uploadAddImage(aiImagePart, dbNameBody)
 
-            Log.d(tag, "서버 전송 성공 (파일명: $originalFileName): $uri")
+            Log.d(tag, "서버 전송 성공 (파일명: $fileName): $uri")
             true
         } catch (e: Exception) {
             Log.e(tag, "서버 전송 실패 원인: ${e.message}", e)
@@ -166,7 +153,7 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun processAnalysisFinish(successfulPaths: List<String>, dbName: String) {
+    private suspend fun processAnalysisFinish(successfulPaths: List<Pair<String, String>>, dbName: String) {
         val lastIndex = personIndexDataSource.getLastPersonIndex()
 
         Log.d(tag, lastIndex.toString())
@@ -182,31 +169,38 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
                     .mapNotNull { it.imageName?.filter { c -> c.isDigit() }?.toIntOrNull() }
                     .maxOrNull() ?: lastIndex
 
-                if (newMax > lastIndex) {
-                    personIndexDataSource.setLastPersonIndex(newMax)
-                }
+                analyzedImageDao.runInTransaction {
+                    if (newMax > lastIndex) {
+                        personIndexDataSource.setLastPersonIndex(newMax)
+                    }
 
-                response.images.forEach { person ->
-                    runCatching {
-                        if (person.isFaceExit && person.imageName != null && person.imageBytes != null) {
-                            val decodedBytes = decode(person.imageBytes, android.util.Base64.DEFAULT)
+                    response.images.forEach { person ->
+                        runCatching {
+                            if (person.isFaceExit && person.imageName != null && person.imageBytes != null) {
+                                val decodedBytes = decode(person.imageBytes, android.util.Base64.DEFAULT)
 
-                            val existingPersonId = personRepository.getPersonIdByImageName(person.imageName!!)
+                                val existingPersonId = personRepository.getPersonIdByImageName(person.imageName!!)
 
-                            if (existingPersonId != null) {
-                                Log.d(tag, "기존 인물 매핑 성공: ${person.imageName} -> ID:$existingPersonId")
-                                personRepository.addFaceToExistingPerson(existingPersonId, person.imageName!!, decodedBytes)
+                                if (existingPersonId != null) {
+                                    Log.d(tag, "기존 인물 매핑 성공: ${person.imageName} -> ID:$existingPersonId")
+                                    personRepository.addFaceToExistingPerson(existingPersonId, person.imageName!!, decodedBytes)
+                                } else {
+                                    Log.d(tag, "새로운 인물 생성: ${person.imageName}")
+                                    personRepository.addAnalyzedPerson(person.imageName!!, decodedBytes)
+                                }
                             } else {
-                                Log.d(tag, "새로운 인물 생성: ${person.imageName}")
-                                personRepository.addAnalyzedPerson(person.imageName!!, decodedBytes)
+                                Log.w(tag, "저장 스킵됨: 얼굴없음(${!person.isFaceExit}) 또는 데이터가 null임")
                             }
-                        } else {
-                            Log.w(tag, "저장 스킵됨: 얼굴없음(${!person.isFaceExit}) 또는 데이터가 null임")
-                        }
-                    }.onFailure { e -> Log.e(tag, "인물 개별 저장 실패: ${person.imageName}", e) }
+                        }.onFailure { e -> Log.e(tag, "인물 개별 저장 실패: ${person.imageName}", e) }
+                    }
+
+                    val entries = successfulPaths.map { (path, fileName) ->
+                        AnalyzedImageEntity(imagePath = path, fileName = fileName)
+                    }
+                    analyzedImageDao.insertAllPaths(entries)
                 }
-                successfulPaths.forEach { analyzedImageDao.insertPath(AnalyzedImageEntity(imagePath = it)) }
-                Log.d(tag, "전체 분석 및 DB 반영 완료")
+
+                Log.d(tag, "트랜잭션 완료: 인물 및 경로(${successfulPaths.size})개 저장 성공")
             }
             .onFailure { Log.e(tag, "최종 finish 실패: ${it.message}") }
     }
