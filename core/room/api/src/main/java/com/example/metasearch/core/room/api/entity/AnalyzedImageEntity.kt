@@ -12,4 +12,7 @@ data class AnalyzedImageEntity(
 
     @ColumnInfo(name = "image_path")
     val imagePath: String,
+
+    @ColumnInfo(name = "file_name")
+    val fileName: String,
 )
