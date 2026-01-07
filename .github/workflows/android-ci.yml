@@ -61,6 +61,14 @@ jobs:
           end=$(date +%s)
           echo "time=$((end-start))" >> $GITHUB_OUTPUT
 
+      - name: Unit Test
+        id: test
+        run: |
+          start=$(date +%s)
+          ./gradlew testDebugUnitTest --parallel
+          end=$(date +%s)
+          echo "time=$((end-start))" >> $GITHUB_OUTPUT
+
       - name: Debug Build with Gradle
         id: assemble
         run: |
@@ -75,6 +83,11 @@ jobs:
         with:
           script: |
             const results = {
+              test: {
+                status: '${{ steps.test.outcome }}',
+                name: 'Unit Test',
+                time: '${{ steps.test.outputs.time }}'
+              },
               assemble: {
                 status: '${{ steps.assemble.outcome }}',
                 name: 'Debug Build',
