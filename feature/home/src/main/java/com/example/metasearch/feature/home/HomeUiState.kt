@@ -1,18 +1,19 @@
 package com.example.metasearch.feature.home
 
-import android.net.Uri
+import androidx.paging.PagingData
+import com.example.metasearch.core.model.GalleryImageModel
 import com.example.metasearch.core.model.PersonModel
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
+import kotlinx.coroutines.flow.Flow
 
 data class HomeUiState(
     val isPersonLoading: Boolean = false,
-    val isGalleryLoading: Boolean = false,
     val isAnalyzing: Boolean = false,
     val isExpanded: Boolean = false,
     val persons: List<PersonModel> = emptyList(),
-    val images: List<Uri> = emptyList(),
+    val images: Flow<PagingData<GalleryImageModel>>,
     val eventSink: (HomeUiEvent) -> Unit,
 ) : CircuitUiState
 
