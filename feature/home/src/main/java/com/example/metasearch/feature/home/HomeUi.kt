@@ -8,14 +8,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,10 +28,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
+import androidx.paging.LoadState
+import androidx.paging.PagingData.Companion.from
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.example.metasearch.core.designsystem.annotation.DevicePreview
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.designsystem.theme.Neutral500
+import com.example.metasearch.core.model.GalleryImageModel
 import com.example.metasearch.core.ui.MetaSearchScaffold
 import com.example.metasearch.core.ui.component.MetaSearchLoadingIndicator
 import com.example.metasearch.core.ui.component.MetaSearchSquareImage
@@ -41,6 +46,7 @@ import com.example.metasearch.feature.screens.component.MetaSearchMainBottomBar
 import com.example.metasearch.feature.screens.component.MetaSearchMainTabItem
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
+import kotlinx.coroutines.flow.flowOf
 
 @CircuitInject(HomeScreen::class, ActivityRetainedComponent::class)
 @Composable
@@ -50,9 +56,11 @@ fun HomeUi(
 ) {
     MetaSearchScaffold(
         modifier = modifier.fillMaxSize(),
+        contentWindowInsets = WindowInsets(bottom = 0),
         bottomBar = {
             MetaSearchMainBottomBar(
-                modifier = modifier,
+                modifier = modifier
+                    .padding(bottom = MetaSearchTheme.spacing.spacing3),
                 currentTab = MetaSearchMainTabItem.HOME,
                 onTabSelected = {
                     state.eventSink(HomeUiEvent.OnTabClick(it.screen))
@@ -72,8 +80,12 @@ private fun HomeUiContent(
     state: HomeUiState,
     innerPadding: PaddingValues,
 ) {
+    val lazyPagingItems = state.images.collectAsLazyPagingItems()
+
     Column(
-        modifier = Modifier.padding(innerPadding),
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding(),
     ) {
         HomeHeader(
             onUploadClick = {
@@ -145,28 +157,37 @@ private fun HomeUiContent(
             modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
             text = stringResource(
                 R.string.home_screen_gallery_grid_view_title,
-                state.images.size,
+                lazyPagingItems.itemCount,
             ),
             color = Neutral500,
         )
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.weight(1f),
         ) {
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
                 columns = GridCells.Fixed(5),
+                contentPadding = PaddingValues(
+                    bottom = innerPadding.calculateBottomPadding() + 16.dp,
+                ),
             ) {
-                items(state.images) { uri ->
-                    MetaSearchSquareImage(
-                        model = uri,
-                        onClick = {
-                            state.eventSink(HomeUiEvent.OnImageClick(uri.toString()))
-                        },
-                    )
+                items(
+                    count = lazyPagingItems.itemCount,
+                    key = lazyPagingItems.itemKey { it.id },
+                ) { index ->
+                    val item = lazyPagingItems[index]
+                    if (item != null) {
+                        MetaSearchSquareImage(
+                            model = item.uriString,
+                            onClick = {
+                                state.eventSink(HomeUiEvent.OnImageClick(item.uriString))
+                            },
+                        )
+                    }
                 }
             }
 
-            if (state.isGalleryLoading) {
+            if (lazyPagingItems.loadState.refresh is LoadState.Loading) {
                 MetaSearchLoadingIndicator(modifier = Modifier.align(Alignment.Center))
             }
         }
@@ -177,6 +198,14 @@ private fun HomeUiContent(
 @Composable
 private fun HomeUiPreview() {
     MetaSearchTheme {
+        val fakeImages = List(20) { index ->
+            GalleryImageModel(
+                id = index.toLong(),
+                uriString = "android.resource://com.example.metasearch/drawable/ic_launcher_foreground",
+                dateAdded = System.currentTimeMillis(),
+            )
+        }
+
         HomeUi(
             state = HomeUiState(
                 isExpanded = true,
@@ -225,9 +254,7 @@ private fun HomeUiPreview() {
 //                        isHomeDisplay = true,
 //                    ),
 //                ),
-                images = List(20) {
-                    "android.resource://com.example.metasearch/feature/home/drawable/ic_launcher_foreground".toUri()
-                },
+                images = flowOf(from(fakeImages)),
                 eventSink = {},
             ),
         )
