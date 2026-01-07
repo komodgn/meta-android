@@ -1,11 +1,9 @@
 package com.example.metasearch.feature.detail.photo.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
@@ -18,9 +16,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.metasearch.core.designsystem.annotation.ComponentPreview
-import com.example.metasearch.core.designsystem.theme.LightGrey
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.designsystem.theme.Neutral800
+import com.example.metasearch.core.ui.component.MetaSearchDivider
 import com.example.metasearch.feature.detail.R
 
 @Composable
@@ -54,11 +52,7 @@ fun PhotoDetailHeader(
                 modifier = Modifier.width(MetaSearchTheme.spacing.spacing10),
             )
         }
-        Spacer(
-            modifier = modifier.fillMaxWidth()
-                .height(MetaSearchTheme.spacing.spacing05)
-                .background(LightGrey),
-        )
+        MetaSearchDivider()
     }
 }
 
