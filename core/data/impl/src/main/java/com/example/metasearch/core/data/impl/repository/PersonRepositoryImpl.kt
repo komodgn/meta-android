@@ -7,6 +7,7 @@ import android.util.Log
 import com.example.metasearch.core.common.utils.normalizePhoneNumber
 import com.example.metasearch.core.data.api.repository.DatabaseNameRepository
 import com.example.metasearch.core.data.api.repository.PersonRepository
+import com.example.metasearch.core.data.impl.di.IoDispatcher
 import com.example.metasearch.core.data.impl.mapper.toModel
 import com.example.metasearch.core.model.PersonModel
 import com.example.metasearch.core.network.request.ChangeNameRequest
@@ -18,7 +19,11 @@ import com.example.metasearch.core.network.service.WebService
 import com.example.metasearch.core.room.api.dao.PersonDao
 import com.example.metasearch.core.room.api.entity.FaceEntity
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -32,6 +37,7 @@ class PersonRepositoryImpl @Inject constructor(
     private val aiService: AIService,
     private val webService: WebService,
     private val databaseNameRepository: DatabaseNameRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     @ApplicationContext private val context: Context,
 ) : PersonRepository {
     private val tag = "PersonRepoImpl"
@@ -153,16 +159,23 @@ class PersonRepositoryImpl @Inject constructor(
             it.serverName to it.actualName
         }
 
-    override suspend fun deleteAnalyzedPerson(person: PersonModel): Result<Unit> = withContext(Dispatchers.IO) {
+    override suspend fun deleteAnalyzedPerson(person: PersonModel): Result<Unit> = withContext(ioDispatcher) {
         runCatching {
             val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
-            webService.deleteEntity(DeleteEntityRequest(dbName, person.inputName))
+            coroutineScope {
+                val webDelete = async {
+                    webService.deleteEntity(DeleteEntityRequest(dbName, person.inputName))
+                }
+                val aiDelete = async {
+                    aiService.deletePerson(
+                        dbName.toRequestBody("text/plain".toMediaTypeOrNull()),
+                        person.name.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    )
+                }
 
-            aiService.deletePerson(
-                dbName.toRequestBody("text/plain".toMediaTypeOrNull()),
-                person.name.toRequestBody("text/plain".toMediaTypeOrNull()),
-            )
+                awaitAll(webDelete, aiDelete)
+            }
 
             personDao.deletePersonById(person.id)
         }
@@ -187,7 +200,7 @@ class PersonRepositoryImpl @Inject constructor(
         newPhone: String,
         isHome: Boolean,
         faceId: Long?,
-    ): Result<Long> = withContext(Dispatchers.IO) {
+    ): Result<Long> = withContext(ioDispatcher) {
         runCatching {
             val currentPersonEntity = personDao.getPersonById(personId)
             val oldName = currentPersonEntity?.inputName ?: ""
@@ -217,7 +230,7 @@ class PersonRepositoryImpl @Inject constructor(
         personDao.updateRepresentativeFace(personId, faceId)
     }
 
-    override suspend fun changePersonNameOnServer(oldName: String, newName: String): Result<Unit> = withContext(Dispatchers.IO) {
+    override suspend fun changePersonNameOnServer(oldName: String, newName: String): Result<Unit> = withContext(ioDispatcher) {
         runCatching {
             val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
