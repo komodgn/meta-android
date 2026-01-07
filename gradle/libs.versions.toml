@@ -19,7 +19,11 @@ espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
 androidxDataStore = "1.2.0"
 coreSplashscreen = "1.2.0"
+composePaging = "3.3.6"
 
+## Work
+workRuntime = "2.11.0"
+#hiltWork = "1.3.0"
 
 ## Permisson
 accompanistPermissions = "0.37.3"
@@ -78,13 +82,12 @@ ktlintEngine = "0.50.0"
 
 # Static Analysis
 detektPlugin = "1.23.8"
+
 appcompat = "1.7.1"
 material = "1.13.0"
-workRuntime = "2.11.0"
 
 [libraries]
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
-androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -95,6 +98,10 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-compose-paging = { module = "androidx.paging:paging-compose", version.ref = "composePaging" }
+androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
+#androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
+#androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltWork" }
 
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 
