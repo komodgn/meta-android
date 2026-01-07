@@ -38,7 +38,7 @@ class GalleryPagingSource(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     projection,
                     queryArgs,
-                    null
+                    null,
                 )?.use { cursor ->
                     val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
                     val dateColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED)
@@ -54,7 +54,7 @@ class GalleryPagingSource(
                 LoadResult.Page(
                     data = imageList,
                     prevKey = if (offset == 0) null else offset - limit,
-                    nextKey = if (imageList.size < limit) null else offset + imageList.size
+                    nextKey = if (imageList.size < limit) null else offset + imageList.size,
                 )
             } catch (e: Exception) {
                 LoadResult.Error(e)
