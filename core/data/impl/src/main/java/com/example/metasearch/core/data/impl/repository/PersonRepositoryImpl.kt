@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.provider.CallLog
 import android.util.Log
 import com.example.metasearch.core.common.utils.normalizePhoneNumber
+import com.example.metasearch.core.common.utils.runSuspendCatching
 import com.example.metasearch.core.data.api.repository.DatabaseNameRepository
 import com.example.metasearch.core.data.api.repository.PersonRepository
 import com.example.metasearch.core.data.impl.di.IoDispatcher
@@ -126,33 +127,23 @@ class PersonRepositoryImpl @Inject constructor(
         personDao.insertPersonAndFace(imageName, imageBytes)
     }
 
-    override suspend fun fetchAndSyncPhotoCount(localModels: List<PersonModel>): List<PersonModel> {
-        val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
-
-        return try {
+    override suspend fun fetchAndSyncPhotoCount(localModels: List<PersonModel>): List<PersonModel> =
+        runSuspendCatching {
+            val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
             val response = webService.getPersonFrequency(
-                PersonFrequencyRequest(
-                    dbName = dbName,
-                    personNames = localModels.map { it.inputName },
-                ),
+                PersonFrequencyRequest(dbName, localModels.map { it.inputName }),
             )
 
-            val updatedModels = localModels.map { personModel ->
-                val matchedFrequency = response.frequencies.find {
-                    it.personName == personModel.inputName
-                }
-
-                personModel.copy(
-                    photoCount = matchedFrequency?.frequency ?: 0,
-                )
+            localModels.map { personModel ->
+                val matchedFrequency = response.frequencies.find { it.personName == personModel.inputName }
+                personModel.copy(photoCount = matchedFrequency?.frequency ?: 0)
             }
-
+        }.map { updatedModels ->
             normalizeScores(updatedModels)
-        } catch (e: Exception) {
+        }.getOrElse { e ->
             Log.e(tag, "사진 개수 동기화 오류", e)
             normalizeScores(localModels)
         }
-    }
 
     override suspend fun getMismatchedFaceNames(): List<Pair<String, String>> =
         personDao.getMismatchedFaceNames().map {
@@ -160,7 +151,7 @@ class PersonRepositoryImpl @Inject constructor(
         }
 
     override suspend fun deleteAnalyzedPerson(person: PersonModel): Result<Unit> = withContext(ioDispatcher) {
-        runCatching {
+        runSuspendCatching {
             val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
             coroutineScope {
@@ -181,7 +172,7 @@ class PersonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPersonPhotoNames(personName: String): Result<List<String>> = runCatching {
+    override suspend fun getPersonPhotoNames(personName: String): Result<List<String>> = runSuspendCatching {
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
         webService.sendPersonData(
@@ -201,18 +192,14 @@ class PersonRepositoryImpl @Inject constructor(
         isHome: Boolean,
         faceId: Long?,
     ): Result<Long> = withContext(ioDispatcher) {
-        runCatching {
+        runSuspendCatching {
             val currentPersonEntity = personDao.getPersonById(personId)
             val oldName = currentPersonEntity?.inputName ?: ""
             val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
-
             val targetPersonId = personDao.getPersonIdByName(newName)
 
             if (targetPersonId != null && targetPersonId != personId) {
-                personDao.mergePersons(
-                    sourceId = personId,
-                    targetId = targetPersonId,
-                )
+                personDao.mergePersons(personId, targetPersonId)
                 webService.changePersonName(ChangeNameRequest(dbName, oldName, newName))
                 targetPersonId
             } else {
@@ -226,12 +213,12 @@ class PersonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateRepresentativeFace(personId: Long, faceId: Long): Result<Unit> = runCatching {
+    override suspend fun updateRepresentativeFace(personId: Long, faceId: Long): Result<Unit> = runSuspendCatching {
         personDao.updateRepresentativeFace(personId, faceId)
     }
 
     override suspend fun changePersonNameOnServer(oldName: String, newName: String): Result<Unit> = withContext(ioDispatcher) {
-        runCatching {
+        runSuspendCatching {
             val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
             webService.changePersonName(ChangeNameRequest(dbName, oldName, newName))
