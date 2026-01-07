@@ -166,7 +166,7 @@ private fun FocusingSearchUiContent(
 
             MetaSearchToast(
                 isVisible = state.isToastVisible,
-                message = stringResource(R.string.focusing_search_screen_toast_message),
+                message = stringResource(R.string.focusing_search_screen_toast_guide),
                 modifier = Modifier.align(Alignment.Center),
             )
         }
