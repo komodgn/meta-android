@@ -6,10 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.metasearch.core.common.utils.EventHandler
+import com.example.metasearch.core.common.utils.MetaSearchDialogSpec
+import com.example.metasearch.core.common.utils.MetaSearchEvent
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
+import com.example.metasearch.core.ui.component.MetaSearchDialog
 import com.example.metasearch.feature.screens.SplashScreen
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
@@ -41,8 +47,33 @@ class MainActivity : ComponentActivity() {
             }
 
             MetaSearchTheme {
+                val dialogSpec = remember { mutableStateOf<MetaSearchDialogSpec?>(null) }
+
                 val backStack = rememberSaveableBackStack(SplashScreen)
                 val navigator = rememberCircuitNavigator(backStack)
+
+                LaunchedEffect(Unit) {
+                    EventHandler.eventFlow.collect { event ->
+                        when (event) {
+                            is MetaSearchEvent.ShowDialog -> dialogSpec.value = event.dialogSpec
+                        }
+                    }
+                }
+
+                dialogSpec.value?.let { spec ->
+                    MetaSearchDialog(
+                        onDismissRequest = {
+                            dialogSpec.value = null
+                        },
+                        onConfirmRequest = {
+                            spec.onConfirm()
+                            dialogSpec.value = null
+                        },
+                        dismissButtonText = spec.dismissText,
+                        confirmButtonText = spec.confirmText,
+                        title = spec.title,
+                    )
+                }
 
                 CircuitCompositionLocals(circuit) {
                     NavigableCircuitContent(
