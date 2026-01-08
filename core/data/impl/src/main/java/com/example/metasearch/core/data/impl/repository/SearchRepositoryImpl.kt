@@ -1,6 +1,7 @@
 package com.example.metasearch.core.data.impl.repository
 
 import com.example.metasearch.core.common.constants.PromptConstants
+import com.example.metasearch.core.common.utils.runSuspendCatching
 import com.example.metasearch.core.data.api.repository.DatabaseNameRepository
 import com.example.metasearch.core.data.api.repository.GalleryRepository
 import com.example.metasearch.core.data.api.repository.SearchRepository
@@ -17,6 +18,9 @@ import com.example.metasearch.core.network.request.OpenAIRequest
 import com.example.metasearch.core.network.service.AIService
 import com.example.metasearch.core.network.service.OpenAIService
 import com.example.metasearch.core.network.service.WebService
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -38,77 +42,87 @@ internal class SearchRepositoryImpl @Inject constructor(
     override suspend fun focusingSearch(
         imageFile: File,
         circles: List<CircleModel>,
-    ): Result<SearchResult> = runCatching {
-        val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
+    ): Result<SearchResult> = runSuspendCatching {
+        coroutineScope {
+            val dbNameDeferred = async { databaseNameRepository.getPersistentDeviceDatabaseName() }
+            val imagePartDeferred = async {
+                MultipartBody.Part.createFormData(
+                    "searchImage",
+                    imageFile.name,
+                    imageFile.asRequestBody("image/jpeg".toMediaType()),
+                )
+            }
 
-        val imagePart = MultipartBody.Part.createFormData(
-            "searchImage",
-            imageFile.name,
-            imageFile.asRequestBody("image/jpeg".toMediaType()),
-        )
+            val dbName = dbNameDeferred.await()
+            val imagePart = imagePartDeferred.await()
+            val dbNamePart = dbName.toRequestBody("text/plain".toMediaType())
+            val requestCircles = circles.map {
+                RequestCircle(it.centerX, it.centerY, it.radius)
+            }
 
-        val dbNamePart = dbName.toRequestBody("text/plain".toMediaType())
+            val detectionResponse = aiService.uploadImageAndCircles(
+                image = imagePart,
+                dbName = dbNamePart,
+                request = FocusingSearchRequest(requestCircles),
+            )
 
-        val requestCircles = circles.map {
-            RequestCircle(it.centerX, it.centerY, it.radius)
+            val finalResult = webService.sendDetectedObjects(
+                request = DetectedObjectsRequest(
+                    dbName = dbName,
+                    properties = detectionResponse.detectedObjects,
+                ),
+            )
+
+            val searchResult = finalResult?.toModel() ?: SearchResult(emptyList())
+            val updatedGroups = searchResult.groups.map { group ->
+                async {
+                    val matchedUris = galleryRepository.findMatchedUris(group.photoNames)
+                    group.copy(photoNames = matchedUris.map { it.toString() })
+                }
+            }.awaitAll().filter { it.photoNames.isNotEmpty() }
+
+            SearchResult(groups = updatedGroups)
         }
-        val detectionResponse = aiService.uploadImageAndCircles(
-            image = imagePart,
-            dbName = dbNamePart,
-            request = FocusingSearchRequest(requestCircles),
-        )
-
-        val finalResult = webService.sendDetectedObjects(
-            request = DetectedObjectsRequest(
-                dbName = dbName,
-                properties = detectionResponse.detectedObjects,
-            ),
-        )
-
-        val searchResult = finalResult?.toModel() ?: SearchResult(emptyList())
-
-        val updatedGroups = searchResult.groups.map { group ->
-            val matchedUris = galleryRepository.findMatchedUris(group.photoNames)
-            group.copy(photoNames = matchedUris.map { it.toString() })
-        }.filter { it.photoNames.isNotEmpty() }
-
-        SearchResult(groups = updatedGroups)
     }
 
     override suspend fun nlSearch(
         query: String,
-    ): Result<NLSearchResult> = runCatching {
-        if (query.isBlank()) return@runCatching NLSearchResult(emptyList())
+    ): Result<NLSearchResult> = runSuspendCatching {
+        if (query.isBlank()) return@runSuspendCatching NLSearchResult(emptyList())
 
-        val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
+        coroutineScope {
+            val dbNameDeferred = async { databaseNameRepository.getPersistentDeviceDatabaseName() }
+            val openAIResponseDeferred = async {
+                val fullPrompt = PromptConstants.NL_SEARCH_BASIC_PROMPT + query
+                openAIService.createChatCompletion(
+                    request = OpenAIRequest(
+                        model = "gpt-3.5-turbo",
+                        messages = listOf(OpenAIMessage(role = "user", content = fullPrompt)),
+                    ),
+                )
+            }
 
-        val fullPrompt = PromptConstants.NL_SEARCH_BASIC_PROMPT + query
-        val openAIResponse = openAIService.createChatCompletion(
-            request = OpenAIRequest(
-                model = "gpt-3.5-turbo",
-                messages = listOf(OpenAIMessage(role = "user", content = fullPrompt)),
-            ),
-        )
+            val openAIResponse = openAIResponseDeferred.await()
+            val text = openAIResponse.choices.firstOrNull()?.message?.content?.trim() ?: ""
 
-        val text = openAIResponse.choices.firstOrNull()?.message?.content?.trim() ?: ""
-        if (text == "0" || text.isEmpty()) return@runCatching NLSearchResult(emptyList())
+            if (text == "0" || text.isEmpty()) return@coroutineScope NLSearchResult(emptyList())
 
-        val entities = text.split(",").map { it.trim() }
-        val neo4jQuery = CypherQueryGenerator.generateQueryByKeywords(
-            keywords = entities,
-        )
+            val entities = text.split(",").map { it.trim() }
+            val neo4jQuery = CypherQueryGenerator.generateQueryByKeywords(keywords = entities)
 
-        val response = webService.sendCypherQuery(
-            request = NLQueryRequest(
-                dbName = dbName,
-                query = neo4jQuery,
-            ),
-        )
+            val dbName = dbNameDeferred.await()
+            val response = webService.sendCypherQuery(
+                request = NLQueryRequest(
+                    dbName = dbName,
+                    query = neo4jQuery,
+                ),
+            )
 
-        val photoNames = response.toModel()
+            val photoNames = response.toModel()
 
-        val matchedUris = galleryRepository.findMatchedUris(photoNames)
+            val matchedUris = galleryRepository.findMatchedUris(photoNames)
 
-        NLSearchResult(matchedUris = matchedUris.map { it.toString() })
+            NLSearchResult(matchedUris = matchedUris.map { it.toString() })
+        }
     }
 }
