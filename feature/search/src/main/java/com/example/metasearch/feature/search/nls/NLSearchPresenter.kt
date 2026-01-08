@@ -19,6 +19,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class NLSearchPresenter @AssistedInject constructor(
@@ -36,6 +37,7 @@ class NLSearchPresenter @AssistedInject constructor(
     override fun present(): NLSearchUiState {
         val scope = rememberCoroutineScope()
         var isLoading by remember { mutableStateOf(false) }
+        var searchJob by remember { mutableStateOf<Job?>(null) }
         var toastMessage by remember { mutableStateOf<String?>(null) }
         var inputString by remember { mutableStateOf("") }
         var resultImages by remember { mutableStateOf<List<String>>(emptyList()) }
@@ -48,9 +50,10 @@ class NLSearchPresenter @AssistedInject constructor(
 
                 is NLSearchUiEvent.OnNLSearchClick -> {
                     if (inputString.isBlank()) return
+                    searchJob?.cancel()
                     isLoading = true
 
-                    scope.launch {
+                    searchJob = scope.launch {
                         searchRepository.nlSearch(inputString)
                             .onSuccess { result ->
                                 if (result.matchedUris.isEmpty()) {

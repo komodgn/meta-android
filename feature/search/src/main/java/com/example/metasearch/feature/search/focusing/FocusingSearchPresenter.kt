@@ -24,6 +24,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class FocusingSearchPresenter @AssistedInject constructor(
@@ -47,6 +48,7 @@ class FocusingSearchPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
 
         var isLoading by remember { mutableStateOf(false) }
+        var searchJob by remember { mutableStateOf<Job?>(null) }
         val toastInit = stringResource(R.string.focusing_search_screen_toast_guide)
         val errorMinCircles = stringResource(R.string.focusing_search_screen_toast_error_min_circles)
         val errorMaxCircles = stringResource(R.string.focusing_search_screen_toast_error_max_circles)
@@ -64,8 +66,12 @@ class FocusingSearchPresenter @AssistedInject constructor(
                         handleEvent(FocusingSearchUiEvent.ShowToast(errorMinCircles))
                         return
                     }
-                    coroutineScope.launch {
-                        isLoading = true
+
+                    searchJob?.cancel()
+                    
+                    isLoading = true
+
+                    searchJob = coroutineScope.launch {
                         val uri = screen.imageUriString.toUri()
                         val file = uri.toFile(context)
 
