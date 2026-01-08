@@ -7,8 +7,7 @@ import com.slack.circuit.runtime.CircuitUiState
 
 data class FocusingSearchUiState(
     val isLoading: Boolean = false,
-    val isToastVisible: Boolean = false,
-    val errorMessage: String? = null,
+    val toastMessage: String? = null,
     val imageUriString: String,
     val circles: List<CircleModel>? = emptyList(),
     val searchResult: SearchResult? = null,
@@ -16,9 +15,6 @@ data class FocusingSearchUiState(
 ) : CircuitUiState
 
 sealed interface FocusingSearchUiEvent : CircuitUiEvent {
-    data object ShowToast : FocusingSearchUiEvent
-    data object HideToast : FocusingSearchUiEvent
-
     /**
      * 드래그 완료 시, 원 추가
      */
@@ -52,4 +48,10 @@ sealed interface FocusingSearchUiEvent : CircuitUiEvent {
     data class OnImageClick(
         val imageUriString: String,
     ) : FocusingSearchUiEvent
+
+    data class ShowToast(
+        val message: String? = null,
+    ) : FocusingSearchUiEvent
+
+    data object HideToast : FocusingSearchUiEvent
 }

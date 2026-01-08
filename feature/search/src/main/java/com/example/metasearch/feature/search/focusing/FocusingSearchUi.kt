@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.metasearch.core.designsystem.annotation.DevicePreview
@@ -32,7 +31,6 @@ import com.example.metasearch.core.model.CircleModel
 import com.example.metasearch.core.ui.MetaSearchScaffold
 import com.example.metasearch.core.ui.component.MetaSearchLoadingIndicator
 import com.example.metasearch.feature.screens.FocusingSearchScreen
-import com.example.metasearch.feature.search.R
 import com.example.metasearch.feature.search.focusing.component.FocusingSearchBottomBar
 import com.example.metasearch.feature.search.focusing.component.FocusingSearchBottomBarItem
 import com.example.metasearch.feature.search.focusing.component.FocusingSearchHeader
@@ -48,7 +46,7 @@ fun FocusingSearchUi(
     state: FocusingSearchUiState,
 ) {
     FocusingSearchToastEffect(
-        isCirclesEmpty = state.circles?.isEmpty() == true,
+        toastMessage = state.toastMessage,
         eventSink = state.eventSink,
     )
 
@@ -165,8 +163,8 @@ private fun FocusingSearchUiContent(
             }
 
             MetaSearchToast(
-                isVisible = state.isToastVisible,
-                message = stringResource(R.string.focusing_search_screen_toast_guide),
+                isVisible = state.toastMessage != null,
+                message = state.toastMessage ?: "",
                 modifier = Modifier.align(Alignment.Center),
             )
         }
