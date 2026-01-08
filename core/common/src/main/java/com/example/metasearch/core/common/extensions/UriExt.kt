@@ -1,4 +1,4 @@
-package com.example.metasearch.core.common.utils
+package com.example.metasearch.core.common.extensions
 
 import android.content.Context
 import android.net.Uri
