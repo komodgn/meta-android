@@ -53,9 +53,9 @@ fun GraphDetailUi(
         if (state.errorMessage.isNotBlank()) {
             MetaSearchDialog(
                 title = stringResource(R.string.graph_detail_screen_dialog_title),
-                onDismissRequest = { state.eventSink(GraphDetailUiEvent.OnErrorDialogDismiss) },
+                onConfirmRequest = { state.eventSink(GraphDetailUiEvent.OnErrorDialogDismiss) },
                 content = { Text(state.errorMessage) },
-                dismissButtonText = stringResource(R.string.graph_detail_screen_dialog_close_button),
+                confirmButtonText = stringResource(R.string.graph_detail_screen_dialog_close_button),
             )
         }
     }

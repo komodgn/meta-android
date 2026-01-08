@@ -62,10 +62,10 @@ fun SplashUi(
                         ),
                     )
                 },
-                onDismissRequest = {
+                onConfirmRequest = {
                     state.eventSink(SplashUiEvent.OnConfirmSettings)
                 },
-                dismissButtonText = stringResource(R.string.confirm_settings),
+                confirmButtonText = stringResource(R.string.confirm_settings),
             )
         }
     }

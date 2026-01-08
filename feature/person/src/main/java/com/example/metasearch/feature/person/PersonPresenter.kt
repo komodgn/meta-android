@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import com.example.metasearch.core.common.utils.handleException
 import com.example.metasearch.core.data.api.repository.PersonRepository
 import com.example.metasearch.feature.screens.PersonDetailScreen
 import com.example.metasearch.feature.screens.PersonScreen
@@ -38,6 +39,7 @@ class PersonPresenter @AssistedInject constructor(
         var deleteJob by remember { mutableStateOf<Job?>(null) }
 
         var showToast by remember { mutableStateOf(false) }
+        var toastMessage by remember { mutableStateOf("") }
         var showDeleteDialog by remember { mutableStateOf(false) }
         var pendingDeletePersonId by remember { mutableStateOf<Long?>(null) }
         var pendingDeletePersonName by remember { mutableStateOf("") }
@@ -81,8 +83,14 @@ class PersonPresenter @AssistedInject constructor(
                                     showDeleteDialog = false
                                     pendingDeletePersonId = null
                                 }
-                                .onFailure {
-                                    showToast = true
+                                .onFailure { exception ->
+                                    handleException(
+                                        exception = exception,
+                                        onError = { message ->
+                                            toastMessage = message
+                                            showToast = true
+                                        },
+                                    )
                                     showDeleteDialog = false
                                     pendingDeletePersonId = null
                                 }
@@ -103,6 +111,7 @@ class PersonPresenter @AssistedInject constructor(
         }
 
         return PersonUiState(
+            toastMessage = toastMessage,
             showToast = showToast,
             showDeleteDialog = showDeleteDialog,
             pendingDeletePersonName = pendingDeletePersonName,

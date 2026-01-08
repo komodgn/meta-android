@@ -126,7 +126,7 @@ private fun PersonUiContent(
         MetaSearchToast(
             modifier = Modifier.align(Alignment.Center),
             isVisible = state.showToast,
-            message = stringResource(R.string.person_delete_failed_toast_message),
+            message = state.toastMessage,
         )
     }
 }

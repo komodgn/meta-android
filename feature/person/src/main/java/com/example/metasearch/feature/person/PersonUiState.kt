@@ -11,6 +11,7 @@ data class PersonUiState(
     val showDeleteDialog: Boolean = false,
     val pendingDeletePersonName: String = "",
     val showToast: Boolean = false,
+    val toastMessage: String? = null,
     val people: List<PersonModel> = emptyList(),
     val eventSink: (PersonUiEvent) -> Unit,
 ) : CircuitUiState
