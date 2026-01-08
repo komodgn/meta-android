@@ -6,7 +6,7 @@ import com.slack.circuit.runtime.screen.Screen
 
 data class NLSearchUiState(
     val isLoading: Boolean = false,
-    val errorMessage: String = "",
+    val toastMessage: String? = null,
     val inputString: String = "",
     val resultImages: List<String> = emptyList(),
     val eventSink: (NLSearchUiEvent) -> Unit,
@@ -27,8 +27,6 @@ sealed interface NLSearchUiEvent : CircuitUiEvent {
         val inputString: String,
     ) : NLSearchUiEvent
 
-    data object OnDialogCloseButtonClick : NLSearchUiEvent
-
     /**
      * 개별 이미지 클릭
      */
@@ -42,4 +40,10 @@ sealed interface NLSearchUiEvent : CircuitUiEvent {
     data class OnTabClick(
         val screen: Screen,
     ) : NLSearchUiEvent
+
+    data class ShowToast(
+        val message: String? = null,
+    ) : NLSearchUiEvent
+
+    data object HideToast : NLSearchUiEvent
 }

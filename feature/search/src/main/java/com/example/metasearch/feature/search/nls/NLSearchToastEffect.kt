@@ -1,18 +1,18 @@
-package com.example.metasearch.feature.search.focusing
+package com.example.metasearch.feature.search.nls
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.delay
 
 @Composable
-fun FocusingSearchToastEffect(
+fun NLSearchToastEffect(
     toastMessage: String? = null,
-    eventSink: (FocusingSearchUiEvent) -> Unit,
+    eventSink: (NLSearchUiEvent) -> Unit,
 ) {
     LaunchedEffect(toastMessage) {
         if (toastMessage != null) {
-            delay(1500L)
-            eventSink(FocusingSearchUiEvent.HideToast)
+            delay(2000L)
+            eventSink(NLSearchUiEvent.HideToast)
         }
     }
 }

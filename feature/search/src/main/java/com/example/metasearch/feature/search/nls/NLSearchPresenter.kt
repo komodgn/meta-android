@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import com.example.metasearch.core.common.utils.handleException
 import com.example.metasearch.core.data.api.repository.SearchRepository
 import com.example.metasearch.feature.screens.NLSearchScreen
 import com.example.metasearch.feature.screens.PhotoDetailScreen
@@ -18,6 +19,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class NLSearchPresenter @AssistedInject constructor(
@@ -35,11 +37,12 @@ class NLSearchPresenter @AssistedInject constructor(
     override fun present(): NLSearchUiState {
         val scope = rememberCoroutineScope()
         var isLoading by remember { mutableStateOf(false) }
-        var errorMessage by remember { mutableStateOf("") }
+        var searchJob by remember { mutableStateOf<Job?>(null) }
+        var toastMessage by remember { mutableStateOf<String?>(null) }
         var inputString by remember { mutableStateOf("") }
         var resultImages by remember { mutableStateOf<List<String>>(emptyList()) }
 
-        val nlSearchFailed = stringResource(R.string.nl_search_screen_error_message)
+        val emptyResultMessage = stringResource(R.string.search_screen_empty_result_message)
 
         fun handleEvent(event: NLSearchUiEvent) {
             when (event) {
@@ -47,37 +50,45 @@ class NLSearchPresenter @AssistedInject constructor(
 
                 is NLSearchUiEvent.OnNLSearchClick -> {
                     if (inputString.isBlank()) return
-
+                    searchJob?.cancel()
                     isLoading = true
 
-                    scope.launch {
-                        try {
-                            searchRepository.nlSearch(
-                                query = inputString,
-                            ).onSuccess {
-                                resultImages = it.matchedUris
-                            }.onFailure {
-                                errorMessage = nlSearchFailed
+                    searchJob = scope.launch {
+                        searchRepository.nlSearch(inputString)
+                            .onSuccess { result ->
+                                if (result.matchedUris.isEmpty()) {
+                                    resultImages = emptyList()
+                                    toastMessage = emptyResultMessage
+                                } else {
+                                    resultImages = result.matchedUris
+                                }
+                            }.onFailure { exception ->
+                                handleException(
+                                    exception = exception,
+                                    onError = { message ->
+                                        toastMessage = message
+                                    },
+                                )
                             }
-                        } finally {
-                            isLoading = false
-                        }
+                        isLoading = false
                     }
                 }
-
-                NLSearchUiEvent.OnDialogCloseButtonClick -> errorMessage = ""
 
                 is NLSearchUiEvent.OnImageClick -> {
                     navigator.goTo(PhotoDetailScreen(event.imageUriString))
                 }
 
                 is NLSearchUiEvent.OnTabClick -> navigator.resetRoot(event.screen)
+
+                is NLSearchUiEvent.ShowToast -> toastMessage = event.message
+
+                NLSearchUiEvent.HideToast -> toastMessage = null
             }
         }
 
         return NLSearchUiState(
             isLoading = isLoading,
-            errorMessage = errorMessage,
+            toastMessage = toastMessage,
             inputString = inputString,
             resultImages = resultImages,
             eventSink = ::handleEvent,

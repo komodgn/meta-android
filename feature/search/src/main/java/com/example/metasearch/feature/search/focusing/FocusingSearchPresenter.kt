@@ -1,6 +1,5 @@
 package com.example.metasearch.feature.search.focusing
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,13 +7,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
-import com.example.metasearch.core.common.utils.toFile
+import com.example.metasearch.core.common.extensions.toFile
+import com.example.metasearch.core.common.utils.handleException
 import com.example.metasearch.core.data.api.repository.SearchRepository
 import com.example.metasearch.core.model.CircleModel
 import com.example.metasearch.core.model.SearchResult
 import com.example.metasearch.feature.screens.FocusingSearchScreen
 import com.example.metasearch.feature.screens.PhotoDetailScreen
+import com.example.metasearch.feature.search.R
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -22,6 +24,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class FocusingSearchPresenter @AssistedInject constructor(
@@ -45,43 +48,59 @@ class FocusingSearchPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
 
         var isLoading by remember { mutableStateOf(false) }
-        var isToastVisible by remember { mutableStateOf(false) }
+        var searchJob by remember { mutableStateOf<Job?>(null) }
+        val toastInit = stringResource(R.string.focusing_search_screen_toast_guide)
+        val errorMinCircles = stringResource(R.string.focusing_search_screen_toast_error_min_circles)
+        val errorMaxCircles = stringResource(R.string.focusing_search_screen_toast_error_max_circles)
+        var toastMessage by remember { mutableStateOf<String?>(toastInit) }
 
         val imageUriString by remember { mutableStateOf(screen.imageUriString) }
         var circles by remember { mutableStateOf(listOf<CircleModel>()) }
         var searchResult by remember { mutableStateOf<SearchResult?>(null) }
-
-        val tag = "FocusingPresenter"
+        val emptyResultMessage = stringResource(R.string.search_screen_empty_result_message)
 
         fun handleEvent(event: FocusingSearchUiEvent) {
-            Log.d(tag, "handleEvent: $event")
             when (event) {
                 FocusingSearchUiEvent.OnSearchClick -> {
-                    coroutineScope.launch {
-                        isLoading = true
-                        try {
-                            val uri = screen.imageUriString.toUri()
-                            val file = uri.toFile(context)
-                            searchRepository.focusingSearch(
-                                imageFile = file,
-                                circles = circles,
-                            ).onSuccess {
-                                searchResult = it
-                                isLoading = false
-                                file.delete()
-                                Log.d(tag, searchResult!!.groups.size.toString())
-                            }.onFailure {
-                                isLoading = false
-                                Log.e(tag, "검색 실패: ${it.message}")
+                    if (circles.isEmpty()) {
+                        handleEvent(FocusingSearchUiEvent.ShowToast(errorMinCircles))
+                        return
+                    }
+
+                    searchJob?.cancel()
+
+                    isLoading = true
+
+                    searchJob = coroutineScope.launch {
+                        val uri = screen.imageUriString.toUri()
+                        val file = uri.toFile(context)
+
+                        searchRepository.focusingSearch(file, circles)
+                            .onSuccess { result ->
+                                if (result.groups.isEmpty()) {
+                                    toastMessage = emptyResultMessage
+                                } else {
+                                    searchResult = result
+                                }
+                            }.onFailure { exception ->
+                                handleException(
+                                    exception = exception,
+                                    onError = { message -> toastMessage = message },
+                                )
                             }
-                        } catch (e: Exception) {
-                            isLoading = false
-                            Log.e(tag, "파일 변환 실패: ${e.message}")
-                        }
+
+                        file.delete()
+                        isLoading = false
                     }
                 }
 
-                is FocusingSearchUiEvent.OnCircleAdded -> circles = circles + event.circle
+                is FocusingSearchUiEvent.OnCircleAdded -> {
+                    if (circles.size >= 3) {
+                        handleEvent(FocusingSearchUiEvent.ShowToast(errorMaxCircles))
+                    } else {
+                        circles = circles + event.circle
+                    }
+                }
 
                 is FocusingSearchUiEvent.OnImageClick -> navigator.goTo(PhotoDetailScreen(event.imageUriString))
 
@@ -94,15 +113,15 @@ class FocusingSearchPresenter @AssistedInject constructor(
 
                 FocusingSearchUiEvent.OnBackClick -> navigator.pop()
 
-                FocusingSearchUiEvent.HideToast -> isToastVisible = false
+                FocusingSearchUiEvent.HideToast -> toastMessage = null
 
-                FocusingSearchUiEvent.ShowToast -> isToastVisible = true
+                is FocusingSearchUiEvent.ShowToast -> toastMessage = event.message
             }
         }
 
         return FocusingSearchUiState(
             isLoading = isLoading,
-            isToastVisible = isToastVisible,
+            toastMessage = toastMessage,
             imageUriString = imageUriString,
             circles = circles,
             searchResult = searchResult,

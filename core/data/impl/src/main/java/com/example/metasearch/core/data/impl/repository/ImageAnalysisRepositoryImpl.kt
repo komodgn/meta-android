@@ -6,7 +6,7 @@ import android.util.Base64.decode
 import android.util.Log
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import com.example.metasearch.core.common.utils.toFile
+import com.example.metasearch.core.common.extensions.toFile
 import com.example.metasearch.core.data.api.repository.DatabaseNameRepository
 import com.example.metasearch.core.data.api.repository.GalleryRepository
 import com.example.metasearch.core.data.api.repository.ImageAnalysisRepository
