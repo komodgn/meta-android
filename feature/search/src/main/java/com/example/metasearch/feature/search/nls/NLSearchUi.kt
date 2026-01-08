@@ -14,10 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.metasearch.core.designsystem.annotation.DevicePreview
+import com.example.metasearch.core.designsystem.component.MetaSearchToast
 import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 import com.example.metasearch.core.designsystem.theme.Neutral500
 import com.example.metasearch.core.ui.MetaSearchScaffold
-import com.example.metasearch.core.ui.component.MetaSearchDialog
 import com.example.metasearch.core.ui.component.MetaSearchLoadingIndicator
 import com.example.metasearch.core.ui.component.MetaSearchSquareImage
 import com.example.metasearch.feature.screens.NLSearchScreen
@@ -35,6 +35,11 @@ fun NLSearchUi(
     modifier: Modifier = Modifier,
     state: NLSearchUiState,
 ) {
+    NLSearchToastEffect(
+        toastMessage = state.toastMessage,
+        eventSink = state.eventSink,
+    )
+
     MetaSearchScaffold(
         modifier = modifier.fillMaxSize(),
         bottomBar = {
@@ -107,22 +112,12 @@ private fun NLSearchUiContent(
                     MetaSearchLoadingIndicator(modifier = Modifier.align(Alignment.Center))
                 }
             }
-
-            if (state.errorMessage.isNotBlank()) {
-                MetaSearchDialog(
-                    title = stringResource(R.string.nl_search_screen_error_dialog_title),
-                    content = {
-                        Text(
-                            text = state.errorMessage,
-                        )
-                    },
-                    onConfirmRequest = {
-                        state.eventSink(NLSearchUiEvent.OnDialogCloseButtonClick)
-                    },
-                    confirmButtonText = stringResource(R.string.nl_search_screen_dialog_close_button),
-                )
-            }
         }
+
+        MetaSearchToast(
+            isVisible = state.toastMessage != null,
+            message = state.toastMessage,
+        )
     }
 }
 
