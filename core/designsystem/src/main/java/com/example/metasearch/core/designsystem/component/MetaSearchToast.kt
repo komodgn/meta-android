@@ -22,7 +22,7 @@ import com.example.metasearch.core.designsystem.theme.MetaSearchTheme
 @Composable
 fun MetaSearchToast(
     modifier: Modifier = Modifier,
-    message: String,
+    message: String? = null,
     isVisible: Boolean,
 ) {
     Box(
@@ -40,15 +40,17 @@ fun MetaSearchToast(
                 shape = RoundedCornerShape(MetaSearchTheme.radius.full),
                 modifier = modifier.padding(horizontal = MetaSearchTheme.spacing.spacing8),
             ) {
-                Text(
-                    text = message,
-                    color = LightPink,
-                    style = MetaSearchTheme.typography.captionSmall,
-                    modifier = Modifier.padding(
-                        horizontal = MetaSearchTheme.spacing.spacing4,
-                        vertical = MetaSearchTheme.spacing.spacing2,
-                    ),
-                )
+                message?.let {
+                    Text(
+                        text = it,
+                        color = LightPink,
+                        style = MetaSearchTheme.typography.captionSmall,
+                        modifier = Modifier.padding(
+                            horizontal = MetaSearchTheme.spacing.spacing4,
+                            vertical = MetaSearchTheme.spacing.spacing2,
+                        ),
+                    )
+                }
             }
         }
     }
