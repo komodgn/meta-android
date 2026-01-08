@@ -29,10 +29,10 @@ import com.example.metasearch.core.designsystem.theme.White
 @Composable
 fun MetaSearchDialog(
     modifier: Modifier = Modifier,
-    onDismissRequest: () -> Unit,
-    onConfirmRequest: () -> Unit = {},
-    dismissButtonText: String,
-    confirmButtonText: String? = null,
+    onDismissRequest: () -> Unit = {},
+    onConfirmRequest: () -> Unit,
+    dismissButtonText: String? = null,
+    confirmButtonText: String,
     title: String? = null,
     content: @Composable (() -> Unit)? = null,
     properties: DialogProperties = DialogProperties(),
@@ -90,20 +90,20 @@ fun MetaSearchDialog(
                     MetaSearchTheme.spacing.spacing3,
                 ),
             ) {
-                MetaSearchButton(
-                    modifier = Modifier.weight(1f),
-                    text = dismissButtonText,
-                    onClick = onDismissRequest,
-                    contentColor = Neutral500,
-                )
-
-                confirmButtonText?.let {
+                dismissButtonText?.let {
                     MetaSearchButton(
                         modifier = Modifier.weight(1f),
                         text = it,
-                        onClick = onConfirmRequest,
+                        onClick = onDismissRequest,
+                        contentColor = Neutral500,
                     )
                 }
+
+                MetaSearchButton(
+                    modifier = Modifier.weight(1f),
+                    text = confirmButtonText,
+                    onClick = onConfirmRequest,
+                )
             }
         }
     }
@@ -120,7 +120,7 @@ private fun MetaSearchDialogPreview() {
                     text = "앱을 이용하려면 권한 설정이 필요합니다.",
                 )
             },
-            onDismissRequest = {},
+            onConfirmRequest = {},
             dismissButtonText = "닫기",
             confirmButtonText = "설정으로 이동",
         )

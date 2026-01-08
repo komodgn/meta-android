@@ -116,10 +116,10 @@ private fun NLSearchUiContent(
                             text = state.errorMessage,
                         )
                     },
-                    onDismissRequest = {
+                    onConfirmRequest = {
                         state.eventSink(NLSearchUiEvent.OnDialogCloseButtonClick)
                     },
-                    dismissButtonText = stringResource(R.string.nl_search_screen_dialog_close_button),
+                    confirmButtonText = stringResource(R.string.nl_search_screen_dialog_close_button),
                 )
             }
         }
