@@ -68,7 +68,7 @@ class FocusingSearchPresenter @AssistedInject constructor(
                     }
 
                     searchJob?.cancel()
-                    
+
                     isLoading = true
 
                     searchJob = coroutineScope.launch {
