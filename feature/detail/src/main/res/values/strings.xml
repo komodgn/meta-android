@@ -26,4 +26,5 @@
     <string name="photo_detail_screen_bottom_item_graph">탐색</string>
     <string name="photo_detail_screen_bottom_item_focusing">포커싱 검색</string>
     <string name="photo_detail_screen_bottom_item_share">공유</string>
+    <string name="photo_detail_screen_openai_bottom_sheet_title">🐻‍❄️ AI 이미지 분석 결과</string>
 </resources>

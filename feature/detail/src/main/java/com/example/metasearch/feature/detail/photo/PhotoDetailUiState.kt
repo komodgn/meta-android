@@ -5,7 +5,9 @@ import com.slack.circuit.runtime.CircuitUiState
 
 data class PhotoDetailUiState(
     val isLoading: Boolean = false,
+    val toastMessage: String? = null,
     val imageUriString: String,
+    val imageDescription: String? = null,
     val eventSink: (PhotoDetailUiEvent) -> Unit,
 ) : CircuitUiState
 
@@ -40,4 +42,10 @@ sealed interface PhotoDetailUiEvent : CircuitUiEvent {
      * 헤더의 뒤로가기 버튼 클릭
      */
     data object OnBackClick : PhotoDetailUiEvent
+
+    data class ShowToast(
+        val message: String,
+    ) : PhotoDetailUiEvent
+
+    data object HideToast : PhotoDetailUiEvent
 }

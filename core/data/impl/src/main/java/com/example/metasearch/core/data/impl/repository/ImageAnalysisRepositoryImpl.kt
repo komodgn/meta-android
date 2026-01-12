@@ -4,9 +4,12 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64.decode
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.example.metasearch.core.common.constants.PromptConstants
 import com.example.metasearch.core.common.extensions.toFile
+import com.example.metasearch.core.common.utils.runSuspendCatching
 import com.example.metasearch.core.data.api.repository.DatabaseNameRepository
 import com.example.metasearch.core.data.api.repository.GalleryRepository
 import com.example.metasearch.core.data.api.repository.ImageAnalysisRepository
@@ -14,7 +17,10 @@ import com.example.metasearch.core.data.api.repository.PersonRepository
 import com.example.metasearch.core.datastore.api.datasource.PersonIndexDataSource
 import com.example.metasearch.core.network.request.ChangeNameRequest
 import com.example.metasearch.core.network.request.DeleteImageRequest
+import com.example.metasearch.core.network.request.OpenAIMessage
+import com.example.metasearch.core.network.request.OpenAIRequest
 import com.example.metasearch.core.network.service.AIService
+import com.example.metasearch.core.network.service.OpenAIService
 import com.example.metasearch.core.network.service.WebService
 import com.example.metasearch.core.room.api.dao.AnalyzedImageDao
 import com.example.metasearch.core.room.api.entity.AnalyzedImageEntity
@@ -22,6 +28,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.supervisorScope
@@ -41,6 +48,7 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
     private val personRepository: PersonRepository,
     private val aiService: AIService,
     private val webService: WebService,
+    private val openAIService: OpenAIService,
     @ApplicationContext private val context: Context,
 ) : ImageAnalysisRepository {
     private val tag = "ImageAnalysisRepo"
@@ -90,6 +98,30 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         }
 
         syncMismatchedNames(dbName)
+    }
+
+    override suspend fun getImageDescription(uriString: String): Result<String> = runSuspendCatching {
+        coroutineScope {
+            val uri = uriString.toUri()
+            val photoNameDeferred = async { galleryRepository.getFileName(uri) }
+            val dbNameDeferred = async { databaseNameRepository.getPersistentDeviceDatabaseName() }
+
+            val photoName = photoNameDeferred.await()
+                ?: error("파일 이름을 찾을 수 없음.")
+            val dbName = dbNameDeferred.await()
+
+            val tripleDataResponse = webService.fetchTripleData(dbName, photoName)
+            val fullPrompt = PromptConstants.CREATE_IMAGE_BASIC_PROMPT + tripleDataResponse.triple
+            val imageDescriptionResponse = openAIService.createChatCompletion(
+                OpenAIRequest(
+                    model = "gpt-3.5-turbo",
+                    messages = listOf(OpenAIMessage(role = "user", content = fullPrompt)),
+                ),
+            )
+
+            imageDescriptionResponse.choices.firstOrNull()?.message?.content
+                ?: error("AI 응답 내용이 비어 있음.")
+        }
     }
 
     private suspend fun deleteMissingImages(alreadyPaths: List<String>, currentPaths: List<String>, dbName: String) {

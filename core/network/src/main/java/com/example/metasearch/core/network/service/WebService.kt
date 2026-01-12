@@ -48,7 +48,7 @@ public interface WebService {
         @Body request: PersonFrequencyRequest,
     ): PersonFrequencyResponse
 
-    @GET("/api/photoTripleData/{dbName}/{photoName}")
+    @GET("api/photoTripleData/{dbName}/{photoName}")
     suspend fun fetchTripleData(
         @Path("dbName") dbName: String,
         @Path("photoName") photoName: String,
