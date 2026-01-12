@@ -1,13 +1,12 @@
 import com.android.build.gradle.LibraryExtension
-import com.example.metasearch.convention.ExtensionType
-import com.example.metasearch.convention.Plugins
-import com.example.metasearch.convention.configureBuildTypes
-import com.example.metasearch.convention.libs
-import com.example.metasearch.convention.configureKotlinAndroid
+import com.metasearch.android.convention.ExtensionType
+import com.metasearch.android.convention.Plugins
+import com.metasearch.android.convention.configureBuildTypes
+import com.metasearch.android.convention.libs
+import com.metasearch.android.convention.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
 import kotlin.text.toInt
 
 internal class AndroidLibraryConventionPlugin : Plugin<Project> {

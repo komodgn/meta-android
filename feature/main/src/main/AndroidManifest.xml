@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name=".MainActivity"
+            android:name="com.metasearch.android.feature.main.MainActivity"
             android:theme="@style/Theme.App.Starting"
             android:exported="true">
             <intent-filter>

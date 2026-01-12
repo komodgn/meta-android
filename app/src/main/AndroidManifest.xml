@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
-        android:name="com.example.metasearch.App"
+        android:name="com.metasearch.android.App"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -24,6 +24,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MetaSearch"
+        android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config">
 
     </application>

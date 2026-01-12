@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.metasearch.core.data.impl"
+    namespace = "com.metasearch.android.core.data.impl"
 
     buildFeatures {
         buildConfig = true

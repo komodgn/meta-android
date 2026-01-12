@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.metasearch.core.network"
+    namespace = "com.metasearch.android.core.network"
 
     buildFeatures {
         buildConfig = true

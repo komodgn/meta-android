@@ -1,8 +1,8 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
-import com.example.metasearch.convention.libs
-import com.example.metasearch.convention.implementation
+import com.metasearch.android.convention.libs
+import com.metasearch.android.convention.implementation
 
 internal class AndroidRetrofitConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {

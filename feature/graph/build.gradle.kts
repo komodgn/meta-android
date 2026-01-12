@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.metasearch.feature.graph"
+    namespace = "com.metasearch.android.feature.graph"
 }
 
 ksp {

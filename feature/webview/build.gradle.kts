@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.metasearch.feature.webview"
+    namespace = "com.metasearch.android.feature.webview"
 }
 
 ksp {

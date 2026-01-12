@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.metasearch.core.common"
+    namespace = "com.metasearch.android.core.common"
 }
 
 dependencies {
