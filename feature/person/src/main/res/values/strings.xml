@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="person_screen_header">인물</string>
+    <string name="person_search_text_field_placeholder">이름 입력</string>
+    <string name="person_delete_dialog_title">인물 삭제 확인</string>
+    <string name="person_delete_dialog_content">\'%s\'님을 인물 목록에서 삭제할까요?</string>
+    <string name="person_delete_dialog_confirm_button">삭제</string>
+    <string name="person_delete_dialog_cancel_button">취소</string>
+</resources>

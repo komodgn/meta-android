@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="graph_screen_header">탐색</string>
+    <string name="graph_screen_bottom_selected_image_label">탐색 이미지</string>
+    <string name="graph_screen_dialog_close_button">확인</string>
+    <string name="graph_screen_dialog_title">알림</string>
+    <string name="graph_screen_image_not_found_error">사진을 찾지 못했습니다.</string>
+</resources>
