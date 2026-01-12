@@ -5,5 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ImageAnalysisRepository {
     fun getAnalysisStatus(context: Context): Flow<Boolean>
+
     suspend fun runFullAnalysis()
+    suspend fun getImageDescription(uriString: String): Result<String?>
 }
