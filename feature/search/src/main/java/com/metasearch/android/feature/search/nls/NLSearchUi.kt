@@ -1,0 +1,139 @@
+package com.metasearch.android.feature.search.nls
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.metasearch.android.core.designsystem.annotation.DevicePreview
+import com.metasearch.android.core.designsystem.component.MetaSearchToast
+import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
+import com.metasearch.android.core.designsystem.theme.Neutral500
+import com.metasearch.android.core.ui.MetaSearchScaffold
+import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
+import com.metasearch.android.core.ui.component.MetaSearchSquareImage
+import com.metasearch.android.feature.screens.NLSearchScreen
+import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
+import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
+import com.metasearch.android.feature.search.R
+import com.metasearch.android.feature.search.nls.component.NLSearchHeader
+import com.metasearch.android.feature.search.nls.component.NLSearchTextField
+import com.slack.circuit.codegen.annotations.CircuitInject
+import dagger.hilt.android.components.ActivityRetainedComponent
+
+@CircuitInject(NLSearchScreen::class, ActivityRetainedComponent::class)
+@Composable
+fun NLSearchUi(
+    modifier: Modifier = Modifier,
+    state: NLSearchUiState,
+) {
+    NLSearchToastEffect(
+        toastMessage = state.toastMessage,
+        eventSink = state.eventSink,
+    )
+
+    MetaSearchScaffold(
+        modifier = modifier.fillMaxSize(),
+        bottomBar = {
+            MetaSearchMainBottomBar(
+                modifier = modifier,
+                currentTab = MetaSearchMainTabItem.SEARCH,
+                onTabSelected = {
+                    state.eventSink(NLSearchUiEvent.OnTabClick(it.screen))
+                },
+            )
+        },
+    ) { innerPadding ->
+        NLSearchUiContent(
+            modifier = modifier,
+            state = state,
+            innerPadding = innerPadding,
+        )
+    }
+}
+
+@Composable
+private fun NLSearchUiContent(
+    modifier: Modifier = Modifier,
+    state: NLSearchUiState,
+    innerPadding: PaddingValues,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+        ) {
+            NLSearchHeader()
+
+            NLSearchTextField(
+                modifier = modifier,
+                inputString = state.inputString,
+                onInputChange = {
+                    state.eventSink(NLSearchUiEvent.OnInputChange(it))
+                },
+                onSearchClick = {
+                    state.eventSink(NLSearchUiEvent.OnNLSearchClick(state.inputString))
+                },
+            )
+
+            Text(
+                modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
+                text = stringResource(R.string.nl_search_screen_result_label),
+                color = Neutral500,
+            )
+            Box(modifier = Modifier.fillMaxSize()) {
+                LazyVerticalGrid(
+                    modifier = Modifier.fillMaxSize(),
+                    columns = GridCells.Fixed(5),
+                ) {
+                    items(state.resultImages) { uriString ->
+                        MetaSearchSquareImage(
+                            model = uriString,
+                            onClick = {
+                                state.eventSink(NLSearchUiEvent.OnImageClick(uriString))
+                            },
+                        )
+                    }
+                }
+
+                if (state.isLoading) {
+                    MetaSearchLoadingIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+            }
+        }
+
+        MetaSearchToast(
+            isVisible = state.toastMessage != null,
+            message = state.toastMessage,
+        )
+    }
+}
+
+@DevicePreview
+@Composable
+private fun NLSearchUiPreview() {
+    MetaSearchTheme {
+        NLSearchUi(
+            state = NLSearchUiState(
+                isLoading = false,
+                resultImages = listOf(
+                    "uri1",
+                    "uri2",
+                ),
+                eventSink = {},
+            ),
+        )
+    }
+}

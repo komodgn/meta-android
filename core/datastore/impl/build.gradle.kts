@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.metasearch.datastore.impl"
+    namespace = "com.metasearch.android.datastore.impl"
 }
 
 dependencies {

@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.metasearch.android.library)
 }
 android {
-    namespace = "com.example.metasearch.core.datastore.api"
+    namespace = "com.metasearch.android.core.datastore.api"
 }
 
 dependencies {

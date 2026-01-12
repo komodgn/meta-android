@@ -1,6 +1,6 @@
 import com.android.build.api.dsl.LibraryExtension
-import com.example.metasearch.convention.Plugins
-import com.example.metasearch.convention.configureCompose
+import com.metasearch.android.convention.Plugins
+import com.metasearch.android.convention.configureCompose
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure

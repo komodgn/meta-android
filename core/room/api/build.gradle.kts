@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.metasearch.core.room.api"
+    namespace = "com.metasearch.android.core.room.api"
 }
 
 dependencies {

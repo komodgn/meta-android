@@ -4,5 +4,5 @@ plugins {
 }
 
 android {
-    namespace = "com.example.metasearch.core.designsystem"
+    namespace = "com.metasearch.android.core.designsystem"
 }

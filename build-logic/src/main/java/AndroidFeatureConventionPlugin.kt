@@ -1,11 +1,11 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
-import com.example.metasearch.convention.implementation
-import com.example.metasearch.convention.api
-import com.example.metasearch.convention.implementationProject
-import com.example.metasearch.convention.libs
-import com.example.metasearch.convention.ksp
+import com.metasearch.android.convention.implementation
+import com.metasearch.android.convention.api
+import com.metasearch.android.convention.implementationProject
+import com.metasearch.android.convention.libs
+import com.metasearch.android.convention.ksp
 
 internal class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {

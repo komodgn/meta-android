@@ -4,5 +4,5 @@ plugins {
 }
 
 android {
-    namespace = "com.example.metasearch.core.notification"
+    namespace = "com.metasearch.android.core.notification"
 }

@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.metasearch.feature.screens"
+    namespace = "com.metasearch.android.feature.screens"
 }
 
 dependencies {

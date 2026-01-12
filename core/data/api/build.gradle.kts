@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.metasearch.core.data.api"
+    namespace = "com.metasearch.android.core.data.api"
 }
 
 dependencies {

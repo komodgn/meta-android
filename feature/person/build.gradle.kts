@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.metasearch.feature.person"
+    namespace = "com.metasearch.android.feature.person"
 }
 
 ksp {

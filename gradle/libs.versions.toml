@@ -1,6 +1,6 @@
 [versions]
 ## Application
-applicationId = "com.example.metasearch"
+applicationId = "com.metasearch.android"
 compileSdk = "36"
 targetSdk = "36"
 minSdk = "30"
