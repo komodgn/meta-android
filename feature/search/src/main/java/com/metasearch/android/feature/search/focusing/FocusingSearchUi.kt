@@ -179,6 +179,9 @@ private fun FocusingSearchUiContent(
                 onImageClick = { uri ->
                     state.eventSink(FocusingSearchUiEvent.OnImageClick(uri))
                 },
+                onMoreClick = { categoryName ->
+                    state.eventSink(FocusingSearchUiEvent.OnMoreClick(categoryName))
+                },
             )
         }
     }

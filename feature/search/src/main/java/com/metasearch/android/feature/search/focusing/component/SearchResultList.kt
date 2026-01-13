@@ -28,6 +28,7 @@ internal fun SearchResultList(
     modifier: Modifier = Modifier,
     result: SearchResult,
     onImageClick: (String) -> Unit,
+    onMoreClick: (String) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier
@@ -40,8 +41,12 @@ internal fun SearchResultList(
 
         items(result.groups) { group ->
             Column {
+                val displayTags = group.categoryName
+                    .split(", ")
+                    .joinToString(" ") { "# $it" }
+
                 Text(
-                    text = group.categoryName,
+                    text = displayTags,
                     color = Neutral500,
                     modifier = Modifier.padding(bottom = MetaSearchTheme.spacing.spacing2),
                 )
@@ -69,7 +74,7 @@ internal fun SearchResultList(
                     if (hasMore) {
                         item {
                             MoreButton(
-                                onClick = { onImageClick(group.categoryName) },
+                                onClick = { onMoreClick(group.categoryName) },
                             )
                         }
                     }

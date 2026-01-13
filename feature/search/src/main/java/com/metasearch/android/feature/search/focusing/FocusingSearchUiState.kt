@@ -23,6 +23,13 @@ sealed interface FocusingSearchUiEvent : CircuitUiEvent {
     ) : FocusingSearchUiEvent
 
     /**
+     * 이미지 검색 결과 더보기 버튼 클릭
+     */
+    data class OnMoreClick(
+        val categoryName: String,
+    ) : FocusingSearchUiEvent
+
+    /**
      * 포커싱 검색 이벤트
      */
     data object OnSearchClick : FocusingSearchUiEvent
