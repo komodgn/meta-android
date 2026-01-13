@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.metasearch.android.core.common.extensions.previewPlaceholder
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.model.SearchResult
@@ -27,6 +28,7 @@ internal fun SearchResultList(
     modifier: Modifier = Modifier,
     result: SearchResult,
     onImageClick: (String) -> Unit,
+    onMoreClick: (String) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier
@@ -35,28 +37,46 @@ internal fun SearchResultList(
         verticalArrangement = Arrangement.spacedBy(MetaSearchTheme.spacing.spacing4),
         contentPadding = PaddingValues(vertical = MetaSearchTheme.spacing.spacing4),
     ) {
+        val displayLimit = 3
+
         items(result.groups) { group ->
             Column {
+                val displayTags = group.categoryName
+                    .split(", ")
+                    .joinToString(" ") { "# $it" }
+
                 Text(
-                    text = group.categoryName,
+                    text = displayTags,
                     color = Neutral500,
                     modifier = Modifier.padding(bottom = MetaSearchTheme.spacing.spacing2),
                 )
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(MetaSearchTheme.spacing.spacing2),
                 ) {
-                    items(group.photoNames) { photoName ->
+                    val itemsToShow = group.photoNames.take(displayLimit)
+                    val hasMore = group.photoNames.size > displayLimit
+
+                    items(itemsToShow) { photoName ->
                         AsyncImage(
                             model = photoName,
                             contentDescription = null,
                             modifier = Modifier
                                 .size(100.dp)
+                                .previewPlaceholder()
                                 .clip(RoundedCornerShape(MetaSearchTheme.radius.sm))
                                 .clickable {
                                     onImageClick(photoName)
                                 },
                             contentScale = ContentScale.Crop,
                         )
+                    }
+
+                    if (hasMore) {
+                        item {
+                            MoreButton(
+                                onClick = { onMoreClick(group.categoryName) },
+                            )
+                        }
                     }
                 }
             }

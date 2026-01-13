@@ -45,7 +45,7 @@ class GraphDetailPresenter @AssistedInject constructor(
         val maxImages = 10
 
         LaunchedEffect(Unit) {
-            webViewUrl = graphRepository.getDetailGraphWebViewUrl(screen.imageUriString)
+            webViewUrl = graphRepository.getDetailGraphWebViewUrl(screen.entityName)
         }
 
         fun handleEvent(event: GraphDetailUiEvent) {

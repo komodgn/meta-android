@@ -15,6 +15,7 @@ import com.metasearch.android.core.data.api.repository.SearchRepository
 import com.metasearch.android.core.model.CircleModel
 import com.metasearch.android.core.model.SearchResult
 import com.metasearch.android.feature.screens.FocusingSearchScreen
+import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
 import com.metasearch.android.feature.search.R
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -119,6 +120,8 @@ class FocusingSearchPresenter @AssistedInject constructor(
                 FocusingSearchUiEvent.HideToast -> toastMessage = null
 
                 is FocusingSearchUiEvent.ShowToast -> toastMessage = event.message
+
+                is FocusingSearchUiEvent.OnMoreClick -> navigator.goTo(GraphDetailScreen(event.categoryName))
             }
         }
 

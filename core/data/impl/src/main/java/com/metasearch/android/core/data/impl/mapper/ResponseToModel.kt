@@ -19,7 +19,7 @@ internal fun PhotoResponse.toModel(): SearchResult {
     if (commonList.isNotEmpty()) {
         val relatedCategories = individualMap.filter { entry ->
             entry.value.any { it in commonList }
-        }.keys.joinToString(" ") { "#$it" }
+        }.keys.joinToString(", ")
 
         resultGroups.add(PhotoGroup(categoryName = relatedCategories, photoNames = commonList))
     }
@@ -30,7 +30,7 @@ internal fun PhotoResponse.toModel(): SearchResult {
         if (filteredNames.isNotEmpty()) {
             resultGroups.add(
                 PhotoGroup(
-                    categoryName = "# $category",
+                    categoryName = category,
                     photoNames = filteredNames,
                 ),
             )
