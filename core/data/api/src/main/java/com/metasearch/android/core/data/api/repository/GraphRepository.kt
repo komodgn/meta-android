@@ -4,7 +4,7 @@ import android.net.Uri
 
 interface GraphRepository {
     suspend fun getFullGraphWebViewUrl(): String
-    suspend fun getDetailGraphWebViewUrl(imageUriString: String): String
+    suspend fun getDetailGraphWebViewUrl(entityName: String): String
 
     suspend fun getTripleData(photoName: String)
 

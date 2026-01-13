@@ -1,12 +1,12 @@
 package com.metasearch.android.core.data.impl.repository
 
 import android.net.Uri
-import androidx.core.net.toUri
 import com.metasearch.android.core.data.api.repository.DatabaseNameRepository
 import com.metasearch.android.core.data.api.repository.GalleryRepository
 import com.metasearch.android.core.data.api.repository.GraphRepository
 import com.metasearch.android.core.network.BuildConfig
 import com.metasearch.android.core.network.service.WebService
+import java.net.URLEncoder
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,13 +24,11 @@ internal class GraphRepositoryImpl @Inject constructor(
         return "$webServerBaseUrl/graph/$dbName"
     }
 
-    override suspend fun getDetailGraphWebViewUrl(imageUriString: String): String {
+    override suspend fun getDetailGraphWebViewUrl(entityName: String): String {
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
-        val uri = imageUriString.toUri()
+        val encodedName = URLEncoder.encode(entityName, "UTF-8")
 
-        val fileName = galleryRepository.getFileName(uri) ?: ""
-
-        return "$webServerBaseUrl/entityTripleGraph/$dbName/$fileName"
+        return "$webServerBaseUrl/entityTripleGraph/$dbName/$encodedName"
     }
 
     override suspend fun getTripleData(photoName: String) {

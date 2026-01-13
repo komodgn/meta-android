@@ -35,7 +35,7 @@ data class FocusingSearchScreen(
 
 @Parcelize
 data class GraphDetailScreen(
-    val imageUriString: String,
+    val entityName: String,
 ) : Screen
 
 @Parcelize

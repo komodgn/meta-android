@@ -6,7 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import com.metasearch.android.core.common.utils.handleException
+import com.metasearch.android.core.data.api.repository.GalleryRepository
 import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
 import com.metasearch.android.feature.screens.FocusingSearchScreen
 import com.metasearch.android.feature.screens.GraphDetailScreen
@@ -24,6 +26,7 @@ class PhotoDetailPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
     @Assisted private val screen: PhotoDetailScreen,
     private val imageAnalysisRepository: ImageAnalysisRepository,
+    private val galleryRepository: GalleryRepository,
 ) : Presenter<PhotoDetailUiState> {
 
     @CircuitInject(PhotoDetailScreen::class, ActivityRetainedComponent::class)
@@ -68,11 +71,13 @@ class PhotoDetailPresenter @AssistedInject constructor(
                     }
                 }
 
-                is PhotoDetailUiEvent.OnGraphButtonClick -> navigator.goTo(
-                    GraphDetailScreen(
-                        imageUriString = screen.imageUriString,
-                    ),
-                )
+                is PhotoDetailUiEvent.OnGraphButtonClick -> {
+                    scope.launch {
+                        val fileName = galleryRepository.getFileName(screen.imageUriString.toUri()) ?: ""
+
+                        navigator.goTo(GraphDetailScreen(entityName = fileName))
+                    }
+                }
 
                 is PhotoDetailUiEvent.OnFocusingSearchClick -> navigator.goTo(
                     FocusingSearchScreen(
