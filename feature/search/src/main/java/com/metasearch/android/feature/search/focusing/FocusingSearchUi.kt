@@ -29,6 +29,8 @@ import com.metasearch.android.core.designsystem.component.MetaSearchToast
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.model.CircleModel
+import com.metasearch.android.core.model.PhotoGroup
+import com.metasearch.android.core.model.SearchResult
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
 import com.metasearch.android.feature.screens.FocusingSearchScreen
@@ -185,10 +187,27 @@ private fun FocusingSearchUiContent(
 @DevicePreview
 @Composable
 private fun FocusingSearchUiPreview() {
+    val fakeGroups = listOf(
+        PhotoGroup(
+            categoryName = "# 고양이 # 노트북",
+            photoNames = listOf("https://picsum.photos/200", "https://picsum.photos/201", "https://picsum.photos/202", "https://picsum.photos/203"),
+        ),
+        PhotoGroup(
+            categoryName = "# 고양이",
+            photoNames = listOf("https://picsum.photos/200", "https://picsum.photos/201", "https://picsum.photos/202", "https://picsum.photos/203"),
+        ),
+        PhotoGroup(
+            categoryName = "# 노트북",
+            photoNames = listOf("https://picsum.photos/204", "https://picsum.photos/205"),
+        ),
+    )
+    val fakeSearchResult = SearchResult(groups = fakeGroups)
+
     MetaSearchTheme {
         FocusingSearchUi(
             state = FocusingSearchUiState(
                 imageUriString = "",
+                searchResult = fakeSearchResult,
                 eventSink = {},
             ),
         )

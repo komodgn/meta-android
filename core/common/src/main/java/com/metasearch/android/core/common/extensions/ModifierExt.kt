@@ -15,7 +15,7 @@ fun Modifier.clickableIfNotNull(onClick: (() -> Unit)?): Modifier =
 @Composable
 fun Modifier.previewPlaceholder(
     color: Color = LightGray,
-    shape: Shape? = null
+    shape: Shape? = null,
 ): Modifier = if (LocalInspectionMode.current) {
     if (shape != null) background(color, shape) else background(color)
 } else {
