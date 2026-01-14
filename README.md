@@ -103,7 +103,7 @@ RELEASE_AI_SERVER_URL=
 │   ├── main
 │   ├── person              # 인물 사진 모아보기 및 관리
 │   ├── screens             # 메인 네비게이션 및 스크린 정의
-│   ├── search 그 검색 화면
+│   ├── search              # AI 기반 자연어 및 드래그 검색 화면
 │   └── splash
 └── gradle                  # Version Catalog (libs.versions.toml)
 ```
