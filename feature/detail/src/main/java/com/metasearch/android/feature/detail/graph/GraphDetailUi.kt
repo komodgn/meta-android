@@ -30,8 +30,8 @@ import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchDialog
+import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.feature.detail.R
-import com.metasearch.android.feature.detail.graph.component.GraphDetailHeader
 import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
@@ -70,7 +70,8 @@ private fun GraphDetailUiContent(
     Column(
         modifier = Modifier.padding(innerPadding),
     ) {
-        GraphDetailHeader(
+        MetaSearchHeader(
+            title = stringResource(R.string.graph_detail_screen_header),
             onBackClick = {
                 state.eventSink(GraphDetailUiEvent.OnBackClick)
             },

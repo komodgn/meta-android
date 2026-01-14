@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.component.MetaSearchToast
@@ -21,7 +22,7 @@ import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.model.PersonModel
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchDialog
-import com.metasearch.android.feature.person.component.PersonHeader
+import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.feature.person.component.PersonItem
 import com.metasearch.android.feature.person.component.PersonSearchTextField
 import com.metasearch.android.feature.screens.PersonScreen
@@ -95,7 +96,11 @@ private fun PersonUiContent(
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
-            PersonHeader()
+            MetaSearchHeader(
+                title = stringResource(R.string.person_screen_header),
+                textAlign = TextAlign.Start,
+                textStyle = MetaSearchTheme.typography.headlineSmall,
+            )
 
             PersonSearchTextField(
                 inputString = state.inputPersonNameString,

@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil3.compose.AsyncImage
@@ -32,7 +33,7 @@ import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchDialog
-import com.metasearch.android.feature.graph.component.GraphHeader
+import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.feature.screens.GraphScreen
 import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
 import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
@@ -82,7 +83,11 @@ private fun GraphUiContent(
     Column(
         modifier = Modifier.padding(innerPadding),
     ) {
-        GraphHeader()
+        MetaSearchHeader(
+            title = stringResource(R.string.graph_screen_header),
+            textAlign = TextAlign.Start,
+            textStyle = MetaSearchTheme.typography.headlineSmall,
+        )
         AndroidView(
             modifier = Modifier.weight(1f).fillMaxWidth(),
             factory = { context ->

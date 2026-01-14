@@ -13,18 +13,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.component.MetaSearchToast
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.MetaSearchScaffold
+import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
 import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 import com.metasearch.android.feature.screens.NLSearchScreen
 import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
 import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
 import com.metasearch.android.feature.search.R
-import com.metasearch.android.feature.search.nls.component.NLSearchHeader
 import com.metasearch.android.feature.search.nls.component.NLSearchTextField
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
@@ -75,7 +76,11 @@ private fun NLSearchUiContent(
             modifier = Modifier
                 .fillMaxSize(),
         ) {
-            NLSearchHeader()
+            MetaSearchHeader(
+                title = stringResource(R.string.nl_search_screen_header),
+                textAlign = TextAlign.Start,
+                textStyle = MetaSearchTheme.typography.headlineSmall,
+            )
 
             NLSearchTextField(
                 modifier = modifier,
