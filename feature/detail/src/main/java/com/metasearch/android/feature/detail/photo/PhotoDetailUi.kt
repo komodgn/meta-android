@@ -17,17 +17,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import coil3.compose.AsyncImage
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.component.MetaSearchToast
 import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.ui.MetaSearchScaffold
+import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
+import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.detail.photo.component.ImageDescriptionBottomSheetContent
 import com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBar
 import com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBarItem
-import com.metasearch.android.feature.detail.photo.component.PhotoDetailHeader
 import com.metasearch.android.feature.screens.PhotoDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
@@ -109,7 +111,8 @@ private fun PhotoDetailUiContent(
     Column(
         modifier = Modifier.padding(innerPadding),
     ) {
-        PhotoDetailHeader(
+        MetaSearchHeader(
+            title = stringResource(R.string.photo_detail_screen_header),
             onBackClick = {
                 state.eventSink(PhotoDetailUiEvent.OnBackClick)
             },

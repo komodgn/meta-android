@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -32,11 +33,12 @@ import com.metasearch.android.core.model.CircleModel
 import com.metasearch.android.core.model.PhotoGroup
 import com.metasearch.android.core.model.SearchResult
 import com.metasearch.android.core.ui.MetaSearchScaffold
+import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
 import com.metasearch.android.feature.screens.FocusingSearchScreen
+import com.metasearch.android.feature.search.R
 import com.metasearch.android.feature.search.focusing.component.FocusingSearchBottomBar
 import com.metasearch.android.feature.search.focusing.component.FocusingSearchBottomBarItem
-import com.metasearch.android.feature.search.focusing.component.FocusingSearchHeader
 import com.metasearch.android.feature.search.focusing.component.SearchResultList
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
@@ -92,7 +94,8 @@ private fun FocusingSearchUiContent(
     Column(
         modifier = Modifier.padding(innerPadding),
     ) {
-        FocusingSearchHeader(
+        MetaSearchHeader(
+            title = stringResource(R.string.focusing_search_screen_header),
             onBackClick = {
                 state.eventSink(FocusingSearchUiEvent.OnBackClick)
             },
