@@ -1,24 +1,25 @@
-# Visualize Me By Photo
+<div align="center">
+    <h1>Visualize Me By Photo</h1>
+    <h5>스마트폰 속에 흩어져있는 나만의 정보를 지식화하여 활용하는 서비스</h5>
+    <img src="https://img.shields.io/badge/Kotlin-2.2.21-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
+</div>
 
-<img src="https://img.shields.io/badge/Kotlin-2.2.21-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
-
-## Demo
-
-### 일상 언어로 사진 검색
+<h2>Demo</h2>
+<h6>일상 언어로 사진 검색</h6>
 <video src="https://github.com/user-attachments/assets/56c7dd41-de57-40ca-b7d3-4b4e7b8f23e8" width="400px"></video>
 
-### 등록한 인물 이름으로 사진 검색
+<h6>등록한 인물 이름으로 사진 검색</h6>
 <video src="https://github.com/user-attachments/assets/228a8d81-05e6-4a41-9ea6-036703a5127e" width="400px"></video>
 
 ## Features
 - Image Analysis
-- Focusing Search
+- Drag Search
 - Natural Language Search
 - Face Analytics
 
-### Intelligent Search
+### AI Image Search
 
-|자연어 검색|포커싱 검색|
+|자연어 검색|드래그 검색|
 |:---:|:---:|
 |<img src="https://github.com/user-attachments/assets/c90afda9-8bb4-4e2d-a03a-6eeb6a74491b" width="250"/> |<img src="https://github.com/user-attachments/assets/b911e635-420a-4035-8b59-27f26baf9df6" width="280"/> |
 |자연어를 통한 복잡한 조건으로 정확한 검색|간단한 드래그 동작으로 쉽고 빠른 검색|
@@ -102,7 +103,7 @@ RELEASE_AI_SERVER_URL=
 │   ├── main
 │   ├── person              # 인물 사진 모아보기 및 관리
 │   ├── screens             # 메인 네비게이션 및 스크린 정의
-│   ├── search              # AI 기반 자연어 및 포커싱 검색 화면
+│   ├── search 그 검색 화면
 │   └── splash
 └── gradle                  # Version Catalog (libs.versions.toml)
 ```
