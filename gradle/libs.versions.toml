@@ -61,7 +61,7 @@ constraintlayoutCompose = "1.1.1"
 coilCompose = "3.3.0"
 
 ## Circuit
-circuit = "0.31.0"
+circuit = "0.32.0"
 
 ## Hilt
 hilt = "2.57.2"
