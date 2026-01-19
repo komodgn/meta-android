@@ -48,6 +48,8 @@ class NLSearchPresenter @AssistedInject constructor(
                 is NLSearchUiEvent.OnInputChange -> inputString = event.inputString
 
                 is NLSearchUiEvent.OnNLSearchClick -> {
+                    inputString = event.inputString
+
                     if (inputString.isBlank()) return
                     isLoading = true
 

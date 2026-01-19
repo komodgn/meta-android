@@ -85,11 +85,9 @@ private fun NLSearchUiContent(
             NLSearchTextField(
                 modifier = modifier,
                 inputString = state.inputString,
-                onInputChange = {
-                    state.eventSink(NLSearchUiEvent.OnInputChange(it))
-                },
-                onSearchClick = {
-                    state.eventSink(NLSearchUiEvent.OnNLSearchClick(state.inputString))
+                onSearchClick = { lastInput ->
+                    state.eventSink(NLSearchUiEvent.OnInputChange(lastInput))
+                    state.eventSink(NLSearchUiEvent.OnNLSearchClick(lastInput))
                 },
             )
 
