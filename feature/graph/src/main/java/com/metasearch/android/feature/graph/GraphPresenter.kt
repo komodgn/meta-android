@@ -9,9 +9,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import com.metasearch.android.core.data.api.repository.GraphRepository
-import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.metasearch.android.feature.screens.GraphScreen
+import com.metasearch.android.feature.screens.PhotoDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.assisted.Assisted
@@ -35,8 +36,8 @@ class GraphPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): GraphUiState {
-        var webViewUrl by remember { mutableStateOf("") }
-        var selectedImages by remember { mutableStateOf(listOf<String>()) }
+        var webViewUrl by rememberRetained { mutableStateOf("") }
+        var selectedImages by rememberRetained { mutableStateOf(listOf<String>()) }
         var errorMessage by remember { mutableStateOf("") }
         val coroutineScope = rememberCoroutineScope()
         val imageNotFoundMessage = stringResource(R.string.graph_screen_image_not_found_error)
@@ -63,7 +64,7 @@ class GraphPresenter @AssistedInject constructor(
                 }
 
                 is GraphUiEvent.OnImageClick -> {
-                    navigator.goTo(GraphDetailScreen(event.uriString))
+                    navigator.goTo(PhotoDetailScreen(event.uriString))
                 }
 
                 GraphUiEvent.OnErrorDialogDismiss -> errorMessage = ""
