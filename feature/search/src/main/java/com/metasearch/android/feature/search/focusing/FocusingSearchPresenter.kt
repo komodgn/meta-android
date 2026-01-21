@@ -19,6 +19,7 @@ import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
 import com.metasearch.android.feature.search.R
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.assisted.Assisted
@@ -55,9 +56,9 @@ class FocusingSearchPresenter @AssistedInject constructor(
         val errorMaxCircles = stringResource(R.string.focusing_search_screen_toast_error_max_circles)
         var toastMessage by remember { mutableStateOf<String?>(toastInit) }
 
-        val imageUriString by remember { mutableStateOf(screen.imageUriString) }
-        var circles by remember { mutableStateOf(listOf<CircleModel>()) }
-        var searchResult by remember { mutableStateOf<SearchResult?>(null) }
+        val imageUriString by rememberRetained { mutableStateOf(screen.imageUriString) }
+        var circles by rememberRetained { mutableStateOf(listOf<CircleModel>()) }
+        var searchResult by rememberRetained { mutableStateOf<SearchResult?>(null) }
         val emptyResultMessage = stringResource(R.string.search_screen_empty_result_message)
 
         fun handleEvent(event: FocusingSearchUiEvent) {
