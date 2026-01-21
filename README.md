@@ -21,10 +21,10 @@
 
 |자연어 검색|드래그 검색|
 |:---:|:---:|
-|<img src="https://github.com/user-attachments/assets/c90afda9-8bb4-4e2d-a03a-6eeb6a74491b" width="250"/> |<img src="https://github.com/user-attachments/assets/b911e635-420a-4035-8b59-27f26baf9df6" width="280"/> |
+|<img src="https://github.com/user-attachments/assets/c90afda9-8bb4-4e2d-a03a-6eeb6a74491b" width="250"/> |<img src="https://github.com/user-attachments/assets/aa075c0b-bbd6-4fec-9e32-06a140ae21aa" width="200"/> |
 |자연어를 통한 복잡한 조건으로 정확한 검색|간단한 드래그 동작으로 쉽고 빠른 검색|
 
-### Person In My Gallery
+### Person In My Gallery 
 
 |인물 정보 통합 및 관리|개인화|
 |:---:|:---:|
