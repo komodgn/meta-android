@@ -105,6 +105,10 @@ class PersonRepositoryImpl @Inject constructor(
             .map { it?.toModel(emptyMap()) }
             .flowOn(Dispatchers.IO)
 
+    override suspend fun getInputNameBySystemName(systemName: String): String? = withContext(ioDispatcher) {
+        personDao.getInputNameByImageName(systemName)
+    }
+
     override suspend fun getPersonCount(): Int = personDao.getPersonCount()
 
     override suspend fun getPersonIdByImageName(imageName: String): Long? =

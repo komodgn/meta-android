@@ -4,6 +4,7 @@ import com.metasearch.android.core.common.constants.PromptConstants
 import com.metasearch.android.core.common.utils.runSuspendCatching
 import com.metasearch.android.core.data.api.repository.DatabaseNameRepository
 import com.metasearch.android.core.data.api.repository.GalleryRepository
+import com.metasearch.android.core.data.api.repository.PersonRepository
 import com.metasearch.android.core.data.api.repository.SearchRepository
 import com.metasearch.android.core.data.impl.mapper.toModel
 import com.metasearch.android.core.data.impl.util.CypherQueryGenerator
@@ -36,6 +37,7 @@ internal class SearchRepositoryImpl @Inject constructor(
     private val webService: WebService,
     private val openAIService: OpenAIService,
     private val galleryRepository: GalleryRepository,
+    private val personRepository: PersonRepository,
     private val databaseNameRepository: DatabaseNameRepository,
 ) : SearchRepository {
 
@@ -66,10 +68,18 @@ internal class SearchRepositoryImpl @Inject constructor(
                 request = FocusingSearchRequest(requestCircles),
             )
 
+            val mappedProperties = detectionResponse.detectedObjects.map { systemName ->
+                val inputName = personRepository.getInputNameBySystemName(systemName)
+
+                if (!inputName.isNullOrBlank()) inputName else systemName
+            }.filter { it.isNotBlank() }.distinct()
+
+            if (mappedProperties.isEmpty()) return@coroutineScope SearchResult(groups = emptyList())
+
             val finalResult = webService.sendDetectedObjects(
                 request = DetectedObjectsRequest(
                     dbName = dbName,
-                    properties = detectionResponse.detectedObjects,
+                    properties = mappedProperties,
                 ),
             )
 
