@@ -14,6 +14,11 @@ interface PersonRepository {
     fun getPersonById(personId: Long): Flow<PersonModel?>
 
     /**
+     * 시스템 식별자로 인물 이름 조회
+     */
+    suspend fun getInputNameBySystemName(systemName: String): String?
+
+    /**
      * @return 분석 완료 후 저장된 인물 수
      */
     suspend fun getPersonCount(): Int
