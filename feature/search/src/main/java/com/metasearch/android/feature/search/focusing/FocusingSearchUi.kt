@@ -1,6 +1,5 @@
 package com.metasearch.android.feature.search.focusing
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,18 +16,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.component.MetaSearchToast
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.model.CircleModel
 import com.metasearch.android.core.model.PhotoGroup
 import com.metasearch.android.core.model.SearchResult
@@ -37,6 +33,7 @@ import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
 import com.metasearch.android.feature.screens.FocusingSearchScreen
 import com.metasearch.android.feature.search.R
+import com.metasearch.android.feature.search.focusing.component.DrawingCanvas
 import com.metasearch.android.feature.search.focusing.component.FocusingSearchBottomBar
 import com.metasearch.android.feature.search.focusing.component.FocusingSearchBottomBarItem
 import com.metasearch.android.feature.search.focusing.component.SearchResultList
@@ -88,7 +85,6 @@ private fun FocusingSearchUiContent(
     var currentCenter by remember { mutableStateOf(Offset.Zero) }
     var currentRadius by remember { mutableFloatStateOf(0f) }
     var isDrawing by remember { mutableStateOf(false) }
-
     var size by remember { mutableStateOf(IntSize.Zero) }
 
     Column(
@@ -148,25 +144,14 @@ private fun FocusingSearchUiContent(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Fit,
             )
-            Canvas(modifier = Modifier.fillMaxSize()) {
-                state.circles?.forEach { circle ->
-                    drawCircle(
-                        color = White,
-                        radius = circle.radius * maxOf(size.width, size.height).toFloat(),
-                        center = Offset(circle.centerX * size.width, circle.centerY * size.height),
-                        style = Stroke(width = 4.dp.toPx()),
-                    )
-                }
 
-                if (isDrawing) {
-                    drawCircle(
-                        color = White.copy(alpha = 0.5f),
-                        radius = currentRadius,
-                        center = currentCenter,
-                        style = Stroke(width = 4.dp.toPx()),
-                    )
-                }
-            }
+            DrawingCanvas(
+                circles = state.circles,
+                isDrawing = isDrawing,
+                currentCenter = currentCenter,
+                currentRadius = currentRadius,
+                canvasSize = size,
+            )
 
             MetaSearchToast(
                 isVisible = state.toastMessage != null,
