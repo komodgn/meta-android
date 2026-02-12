@@ -12,6 +12,7 @@ import com.metasearch.android.core.data.api.repository.PersonRepository
 import com.metasearch.android.feature.screens.PersonDetailScreen
 import com.metasearch.android.feature.screens.PersonScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.assisted.Assisted
@@ -43,16 +44,15 @@ class PersonPresenter @AssistedInject constructor(
         var showDeleteDialog by remember { mutableStateOf(false) }
         var pendingDeletePersonId by remember { mutableStateOf<Long?>(null) }
         var pendingDeletePersonName by remember { mutableStateOf("") }
-        var inputPersonNameString by remember { mutableStateOf("") }
+        var inputPersonNameString by rememberRetained { mutableStateOf("") }
         val allPeople by personRepository.getAllPersons().collectAsState(initial = emptyList())
 
-        val filteredPeople = remember(inputPersonNameString, allPeople) {
+        val filteredPeople = rememberRetained(inputPersonNameString, allPeople) {
             if (inputPersonNameString.isBlank()) {
                 allPeople
             } else {
                 allPeople.filter { person ->
-                    person.inputName.contains(inputPersonNameString, ignoreCase = true) ||
-                        person.name.contains(inputPersonNameString, ignoreCase = true)
+                    person.inputName.contains(inputPersonNameString, ignoreCase = true)
                 }
             }
         }
@@ -62,8 +62,6 @@ class PersonPresenter @AssistedInject constructor(
                 is PersonUiEvent.OnInputChange -> {
                     inputPersonNameString = event.inputString
                 }
-
-                is PersonUiEvent.OnPersonSearchClick -> TODO()
 
                 is PersonUiEvent.OnPersonDeleteClick -> {
                     val target = allPeople.find { it.id == event.personId }

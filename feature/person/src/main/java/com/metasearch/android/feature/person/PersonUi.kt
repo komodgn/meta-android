@@ -105,7 +105,6 @@ private fun PersonUiContent(
             PersonSearchTextField(
                 inputString = state.inputPersonNameString,
                 onInputChange = { state.eventSink(PersonUiEvent.OnInputChange(it)) },
-                onSearchClick = { state.eventSink(PersonUiEvent.OnPersonSearchClick(state.inputPersonNameString)) },
             )
 
             LazyVerticalGrid(

@@ -25,13 +25,6 @@ sealed interface PersonUiEvent : CircuitUiEvent {
     ) : PersonUiEvent
 
     /**
-     * 인물 검색 버튼 클릭
-     */
-    data class OnPersonSearchClick(
-        val inputString: String,
-    ) : PersonUiEvent
-
-    /**
      * 인물 삭제 버튼 클릭
      */
     data class OnPersonDeleteClick(
