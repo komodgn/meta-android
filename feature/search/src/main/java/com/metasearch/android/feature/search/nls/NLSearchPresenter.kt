@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
+import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.common.utils.handleException
 import com.metasearch.android.core.data.api.repository.SearchRepository
 import com.metasearch.android.feature.screens.NLSearchScreen
@@ -37,15 +37,21 @@ class NLSearchPresenter @AssistedInject constructor(
     override fun present(): NLSearchUiState {
         val scope = rememberCoroutineScope()
         var isLoading by rememberRetained { mutableStateOf(false) }
-        var toastMessage by remember { mutableStateOf<String?>(null) }
+        var sideEffect by remember { mutableStateOf<NLSearchSideEffect?>(null) }
         var inputString by rememberRetained { mutableStateOf("") }
-        var resultImages by rememberRetained { mutableStateOf<List<String>>(emptyList()) }
-
-        val emptyResultMessage = stringResource(R.string.search_screen_empty_result_message)
+        var resultImages by rememberRetained {
+            mutableStateOf<List<String>>(emptyList())
+        }
 
         fun handleEvent(event: NLSearchUiEvent) {
             when (event) {
-                is NLSearchUiEvent.OnInputChange -> inputString = event.inputString
+                NLSearchUiEvent.InitSideEffect -> {
+                    sideEffect = null
+                }
+
+                is NLSearchUiEvent.OnInputChange -> {
+                    inputString = event.inputString
+                }
 
                 is NLSearchUiEvent.OnNLSearchClick -> {
                     inputString = event.inputString
@@ -58,7 +64,9 @@ class NLSearchPresenter @AssistedInject constructor(
                             .onSuccess { result ->
                                 if (result.matchedUris.isEmpty()) {
                                     resultImages = emptyList()
-                                    toastMessage = emptyResultMessage
+                                    sideEffect = NLSearchSideEffect.ShowToast(
+                                        message = UiText.StringResource(R.string.search_screen_empty_result_message),
+                                    )
                                 } else {
                                     resultImages = result.matchedUris
                                 }
@@ -66,7 +74,9 @@ class NLSearchPresenter @AssistedInject constructor(
                                 handleException(
                                     exception = exception,
                                     onError = { message ->
-                                        toastMessage = message
+                                        sideEffect = NLSearchSideEffect.ShowToast(
+                                            message = UiText.DynamicString(message),
+                                        )
                                     },
                                 )
                             }
@@ -78,19 +88,17 @@ class NLSearchPresenter @AssistedInject constructor(
                     navigator.goTo(PhotoDetailScreen(event.imageUriString))
                 }
 
-                is NLSearchUiEvent.OnTabClick -> navigator.resetRoot(event.screen)
-
-                is NLSearchUiEvent.ShowToast -> toastMessage = event.message
-
-                NLSearchUiEvent.HideToast -> toastMessage = null
+                is NLSearchUiEvent.OnTabClick -> {
+                    navigator.resetRoot(event.screen)
+                }
             }
         }
 
         return NLSearchUiState(
             isLoading = isLoading,
-            toastMessage = toastMessage,
             inputString = inputString,
             resultImages = resultImages,
+            sideEffect = sideEffect,
             eventSink = ::handleEvent,
         )
     }

@@ -1,17 +1,30 @@
 package com.metasearch.android.feature.detail.photo
 
+import androidx.compose.runtime.Immutable
+import com.metasearch.android.core.common.utils.UiText
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
+import java.util.UUID
 
 data class PhotoDetailUiState(
     val isLoading: Boolean = false,
-    val toastMessage: String? = null,
     val imageUriString: String,
     val imageDescription: String? = null,
+    val sideEffect: PhotoDetailSideEffect? = null,
     val eventSink: (PhotoDetailUiEvent) -> Unit,
 ) : CircuitUiState
 
+@Immutable
+sealed interface PhotoDetailSideEffect {
+    data class ShowToast(
+        val message: UiText,
+        private val key: String = UUID.randomUUID().toString(),
+    ) : PhotoDetailSideEffect
+}
+
 sealed interface PhotoDetailUiEvent : CircuitUiEvent {
+    data object InitSideEffect : PhotoDetailUiEvent
+
     /**
      * Open AI로 이미지 설명을 생성
      */
@@ -42,10 +55,4 @@ sealed interface PhotoDetailUiEvent : CircuitUiEvent {
      * 헤더의 뒤로가기 버튼 클릭
      */
     data object OnBackClick : PhotoDetailUiEvent
-
-    data class ShowToast(
-        val message: String,
-    ) : PhotoDetailUiEvent
-
-    data object HideToast : PhotoDetailUiEvent
 }

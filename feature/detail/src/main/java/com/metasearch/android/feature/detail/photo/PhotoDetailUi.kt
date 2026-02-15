@@ -20,7 +20,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import coil3.compose.AsyncImage
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
-import com.metasearch.android.core.designsystem.component.MetaSearchToast
 import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.ui.MetaSearchScaffold
@@ -50,8 +49,8 @@ fun PhotoDetailUi(
         }
     }
 
-    PhotoDetailToastEffect(
-        toastMessage = state.toastMessage,
+    PhotoDetailSideEffect(
+        state = state,
         eventSink = state.eventSink,
     )
 
@@ -95,11 +94,6 @@ fun PhotoDetailUi(
                 ImageDescriptionBottomSheetContent(state.imageDescription ?: "")
             }
         }
-
-        MetaSearchToast(
-            isVisible = state.toastMessage != null,
-            message = state.toastMessage,
-        )
     }
 }
 

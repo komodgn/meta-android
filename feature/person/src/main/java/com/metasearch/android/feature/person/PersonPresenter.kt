@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.common.utils.handleException
 import com.metasearch.android.core.data.api.repository.PersonRepository
 import com.metasearch.android.feature.screens.PersonDetailScreen
@@ -36,17 +37,10 @@ class PersonPresenter @AssistedInject constructor(
     @Composable
     override fun present(): PersonUiState {
         val scope = rememberCoroutineScope()
-
         var deleteJob by remember { mutableStateOf<Job?>(null) }
-
-        var showToast by remember { mutableStateOf(false) }
-        var toastMessage by remember { mutableStateOf("") }
-        var showDeleteDialog by remember { mutableStateOf(false) }
-        var pendingDeletePersonId by remember { mutableStateOf<Long?>(null) }
-        var pendingDeletePersonName by remember { mutableStateOf("") }
+        var sideEffect by remember { mutableStateOf<PersonSideEffect?>(null) }
         var inputPersonNameString by rememberRetained { mutableStateOf("") }
         val allPeople by personRepository.getAllPersons().collectAsState(initial = emptyList())
-
         val filteredPeople = rememberRetained(inputPersonNameString, allPeople) {
             if (inputPersonNameString.isBlank()) {
                 allPeople
@@ -56,9 +50,16 @@ class PersonPresenter @AssistedInject constructor(
                 }
             }
         }
+        var showDeleteDialog by remember { mutableStateOf(false) }
+        var pendingDeletePersonId by remember { mutableStateOf<Long?>(null) }
+        var pendingDeletePersonName by remember { mutableStateOf("") }
 
         fun handleEvent(event: PersonUiEvent) {
             when (event) {
+                PersonUiEvent.InitSideEffect -> {
+                    sideEffect = null
+                }
+
                 is PersonUiEvent.OnInputChange -> {
                     inputPersonNameString = event.inputString
                 }
@@ -85,8 +86,9 @@ class PersonPresenter @AssistedInject constructor(
                                     handleException(
                                         exception = exception,
                                         onError = { message ->
-                                            toastMessage = message
-                                            showToast = true
+                                            sideEffect = PersonSideEffect.ShowToast(
+                                                message = UiText.DynamicString(message),
+                                            )
                                         },
                                     )
                                     showDeleteDialog = false
@@ -96,25 +98,26 @@ class PersonPresenter @AssistedInject constructor(
                     }
                 }
 
-                PersonUiEvent.OnPersonDeleteCancel -> showDeleteDialog = false
+                PersonUiEvent.OnPersonDeleteCancel -> {
+                    showDeleteDialog = false
+                }
 
-                is PersonUiEvent.OnPersonClick -> navigator.goTo(PersonDetailScreen(event.personId))
+                is PersonUiEvent.OnPersonClick -> {
+                    navigator.goTo(PersonDetailScreen(event.personId))
+                }
 
                 is PersonUiEvent.OnTabClick -> {
                     navigator.resetRoot(event.screen)
                 }
-
-                PersonUiEvent.HideToast -> showToast = false
             }
         }
 
         return PersonUiState(
-            toastMessage = toastMessage,
-            showToast = showToast,
             showDeleteDialog = showDeleteDialog,
             pendingDeletePersonName = pendingDeletePersonName,
             inputPersonNameString = inputPersonNameString,
             people = filteredPeople,
+            sideEffect = sideEffect,
             eventSink = ::handleEvent,
         )
     }

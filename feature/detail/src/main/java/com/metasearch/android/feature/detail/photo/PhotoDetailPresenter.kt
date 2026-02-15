@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
+import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.common.utils.handleException
 import com.metasearch.android.core.data.api.repository.GalleryRepository
 import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
@@ -42,12 +43,16 @@ class PhotoDetailPresenter @AssistedInject constructor(
     override fun present(): PhotoDetailUiState {
         val scope = rememberCoroutineScope()
         var isLoading by remember { mutableStateOf(false) }
-        var toastMessage by remember { mutableStateOf<String?>(null) }
+        var sideEffect by remember { mutableStateOf<PhotoDetailSideEffect?>(null) }
         val imageUriString by remember { mutableStateOf(screen.imageUriString) }
         var imageDescription by remember { mutableStateOf<String?>(null) }
 
         fun handleEvent(event: PhotoDetailUiEvent) {
             when (event) {
+                PhotoDetailUiEvent.InitSideEffect -> {
+                    sideEffect = null
+                }
+
                 is PhotoDetailUiEvent.OnCreateImageDescriptionButtonClick -> {
                     isLoading = true
 
@@ -62,7 +67,9 @@ class PhotoDetailPresenter @AssistedInject constructor(
                                 handleException(
                                     exception = exception,
                                     onError = { message ->
-                                        toastMessage = message
+                                        sideEffect = PhotoDetailSideEffect.ShowToast(
+                                            message = UiText.DynamicString(message),
+                                        )
                                     },
                                 )
                             }
@@ -79,27 +86,27 @@ class PhotoDetailPresenter @AssistedInject constructor(
                     }
                 }
 
-                is PhotoDetailUiEvent.OnFocusingSearchClick -> navigator.goTo(
-                    FocusingSearchScreen(
-                        imageUriString = event.imageUriString,
-                    ),
-                )
+                is PhotoDetailUiEvent.OnFocusingSearchClick -> {
+                    navigator.goTo(
+                        FocusingSearchScreen(
+                            imageUriString = event.imageUriString,
+                        ),
+                    )
+                }
 
                 is PhotoDetailUiEvent.OnShareImageButtonClick -> TODO()
 
-                PhotoDetailUiEvent.OnBackClick -> navigator.pop()
-
-                PhotoDetailUiEvent.HideToast -> toastMessage = null
-
-                is PhotoDetailUiEvent.ShowToast -> toastMessage = event.message
+                PhotoDetailUiEvent.OnBackClick -> {
+                    navigator.pop()
+                }
             }
         }
 
         return PhotoDetailUiState(
             isLoading = isLoading,
-            toastMessage = toastMessage,
             imageUriString = imageUriString,
             imageDescription = imageDescription,
+            sideEffect = sideEffect,
             eventSink = ::handleEvent,
         )
     }

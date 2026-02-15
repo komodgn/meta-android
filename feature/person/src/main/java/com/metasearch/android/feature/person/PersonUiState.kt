@@ -1,22 +1,34 @@
 package com.metasearch.android.feature.person
 
+import androidx.compose.runtime.Immutable
+import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.model.PersonModel
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
+import java.util.UUID
 
 data class PersonUiState(
     val isLoading: Boolean = false,
     val inputPersonNameString: String = "",
     val showDeleteDialog: Boolean = false,
     val pendingDeletePersonName: String = "",
-    val showToast: Boolean = false,
-    val toastMessage: String? = null,
     val people: List<PersonModel> = emptyList(),
+    val sideEffect: PersonSideEffect? = null,
     val eventSink: (PersonUiEvent) -> Unit,
 ) : CircuitUiState
 
+@Immutable
+sealed interface PersonSideEffect {
+    data class ShowToast(
+        val message: UiText,
+        private val key: String = UUID.randomUUID().toString(),
+    ) : PersonSideEffect
+}
+
 sealed interface PersonUiEvent : CircuitUiEvent {
+    data object InitSideEffect : PersonUiEvent
+
     /**
      * 입력 텍스트 동기화
      */
@@ -51,6 +63,4 @@ sealed interface PersonUiEvent : CircuitUiEvent {
     data class OnTabClick(
         val screen: Screen,
     ) : PersonUiEvent
-
-    data object HideToast : PersonUiEvent
 }

@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
-import com.metasearch.android.core.designsystem.component.MetaSearchToast
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.MetaSearchScaffold
@@ -36,8 +35,8 @@ fun NLSearchUi(
     modifier: Modifier = Modifier,
     state: NLSearchUiState,
 ) {
-    NLSearchToastEffect(
-        toastMessage = state.toastMessage,
+    NLSearchSideEffect(
+        state = state,
         eventSink = state.eventSink,
     )
 
@@ -116,11 +115,6 @@ private fun NLSearchUiContent(
                 }
             }
         }
-
-        MetaSearchToast(
-            isVisible = state.toastMessage != null,
-            message = state.toastMessage,
-        )
     }
 }
 
