@@ -7,9 +7,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import com.metasearch.android.core.common.extensions.toFile
+import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.common.utils.handleException
 import com.metasearch.android.core.data.api.repository.SearchRepository
 import com.metasearch.android.core.model.CircleModel
@@ -26,6 +26,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -49,23 +51,37 @@ class FocusingSearchPresenter @AssistedInject constructor(
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
 
+        var sideEffect by remember {
+            mutableStateOf<FocusingSearchSideEffect?>(
+                FocusingSearchSideEffect.ShowToast(
+                    message = UiText.StringResource(R.string.focusing_search_screen_toast_guide),
+                ),
+            )
+        }
         var isLoading by remember { mutableStateOf(false) }
         var searchJob by remember { mutableStateOf<Job?>(null) }
-        val toastInit = stringResource(R.string.focusing_search_screen_toast_guide)
-        val errorMinCircles = stringResource(R.string.focusing_search_screen_toast_error_min_circles)
-        val errorMaxCircles = stringResource(R.string.focusing_search_screen_toast_error_max_circles)
-        var toastMessage by remember { mutableStateOf<String?>(toastInit) }
 
-        val imageUriString by rememberRetained { mutableStateOf(screen.imageUriString) }
-        var circles by rememberRetained { mutableStateOf(listOf<CircleModel>()) }
-        var searchResult by rememberRetained { mutableStateOf<SearchResult?>(null) }
-        val emptyResultMessage = stringResource(R.string.search_screen_empty_result_message)
+        val imageUriString by rememberRetained {
+            mutableStateOf(screen.imageUriString)
+        }
+        var circles by rememberRetained {
+            mutableStateOf<PersistentList<CircleModel>>(persistentListOf())
+        }
+        var searchResult by rememberRetained {
+            mutableStateOf<SearchResult?>(null)
+        }
 
         fun handleEvent(event: FocusingSearchUiEvent) {
             when (event) {
+                FocusingSearchUiEvent.InitSideEffect -> {
+                    sideEffect = null
+                }
+
                 FocusingSearchUiEvent.OnSearchClick -> {
                     if (circles.isEmpty()) {
-                        handleEvent(FocusingSearchUiEvent.ShowToast(errorMinCircles))
+                        sideEffect = FocusingSearchSideEffect.ShowToast(
+                            message = UiText.StringResource(R.string.focusing_search_screen_toast_error_min_circles),
+                        )
                         return
                     }
 
@@ -80,14 +96,20 @@ class FocusingSearchPresenter @AssistedInject constructor(
                         searchRepository.focusingSearch(file, circles)
                             .onSuccess { result ->
                                 if (result.groups.isEmpty()) {
-                                    toastMessage = emptyResultMessage
+                                    sideEffect = FocusingSearchSideEffect.ShowToast(
+                                        message = UiText.StringResource(R.string.search_screen_empty_result_message),
+                                    )
                                 } else {
                                     searchResult = result
                                 }
                             }.onFailure { exception ->
                                 handleException(
                                     exception = exception,
-                                    onError = { message -> toastMessage = message },
+                                    onError = { message ->
+                                        sideEffect = FocusingSearchSideEffect.ShowToast(
+                                            message = UiText.DynamicString(message),
+                                        )
+                                    },
                                 )
                             }
 
@@ -98,16 +120,20 @@ class FocusingSearchPresenter @AssistedInject constructor(
 
                 is FocusingSearchUiEvent.OnCircleAdded -> {
                     if (circles.size >= 3) {
-                        handleEvent(FocusingSearchUiEvent.ShowToast(errorMaxCircles))
+                        sideEffect = FocusingSearchSideEffect.ShowToast(
+                            UiText.StringResource(R.string.focusing_search_screen_toast_error_max_circles),
+                        )
                     } else {
-                        circles = circles + event.circle
+                        circles = circles.add(event.circle)
                     }
                 }
 
-                is FocusingSearchUiEvent.OnImageClick -> navigator.goTo(PhotoDetailScreen(event.imageUriString))
+                is FocusingSearchUiEvent.OnImageClick -> {
+                    navigator.goTo(PhotoDetailScreen(event.imageUriString))
+                }
 
                 FocusingSearchUiEvent.OnCircleResetClick -> {
-                    circles = emptyList()
+                    circles = persistentListOf()
                     searchResult = null
                 }
 
@@ -118,20 +144,18 @@ class FocusingSearchPresenter @AssistedInject constructor(
                     navigator.pop()
                 }
 
-                FocusingSearchUiEvent.HideToast -> toastMessage = null
-
-                is FocusingSearchUiEvent.ShowToast -> toastMessage = event.message
-
-                is FocusingSearchUiEvent.OnMoreClick -> navigator.goTo(GraphDetailScreen(event.categoryName))
+                is FocusingSearchUiEvent.OnMoreClick -> {
+                    navigator.goTo(GraphDetailScreen(event.categoryName))
+                }
             }
         }
 
         return FocusingSearchUiState(
             isLoading = isLoading,
-            toastMessage = toastMessage,
             imageUriString = imageUriString,
             circles = circles,
             searchResult = searchResult,
+            sideEffect = sideEffect,
             eventSink = ::handleEvent,
         )
     }
