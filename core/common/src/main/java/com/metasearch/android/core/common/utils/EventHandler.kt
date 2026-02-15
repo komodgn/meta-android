@@ -18,6 +18,10 @@ sealed interface MetaSearchEvent {
     data class ShowDialog(
         val dialogSpec: MetaSearchDialogSpec,
     ) : MetaSearchEvent
+
+    data class ShowToast(
+        val message: String,
+    ) : MetaSearchEvent
 }
 
 data class MetaSearchDialogSpec(
