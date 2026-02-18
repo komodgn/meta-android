@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
+import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.data.api.repository.GraphRepository
 import com.metasearch.android.feature.screens.GraphScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
@@ -36,11 +36,10 @@ class GraphPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): GraphUiState {
+        val coroutineScope = rememberCoroutineScope()
+        var sideEffect by remember { mutableStateOf<GraphSideEffect?>(null) }
         var webViewUrl by rememberRetained { mutableStateOf("") }
         var selectedImages by rememberRetained { mutableStateOf(listOf<String>()) }
-        var errorMessage by remember { mutableStateOf("") }
-        val coroutineScope = rememberCoroutineScope()
-        val imageNotFoundMessage = stringResource(R.string.graph_screen_image_not_found_error)
         val maxImages = 10
 
         LaunchedEffect(Unit) {
@@ -49,6 +48,10 @@ class GraphPresenter @AssistedInject constructor(
 
         fun handleEvent(event: GraphUiEvent) {
             when (event) {
+                GraphUiEvent.InitSideEffect -> {
+                    sideEffect = null
+                }
+
                 is GraphUiEvent.OnPhotoSelected -> {
                     coroutineScope.launch {
                         val uri = graphRepository.findMatchedUri(event.photoName)
@@ -58,7 +61,9 @@ class GraphPresenter @AssistedInject constructor(
                                 selectedImages = (listOf(uriString) + selectedImages).take(maxImages)
                             }
                         } else {
-                            errorMessage = imageNotFoundMessage
+                            sideEffect = GraphSideEffect.ShowToast(
+                                message = UiText.StringResource(R.string.graph_screen_image_not_found_error)
+                            )
                         }
                     }
                 }
@@ -67,16 +72,16 @@ class GraphPresenter @AssistedInject constructor(
                     navigator.goTo(PhotoDetailScreen(event.uriString))
                 }
 
-                GraphUiEvent.OnErrorDialogDismiss -> errorMessage = ""
-
-                is GraphUiEvent.OnTabClick -> navigator.resetRoot(event.screen)
+                is GraphUiEvent.OnTabClick -> {
+                    navigator.resetRoot(event.screen)
+                }
             }
         }
 
         return GraphUiState(
             webViewUrl = webViewUrl,
             selectedImages = selectedImages,
-            errorMessage = errorMessage,
+            sideEffect = sideEffect,
             eventSink = ::handleEvent,
         )
     }

@@ -46,6 +46,11 @@ fun GraphUi(
     modifier: Modifier = Modifier,
     state: GraphUiState,
 ) {
+    GraphSideEffect(
+        state = state,
+        eventSink = state.eventSink,
+    )
+
     MetaSearchScaffold(
         modifier = modifier,
         bottomBar = {
@@ -62,15 +67,6 @@ fun GraphUi(
             state = state,
             innerPadding = innerPadding,
         )
-
-        if (state.errorMessage.isNotBlank()) {
-            MetaSearchDialog(
-                title = stringResource(R.string.graph_screen_dialog_title),
-                onConfirmRequest = { state.eventSink(GraphUiEvent.OnErrorDialogDismiss) },
-                content = { Text(state.errorMessage) },
-                confirmButtonText = stringResource(R.string.graph_screen_dialog_close_button),
-            )
-        }
     }
 }
 
