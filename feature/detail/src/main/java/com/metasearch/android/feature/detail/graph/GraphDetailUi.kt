@@ -29,7 +29,6 @@ import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.MetaSearchScaffold
-import com.metasearch.android.core.ui.component.MetaSearchDialog
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.screens.GraphDetailScreen
@@ -42,6 +41,11 @@ fun GraphDetailUi(
     modifier: Modifier = Modifier,
     state: GraphDetailUiState,
 ) {
+    GraphDetailSideEffect(
+        state = state,
+        eventSink = state.eventSink,
+    )
+
     MetaSearchScaffold(
         modifier = modifier,
     ) { innerPadding ->
@@ -49,15 +53,6 @@ fun GraphDetailUi(
             state = state,
             innerPadding = innerPadding,
         )
-
-        if (state.errorMessage.isNotBlank()) {
-            MetaSearchDialog(
-                title = stringResource(R.string.graph_detail_screen_dialog_title),
-                onConfirmRequest = { state.eventSink(GraphDetailUiEvent.OnErrorDialogDismiss) },
-                content = { Text(state.errorMessage) },
-                confirmButtonText = stringResource(R.string.graph_detail_screen_dialog_close_button),
-            )
-        }
     }
 }
 

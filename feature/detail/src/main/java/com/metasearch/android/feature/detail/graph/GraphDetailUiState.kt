@@ -1,16 +1,29 @@
 package com.metasearch.android.feature.detail.graph
 
+import androidx.compose.runtime.Immutable
+import com.metasearch.android.core.common.utils.UiText
 import com.slack.circuit.runtime.CircuitUiState
+import java.util.UUID
 
 data class GraphDetailUiState(
     val isLoading: Boolean = false,
-    val errorMessage: String = "",
     val webViewUrl: String = "",
     val selectedImages: List<String> = emptyList(),
+    val sideEffect: GraphDetailSideEffect? = null,
     val eventSink: (GraphDetailUiEvent) -> Unit,
 ) : CircuitUiState
 
+@Immutable
+sealed interface GraphDetailSideEffect {
+    data class ShowToast(
+        val message: UiText,
+        private val key: String = UUID.randomUUID().toString(),
+    ) : GraphDetailSideEffect
+}
+
 sealed interface GraphDetailUiEvent {
+    data object InitSideEffect : GraphDetailUiEvent
+
     data class OnPhotoSelected(
         val photoName: String,
     ) : GraphDetailUiEvent
@@ -26,6 +39,4 @@ sealed interface GraphDetailUiEvent {
     data class OnImageClick(
         val uriString: String,
     ) : GraphDetailUiEvent
-
-    data object OnErrorDialogDismiss : GraphDetailUiEvent
 }
