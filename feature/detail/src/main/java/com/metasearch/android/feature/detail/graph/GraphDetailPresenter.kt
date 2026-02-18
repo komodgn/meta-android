@@ -65,13 +65,17 @@ class GraphDetailPresenter @AssistedInject constructor(
                     }
                 }
 
-                GraphDetailUiEvent.OnBackClick -> navigator.pop()
+                GraphDetailUiEvent.OnBackClick -> {
+                    navigator.pop()
+                }
 
                 is GraphDetailUiEvent.OnImageClick -> {
                     navigator.goTo(PhotoDetailScreen(event.uriString))
                 }
 
-                GraphDetailUiEvent.OnErrorDialogDismiss -> errorMessage = ""
+                GraphDetailUiEvent.OnErrorDialogDismiss -> {
+                    errorMessage = ""
+                }
             }
         }
 
