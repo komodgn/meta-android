@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
 import androidx.paging.cachedIn
 import androidx.work.Constraints
@@ -50,6 +51,7 @@ class HomePresenter @AssistedInject constructor(
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
 
+        var sideEffect by remember { mutableStateOf<HomeSideEffect?>(null) }
         var isPersonLoading by remember { mutableStateOf(false) }
         val isAnalyzing by remember(context) {
             imageAnalysisRepository.getAnalysisStatus(context)
@@ -62,6 +64,8 @@ class HomePresenter @AssistedInject constructor(
         val galleryPagingFlow = remember {
             galleryRepository.getGalleryPagingData().cachedIn(scope)
         }
+        var selectedLongClickImage by remember { mutableStateOf<String?>(null) }
+        var selectedOffset by remember { mutableStateOf(Offset.Zero) }
 
         LaunchedEffect(localPersons) {
             displayPersons = localPersons
@@ -69,6 +73,10 @@ class HomePresenter @AssistedInject constructor(
 
         fun handleEvent(event: HomeUiEvent) {
             when (event) {
+                HomeUiEvent.InitSideEffect -> {
+                    sideEffect = null
+                }
+
                 HomeUiEvent.OnStartAnalysisClicked -> {
                     val constraints = Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -97,19 +105,39 @@ class HomePresenter @AssistedInject constructor(
                     }
                 }
 
-                is HomeUiEvent.OnPersonClick -> navigator.goTo(
-                    PersonDetailScreen(
-                        event.personId,
-                    ),
-                )
+                is HomeUiEvent.OnPersonClick -> {
+                    navigator.goTo(
+                        PersonDetailScreen(
+                            event.personId,
+                        ),
+                    )
+                }
 
-                is HomeUiEvent.OnImageClick -> navigator.goTo(
-                    PhotoDetailScreen(
-                        event.imageUriString,
-                    ),
-                )
+                is HomeUiEvent.OnImageClick -> {
+                    navigator.goTo(
+                        PhotoDetailScreen(
+                            event.imageUriString,
+                        ),
+                    )
+                }
 
-                is HomeUiEvent.OnTabClick -> navigator.resetRoot(event.screen)
+                is HomeUiEvent.OnImageLongClick -> {
+                    selectedLongClickImage = event.imageUriString
+                    selectedOffset = event.offSet
+                }
+
+                HomeUiEvent.OnLongClickCancel -> {
+                    selectedLongClickImage = null
+                }
+
+                is HomeUiEvent.OnShareRelease -> {
+                    sideEffect = HomeSideEffect.ShareImage(event.imageUriString)
+                    selectedLongClickImage = null
+                }
+
+                is HomeUiEvent.OnTabClick -> {
+                    navigator.resetRoot(event.screen)
+                }
             }
         }
 
@@ -119,6 +147,9 @@ class HomePresenter @AssistedInject constructor(
             isExpanded = isExpanded,
             persons = displayPersons,
             images = galleryPagingFlow,
+            selectedLongClickImage = selectedLongClickImage,
+            selectedOffset = selectedOffset,
+            sideEffect = sideEffect,
             eventSink = ::handleEvent,
         )
     }
