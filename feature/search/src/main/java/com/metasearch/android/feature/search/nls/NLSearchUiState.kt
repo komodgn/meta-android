@@ -1,18 +1,31 @@
 package com.metasearch.android.feature.search.nls
 
+import androidx.compose.runtime.Immutable
+import com.metasearch.android.core.common.utils.UiText
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
+import java.util.UUID
 
 data class NLSearchUiState(
     val isLoading: Boolean = false,
-    val toastMessage: String? = null,
     val inputString: String = "",
     val resultImages: List<String> = emptyList(),
+    val sideEffect: NLSearchSideEffect? = null,
     val eventSink: (NLSearchUiEvent) -> Unit,
 ) : CircuitUiState
 
+@Immutable
+sealed interface NLSearchSideEffect {
+    data class ShowToast(
+        val message: UiText,
+        private val key: String = UUID.randomUUID().toString(),
+    ) : NLSearchSideEffect
+}
+
 sealed interface NLSearchUiEvent : CircuitUiEvent {
+    data object InitSideEffect : NLSearchUiEvent
+
     /**
      * 입력 텍스트 동기화
      */
@@ -40,10 +53,4 @@ sealed interface NLSearchUiEvent : CircuitUiEvent {
     data class OnTabClick(
         val screen: Screen,
     ) : NLSearchUiEvent
-
-    data class ShowToast(
-        val message: String? = null,
-    ) : NLSearchUiEvent
-
-    data object HideToast : NLSearchUiEvent
 }

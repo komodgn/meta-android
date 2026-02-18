@@ -93,7 +93,9 @@ class PersonDetailPresenter @AssistedInject constructor(
 
         fun handleEvent(event: PersonDetailUiEvent) {
             when (event) {
-                PersonDetailUiEvent.OnHeaderBackClick -> navigator.pop()
+                PersonDetailUiEvent.OnHeaderBackClick -> {
+                    navigator.pop()
+                }
 
                 PersonDetailUiEvent.OnMenuClick -> {
                     person?.let {
@@ -116,13 +118,21 @@ class PersonDetailPresenter @AssistedInject constructor(
                     }
                 }
 
-                is PersonDetailUiEvent.OnEditHomeDisplayChange -> editIsHomeDisplay = event.isHomeDisplay
+                is PersonDetailUiEvent.OnEditHomeDisplayChange -> {
+                    editIsHomeDisplay = event.isHomeDisplay
+                }
 
-                is PersonDetailUiEvent.OnEditNameChange -> editName = event.name
+                is PersonDetailUiEvent.OnEditNameChange -> {
+                    editName = event.name
+                }
 
-                is PersonDetailUiEvent.OnEditPhoneChange -> editPhone = event.phone
+                is PersonDetailUiEvent.OnEditPhoneChange -> {
+                    editPhone = event.phone
+                }
 
-                PersonDetailUiEvent.OnEditCancel -> showEditDialog = false
+                PersonDetailUiEvent.OnEditCancel -> {
+                    showEditDialog = false
+                }
 
                 PersonDetailUiEvent.OnConfirmMergeSave -> {
                     scope.launch {
@@ -133,7 +143,9 @@ class PersonDetailPresenter @AssistedInject constructor(
                     }
                 }
 
-                PersonDetailUiEvent.OnDismissMergeDialog -> showMergeConfirmDialog = false
+                PersonDetailUiEvent.OnDismissMergeDialog -> {
+                    showMergeConfirmDialog = false
+                }
 
                 is PersonDetailUiEvent.OnEditThumbnailClick -> {
                     val currentPerson = person ?: return
@@ -147,11 +159,17 @@ class PersonDetailPresenter @AssistedInject constructor(
                     }
                 }
 
-                PersonDetailUiEvent.OnThumbnailClick -> showPhotoSelectDialog = true
+                PersonDetailUiEvent.OnThumbnailClick -> {
+                    showPhotoSelectDialog = true
+                }
 
-                PersonDetailUiEvent.OnPhotoSelectCancel -> showPhotoSelectDialog = false
+                PersonDetailUiEvent.OnPhotoSelectCancel -> {
+                    showPhotoSelectDialog = false
+                }
 
-                is PersonDetailUiEvent.OnGridImageClick -> navigator.goTo(PhotoDetailScreen(event.imageUri.toString()))
+                is PersonDetailUiEvent.OnGridImageClick -> {
+                    navigator.goTo(PhotoDetailScreen(event.imageUri.toString()))
+                }
             }
         }
 

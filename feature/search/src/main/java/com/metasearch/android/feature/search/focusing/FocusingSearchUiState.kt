@@ -1,20 +1,36 @@
 package com.metasearch.android.feature.search.focusing
 
+import androidx.compose.runtime.Immutable
+import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.model.CircleModel
 import com.metasearch.android.core.model.SearchResult
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import java.util.UUID
 
+@Immutable
 data class FocusingSearchUiState(
     val isLoading: Boolean = false,
-    val toastMessage: String? = null,
     val imageUriString: String,
-    val circles: List<CircleModel>? = emptyList(),
+    val circles: ImmutableList<CircleModel> = persistentListOf(),
     val searchResult: SearchResult? = null,
+    val sideEffect: FocusingSearchSideEffect? = null,
     val eventSink: (FocusingSearchUiEvent) -> Unit,
 ) : CircuitUiState
 
+@Immutable
+sealed interface FocusingSearchSideEffect {
+    data class ShowToast(
+        val message: UiText,
+        private val key: String = UUID.randomUUID().toString(),
+    ) : FocusingSearchSideEffect
+}
+
 sealed interface FocusingSearchUiEvent : CircuitUiEvent {
+    data object InitSideEffect : FocusingSearchUiEvent
+
     /**
      * 드래그 완료 시, 원 추가
      */
@@ -55,10 +71,4 @@ sealed interface FocusingSearchUiEvent : CircuitUiEvent {
     data class OnImageClick(
         val imageUriString: String,
     ) : FocusingSearchUiEvent
-
-    data class ShowToast(
-        val message: String? = null,
-    ) : FocusingSearchUiEvent
-
-    data object HideToast : FocusingSearchUiEvent
 }

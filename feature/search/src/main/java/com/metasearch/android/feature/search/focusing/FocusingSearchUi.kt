@@ -13,7 +13,6 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
@@ -23,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import coil3.compose.AsyncImage
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
-import com.metasearch.android.core.designsystem.component.MetaSearchToast
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.model.CircleModel
 import com.metasearch.android.core.model.PhotoGroup
@@ -47,8 +45,8 @@ fun FocusingSearchUi(
     modifier: Modifier = Modifier,
     state: FocusingSearchUiState,
 ) {
-    FocusingSearchToastEffect(
-        toastMessage = state.toastMessage,
+    FocusingSearchSideEffect(
+        state = state,
         eventSink = state.eventSink,
     )
 
@@ -151,12 +149,6 @@ private fun FocusingSearchUiContent(
                 currentCenter = currentCenter,
                 currentRadius = currentRadius,
                 canvasSize = size,
-            )
-
-            MetaSearchToast(
-                isVisible = state.toastMessage != null,
-                message = state.toastMessage ?: "",
-                modifier = Modifier.align(Alignment.Center),
             )
         }
 
