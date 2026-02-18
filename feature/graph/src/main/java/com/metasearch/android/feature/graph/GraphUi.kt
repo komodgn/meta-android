@@ -32,7 +32,6 @@ import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.MetaSearchScaffold
-import com.metasearch.android.core.ui.component.MetaSearchDialog
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.feature.screens.GraphScreen
 import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar

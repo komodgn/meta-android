@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.metasearch.android.core.common.extensions.clickableIfNotNull
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 
@@ -26,7 +25,7 @@ fun MetaSearchSquareImage(
             .padding(1.dp)
             .combinedClickable(
                 onClick = { onClick?.invoke() },
-                onLongClick = { onLongClick?.invoke() }
+                onLongClick = { onLongClick?.invoke() },
             ),
         model = model,
         contentScale = ContentScale.Crop,

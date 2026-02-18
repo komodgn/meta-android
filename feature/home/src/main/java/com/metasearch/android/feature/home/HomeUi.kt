@@ -125,7 +125,7 @@ fun HomeUi(
                             .offset {
                                 IntOffset(
                                     x = (state.selectedOffset.x + 20).toInt(),
-                                    y = (state.selectedOffset.y - 120).toInt()
+                                    y = (state.selectedOffset.y - 120).toInt(),
                                 )
                             }
                             .size(50.dp)

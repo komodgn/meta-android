@@ -62,7 +62,7 @@ class GraphPresenter @AssistedInject constructor(
                             }
                         } else {
                             sideEffect = GraphSideEffect.ShowToast(
-                                message = UiText.StringResource(R.string.graph_screen_image_not_found_error)
+                                message = UiText.StringResource(R.string.graph_screen_image_not_found_error),
                             )
                         }
                     }
