@@ -20,6 +20,10 @@ sealed interface PhotoDetailSideEffect {
         val message: UiText,
         private val key: String = UUID.randomUUID().toString(),
     ) : PhotoDetailSideEffect
+
+    data class ShareImage(
+        val uriString: String,
+    ) : PhotoDetailSideEffect
 }
 
 sealed interface PhotoDetailUiEvent : CircuitUiEvent {

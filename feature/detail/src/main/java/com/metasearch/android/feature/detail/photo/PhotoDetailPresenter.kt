@@ -94,7 +94,11 @@ class PhotoDetailPresenter @AssistedInject constructor(
                     )
                 }
 
-                is PhotoDetailUiEvent.OnShareImageButtonClick -> TODO()
+                is PhotoDetailUiEvent.OnShareImageButtonClick -> {
+                    sideEffect = PhotoDetailSideEffect.ShareImage(
+                        uriString = event.imageUriString,
+                    )
+                }
 
                 PhotoDetailUiEvent.OnBackClick -> {
                     navigator.pop()

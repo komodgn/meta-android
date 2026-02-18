@@ -69,7 +69,9 @@ fun PhotoDetailUi(
                         PhotoDetailBottomBarItem.FOCUSING_SEARCH -> {
                             state.eventSink(PhotoDetailUiEvent.OnFocusingSearchClick(state.imageUriString))
                         }
-                        PhotoDetailBottomBarItem.SHARE -> TODO()
+                        PhotoDetailBottomBarItem.SHARE -> {
+                            state.eventSink(PhotoDetailUiEvent.OnShareImageButtonClick(state.imageUriString))
+                        }
                     }
                 },
             )
