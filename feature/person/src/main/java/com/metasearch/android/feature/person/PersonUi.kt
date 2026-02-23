@@ -17,12 +17,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.model.PersonModel
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchDialog
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.feature.person.component.PersonItem
 import com.metasearch.android.feature.person.component.PersonSearchTextField
+import com.metasearch.android.feature.person.mock.personUiStateMock
 import com.metasearch.android.feature.screens.PersonScreen
 import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
 import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
@@ -132,36 +132,17 @@ private fun PersonUiContent(
 private fun PersonUiPreview() {
     MetaSearchTheme {
         PersonUi(
-            state = PersonUiState(
-                showDeleteDialog = true,
-                people = listOf(
-                    PersonModel(
-                        id = 1L,
-                        name = "춘식이",
-                        inputName = "춘식이",
-                        isHomeDisplay = true,
-                    ),
-                    PersonModel(
-                        id = 2L,
-                        name = "춘식이2",
-                        inputName = "춘식이2",
-                        isHomeDisplay = true,
-                    ),
-                    PersonModel(
-                        id = 3L,
-                        name = "춘식이3",
-                        inputName = "춘식이3",
-                        isHomeDisplay = true,
-                    ),
-                    PersonModel(
-                        id = 4L,
-                        name = "춘식이4",
-                        inputName = "춘식이4",
-                        isHomeDisplay = true,
-                    ),
-                ),
-                eventSink = {},
-            ),
+            state = personUiStateMock,
+        )
+    }
+}
+
+@DevicePreview
+@Composable
+private fun PersonUiDeleteDialogPreview() {
+    MetaSearchTheme {
+        PersonUi(
+            state = personUiStateMock.copy(showDeleteDialog = true),
         )
     }
 }

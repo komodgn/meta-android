@@ -24,8 +24,6 @@ import coil3.compose.AsyncImage
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.model.CircleModel
-import com.metasearch.android.core.model.PhotoGroup
-import com.metasearch.android.core.model.SearchResult
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
@@ -35,6 +33,7 @@ import com.metasearch.android.feature.search.focusing.component.DrawingCanvas
 import com.metasearch.android.feature.search.focusing.component.FocusingSearchBottomBar
 import com.metasearch.android.feature.search.focusing.component.FocusingSearchBottomBarItem
 import com.metasearch.android.feature.search.focusing.component.SearchResultList
+import com.metasearch.android.feature.search.focusing.mock.focusingSearchUiStateMock
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
 import kotlin.math.sqrt
@@ -170,29 +169,19 @@ private fun FocusingSearchUiContent(
 @DevicePreview
 @Composable
 private fun FocusingSearchUiPreview() {
-    val fakeGroups = listOf(
-        PhotoGroup(
-            categoryName = "# 고양이 # 노트북",
-            photoNames = listOf("https://picsum.photos/200", "https://picsum.photos/201", "https://picsum.photos/202", "https://picsum.photos/203"),
-        ),
-        PhotoGroup(
-            categoryName = "# 고양이",
-            photoNames = listOf("https://picsum.photos/200", "https://picsum.photos/201", "https://picsum.photos/202", "https://picsum.photos/203"),
-        ),
-        PhotoGroup(
-            categoryName = "# 노트북",
-            photoNames = listOf("https://picsum.photos/204", "https://picsum.photos/205"),
-        ),
-    )
-    val fakeSearchResult = SearchResult(groups = fakeGroups)
-
     MetaSearchTheme {
         FocusingSearchUi(
-            state = FocusingSearchUiState(
-                imageUriString = "",
-                searchResult = fakeSearchResult,
-                eventSink = {},
-            ),
+            state = focusingSearchUiStateMock,
+        )
+    }
+}
+
+@DevicePreview
+@Composable
+private fun FocusingSearchUiLoadingPreview() {
+    MetaSearchTheme {
+        FocusingSearchUi(
+            state = focusingSearchUiStateMock.copy(isLoading = true),
         )
     }
 }

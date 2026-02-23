@@ -26,7 +26,6 @@ import androidx.compose.ui.window.Dialog
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
-import com.metasearch.android.core.model.PersonModel
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchCircleImage
 import com.metasearch.android.core.ui.component.MetaSearchDialog
@@ -35,6 +34,7 @@ import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.detail.person.component.PersonDetailHeader
 import com.metasearch.android.feature.detail.person.component.PersonEditDialogContent
+import com.metasearch.android.feature.detail.person.mock.personDetailUiStateMock
 import com.metasearch.android.feature.screens.PersonDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
@@ -186,16 +186,27 @@ private fun PersonDetailContent(
 private fun PersonDetailUiPreview() {
     MetaSearchTheme {
         PersonDetailUi(
-            state = PersonDetailUiState(
-                isLoading = false,
-                person = PersonModel(
-                    id = 1L,
-                    name = "춘식이",
-                    inputName = "춘식이",
-                ),
-                showPhotoSelectDialog = false,
-                eventSink = {},
-            ),
+            state = personDetailUiStateMock,
+        )
+    }
+}
+
+@DevicePreview
+@Composable
+private fun PersonDetailUiEditDialogPreview() {
+    MetaSearchTheme {
+        PersonDetailUi(
+            state = personDetailUiStateMock.copy(showEditDialog = true),
+        )
+    }
+}
+
+@DevicePreview
+@Composable
+private fun PersonDetailUiProfileSelectPreview() {
+    MetaSearchTheme {
+        PersonDetailUi(
+            state = personDetailUiStateMock.copy(showPhotoSelectDialog = true),
         )
     }
 }
