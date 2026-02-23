@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.metasearch.android.core.common.extensions.clickableIfNotNull
+import com.metasearch.android.core.common.extensions.previewPlaceholder
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.LightGrey
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
@@ -31,6 +32,7 @@ fun MetaSearchCircleImage(
             .size(size)
             .clip(CircleShape)
             .border(borderWidth, borderColor, CircleShape)
+            .previewPlaceholder()
             .clickableIfNotNull(onClick),
         model = model,
         contentDescription = contentDescription,
