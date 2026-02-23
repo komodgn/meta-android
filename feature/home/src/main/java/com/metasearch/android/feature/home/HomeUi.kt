@@ -44,7 +44,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.paging.LoadState
-import androidx.paging.PagingData.Companion.from
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import coil3.compose.AsyncImage
@@ -52,18 +51,17 @@ import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
-import com.metasearch.android.core.model.GalleryImageModel
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
 import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 import com.metasearch.android.feature.home.component.HomeHeader
 import com.metasearch.android.feature.home.component.PersonCircleItem
+import com.metasearch.android.feature.home.mock.homeUiStateMock
 import com.metasearch.android.feature.screens.HomeScreen
 import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
 import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
-import kotlinx.coroutines.flow.flowOf
 
 @CircuitInject(HomeScreen::class, ActivityRetainedComponent::class)
 @Composable
@@ -290,64 +288,30 @@ private fun HomeUiContent(
 @Composable
 private fun HomeUiPreview() {
     MetaSearchTheme {
-        val fakeImages = List(20) { index ->
-            GalleryImageModel(
-                id = index.toLong(),
-                uriString = "android.resource://com.example.metasearch/drawable/ic_launcher_foreground",
-                dateAdded = System.currentTimeMillis(),
-            )
-        }
-
         HomeUi(
-            state = HomeUiState(
-                isExpanded = true,
-                persons = emptyList(),
-//                persons = listOf(
-//                    PersonModel(
-//                        id = 1L,
-//                        name = "person1",
-//                        inputName = "할미쬬",
-//                        faces = listOf(
-//                            FaceModel(
-//                                id = 101L,
-//                                personId = 1L,
-//                                imageName = "face1.jpg",
-//                                imageData = byteArrayOf(),
-//                            ),
-//                        ),
-//                        isHomeDisplay = true,
-//                    ),
-//                    PersonModel(
-//                        id = 2L,
-//                        name = "person2",
-//                        inputName = "춘식이",
-//                        faces = listOf(
-//                            FaceModel(
-//                                id = 102L,
-//                                personId = 2L,
-//                                imageName = "face2.jpg",
-//                                imageData = byteArrayOf(),
-//                            ),
-//                        ),
-//                        isHomeDisplay = true,
-//                    ),
-//                    PersonModel(
-//                        id = 3L,
-//                        name = "person3",
-//                        inputName = "춘구마",
-//                        faces = listOf(
-//                            FaceModel(
-//                                id = 103L,
-//                                personId = 3L,
-//                                imageName = "face3.jpg",
-//                                imageData = byteArrayOf(),
-//                            ),
-//                        ),
-//                        isHomeDisplay = true,
-//                    ),
-//                ),
-                images = flowOf(from(fakeImages)),
-                eventSink = {},
+            state = homeUiStateMock,
+        )
+    }
+}
+
+@DevicePreview
+@Composable
+private fun HomeUiCollapsedPreview() {
+    MetaSearchTheme {
+        HomeUi(
+            state = homeUiStateMock.copy(isExpanded = false),
+        )
+    }
+}
+
+@DevicePreview
+@Composable
+private fun HomeUiLongClickPreview() {
+    MetaSearchTheme {
+        HomeUi(
+            state = homeUiStateMock.copy(
+                selectedLongClickImage = "https://picsum.photos/200",
+                selectedOffset = Offset(200f, 800f),
             ),
         )
     }
