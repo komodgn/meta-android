@@ -102,32 +102,30 @@ internal class SearchRepositoryImpl @Inject constructor(
         if (query.isBlank()) return@runSuspendCatching NLSearchResult(emptyList())
 
         coroutineScope {
-            val dbNameDeferred = async { databaseNameRepository.getPersistentDeviceDatabaseName() }
-            val openAIResponseDeferred = async {
-                val fullPrompt = PromptConstants.NL_SEARCH_BASIC_PROMPT + query
-                openAIService.createChatCompletion(
-                    request = OpenAIRequest(
-                        model = "gpt-3.5-turbo",
-                        messages = listOf(OpenAIMessage(role = "user", content = fullPrompt)),
-                    ),
-                )
-            }
+            val openAIResponse = openAIService.createChatCompletion(
+                request = OpenAIRequest(
+                    model = "gpt-3.5-turbo",
+                    messages = listOf(OpenAIMessage(role = "user", content = PromptConstants.NL_SEARCH_BASIC_PROMPT + query)),
+                ),
+            )
 
-            val openAIResponse = openAIResponseDeferred.await()
             val text = openAIResponse.choices.firstOrNull()?.message?.content?.trim() ?: ""
-
             if (text == "0" || text.isEmpty()) return@coroutineScope NLSearchResult(emptyList())
 
-            val entities = text.split(",").map { it.trim() }.sorted()
+            val entities = text.split(",")
+                .map { it.trim() }
+                .filter { it.isNotBlank() }
+                .distinct()
+                .sorted()
+
             val entityKey = entities.joinToString(",")
 
             entityCache.get(entityKey)?.let { cachedUris ->
-                val result = NLSearchResult(cachedUris)
-                return@coroutineScope result
+                return@coroutineScope NLSearchResult(cachedUris)
             }
 
             val neo4jQuery = CypherQueryGenerator.generateQueryByKeywords(keywords = entities)
-            val dbName = dbNameDeferred.await()
+            val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
             val response = webService.sendCypherQuery(
                 request = NLQueryRequest(
                     dbName = dbName,
