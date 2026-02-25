@@ -1,0 +1,7 @@
+<resources>
+    <string name="graph_screen_header">Explore</string>
+    <string name="graph_screen_bottom_selected_image_label">Navigation images</string>
+    <string name="graph_screen_dialog_close_button">OK</string>
+    <string name="graph_screen_dialog_title">NOTE</string>
+    <string name="graph_screen_image_not_found_error">No photos found.</string>
+</resources>

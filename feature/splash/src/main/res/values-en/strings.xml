@@ -1,0 +1,5 @@
+<resources>
+    <string name="permission_dialog_title">Permission Requests</string>
+    <string name="permission_dialog_content">To use the app\'s features, permissions such as photos, contacts, etc. are required. Please allow it in your settings.</string>
+    <string name="confirm_settings">Go to Settings</string>
+</resources>

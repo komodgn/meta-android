@@ -1,0 +1,6 @@
+<resources>
+    <string name="home_screen_header">Visualize Me By Photo</string>
+    <string name="home_screen_person_scroll_view_title">People I Like</string>
+    <string name="home_screen_person_scroll_view_empty_content">Analyze the image and fill it with people you like.</string>
+    <string name="home_screen_gallery_grid_view_title">Gallery photo (%d)</string>
+</resources>

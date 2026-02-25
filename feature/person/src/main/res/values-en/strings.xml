@@ -1,0 +1,8 @@
+<resources>
+    <string name="person_screen_header">People</string>
+    <string name="person_search_text_field_placeholder">Enter a name</string>
+    <string name="person_delete_dialog_title">Confirm the deletion of people</string>
+    <string name="person_delete_dialog_content">Should I remove %s\' from the list of people\?</string>
+    <string name="person_delete_dialog_confirm_button">Delete</string>
+    <string name="person_delete_dialog_cancel_button">Cancellation</string>
+</resources>

@@ -1,0 +1,16 @@
+<resources>
+    <string name="nl_search_screen_header">Search</string>
+    <string name="nl_search_text_field_placeholder">Food photos taken in Seoul on a summer night</string>
+    <string name="nl_search_screen_result_label">Search results</string>
+
+    <string name="search_screen_empty_result_message">No search results.</string>
+
+    <string name="focusing_search_screen_header">Drag search</string>
+    <string name="focusing_search_screen_toast_guide">Drag to draw a circle.</string>
+    <string name="focusing_search_screen_toast_error_min_circles">Draw at least 1 circle.</string>
+    <string name="focusing_search_screen_toast_error_max_circles">You can only draw up to 3 circles.</string>
+    <string name="focusing_search_button_text">Search</string>
+    <string name="focusing_search_more_button">Read more+</string>
+    <string name="focusing_search_change_circle_color_button">Color change</string>
+    <string name="focusing_search_circle_reset_button">Redraw</string>
+</resources>
