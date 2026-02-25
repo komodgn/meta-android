@@ -41,6 +41,13 @@ internal class SearchRepositoryImpl @Inject constructor(
     private val databaseNameRepository: DatabaseNameRepository,
 ) : SearchRepository {
 
+    companion object {
+        private const val AI_MODEL_NAME = "gpt-3.5-turbo"
+        private const val CACHE_SIZE = 30
+    }
+
+    private val entityCache = androidx.collection.LruCache<String, List<String>>(CACHE_SIZE)
+
     override suspend fun focusingSearch(
         imageFile: File,
         circles: List<CircleModel>,
@@ -100,39 +107,49 @@ internal class SearchRepositoryImpl @Inject constructor(
     ): Result<NLSearchResult> = runSuspendCatching {
         if (query.isBlank()) return@runSuspendCatching NLSearchResult(emptyList())
 
-        coroutineScope {
-            val dbNameDeferred = async { databaseNameRepository.getPersistentDeviceDatabaseName() }
-            val openAIResponseDeferred = async {
-                val fullPrompt = PromptConstants.NL_SEARCH_BASIC_PROMPT + query
-                openAIService.createChatCompletion(
-                    request = OpenAIRequest(
-                        model = "gpt-3.5-turbo",
-                        messages = listOf(OpenAIMessage(role = "user", content = fullPrompt)),
-                    ),
-                )
-            }
+        val openAIResponse = openAIService.createChatCompletion(
+            request = OpenAIRequest(
+                model = AI_MODEL_NAME,
+                messages = listOf(OpenAIMessage(role = "user", content = PromptConstants.NL_SEARCH_BASIC_PROMPT + query)),
+            ),
+        )
 
-            val openAIResponse = openAIResponseDeferred.await()
-            val text = openAIResponse.choices.firstOrNull()?.message?.content?.trim() ?: ""
+        val text = openAIResponse.choices.firstOrNull()?.message?.content?.trim() ?: ""
+        if (text == "0" || text.isEmpty()) return@runSuspendCatching NLSearchResult(emptyList())
 
-            if (text == "0" || text.isEmpty()) return@coroutineScope NLSearchResult(emptyList())
+        val entities = text.split(",")
+            .map { it.trim() }
+            .filter { it.isNotBlank() }
+            .distinct()
+            .sorted()
 
-            val entities = text.split(",").map { it.trim() }
-            val neo4jQuery = CypherQueryGenerator.generateQueryByKeywords(keywords = entities)
+        val entityKey = entities.joinToString(",")
 
-            val dbName = dbNameDeferred.await()
-            val response = webService.sendCypherQuery(
-                request = NLQueryRequest(
-                    dbName = dbName,
-                    query = neo4jQuery,
-                ),
-            )
-
-            val photoNames = response.toModel()
-
-            val matchedUris = galleryRepository.findMatchedUris(photoNames)
-
-            NLSearchResult(matchedUris = matchedUris.map { it.toString() })
+        entityCache.get(entityKey)?.let { cachedUris ->
+            return@runSuspendCatching NLSearchResult(cachedUris)
         }
+
+        val neo4jQuery = CypherQueryGenerator.generateQueryByKeywords(keywords = entities)
+        val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
+        val response = webService.sendCypherQuery(
+            request = NLQueryRequest(
+                dbName = dbName,
+                query = neo4jQuery,
+            ),
+        )
+
+        val photoNames = response.toModel()
+
+        val matchedUris = galleryRepository.findMatchedUris(photoNames).map { it.toString() }
+
+        val finalResult = NLSearchResult(matchedUris = matchedUris)
+
+        entityCache.put(entityKey, matchedUris)
+
+        finalResult
+    }
+
+    override fun clearEntityCache() {
+        entityCache.evictAll()
     }
 }
