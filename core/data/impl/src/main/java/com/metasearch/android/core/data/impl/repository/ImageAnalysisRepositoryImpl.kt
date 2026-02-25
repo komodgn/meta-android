@@ -15,6 +15,7 @@ import com.metasearch.android.core.data.api.repository.DatabaseNameRepository
 import com.metasearch.android.core.data.api.repository.GalleryRepository
 import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
 import com.metasearch.android.core.data.api.repository.PersonRepository
+import com.metasearch.android.core.data.api.repository.SearchRepository
 import com.metasearch.android.core.datastore.api.datasource.PersonIndexDataSource
 import com.metasearch.android.core.network.request.ChangeNameRequest
 import com.metasearch.android.core.network.request.DeleteImageRequest
@@ -47,6 +48,7 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
     private val databaseNameRepository: DatabaseNameRepository,
     private val personIndexDataSource: PersonIndexDataSource,
     private val personRepository: PersonRepository,
+    private val searchRepository: SearchRepository,
     private val aiService: AIService,
     private val webService: WebService,
     private val openAIService: OpenAIService,
@@ -75,7 +77,10 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
         Log.d(tag, "5. 삭제 로직 시작")
-        deleteMissingImages(alreadyAnalyzedPaths, currentGalleryUrisString, dbName)
+        val deleteCount = deleteMissingImages(alreadyAnalyzedPaths, currentGalleryUrisString, dbName)
+        if (deleteCount > 0) {
+            searchRepository.clearEntityCache()
+        }
         Log.d(tag, "6. 삭제 로직 완료")
 
         val addUris = currentGalleryUris.filter { uri ->
@@ -93,6 +98,8 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
 
             if (allSuccessfulData.isNotEmpty()) {
                 processAnalysisFinish(allSuccessfulData, dbName)
+
+                searchRepository.clearEntityCache()
             }
         } else {
             Log.d(tag, "8. 추가할 이미지가 없어 종료함")
@@ -125,7 +132,11 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun deleteMissingImages(alreadyPaths: List<String>, currentPaths: List<String>, dbName: String) {
+    private suspend fun deleteMissingImages(
+        alreadyPaths: List<String>,
+        currentPaths: List<String>,
+        dbName: String
+    ): Int {
         val deletePaths = alreadyPaths.filter { it !in currentPaths }
         Log.d(tag, "삭제 대상 개수: ${deletePaths.size}개")
         deletePaths.forEachIndexed { index, pathString ->
@@ -150,6 +161,8 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
                 Log.e(tag, "삭제 실패 (Web: $webResult, AI: $aiResult): $pathString")
             }
         }
+
+        return deletePaths.size
     }
 
     private suspend fun uploadOnlyImageChunk(

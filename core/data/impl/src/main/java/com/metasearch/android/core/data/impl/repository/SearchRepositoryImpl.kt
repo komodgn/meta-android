@@ -40,6 +40,7 @@ internal class SearchRepositoryImpl @Inject constructor(
     private val personRepository: PersonRepository,
     private val databaseNameRepository: DatabaseNameRepository,
 ) : SearchRepository {
+    private val entityCache = androidx.collection.LruCache<String, List<String>>(30)
 
     override suspend fun focusingSearch(
         imageFile: File,
@@ -117,9 +118,15 @@ internal class SearchRepositoryImpl @Inject constructor(
 
             if (text == "0" || text.isEmpty()) return@coroutineScope NLSearchResult(emptyList())
 
-            val entities = text.split(",").map { it.trim() }
-            val neo4jQuery = CypherQueryGenerator.generateQueryByKeywords(keywords = entities)
+            val entities = text.split(",").map { it.trim() }.sorted()
+            val entityKey = entities.joinToString(",")
 
+            entityCache.get(entityKey)?.let { cachedUris ->
+                val result = NLSearchResult(cachedUris)
+                return@coroutineScope result
+            }
+
+            val neo4jQuery = CypherQueryGenerator.generateQueryByKeywords(keywords = entities)
             val dbName = dbNameDeferred.await()
             val response = webService.sendCypherQuery(
                 request = NLQueryRequest(
@@ -130,9 +137,17 @@ internal class SearchRepositoryImpl @Inject constructor(
 
             val photoNames = response.toModel()
 
-            val matchedUris = galleryRepository.findMatchedUris(photoNames)
+            val matchedUris = galleryRepository.findMatchedUris(photoNames).map { it.toString() }
 
-            NLSearchResult(matchedUris = matchedUris.map { it.toString() })
+            val finalResult = NLSearchResult(matchedUris = matchedUris)
+
+            entityCache.put(entityKey, matchedUris)
+
+            finalResult
         }
+    }
+
+    override fun clearEntityCache() {
+        entityCache.evictAll()
     }
 }

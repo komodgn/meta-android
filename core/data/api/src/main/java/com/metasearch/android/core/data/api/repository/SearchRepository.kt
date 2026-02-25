@@ -14,4 +14,6 @@ interface SearchRepository {
     suspend fun nlSearch(
         query: String,
     ): Result<NLSearchResult>
+
+    fun clearEntityCache()
 }
