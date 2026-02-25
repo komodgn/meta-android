@@ -135,7 +135,7 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
     private suspend fun deleteMissingImages(
         alreadyPaths: List<String>,
         currentPaths: List<String>,
-        dbName: String
+        dbName: String,
     ): Int {
         val deletePaths = alreadyPaths.filter { it !in currentPaths }
         Log.d(tag, "삭제 대상 개수: ${deletePaths.size}개")
