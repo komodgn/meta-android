@@ -11,4 +11,5 @@ object Plugins {
 
     const val KSP = "com.google.devtools.ksp"
     const val HILT = "dagger.hilt.android.plugin"
+    const val COMPOSE_STABILITY_ANALYZER = "com.github.skydoves.compose.stability.analyzer"
 }
