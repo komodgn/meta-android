@@ -1,19 +1,19 @@
 package com.metasearch.android.core.model
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 
-@Stable
+@Immutable
 data class SearchResult(
     val groups: List<PhotoGroup>,
 )
 
-@Stable
+@Immutable
 data class PhotoGroup(
     val categoryName: String,
     val photoNames: List<String>,
 )
 
-@Stable
+@Immutable
 data class NLSearchResult(
     val matchedUris: List<String>,
 )

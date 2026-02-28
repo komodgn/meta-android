@@ -1,8 +1,8 @@
 package com.metasearch.android.core.model
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 
-@Stable
+@Immutable
 data class CircleModel(
     val centerX: Float,
     val centerY: Float,
