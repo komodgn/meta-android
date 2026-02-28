@@ -41,6 +41,7 @@
 ### Code Quality
 - Ktlint
 - DeteKt
+- Stability: [compose-stability-analyzer](https://github.com/skydoves/compose-stability-analyzer)
 
 ### Architecture
 - MVI (Model-View-Intent) with [Slack Circuit](https://github.com/slackhq/circuit)
