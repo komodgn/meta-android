@@ -1,8 +1,8 @@
 package com.metasearch.android.core.model
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 
-@Stable
+@Immutable
 data class GalleryImageModel(
     val id: Long, // MediaStore._ID
     val uriString: String,

@@ -1,8 +1,8 @@
 package com.metasearch.android.core.model
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 
-@Stable
+@Immutable
 data class PersonModel(
     val id: Long,
     val name: String, // 시스템 부여 이름
@@ -20,7 +20,7 @@ data class PersonModel(
         get() = faces.find { it.id == representativeFaceId } ?: faces.firstOrNull()
 }
 
-@Stable
+@Immutable
 data class FaceModel(
     val id: Long,
     val personId: Long,
