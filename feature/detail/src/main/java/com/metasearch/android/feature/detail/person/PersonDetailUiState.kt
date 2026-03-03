@@ -4,11 +4,13 @@ import android.net.Uri
 import com.metasearch.android.core.model.PersonModel
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 data class PersonDetailUiState(
     val isLoading: Boolean = false,
     val person: PersonModel? = null,
-    val photoUris: List<Uri> = emptyList(),
+    val photoUris: ImmutableList<Uri> = persistentListOf(),
     val showEditDialog: Boolean = false,
     val showMergeConfirmDialog: Boolean = false,
     val editName: String = "",

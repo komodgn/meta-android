@@ -5,12 +5,14 @@ import com.metasearch.android.core.common.utils.UiText
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import java.util.UUID
 
 data class NLSearchUiState(
     val isLoading: Boolean = false,
     val inputString: String = "",
-    val resultImages: List<String> = emptyList(),
+    val resultImages: ImmutableList<String> = persistentListOf(),
     val sideEffect: NLSearchSideEffect? = null,
     val eventSink: (NLSearchUiEvent) -> Unit,
 ) : CircuitUiState

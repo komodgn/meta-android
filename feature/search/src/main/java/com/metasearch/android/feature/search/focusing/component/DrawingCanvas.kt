@@ -10,10 +10,11 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.model.CircleModel
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun DrawingCanvas(
-    circles: List<CircleModel>?,
+    circles: ImmutableList<CircleModel>?,
     isDrawing: Boolean,
     currentCenter: Offset,
     currentRadius: Float,

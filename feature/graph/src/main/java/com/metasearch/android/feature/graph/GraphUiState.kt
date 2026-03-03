@@ -5,11 +5,13 @@ import com.metasearch.android.core.common.utils.UiText
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import java.util.UUID
 
 data class GraphUiState(
     val webViewUrl: String = "",
-    val selectedImages: List<String> = emptyList(),
+    val selectedImages: ImmutableList<String> = persistentListOf(),
     val isLoading: Boolean = false,
     val sideEffect: GraphSideEffect? = null,
     val eventSink: (GraphUiEvent) -> Unit,

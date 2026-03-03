@@ -3,12 +3,14 @@ package com.metasearch.android.feature.detail.graph
 import androidx.compose.runtime.Immutable
 import com.metasearch.android.core.common.utils.UiText
 import com.slack.circuit.runtime.CircuitUiState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import java.util.UUID
 
 data class GraphDetailUiState(
     val isLoading: Boolean = false,
     val webViewUrl: String = "",
-    val selectedImages: List<String> = emptyList(),
+    val selectedImages: ImmutableList<String> = persistentListOf(),
     val sideEffect: GraphDetailSideEffect? = null,
     val eventSink: (GraphDetailUiEvent) -> Unit,
 ) : CircuitUiState
