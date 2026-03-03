@@ -12,41 +12,41 @@ public fun com.metasearch.android.feature.detail.graph.GraphDetailPresenter.pres
 
 @Composable
 public fun com.metasearch.android.feature.detail.graph.GraphDetailSideEffect(state: com.metasearch.android.feature.detail.graph.GraphDetailUiState, eventSink: kotlin.Function1<com.metasearch.android.feature.detail.graph.GraphDetailUiEvent, kotlin.Unit>): kotlin.Unit
-  skippable: false
+  skippable: true
   restartable: true
   params:
-    - state: RUNTIME (requires runtime check)
+    - state: STABLE (class with no mutable properties)
     - eventSink: STABLE (function type)
 
 @Composable
 public fun com.metasearch.android.feature.detail.graph.GraphDetailUi(modifier: androidx.compose.ui.Modifier, state: com.metasearch.android.feature.detail.graph.GraphDetailUiState): kotlin.Unit
-  skippable: false
+  skippable: true
   restartable: true
   params:
     - modifier: STABLE (marked @Stable or @Immutable)
-    - state: RUNTIME (requires runtime check)
+    - state: STABLE (class with no mutable properties)
 
 @Composable
-private fun com.metasearch.android.feature.detail.graph.GraphDetailUi(): kotlin.Unit
+private fun com.metasearch.android.feature.detail.graph.GraphDetailUiContent(state: com.metasearch.android.feature.detail.graph.GraphDetailUiState, innerPadding: androidx.compose.foundation.layout.PaddingValues): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - state: STABLE (class with no mutable properties)
+    - innerPadding: STABLE (marked @Stable or @Immutable)
+
+@Composable
+private fun com.metasearch.android.feature.detail.graph.GraphDetailUiPreview(): kotlin.Unit
   skippable: true
   restartable: true
   params:
 
 @Composable
-private fun com.metasearch.android.feature.detail.graph.GraphDetailUiContent(state: com.metasearch.android.feature.detail.graph.GraphDetailUiState, innerPadding: androidx.compose.foundation.layout.PaddingValues): kotlin.Unit
-  skippable: false
-  restartable: true
-  params:
-    - state: RUNTIME (requires runtime check)
-    - innerPadding: STABLE (marked @Stable or @Immutable)
-
-@Composable
 private fun com.metasearch.android.feature.detail.person.PersonDetailContent(innerPadding: androidx.compose.foundation.layout.PaddingValues, state: com.metasearch.android.feature.detail.person.PersonDetailUiState): kotlin.Unit
-  skippable: false
+  skippable: true
   restartable: true
   params:
     - innerPadding: STABLE (marked @Stable or @Immutable)
-    - state: RUNTIME (requires runtime check)
+    - state: STABLE (class with no mutable properties)
 
 @Composable
 public fun com.metasearch.android.feature.detail.person.PersonDetailPresenter.present(): com.metasearch.android.feature.detail.person.PersonDetailUiState
@@ -56,11 +56,11 @@ public fun com.metasearch.android.feature.detail.person.PersonDetailPresenter.pr
 
 @Composable
 public fun com.metasearch.android.feature.detail.person.PersonDetailUi(modifier: androidx.compose.ui.Modifier, state: com.metasearch.android.feature.detail.person.PersonDetailUiState): kotlin.Unit
-  skippable: false
+  skippable: true
   restartable: true
   params:
     - modifier: STABLE (marked @Stable or @Immutable)
-    - state: RUNTIME (requires runtime check)
+    - state: STABLE (class with no mutable properties)
 
 @Composable
 private fun com.metasearch.android.feature.detail.person.PersonDetailUiEditDialogPreview(): kotlin.Unit

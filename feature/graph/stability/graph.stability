@@ -12,26 +12,26 @@ public fun com.metasearch.android.feature.graph.GraphPresenter.present(): com.me
 
 @Composable
 public fun com.metasearch.android.feature.graph.GraphSideEffect(state: com.metasearch.android.feature.graph.GraphUiState, eventSink: kotlin.Function1<com.metasearch.android.feature.graph.GraphUiEvent, kotlin.Unit>): kotlin.Unit
-  skippable: false
+  skippable: true
   restartable: true
   params:
-    - state: RUNTIME (requires runtime check)
+    - state: STABLE (class with no mutable properties)
     - eventSink: STABLE (function type)
 
 @Composable
 public fun com.metasearch.android.feature.graph.GraphUi(modifier: androidx.compose.ui.Modifier, state: com.metasearch.android.feature.graph.GraphUiState): kotlin.Unit
-  skippable: false
+  skippable: true
   restartable: true
   params:
     - modifier: STABLE (marked @Stable or @Immutable)
-    - state: RUNTIME (requires runtime check)
+    - state: STABLE (class with no mutable properties)
 
 @Composable
 private fun com.metasearch.android.feature.graph.GraphUiContent(state: com.metasearch.android.feature.graph.GraphUiState, innerPadding: androidx.compose.foundation.layout.PaddingValues): kotlin.Unit
-  skippable: false
+  skippable: true
   restartable: true
   params:
-    - state: RUNTIME (requires runtime check)
+    - state: STABLE (class with no mutable properties)
     - innerPadding: STABLE (marked @Stable or @Immutable)
 
 @Composable

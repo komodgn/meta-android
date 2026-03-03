@@ -31,6 +31,7 @@ import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.feature.detail.R
+import com.metasearch.android.feature.detail.graph.mock.graphDetailUiStateMock
 import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
@@ -129,14 +130,10 @@ private fun GraphDetailUiContent(
 
 @DevicePreview
 @Composable
-private fun GraphDetailUi() {
+private fun GraphDetailUiPreview() {
     MetaSearchTheme {
         GraphDetailUi(
-            state = GraphDetailUiState(
-                webViewUrl = "https://www.google.com",
-                selectedImages = listOf("sample_uri_1", "sample_uri_2"),
-                eventSink = {},
-            ),
+            state = graphDetailUiStateMock,
         )
     }
 }

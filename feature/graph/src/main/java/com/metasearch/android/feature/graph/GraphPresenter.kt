@@ -19,6 +19,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
 class GraphPresenter @AssistedInject constructor(
@@ -39,7 +42,7 @@ class GraphPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         var sideEffect by remember { mutableStateOf<GraphSideEffect?>(null) }
         var webViewUrl by rememberRetained { mutableStateOf("") }
-        var selectedImages by rememberRetained { mutableStateOf(listOf<String>()) }
+        var selectedImages by rememberRetained { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
         val maxImages = 10
 
         LaunchedEffect(Unit) {
@@ -58,7 +61,7 @@ class GraphPresenter @AssistedInject constructor(
                         if (uri != null) {
                             val uriString = uri.toString()
                             if (!selectedImages.contains(uriString)) {
-                                selectedImages = (listOf(uriString) + selectedImages).take(maxImages)
+                                selectedImages = (listOf(uriString) + selectedImages).take(maxImages).toPersistentList()
                             }
                         } else {
                             sideEffect = GraphSideEffect.ShowToast(

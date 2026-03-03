@@ -22,6 +22,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
 class PersonDetailPresenter @AssistedInject constructor(
@@ -47,11 +49,11 @@ class PersonDetailPresenter @AssistedInject constructor(
         var isLoading by remember { mutableStateOf(false) }
         var currentPersonId by remember { mutableLongStateOf(screen.personId) }
         val person by personRepository.getPersonById(currentPersonId).collectAsState(initial = null)
-        val photoUris by produceState(initialValue = emptyList(), key1 = person?.inputName) {
+        val photoUris by produceState(initialValue = persistentListOf(), key1 = person?.inputName) {
             val nameToSearch = person?.inputName
             if (nameToSearch != null) {
                 personRepository.getPersonPhotoNames(nameToSearch).onSuccess { photoNames ->
-                    value = galleryRepository.findMatchedUris(photoNames)
+                    value = galleryRepository.findMatchedUris(photoNames).toPersistentList()
                 }
             }
         }

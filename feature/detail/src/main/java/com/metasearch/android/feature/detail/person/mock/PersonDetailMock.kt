@@ -4,6 +4,7 @@ import androidx.core.net.toUri
 import com.metasearch.android.core.model.FaceModel
 import com.metasearch.android.core.model.PersonModel
 import com.metasearch.android.feature.detail.person.PersonDetailUiState
+import kotlinx.collections.immutable.toPersistentList
 
 internal val fakeFaces = listOf(
     FaceModel(
@@ -47,7 +48,7 @@ internal val fakePhotoUris = listOf(
 internal val personDetailUiStateMock = PersonDetailUiState(
     isLoading = false,
     person = fakePerson,
-    photoUris = fakePhotoUris,
+    photoUris = fakePhotoUris.toPersistentList(),
     showPhotoSelectDialog = false,
     eventSink = {},
 )

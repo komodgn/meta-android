@@ -20,6 +20,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
 class NLSearchPresenter @AssistedInject constructor(
@@ -39,9 +42,7 @@ class NLSearchPresenter @AssistedInject constructor(
         var isLoading by rememberRetained { mutableStateOf(false) }
         var sideEffect by remember { mutableStateOf<NLSearchSideEffect?>(null) }
         var inputString by rememberRetained { mutableStateOf("") }
-        var resultImages by rememberRetained {
-            mutableStateOf<List<String>>(emptyList())
-        }
+        var resultImages by rememberRetained { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
 
         fun handleEvent(event: NLSearchUiEvent) {
             when (event) {
@@ -63,12 +64,12 @@ class NLSearchPresenter @AssistedInject constructor(
                         searchRepository.nlSearch(inputString)
                             .onSuccess { result ->
                                 if (result.matchedUris.isEmpty()) {
-                                    resultImages = emptyList()
+                                    resultImages = persistentListOf()
                                     sideEffect = NLSearchSideEffect.ShowToast(
                                         message = UiText.StringResource(R.string.search_screen_empty_result_message),
                                     )
                                 } else {
-                                    resultImages = result.matchedUris
+                                    resultImages = result.matchedUris.toPersistentList()
                                 }
                             }.onFailure { exception ->
                                 handleException(

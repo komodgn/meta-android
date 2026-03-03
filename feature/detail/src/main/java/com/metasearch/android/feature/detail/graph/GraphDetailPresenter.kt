@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.data.api.repository.GraphRepository
@@ -18,7 +19,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
-import kotlinx.coroutines.MainScope
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
 class GraphDetailPresenter @AssistedInject constructor(
@@ -38,9 +41,10 @@ class GraphDetailPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): GraphDetailUiState {
+        val scope = rememberCoroutineScope()
         var sideEffect by remember { mutableStateOf<GraphDetailSideEffect?>(null) }
         var webViewUrl by remember { mutableStateOf("") }
-        var selectedImages by remember { mutableStateOf(listOf<String>()) }
+        var selectedImages by remember { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
         val maxImages = 10
 
         LaunchedEffect(Unit) {
@@ -54,13 +58,12 @@ class GraphDetailPresenter @AssistedInject constructor(
                 }
 
                 is GraphDetailUiEvent.OnPhotoSelected -> {
-                    val scope = MainScope()
                     scope.launch {
                         val uri = graphRepository.findMatchedUri(event.photoName)
                         if (uri != null) {
                             val uriString = uri.toString()
                             if (!selectedImages.contains(uriString)) {
-                                selectedImages = (listOf(uriString) + selectedImages).take(maxImages)
+                                selectedImages = (listOf(uriString) + selectedImages).take(maxImages).toPersistentList()
                             }
                         } else {
                             sideEffect = GraphDetailSideEffect.ShowToast(
