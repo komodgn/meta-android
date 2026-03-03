@@ -26,6 +26,7 @@ import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
 import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
 import com.metasearch.android.feature.search.R
 import com.metasearch.android.feature.search.nls.component.NLSearchTextField
+import com.metasearch.android.feature.search.nls.mock.nlSearchUiStateMock
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
 
@@ -123,13 +124,18 @@ private fun NLSearchUiContent(
 private fun NLSearchUiPreview() {
     MetaSearchTheme {
         NLSearchUi(
-            state = NLSearchUiState(
-                isLoading = false,
-                resultImages = listOf(
-                    "uri1",
-                    "uri2",
-                ),
-                eventSink = {},
+            state = nlSearchUiStateMock,
+        )
+    }
+}
+
+@DevicePreview
+@Composable
+private fun NLSearchUiLoadingPreview() {
+    MetaSearchTheme {
+        NLSearchUi(
+            state = nlSearchUiStateMock.copy(
+                isLoading = true,
             ),
         )
     }
