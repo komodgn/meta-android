@@ -21,9 +21,7 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class GraphDetailPresenter @AssistedInject constructor(
