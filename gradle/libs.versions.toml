@@ -85,6 +85,8 @@ ktlintEngine = "0.50.0"
 # Static Analysis
 detektPlugin = "1.23.8"
 
+deepLinkDispatch = "7.2.2"
+
 appcompat = "1.7.1"
 material = "1.13.0"
 
@@ -161,6 +163,9 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
+deeplink-dispatch = { group = "com.airbnb", name = "deeplinkdispatch", version.ref = "deepLinkDispatch" }
+deeplink-dispatch-processor = { group = "com.airbnb", name = "deeplinkdispatch-processor", version.ref = "deepLinkDispatch" }
+
 [bundles]
 androidx-compose = [
     "androidx-activity-compose",
@@ -205,3 +210,4 @@ metasearch-android-hilt = { id = "metasearch.android.hilt", version = "unspecifi
 metasearch-jvm-library = { id = "metasearch.jvm.library", version = "unspecified" }
 metasearch-kotlin-library-serialization = { id = "metasearch.kotlin.library.serialization", version = "unspecified" }
 metasearch-android-retrofit = { id = "metasearch.android.retrofit", version = "unspecified" }
+metasearch-deeplink = { id = "metasearch.deeplink", version = "unspecified" }
