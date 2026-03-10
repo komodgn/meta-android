@@ -140,6 +140,7 @@ circuit-foundation = { group = "com.slack.circuit", name = "circuit-foundation",
 circuit-runtime = { group = "com.slack.circuit", name = "circuit-runtime", version.ref = "circuit" }
 circuitx-android = { group = "com.slack.circuit", name = "circuitx-android", version.ref = "circuit" }
 circuitx-effects = { group = "com.slack.circuit", name = "circuitx-effects", version.ref = "circuit" }
+circuitx-gesture-navigation = { group = "com.slack.circuit", name = "circuitx-gesture-navigation", version.ref = "circuit" }
 circuit-codegen-annotation = { group = "com.slack.circuit", name = "circuit-codegen-annotations", version.ref = "circuit" }
 circuit-codegen-ksp = { group = "com.slack.circuit", name = "circuit-codegen", version.ref = "circuit" }
 
@@ -175,7 +176,8 @@ circuit = [
     "circuit-foundation",
     "circuitx-android",
     "circuitx-effects",
-    "circuit-runtime"
+    "circuit-runtime",
+    "circuitx-gesture-navigation",
 ]
 
 [plugins]

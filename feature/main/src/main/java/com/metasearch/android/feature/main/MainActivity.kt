@@ -27,6 +27,7 @@ import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
+import com.slack.circuitx.gesturenavigation.GestureNavigationDecorationFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import tech.thdev.compose.exteions.system.ui.controller.rememberSystemUiController
@@ -107,6 +108,11 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.fillMaxSize(),
                             backStack = backStack,
                             navigator = navigator,
+                            decoratorFactory = remember(navigator) {
+                                GestureNavigationDecorationFactory(
+                                    onBackInvoked = navigator::pop,
+                                )
+                            },
                         )
                     }
 
