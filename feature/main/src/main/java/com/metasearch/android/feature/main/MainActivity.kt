@@ -20,6 +20,7 @@ import com.metasearch.android.core.common.utils.MetaSearchEvent
 import com.metasearch.android.core.designsystem.component.MetaSearchToast
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.ui.component.MetaSearchDialog
+import com.metasearch.android.feature.main.deeplink.DeepLinkParser
 import com.metasearch.android.feature.screens.SplashScreen
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
@@ -41,6 +42,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
+        val intentData = intent?.data
+
         setContent {
             val systemUiController = rememberSystemUiController()
 
@@ -55,7 +58,11 @@ class MainActivity : ComponentActivity() {
                 val dialogSpec = remember { mutableStateOf<MetaSearchDialogSpec?>(null) }
                 var toastMessage by remember { mutableStateOf<String?>(null) }
 
-                val backStack = rememberSaveableBackStack(SplashScreen)
+                val initialScreens = remember {
+                    DeepLinkParser.parse(intentData) ?: listOf(SplashScreen)
+                }
+
+                val backStack = rememberSaveableBackStack(initialScreens)
                 val navigator = rememberCircuitNavigator(backStack)
 
                 LaunchedEffect(Unit) {

@@ -3,4 +3,6 @@
     <string name="home_screen_person_scroll_view_title">People I Like</string>
     <string name="home_screen_person_scroll_view_empty_content">Analyze the image and fill it with people you like.</string>
     <string name="home_screen_gallery_grid_view_title">Gallery photo (%d)</string>
+    <string name="notification_analysis_complete_title">Gallery Image Analysis Completed</string>
+    <string name="notification_analysis_complete_content">Explore the gallery.</string>
 </resources>

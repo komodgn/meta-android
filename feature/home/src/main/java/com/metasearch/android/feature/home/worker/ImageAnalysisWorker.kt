@@ -3,8 +3,10 @@ package com.metasearch.android.feature.home.worker
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
 import com.metasearch.android.core.notification.notifier.AnalysisNotifier
+import com.metasearch.android.feature.home.R
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
@@ -22,7 +24,10 @@ class ImageAnalysisWorker(
         return try {
             repository.runFullAnalysis()
 
-            notifier.notifyComplete()
+            notifier.notifyComplete(
+                UiText.StringResource(R.string.notification_analysis_complete_title),
+                UiText.StringResource(R.string.notification_analysis_complete_content),
+            )
 
             Result.success()
         } catch (e: Exception) {

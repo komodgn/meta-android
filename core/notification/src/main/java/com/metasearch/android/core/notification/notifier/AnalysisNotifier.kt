@@ -3,11 +3,15 @@ package com.metasearch.android.core.notification.notifier
 import android.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.core.app.NotificationCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import androidx.core.net.toUri
+import com.metasearch.android.core.common.utils.UiText
 
 @Singleton
 class AnalysisNotifier @Inject constructor(
@@ -30,11 +34,30 @@ class AnalysisNotifier @Inject constructor(
         notificationManager.createNotificationChannel(channel)
     }
 
-    fun notifyComplete() {
+    fun notifyComplete(
+        title: UiText,
+        content: UiText,
+    ) {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            "metasearch://graph".toUri(),
+        ).apply {
+            setPackage(context.packageName)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_dialog_info)
-            .setContentTitle("갤러리 이미지 분석 완료")
-            .setContentText("갤러리 탐색을 시작할 수 있어요.")
+            .setContentTitle(title.asString(context))
+            .setContentText(content.asString(context))
+            .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
         notificationManager.notify(NOTIFICATION_ID, builder.build())

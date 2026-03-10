@@ -20,7 +20,6 @@ gradlePlugin {
         "android.retrofit" to "AndroidRetrofitConventionPlugin",
         "jvm.library" to "JvmLibraryConventionPlugin",
         "kotlin.library.serialization" to "KotlinLibrarySerializationConventionPlugin",
-        "deeplink" to "DeeplinkConventionPlugin",
     )
 
     plugins {
