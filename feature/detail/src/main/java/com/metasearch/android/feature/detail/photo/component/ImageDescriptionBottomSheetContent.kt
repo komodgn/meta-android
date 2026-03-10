@@ -37,7 +37,7 @@ internal fun ImageDescriptionBottomSheetContent(description: String) {
 private fun ImageDescriptionBottomSheetContentPreview() {
     MetaSearchTheme {
         ImageDescriptionBottomSheetContent(
-            description = "2026년 1월에 촬영된 이 사진은 "
+            description = "2026년 1월에 촬영된 이 사진은 ",
         )
     }
 }

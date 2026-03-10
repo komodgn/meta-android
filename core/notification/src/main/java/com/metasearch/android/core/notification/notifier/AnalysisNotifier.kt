@@ -1,17 +1,17 @@
 package com.metasearch.android.core.notification.notifier
 
-import android.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.R
 import androidx.core.app.NotificationCompat
+import androidx.core.net.toUri
+import com.metasearch.android.core.common.utils.UiText
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import androidx.core.net.toUri
-import com.metasearch.android.core.common.utils.UiText
 
 @Singleton
 class AnalysisNotifier @Inject constructor(
