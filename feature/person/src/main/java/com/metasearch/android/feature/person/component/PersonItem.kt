@@ -26,6 +26,7 @@ import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.model.PersonModel
 import com.metasearch.android.core.ui.component.MetaSearchCircleImage
 import com.metasearch.android.feature.person.R
+import com.metasearch.android.feature.person.mock.fakePerson
 
 @Composable
 internal fun PersonItem(
@@ -89,11 +90,7 @@ internal fun PersonItem(
 private fun PersonItemPreview() {
     MetaSearchTheme {
         PersonItem(
-            person = PersonModel(
-                id = 1L,
-                name = "춘식이",
-                inputName = "춘식이",
-            ),
+            person = fakePerson,
             onDeleteClick = {},
             onClick = {},
         )

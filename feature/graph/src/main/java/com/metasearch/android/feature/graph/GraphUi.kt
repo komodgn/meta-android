@@ -33,6 +33,7 @@ import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
+import com.metasearch.android.feature.graph.mock.graphUiStateMock
 import com.metasearch.android.feature.screens.GraphScreen
 import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
 import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
@@ -155,10 +156,7 @@ private fun GraphUiContent(
 private fun GraphUiPreview() {
     MetaSearchTheme {
         GraphUi(
-            state = GraphUiState(
-                webViewUrl = "https://www.google.com",
-                eventSink = {},
-            ),
+            state = graphUiStateMock,
         )
     }
 }

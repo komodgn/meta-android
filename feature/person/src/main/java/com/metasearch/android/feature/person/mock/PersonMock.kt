@@ -3,6 +3,13 @@ package com.metasearch.android.feature.person.mock
 import com.metasearch.android.core.model.PersonModel
 import com.metasearch.android.feature.person.PersonUiState
 
+internal val fakePerson = PersonModel(
+    id = 1L,
+    name = "인물1",
+    inputName = "춘식이",
+    isHomeDisplay = true,
+)
+
 internal val fakePeople = listOf(
     PersonModel(
         id = 1L,

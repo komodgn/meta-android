@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import coil3.compose.AsyncImage
+import com.metasearch.android.core.common.extensions.previewPlaceholder
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
@@ -29,6 +30,7 @@ import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.detail.photo.component.ImageDescriptionBottomSheetContent
 import com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBar
 import com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBarItem
+import com.metasearch.android.feature.detail.photo.mock.photoDetailUiStateMock
 import com.metasearch.android.feature.screens.PhotoDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
@@ -117,12 +119,11 @@ private fun PhotoDetailUiContent(
             model = state.imageUriString,
             contentDescription = "Photo Detail Screen Image",
             modifier = Modifier
-                .weight(1f),
+                .weight(1f)
+                .previewPlaceholder(),
             contentScale = ContentScale.Crop,
         )
-        Spacer(
-            modifier = Modifier.height(MetaSearchTheme.spacing.spacing6),
-        )
+        Spacer(modifier = Modifier.height(MetaSearchTheme.spacing.spacing6))
     }
 }
 
@@ -131,10 +132,7 @@ private fun PhotoDetailUiContent(
 private fun PhotoDetailUiPreview() {
     MetaSearchTheme {
         PhotoDetailUi(
-            state = PhotoDetailUiState(
-                imageUriString = "",
-                eventSink = {},
-            ),
+            state = photoDetailUiStateMock,
         )
     }
 }

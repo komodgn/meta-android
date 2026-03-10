@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.feature.detail.R
 
@@ -27,6 +28,16 @@ internal fun ImageDescriptionBottomSheetContent(description: String) {
         Text(
             text = description,
             style = MetaSearchTheme.typography.bodyLarge,
+        )
+    }
+}
+
+@Composable
+@ComponentPreview
+private fun ImageDescriptionBottomSheetContentPreview() {
+    MetaSearchTheme {
+        ImageDescriptionBottomSheetContent(
+            description = "2026년 1월에 촬영된 이 사진은 "
         )
     }
 }
