@@ -165,6 +165,12 @@ internal fun com.metasearch.android.feature.detail.photo.component.ImageDescript
     - description: STABLE (String is immutable)
 
 @Composable
+private fun com.metasearch.android.feature.detail.photo.component.ImageDescriptionBottomSheetContentPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
 public fun com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBar(modifier: androidx.compose.ui.Modifier, currentTab: com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBarItem?, onTabClick: kotlin.Function1<com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBarItem, kotlin.Unit>): kotlin.Unit
   skippable: true
   restartable: true
