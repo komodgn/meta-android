@@ -113,6 +113,7 @@ class PersonDetailPresenter @AssistedInject constructor(
                     val currentPerson = person ?: return
                     scope.launch {
                         if (editName != person?.inputName && personRepository.isNameExists(editName)) {
+                            showEditDialog = false
                             showMergeConfirmDialog = true
                         } else {
                             savePersonInfo()
