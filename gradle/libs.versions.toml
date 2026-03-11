@@ -63,7 +63,7 @@ stabilityAnalyzer = "0.6.4"
 coilCompose = "3.3.0"
 
 ## Circuit
-circuit = "0.32.0"
+circuit = "0.33.1"
 
 ## Hilt
 hilt = "2.57.2"
