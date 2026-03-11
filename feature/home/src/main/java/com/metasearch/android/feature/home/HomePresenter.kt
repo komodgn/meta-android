@@ -25,6 +25,7 @@ import com.metasearch.android.feature.screens.HomeScreen
 import com.metasearch.android.feature.screens.PersonDetailScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.assisted.Assisted
@@ -52,16 +53,16 @@ class HomePresenter @AssistedInject constructor(
         val context = LocalContext.current
 
         var sideEffect by remember { mutableStateOf<HomeSideEffect?>(null) }
-        var isPersonLoading by remember { mutableStateOf(false) }
+        var isPersonLoading by rememberRetained { mutableStateOf(false) }
         val isAnalyzing by remember(context) {
             imageAnalysisRepository.getAnalysisStatus(context)
         }.collectAsState(initial = false)
-        var isExpanded by remember { mutableStateOf(false) }
+        var isExpanded by rememberRetained { mutableStateOf(false) }
 
         val localPersons by personRepository.getHomeDisplayPersons().collectAsState(initial = emptyList())
-        var displayPersons by remember { mutableStateOf<List<PersonModel>>(emptyList()) }
+        var displayPersons by rememberRetained { mutableStateOf<List<PersonModel>>(emptyList()) }
 
-        val galleryPagingFlow = remember {
+        val galleryPagingFlow = rememberRetained {
             galleryRepository.getGalleryPagingData().cachedIn(scope)
         }
         var selectedLongClickImage by remember { mutableStateOf<String?>(null) }
