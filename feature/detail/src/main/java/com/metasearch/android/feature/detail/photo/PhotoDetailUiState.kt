@@ -1,6 +1,7 @@
 package com.metasearch.android.feature.detail.photo
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.ImageBitmap
 import com.metasearch.android.core.common.utils.UiText
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
@@ -32,14 +33,14 @@ sealed interface PhotoDetailUiEvent : CircuitUiEvent {
     /**
      * Open AI로 이미지 설명을 생성
      */
-    data class OnCreateImageDescriptionButtonClick(
+    data class OnCreateImageDescriptionClick(
         val imageUriString: String,
     ) : PhotoDetailUiEvent
 
     /**
      *  개별 그래프 확인 버튼 클릭
      */
-    data object OnGraphButtonClick : PhotoDetailUiEvent
+    data object OnGraphClick : PhotoDetailUiEvent
 
     /**
      * 포커싱 검색 화면으로 이동
@@ -51,7 +52,7 @@ sealed interface PhotoDetailUiEvent : CircuitUiEvent {
     /**
      * 이미지 공유 버튼 클릭
      */
-    data class OnShareImageButtonClick(
+    data class OnShareImageClick(
         val imageUriString: String,
     ) : PhotoDetailUiEvent
 

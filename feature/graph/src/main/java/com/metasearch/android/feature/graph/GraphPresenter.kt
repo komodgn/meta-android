@@ -40,7 +40,7 @@ class GraphPresenter @AssistedInject constructor(
     @Composable
     override fun present(): GraphUiState {
         val coroutineScope = rememberCoroutineScope()
-        var sideEffect by remember { mutableStateOf<GraphSideEffect?>(null) }
+        var sideEffect by rememberRetained { mutableStateOf<GraphSideEffect?>(null) }
         var webViewUrl by rememberRetained { mutableStateOf("") }
         var selectedImages by rememberRetained { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
         val maxImages = 10

@@ -1,10 +1,10 @@
 package com.metasearch.android.feature.search.nls
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import com.metasearch.android.core.common.utils.EventHandler
 import com.metasearch.android.core.common.utils.MetaSearchEvent
+import com.skydoves.compose.effects.RememberedEffect
 
 @Composable
 fun NLSearchSideEffect(
@@ -13,7 +13,7 @@ fun NLSearchSideEffect(
 ) {
     val context = LocalContext.current
 
-    LaunchedEffect(state.sideEffect) {
+    RememberedEffect(state.sideEffect) {
         when (state.sideEffect) {
             is NLSearchSideEffect.ShowToast -> {
                 EventHandler.sendEvent(

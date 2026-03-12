@@ -38,7 +38,7 @@ class PersonPresenter @AssistedInject constructor(
     override fun present(): PersonUiState {
         val scope = rememberCoroutineScope()
         var deleteJob by remember { mutableStateOf<Job?>(null) }
-        var sideEffect by remember { mutableStateOf<PersonSideEffect?>(null) }
+        var sideEffect by rememberRetained { mutableStateOf<PersonSideEffect?>(null) }
         var inputPersonNameString by rememberRetained { mutableStateOf("") }
         val allPeople by personRepository.getAllPersons().collectAsState(initial = emptyList())
         val filteredPeople = rememberRetained(inputPersonNameString, allPeople) {

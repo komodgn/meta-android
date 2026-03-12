@@ -52,7 +52,7 @@ class HomePresenter @AssistedInject constructor(
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
 
-        var sideEffect by remember { mutableStateOf<HomeSideEffect?>(null) }
+        var sideEffect by rememberRetained { mutableStateOf<HomeSideEffect?>(null) }
         var isPersonLoading by rememberRetained { mutableStateOf(false) }
         val isAnalyzing by remember(context) {
             imageAnalysisRepository.getAnalysisStatus(context)

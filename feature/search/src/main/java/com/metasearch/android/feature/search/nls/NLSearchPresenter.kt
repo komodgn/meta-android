@@ -40,7 +40,7 @@ class NLSearchPresenter @AssistedInject constructor(
     override fun present(): NLSearchUiState {
         val scope = rememberCoroutineScope()
         var isLoading by rememberRetained { mutableStateOf(false) }
-        var sideEffect by remember { mutableStateOf<NLSearchSideEffect?>(null) }
+        var sideEffect by rememberRetained { mutableStateOf<NLSearchSideEffect?>(null) }
         var inputString by rememberRetained { mutableStateOf("") }
         var resultImages by rememberRetained { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
 

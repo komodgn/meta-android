@@ -51,7 +51,7 @@ class FocusingSearchPresenter @AssistedInject constructor(
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
 
-        var sideEffect by remember {
+        var sideEffect by rememberRetained {
             mutableStateOf<FocusingSearchSideEffect?>(
                 FocusingSearchSideEffect.ShowToast(
                     message = UiText.StringResource(R.string.focusing_search_screen_toast_guide),

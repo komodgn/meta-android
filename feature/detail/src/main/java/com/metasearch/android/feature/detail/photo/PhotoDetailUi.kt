@@ -63,16 +63,16 @@ fun PhotoDetailUi(
                 onTabClick = { tab ->
                     when (tab) {
                         PhotoDetailBottomBarItem.OPEN_AI -> {
-                            state.eventSink(PhotoDetailUiEvent.OnCreateImageDescriptionButtonClick(state.imageUriString))
+                            state.eventSink(PhotoDetailUiEvent.OnCreateImageDescriptionClick(state.imageUriString))
                         }
                         PhotoDetailBottomBarItem.GRAPH -> {
-                            state.eventSink(PhotoDetailUiEvent.OnGraphButtonClick)
+                            state.eventSink(PhotoDetailUiEvent.OnGraphClick)
                         }
                         PhotoDetailBottomBarItem.FOCUSING_SEARCH -> {
                             state.eventSink(PhotoDetailUiEvent.OnFocusingSearchClick(state.imageUriString))
                         }
                         PhotoDetailBottomBarItem.SHARE -> {
-                            state.eventSink(PhotoDetailUiEvent.OnShareImageButtonClick(state.imageUriString))
+                            state.eventSink(PhotoDetailUiEvent.OnShareImageClick(state.imageUriString))
                         }
                     }
                 },

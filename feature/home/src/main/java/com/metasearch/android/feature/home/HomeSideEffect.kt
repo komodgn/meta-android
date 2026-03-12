@@ -1,10 +1,9 @@
 package com.metasearch.android.feature.home
 
-import android.content.Intent
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.net.toUri
+import com.metasearch.android.core.common.extensions.shareImage
+import com.skydoves.compose.effects.RememberedEffect
 
 @Composable
 fun HomeSideEffect(
@@ -13,17 +12,10 @@ fun HomeSideEffect(
 ) {
     val context = LocalContext.current
 
-    LaunchedEffect(state.sideEffect) {
+    RememberedEffect(state.sideEffect) {
         when (state.sideEffect) {
             is HomeSideEffect.ShareImage -> {
-                val sendIntent: Intent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_STREAM, state.sideEffect.uriString.toUri())
-                    type = "image/*"
-                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                }
-                val shareIntent = Intent.createChooser(sendIntent, null)
-                context.startActivity(shareIntent)
+                context.shareImage(state.sideEffect.uriString)
             }
 
             else -> {}

@@ -15,6 +15,7 @@ import com.metasearch.android.feature.screens.FocusingSearchScreen
 import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.assisted.Assisted
@@ -43,8 +44,8 @@ class PhotoDetailPresenter @AssistedInject constructor(
     override fun present(): PhotoDetailUiState {
         val scope = rememberCoroutineScope()
         var isLoading by remember { mutableStateOf(false) }
-        var sideEffect by remember { mutableStateOf<PhotoDetailSideEffect?>(null) }
-        val imageUriString by remember { mutableStateOf(screen.imageUriString) }
+        var sideEffect by rememberRetained { mutableStateOf<PhotoDetailSideEffect?>(null) }
+        val imageUriString by rememberRetained { mutableStateOf(screen.imageUriString) }
         var imageDescription by remember { mutableStateOf<String?>(null) }
 
         fun handleEvent(event: PhotoDetailUiEvent) {
@@ -53,7 +54,7 @@ class PhotoDetailPresenter @AssistedInject constructor(
                     sideEffect = null
                 }
 
-                is PhotoDetailUiEvent.OnCreateImageDescriptionButtonClick -> {
+                is PhotoDetailUiEvent.OnCreateImageDescriptionClick -> {
                     isLoading = true
 
                     scope.launch {
@@ -78,7 +79,7 @@ class PhotoDetailPresenter @AssistedInject constructor(
                     }
                 }
 
-                is PhotoDetailUiEvent.OnGraphButtonClick -> {
+                is PhotoDetailUiEvent.OnGraphClick -> {
                     scope.launch {
                         val fileName = galleryRepository.getFileName(screen.imageUriString.toUri()) ?: ""
 
@@ -94,7 +95,7 @@ class PhotoDetailPresenter @AssistedInject constructor(
                     )
                 }
 
-                is PhotoDetailUiEvent.OnShareImageButtonClick -> {
+                is PhotoDetailUiEvent.OnShareImageClick -> {
                     sideEffect = PhotoDetailSideEffect.ShareImage(
                         uriString = event.imageUriString,
                     )
