@@ -1,5 +1,7 @@
 package com.metasearch.android.core.common.extensions
 
+import android.app.Activity
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
@@ -9,7 +11,15 @@ fun Context.shareImage(uriString: String) {
         action = Intent.ACTION_SEND
         putExtra(Intent.EXTRA_STREAM, uriString.toUri())
         type = "image/*"
-        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        clipData = ClipData.newRawUri("shared", uriString.toUri())
     }
-    startActivity(Intent.createChooser(sendIntent, null))
+
+    val chooserIntent = Intent.createChooser(sendIntent, null).apply {
+        if (this@shareImage !is Activity) {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+    }
+
+    startActivity(chooserIntent)
 }
