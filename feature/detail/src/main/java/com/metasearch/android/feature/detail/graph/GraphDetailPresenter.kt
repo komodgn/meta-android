@@ -13,6 +13,7 @@ import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.assisted.Assisted
@@ -42,7 +43,7 @@ class GraphDetailPresenter @AssistedInject constructor(
     @Composable
     override fun present(): GraphDetailUiState {
         val scope = rememberCoroutineScope()
-        var sideEffect by remember { mutableStateOf<GraphDetailSideEffect?>(null) }
+        var sideEffect by rememberRetained { mutableStateOf<GraphDetailSideEffect?>(null) }
         var webViewUrl by remember { mutableStateOf("") }
         var selectedImages by remember { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
         val maxImages = 10

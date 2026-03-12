@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.metasearch.android.core.common.utils.UiText
@@ -40,7 +39,7 @@ class GraphPresenter @AssistedInject constructor(
     @Composable
     override fun present(): GraphUiState {
         val coroutineScope = rememberCoroutineScope()
-        var sideEffect by remember { mutableStateOf<GraphSideEffect?>(null) }
+        var sideEffect by rememberRetained { mutableStateOf<GraphSideEffect?>(null) }
         var webViewUrl by rememberRetained { mutableStateOf("") }
         var selectedImages by rememberRetained { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
         val maxImages = 10

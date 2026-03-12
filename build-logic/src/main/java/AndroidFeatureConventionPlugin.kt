@@ -23,6 +23,7 @@ internal class AndroidFeatureConventionPlugin : Plugin<Project> {
                 implementationProject(":core:model")
                 implementationProject(":feature:screens")
 
+                implementation(libs.compose.effects)
                 implementation(libs.kotlinx.collections.immutable)
                 implementation(libs.bundles.circuit)
                 api(libs.circuit.codegen.annotation)

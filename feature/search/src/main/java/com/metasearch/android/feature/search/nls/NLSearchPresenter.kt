@@ -3,7 +3,6 @@ package com.metasearch.android.feature.search.nls
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.metasearch.android.core.common.utils.UiText
@@ -40,7 +39,7 @@ class NLSearchPresenter @AssistedInject constructor(
     override fun present(): NLSearchUiState {
         val scope = rememberCoroutineScope()
         var isLoading by rememberRetained { mutableStateOf(false) }
-        var sideEffect by remember { mutableStateOf<NLSearchSideEffect?>(null) }
+        var sideEffect by rememberRetained { mutableStateOf<NLSearchSideEffect?>(null) }
         var inputString by rememberRetained { mutableStateOf("") }
         var resultImages by rememberRetained { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
 
