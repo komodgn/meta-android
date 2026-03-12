@@ -1,7 +1,6 @@
 package com.metasearch.android.feature.detail.photo
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.ImageBitmap
 import com.metasearch.android.core.common.utils.UiText
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
