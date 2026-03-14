@@ -1,5 +1,7 @@
 package com.metasearch.android.core.network.di
 
+import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.metasearch.android.core.network.BuildConfig
 import com.metasearch.android.core.network.service.AIService
 import com.metasearch.android.core.network.service.OpenAIService
@@ -7,6 +9,7 @@ import com.metasearch.android.core.network.service.WebService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -40,6 +43,13 @@ internal object NetworkModule {
         }
     }
 
+    @Provides
+    fun provideChuckerInterceptor(
+        @ApplicationContext context: Context,
+    ): ChuckerInterceptor {
+        return ChuckerInterceptor(context)
+    }
+
     @Singleton
     @Provides
     internal fun provideOkHttpClient(
@@ -58,12 +68,14 @@ internal object NetworkModule {
     @Provides
     internal fun provideAIOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
+         chuckerInterceptor: ChuckerInterceptor,
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .connectTimeout(MAX_TIMEOUT_SECONDS_AI, TimeUnit.SECONDS)
             .readTimeout(MAX_TIMEOUT_SECONDS_AI, TimeUnit.SECONDS)
             .writeTimeout(MAX_TIMEOUT_SECONDS_AI, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(chuckerInterceptor)
             .build()
     }
 

@@ -34,6 +34,9 @@ android {
 
 dependencies {
     implementation(projects.core.datastore.api)
+
+    debugImplementation(libs.chucker)
+    releaseImplementation(libs.chucker.no.op)
 }
 
 fun getServerBaseUrl(propertyKey: String): String {
