@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
@@ -65,7 +66,9 @@ fun MetaSearchSearchBar(
                     Text(
                         text = placeholder,
                         color = Neutral500,
-                        style = MetaSearchTheme.typography.bodyLarge,
+                        style = MetaSearchTheme.typography.bodyMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
                 innerTextField()
