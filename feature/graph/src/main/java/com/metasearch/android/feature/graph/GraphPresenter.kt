@@ -39,6 +39,7 @@ class GraphPresenter @AssistedInject constructor(
     @Composable
     override fun present(): GraphUiState {
         val coroutineScope = rememberCoroutineScope()
+        var uiState by rememberRetained { mutableStateOf<UiState>(UiState.Loading) }
         var sideEffect by rememberRetained { mutableStateOf<GraphSideEffect?>(null) }
         var webViewUrl by rememberRetained { mutableStateOf("") }
         var selectedImages by rememberRetained { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
@@ -54,6 +55,26 @@ class GraphPresenter @AssistedInject constructor(
                     sideEffect = null
                 }
 
+                GraphUiEvent.OnWebLoading -> {
+                    uiState = UiState.Loading
+                }
+
+                GraphUiEvent.OnWebSuccess -> {
+                    uiState = UiState.Success
+                }
+
+                is GraphUiEvent.OnWebError -> {
+                    uiState = UiState.Error(event.message)
+                }
+
+                GraphUiEvent.OnRetry -> {
+                    coroutineScope.launch {
+                        uiState = UiState.Loading
+                        webViewUrl = ""
+                        webViewUrl = graphRepository.getFullGraphWebViewUrl()
+                    }
+                }
+
                 is GraphUiEvent.OnPhotoSelected -> {
                     coroutineScope.launch {
                         val uri = graphRepository.findMatchedUri(event.photoName)
@@ -63,9 +84,7 @@ class GraphPresenter @AssistedInject constructor(
                                 selectedImages = (listOf(uriString) + selectedImages).take(maxImages).toPersistentList()
                             }
                         } else {
-                            sideEffect = GraphSideEffect.ShowToast(
-                                message = UiText.StringResource(R.string.graph_screen_image_not_found_error),
-                            )
+                            sideEffect = GraphSideEffect.ShowToast(UiText.StringResource(R.string.graph_screen_image_not_found_error))
                         }
                     }
                 }
@@ -81,6 +100,7 @@ class GraphPresenter @AssistedInject constructor(
         }
 
         return GraphUiState(
+            uiState = uiState,
             webViewUrl = webViewUrl,
             selectedImages = selectedImages,
             sideEffect = sideEffect,

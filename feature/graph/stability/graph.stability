@@ -35,8 +35,27 @@ private fun com.metasearch.android.feature.graph.GraphUiContent(state: com.metas
     - innerPadding: STABLE (marked @Stable or @Immutable)
 
 @Composable
+private fun com.metasearch.android.feature.graph.GraphUiErrorPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
 private fun com.metasearch.android.feature.graph.GraphUiPreview(): kotlin.Unit
   skippable: true
   restartable: true
   params:
+
+@Composable
+private fun com.metasearch.android.feature.graph.GraphUiWebViewPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
+private fun com.metasearch.android.feature.graph.SelectedImagesList(state: com.metasearch.android.feature.graph.GraphUiState): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - state: STABLE (class with no mutable properties)
 
