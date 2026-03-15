@@ -68,7 +68,7 @@ internal object NetworkModule {
     @Provides
     internal fun provideAIOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-         chuckerInterceptor: ChuckerInterceptor,
+        chuckerInterceptor: ChuckerInterceptor,
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .connectTimeout(MAX_TIMEOUT_SECONDS_AI, TimeUnit.SECONDS)

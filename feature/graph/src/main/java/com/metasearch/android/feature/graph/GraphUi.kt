@@ -97,7 +97,7 @@ private fun GraphUiContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .zIndex(1f),
-            contentAlignment = Alignment.CenterStart
+            contentAlignment = Alignment.CenterStart,
         ) {
             MetaSearchHeader(
                 title = stringResource(R.string.graph_screen_header),
@@ -123,10 +123,6 @@ private fun GraphUiContent(
                                 }
                             }
 
-                            override fun onPageFinished(view: WebView?, url: String?) {
-
-                            }
-
                             override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
                                 if (request?.isForMainFrame == true) {
                                     view?.stopLoading()
@@ -140,17 +136,20 @@ private fun GraphUiContent(
                             }
                         }
 
-                        addJavascriptInterface(object {
-                            @JavascriptInterface
-                            fun onPageReady() {
-                                state.eventSink(GraphUiEvent.OnWebSuccess)
-                            }
+                        addJavascriptInterface(
+                            object {
+                                @JavascriptInterface
+                                fun onPageReady() {
+                                    state.eventSink(GraphUiEvent.OnWebSuccess)
+                                }
 
-                            @JavascriptInterface
-                            fun receivePhotoName(photoName: String) {
-                                state.eventSink(GraphUiEvent.OnPhotoSelected(photoName))
-                            }
-                        }, "Android")
+                                @JavascriptInterface
+                                fun receivePhotoName(photoName: String) {
+                                    state.eventSink(GraphUiEvent.OnPhotoSelected(photoName))
+                                }
+                            },
+                            "Android",
+                        )
                     }
                 },
                 update = { webView ->
@@ -159,7 +158,7 @@ private fun GraphUiContent(
                     if (state.webViewUrl.isNotEmpty() && webView.url != state.webViewUrl) {
                         webView.loadUrl(state.webViewUrl)
                     }
-                }
+                },
             )
 
             if (state.uiState is UiState.Loading) {
@@ -172,12 +171,12 @@ private fun GraphUiContent(
                 Column(
                     modifier = Modifier.fillMaxSize().background(White),
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
                         text = stringResource(R.string.graph_screen_network_error),
                         style = MetaSearchTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                     Spacer(modifier = Modifier.height(MetaSearchTheme.spacing.spacing4))
                     MetaSearchButton(
