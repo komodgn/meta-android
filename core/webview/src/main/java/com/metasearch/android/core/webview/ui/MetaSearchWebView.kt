@@ -37,11 +37,14 @@ open class MetaSearchWebView @JvmOverloads constructor(
     }
 
     fun setPhotoSelectionInterface(onPhotoSelected: (String) -> Unit) {
-        addJavascriptInterface(object {
-            @JavascriptInterface
-            fun receivePhotoName(photoName: String) {
-                onPhotoSelected(photoName)
-            }
-        }, "Android")
+        addJavascriptInterface(
+            object {
+                @JavascriptInterface
+                fun receivePhotoName(photoName: String) {
+                    onPhotoSelected(photoName)
+                }
+            },
+            "Android",
+        )
     }
 }

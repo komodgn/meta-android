@@ -132,14 +132,14 @@ private fun GraphUiContent(
                     override fun onReceivedError(
                         view: WebView?,
                         request: WebResourceRequest?,
-                        error: WebResourceError?
+                        error: WebResourceError?,
                     ) {
                         if (request?.isForMainFrame == true) {
                             view?.stopLoading()
                             state.eventSink(GraphUiEvent.OnWebError(error?.description?.toString() ?: "Network Error"))
                         }
                     }
-                }
+                },
             )
 
             if (state.uiState is UiState.Loading) {
