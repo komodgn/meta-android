@@ -31,6 +31,7 @@ dependencies {
     implementation(projects.core.notification)
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
+    implementation(projects.core.webview)
 
     implementation(projects.feature.screens)
     implementation(projects.feature.splash)
@@ -40,7 +41,6 @@ dependencies {
     implementation(projects.feature.main)
     implementation(projects.feature.person)
     implementation(projects.feature.graph)
-    implementation(projects.feature.webview)
 
     implementation(libs.bundles.circuit)
 

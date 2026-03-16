@@ -2,13 +2,10 @@ package com.metasearch.android.feature.graph
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
-import android.net.http.SslError
 import android.webkit.JavascriptInterface
-import android.webkit.SslErrorHandler
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +30,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
 import coil3.compose.AsyncImage
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
@@ -44,6 +40,8 @@ import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
+import com.metasearch.android.core.webview.ui.MetaSearchWebViewClient
+import com.metasearch.android.core.webview.ui.MetaSearchWebViewContainer
 import com.metasearch.android.feature.graph.mock.graphUiStateMock
 import com.metasearch.android.feature.screens.GraphScreen
 import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
@@ -106,57 +104,40 @@ private fun GraphUiContent(
             )
         }
         Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-            AndroidView(
-                modifier = Modifier.fillMaxSize(),
-                factory = { context ->
-                    WebView(context).apply {
-                        settings.apply {
-                            javaScriptEnabled = true
-                            loadWithOverviewMode = true
-                            useWideViewPort = true
-                        }
-
-                        webViewClient = object : WebViewClient() {
-                            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                                if (url != null && !url.startsWith("about:")) {
-                                    state.eventSink(GraphUiEvent.OnWebLoading)
-                                }
+            MetaSearchWebViewContainer(
+                url = state.webViewUrl,
+                onWebViewCreated = { webView ->
+                    webView.addJavascriptInterface(
+                        object {
+                            @JavascriptInterface
+                            fun onPageReady() {
+                                state.eventSink(GraphUiEvent.OnWebSuccess)
                             }
 
-                            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-                                if (request?.isForMainFrame == true) {
-                                    view?.stopLoading()
-                                    state.eventSink(GraphUiEvent.OnWebError(error?.description?.toString() ?: "Network Error"))
-                                }
+                            @JavascriptInterface
+                            fun receivePhotoName(photoName: String) {
+                                state.eventSink(GraphUiEvent.OnPhotoSelected(photoName))
                             }
-
-                            @SuppressLint("WebViewClientOnReceivedSslError")
-                            override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
-                                handler?.proceed()
-                            }
-                        }
-
-                        addJavascriptInterface(
-                            object {
-                                @JavascriptInterface
-                                fun onPageReady() {
-                                    state.eventSink(GraphUiEvent.OnWebSuccess)
-                                }
-
-                                @JavascriptInterface
-                                fun receivePhotoName(photoName: String) {
-                                    state.eventSink(GraphUiEvent.OnPhotoSelected(photoName))
-                                }
-                            },
-                            "Android",
-                        )
-                    }
+                        },
+                        "Android",
+                    )
                 },
-                update = { webView ->
-                    if (state.uiState is UiState.Error) return@AndroidView
+                webViewClient = object : MetaSearchWebViewClient() {
+                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                        if (url != null && !url.startsWith("about:")) {
+                            state.eventSink(GraphUiEvent.OnWebLoading)
+                        }
+                    }
 
-                    if (state.webViewUrl.isNotEmpty() && webView.url != state.webViewUrl) {
-                        webView.loadUrl(state.webViewUrl)
+                    override fun onReceivedError(
+                        view: WebView?,
+                        request: WebResourceRequest?,
+                        error: WebResourceError?,
+                    ) {
+                        if (request?.isForMainFrame == true) {
+                            view?.stopLoading()
+                            state.eventSink(GraphUiEvent.OnWebError(error?.description?.toString() ?: "Network Error"))
+                        }
                     }
                 },
             )
