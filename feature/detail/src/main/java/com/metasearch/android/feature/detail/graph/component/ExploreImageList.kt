@@ -23,9 +23,9 @@ import coil3.compose.AsyncImage
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
+import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.detail.graph.GraphDetailUiEvent
 import com.metasearch.android.feature.detail.graph.GraphDetailUiState
-import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.detail.graph.mock.graphDetailUiStateMock
 
 @Composable
