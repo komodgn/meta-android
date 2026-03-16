@@ -41,146 +41,27 @@ private fun com.metasearch.android.feature.detail.graph.GraphDetailUiPreview(): 
   params:
 
 @Composable
-private fun com.metasearch.android.feature.detail.person.PersonDetailContent(innerPadding: androidx.compose.foundation.layout.PaddingValues, state: com.metasearch.android.feature.detail.person.PersonDetailUiState): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-    - innerPadding: STABLE (marked @Stable or @Immutable)
-    - state: STABLE (class with no mutable properties)
-
-@Composable
-public fun com.metasearch.android.feature.detail.person.PersonDetailPresenter.present(): com.metasearch.android.feature.detail.person.PersonDetailUiState
-  skippable: true
-  restartable: true
-  params:
-
-@Composable
-public fun com.metasearch.android.feature.detail.person.PersonDetailUi(modifier: androidx.compose.ui.Modifier, state: com.metasearch.android.feature.detail.person.PersonDetailUiState): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-    - modifier: STABLE (marked @Stable or @Immutable)
-    - state: STABLE (class with no mutable properties)
-
-@Composable
-private fun com.metasearch.android.feature.detail.person.PersonDetailUiEditDialogPreview(): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-
-@Composable
-private fun com.metasearch.android.feature.detail.person.PersonDetailUiPreview(): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-
-@Composable
-private fun com.metasearch.android.feature.detail.person.PersonDetailUiProfileSelectPreview(): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-
-@Composable
-public fun com.metasearch.android.feature.detail.person.component.PersonDetailHeader(modifier: androidx.compose.ui.Modifier, personName: kotlin.String?, onBackClick: kotlin.Function0<kotlin.Unit>, onMenuClick: kotlin.Function0<kotlin.Unit>): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-    - modifier: STABLE (marked @Stable or @Immutable)
-    - personName: STABLE (class with no mutable properties)
-    - onBackClick: STABLE (function type)
-    - onMenuClick: STABLE (function type)
-
-@Composable
-public fun com.metasearch.android.feature.detail.person.component.PersonDetailHeaderPreview(): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-
-@Composable
-private fun com.metasearch.android.feature.detail.person.component.PersonEditContentPreview(): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-
-@Composable
-internal fun com.metasearch.android.feature.detail.person.component.PersonEditDialogContent(editName: kotlin.String, editPhone: kotlin.String, editIsHomeDisplay: kotlin.Boolean, onEvent: kotlin.Function1<com.metasearch.android.feature.detail.person.PersonDetailUiEvent, kotlin.Unit>): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-    - editName: STABLE (String is immutable)
-    - editPhone: STABLE (String is immutable)
-    - editIsHomeDisplay: STABLE (primitive type)
-    - onEvent: STABLE (function type)
-
-@Composable
-public fun com.metasearch.android.feature.detail.photo.PhotoDetailPresenter.present(): com.metasearch.android.feature.detail.photo.PhotoDetailUiState
-  skippable: true
-  restartable: true
-  params:
-
-@Composable
-public fun com.metasearch.android.feature.detail.photo.PhotoDetailSideEffect(state: com.metasearch.android.feature.detail.photo.PhotoDetailUiState, eventSink: kotlin.Function1<com.metasearch.android.feature.detail.photo.PhotoDetailUiEvent, kotlin.Unit>): kotlin.Unit
+public fun com.metasearch.android.feature.detail.graph.component.ExploreImageList(state: com.metasearch.android.feature.detail.graph.GraphDetailUiState): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - state: STABLE (class with no mutable properties)
-    - eventSink: STABLE (function type)
 
 @Composable
-public fun com.metasearch.android.feature.detail.photo.PhotoDetailUi(modifier: androidx.compose.ui.Modifier, state: com.metasearch.android.feature.detail.photo.PhotoDetailUiState): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-    - modifier: STABLE (marked @Stable or @Immutable)
-    - state: STABLE (class with no mutable properties)
-
-@Composable
-private fun com.metasearch.android.feature.detail.photo.PhotoDetailUiContent(state: com.metasearch.android.feature.detail.photo.PhotoDetailUiState, innerPadding: androidx.compose.foundation.layout.PaddingValues): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-    - state: STABLE (class with no mutable properties)
-    - innerPadding: STABLE (marked @Stable or @Immutable)
-
-@Composable
-private fun com.metasearch.android.feature.detail.photo.PhotoDetailUiPreview(): kotlin.Unit
+public fun com.metasearch.android.feature.detail.graph.component.ExploreImageListPreview(): kotlin.Unit
   skippable: true
   restartable: true
   params:
 
 @Composable
-private fun com.metasearch.android.feature.detail.photo.component.BottomBarItem(tab: com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBarItem, isSelected: kotlin.Boolean, onClick: kotlin.Function0<kotlin.Unit>): kotlin.Unit
+public fun com.metasearch.android.feature.detail.graph.component.WebViewErrorUi(onRetryClick: kotlin.Function0<kotlin.Unit>): kotlin.Unit
   skippable: true
   restartable: true
   params:
-    - tab: STABLE (class with no mutable properties)
-    - isSelected: STABLE (primitive type)
-    - onClick: STABLE (function type)
+    - onRetryClick: STABLE (function type)
 
 @Composable
-internal fun com.metasearch.android.feature.detail.photo.component.ImageDescriptionBottomSheetContent(description: kotlin.String): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-    - description: STABLE (String is immutable)
-
-@Composable
-private fun com.metasearch.android.feature.detail.photo.component.ImageDescriptionBottomSheetContentPreview(): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-
-@Composable
-public fun com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBar(modifier: androidx.compose.ui.Modifier, currentTab: com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBarItem?, onTabClick: kotlin.Function1<com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBarItem, kotlin.Unit>): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-    - modifier: STABLE (marked @Stable or @Immutable)
-    - currentTab: STABLE (class with no mutable properties)
-    - onTabClick: STABLE (function type)
-
-@Composable
-public fun com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBarPreview(): kotlin.Unit
+private fun com.metasearch.android.feature.detail.graph.component.WebViewErrorUiPreview(): kotlin.Unit
   skippable: true
   restartable: true
   params:
