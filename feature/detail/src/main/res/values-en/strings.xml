@@ -15,10 +15,12 @@
     <string name="person_detail_screen_profile_update_success_toast_message">Your profile picture has changed.</string>
 
     <string name="graph_detail_screen_header">Information in the photo</string>
-    <string name="graph_detail_screen_bottom_selected_image_label">Selected images</string>
+    <string name="graph_detail_screen_bottom_selected_image_label">Navigation images</string>
     <string name="graph_detail_screen_error">No photos found.</string>
     <string name="graph_detail_screen_dialog_title">NOTE</string>
     <string name="graph_detail_screen_dialog_close_button">OK</string>
+    <string name="graph_detail_screen_webview_error">Server connection failed.</string>
+    <string name="graph_detail_screen_reload_text_button">Try again</string>
 
     <string name="photo_detail_screen_header">Visualize Me By Photo</string>
     <string name="photo_detail_screen_bottom_item_openai">Description</string>

@@ -43,6 +43,7 @@ class GraphDetailPresenter @AssistedInject constructor(
     @Composable
     override fun present(): GraphDetailUiState {
         val scope = rememberCoroutineScope()
+        var uiState by rememberRetained { mutableStateOf<UiState>(UiState.Loading) }
         var sideEffect by rememberRetained { mutableStateOf<GraphDetailSideEffect?>(null) }
         var webViewUrl by remember { mutableStateOf("") }
         var selectedImages by remember { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
@@ -58,6 +59,26 @@ class GraphDetailPresenter @AssistedInject constructor(
                     sideEffect = null
                 }
 
+                GraphDetailUiEvent.OnWebLoading -> {
+                    uiState = UiState.Loading
+                }
+
+                GraphDetailUiEvent.OnWebSuccess -> {
+                    uiState = UiState.Success
+                }
+
+                is GraphDetailUiEvent.OnWebError -> {
+                    uiState = UiState.Error(event.message)
+                }
+
+                GraphDetailUiEvent.OnRetry -> {
+                    scope.launch {
+                        uiState = UiState.Loading
+                        webViewUrl = ""
+                        webViewUrl = graphRepository.getDetailGraphWebViewUrl(screen.entityName)
+                    }
+                }
+
                 is GraphDetailUiEvent.OnPhotoSelected -> {
                     scope.launch {
                         val uri = graphRepository.findMatchedUri(event.photoName)
@@ -67,9 +88,7 @@ class GraphDetailPresenter @AssistedInject constructor(
                                 selectedImages = (listOf(uriString) + selectedImages).take(maxImages).toPersistentList()
                             }
                         } else {
-                            sideEffect = GraphDetailSideEffect.ShowToast(
-                                message = UiText.StringResource(R.string.graph_detail_screen_error),
-                            )
+                            sideEffect = GraphDetailSideEffect.ShowToast(UiText.StringResource(R.string.graph_detail_screen_error))
                         }
                     }
                 }
@@ -85,6 +104,7 @@ class GraphDetailPresenter @AssistedInject constructor(
         }
 
         return GraphDetailUiState(
+            uiState = uiState,
             webViewUrl = webViewUrl,
             selectedImages = selectedImages,
             sideEffect = sideEffect,

@@ -1,36 +1,34 @@
 package com.metasearch.android.feature.detail.graph
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.webkit.JavascriptInterface
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
-import android.webkit.WebViewClient
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import coil3.compose.AsyncImage
+import androidx.compose.ui.zIndex
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral500
+import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
+import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
+import com.metasearch.android.core.webview.ui.MetaSearchWebViewClient
+import com.metasearch.android.core.webview.ui.MetaSearchWebViewContainer
 import com.metasearch.android.feature.detail.R
+import com.metasearch.android.feature.detail.graph.component.ExploreImageList
+import com.metasearch.android.feature.detail.graph.component.WebViewErrorUi
 import com.metasearch.android.feature.detail.graph.mock.graphDetailUiStateMock
 import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -66,22 +64,30 @@ private fun GraphDetailUiContent(
     Column(
         modifier = Modifier.padding(innerPadding),
     ) {
-        MetaSearchHeader(
-            title = stringResource(R.string.graph_detail_screen_header),
-            onBackClick = {
-                state.eventSink(GraphDetailUiEvent.OnBackClick)
-            },
-        )
-        AndroidView(
+        Box(
             modifier = Modifier
-                .weight(1f).fillMaxWidth(),
-            factory = { context ->
-                WebView(context).apply {
-                    settings.javaScriptEnabled = true
-                    webViewClient = WebViewClient()
-
-                    addJavascriptInterface(
+                .fillMaxWidth()
+                .zIndex(1f),
+            contentAlignment = Alignment.CenterStart,
+        ) {
+            MetaSearchHeader(
+                title = stringResource(R.string.graph_detail_screen_header),
+                onBackClick = {
+                    state.eventSink(GraphDetailUiEvent.OnBackClick)
+                },
+            )
+        }
+        Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
+            MetaSearchWebViewContainer(
+                url = state.webViewUrl,
+                onWebViewCreated = { webView ->
+                    webView.addJavascriptInterface(
                         object {
+                            @JavascriptInterface
+                            fun onPageReady() {
+                                state.eventSink(GraphDetailUiEvent.OnWebSuccess)
+                            }
+
                             @JavascriptInterface
                             fun receivePhotoName(photoName: String) {
                                 state.eventSink(GraphDetailUiEvent.OnPhotoSelected(photoName))
@@ -89,41 +95,40 @@ private fun GraphDetailUiContent(
                         },
                         "Android",
                     )
-                }
-            },
-            update = { webView ->
-                if (state.webViewUrl.isNotEmpty() && webView.url != state.webViewUrl) {
-                    webView.loadUrl(state.webViewUrl)
-                }
-            },
-        )
+                },
+                webViewClient = object : MetaSearchWebViewClient() {
+                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                        if (url != null && !url.startsWith("about:")) {
+                            state.eventSink(GraphDetailUiEvent.OnWebLoading)
+                        }
+                    }
 
-        if (state.selectedImages.isNotEmpty()) {
-            Text(
-                modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
-                text = stringResource(R.string.graph_detail_screen_bottom_selected_image_label),
-                color = Neutral500,
+                    override fun onReceivedError(
+                        view: WebView?,
+                        request: WebResourceRequest?,
+                        error: WebResourceError?,
+                    ) {
+                        if (request?.isForMainFrame == true) {
+                            view?.stopLoading()
+                            state.eventSink(GraphDetailUiEvent.OnWebError(error?.description?.toString() ?: "Network Error"))
+                        }
+                    }
+                },
             )
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp),
-                contentPadding = PaddingValues(MetaSearchTheme.spacing.spacing4),
-                horizontalArrangement = Arrangement.spacedBy(MetaSearchTheme.spacing.spacing2),
-            ) {
-                items(state.selectedImages) { uriString ->
-                    AsyncImage(
-                        model = uriString,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .clip(RoundedCornerShape(8.dp))
-                            .clickable { state.eventSink(GraphDetailUiEvent.OnImageClick(uriString)) },
-                        contentScale = ContentScale.Crop,
-                    )
+
+            if (state.uiState is UiState.Loading) {
+                Box(modifier = Modifier.fillMaxSize().background(White), contentAlignment = Alignment.Center) {
+                    MetaSearchLoadingIndicator()
                 }
             }
-            Spacer(modifier = Modifier.height(MetaSearchTheme.spacing.spacing4))
+
+            if (state.uiState is UiState.Error) {
+                WebViewErrorUi(onRetryClick = { state.eventSink(GraphDetailUiEvent.OnRetry) })
+            }
+        }
+
+        if (state.uiState is UiState.Success && state.selectedImages.isNotEmpty()) {
+            ExploreImageList(state)
         }
     }
 }

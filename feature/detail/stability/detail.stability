@@ -41,6 +41,32 @@ private fun com.metasearch.android.feature.detail.graph.GraphDetailUiPreview(): 
   params:
 
 @Composable
+public fun com.metasearch.android.feature.detail.graph.component.ExploreImageList(state: com.metasearch.android.feature.detail.graph.GraphDetailUiState): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - state: STABLE (class with no mutable properties)
+
+@Composable
+public fun com.metasearch.android.feature.detail.graph.component.ExploreImageListPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
+public fun com.metasearch.android.feature.detail.graph.component.WebViewErrorUi(onRetryClick: kotlin.Function0<kotlin.Unit>): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - onRetryClick: STABLE (function type)
+
+@Composable
+private fun com.metasearch.android.feature.detail.graph.component.WebViewErrorUiPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
 private fun com.metasearch.android.feature.detail.person.PersonDetailContent(innerPadding: androidx.compose.foundation.layout.PaddingValues, state: com.metasearch.android.feature.detail.person.PersonDetailUiState): kotlin.Unit
   skippable: true
   restartable: true
