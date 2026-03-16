@@ -48,7 +48,7 @@
 -  Module Strategy: Feature-based Multi-Module
 
 ### Project Dependency Graph
-<img width="2452" height="383" alt="project-dependency-graph" src="https://github.com/user-attachments/assets/dbbd3ba7-8df1-4411-9875-3c59fe4ac70e" />
+<img width="2666" height="598" alt="project-dependency-graph" src="https://github.com/user-attachments/assets/589bfcdc-b2b7-4fac-9b63-5df1fbab2362" />
 
 ## Project Structure
 ```text
