@@ -7,8 +7,15 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import java.util.UUID
 
+@Immutable
+sealed interface UiState {
+    data object Loading : UiState
+    data object Success : UiState
+    data class Error(val message: String) : UiState
+}
+
 data class GraphDetailUiState(
-    val isLoading: Boolean = false,
+    val uiState: UiState = UiState.Loading,
     val webViewUrl: String = "",
     val selectedImages: ImmutableList<String> = persistentListOf(),
     val sideEffect: GraphDetailSideEffect? = null,
@@ -25,6 +32,13 @@ sealed interface GraphDetailSideEffect {
 
 sealed interface GraphDetailUiEvent {
     data object InitSideEffect : GraphDetailUiEvent
+
+    data object OnWebLoading : GraphDetailUiEvent
+    data object OnWebSuccess : GraphDetailUiEvent
+    data class OnWebError(
+        val message: String,
+    ) : GraphDetailUiEvent
+    data object OnRetry : GraphDetailUiEvent
 
     data class OnPhotoSelected(
         val photoName: String,
