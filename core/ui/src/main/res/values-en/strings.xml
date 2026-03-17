@@ -1,0 +1,4 @@
+<resources>
+    <string name="webview_error_description">Server connection failed.</string>
+    <string name="webview_reload_text_button">Try again</string>
+</resources>

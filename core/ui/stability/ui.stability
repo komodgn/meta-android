@@ -134,3 +134,16 @@ private fun com.metasearch.android.core.ui.component.MetaSearchSquareImagePrevie
   restartable: true
   params:
 
+@Composable
+public fun com.metasearch.android.core.ui.component.WebViewErrorUi(onRetryClick: kotlin.Function0<kotlin.Unit>): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - onRetryClick: STABLE (function type)
+
+@Composable
+private fun com.metasearch.android.core.ui.component.WebViewErrorUiPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+

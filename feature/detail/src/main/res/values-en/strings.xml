@@ -19,8 +19,6 @@
     <string name="graph_detail_screen_error">No photos found.</string>
     <string name="graph_detail_screen_dialog_title">NOTE</string>
     <string name="graph_detail_screen_dialog_close_button">OK</string>
-    <string name="graph_detail_screen_webview_error">Server connection failed.</string>
-    <string name="graph_detail_screen_reload_text_button">Try again</string>
 
     <string name="photo_detail_screen_header">Visualize Me By Photo</string>
     <string name="photo_detail_screen_bottom_item_openai">Description</string>
