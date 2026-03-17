@@ -3,7 +3,5 @@
     <string name="graph_screen_bottom_selected_image_label">Navigation images</string>
     <string name="graph_screen_dialog_close_button">OK</string>
     <string name="graph_screen_dialog_title">NOTE</string>
-    <string name="graph_screen_network_error">Server connection failed.</string>
-    <string name="graph_screen_reload_text_button">Retry</string>
     <string name="graph_screen_image_not_found_error">No photos found.</string>
 </resources>

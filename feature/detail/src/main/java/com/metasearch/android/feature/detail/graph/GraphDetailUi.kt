@@ -24,11 +24,11 @@ import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
+import com.metasearch.android.core.ui.component.WebViewErrorUi
 import com.metasearch.android.core.webview.ui.MetaSearchWebViewClient
 import com.metasearch.android.core.webview.ui.MetaSearchWebViewContainer
 import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.detail.graph.component.ExploreImageList
-import com.metasearch.android.feature.detail.graph.component.WebViewErrorUi
 import com.metasearch.android.feature.detail.graph.mock.graphDetailUiStateMock
 import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject

@@ -20,8 +20,6 @@
     <string name="graph_detail_screen_error">사진을 찾지 못했습니다.</string>
     <string name="graph_detail_screen_dialog_title">알림</string>
     <string name="graph_detail_screen_dialog_close_button">확인</string>
-    <string name="graph_detail_screen_webview_error">서버 연결에 실패했습니다.</string>
-    <string name="graph_detail_screen_reload_text_button">다시 시도</string>
 
     <string name="photo_detail_screen_header">Visualize Me By Photo</string>
     <string name="photo_detail_screen_bottom_item_openai">설명</string>

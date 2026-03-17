@@ -33,13 +33,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil3.compose.AsyncImage
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
-import com.metasearch.android.core.designsystem.component.MetaSearchButton
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
+import com.metasearch.android.core.ui.component.WebViewErrorUi
 import com.metasearch.android.core.webview.ui.MetaSearchWebViewClient
 import com.metasearch.android.core.webview.ui.MetaSearchWebViewContainer
 import com.metasearch.android.feature.graph.mock.graphUiStateMock
@@ -149,22 +149,7 @@ private fun GraphUiContent(
             }
 
             if (state.uiState is UiState.Error) {
-                Column(
-                    modifier = Modifier.fillMaxSize().background(White),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        text = stringResource(R.string.graph_screen_network_error),
-                        style = MetaSearchTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center,
-                    )
-                    Spacer(modifier = Modifier.height(MetaSearchTheme.spacing.spacing4))
-                    MetaSearchButton(
-                        text = stringResource(R.string.graph_screen_reload_text_button),
-                        onClick = { state.eventSink(GraphUiEvent.OnRetry) },
-                    )
-                }
+                WebViewErrorUi(onRetryClick = { state.eventSink(GraphUiEvent.OnRetry) })
             }
         }
 
