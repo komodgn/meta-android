@@ -13,7 +13,6 @@ import com.metasearch.android.core.data.impl.di.IoDispatcher
 import com.metasearch.android.core.model.GalleryImageModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -36,7 +35,7 @@ internal class GalleryRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun getAllGalleryImages(): List<Uri> = withContext(Dispatchers.IO) {
+    override suspend fun getAllGalleryImages(): List<Uri> = withContext(ioDispatcher) {
         val imageUris = mutableListOf<Uri>()
         val projection = arrayOf(MediaStore.Images.Media._ID)
 
@@ -56,7 +55,7 @@ internal class GalleryRepositoryImpl @Inject constructor(
         imageUris
     }
 
-    override suspend fun getFileName(uri: Uri): String? = withContext(Dispatchers.IO) {
+    override suspend fun getFileName(uri: Uri): String? = withContext(ioDispatcher) {
         val projection = arrayOf(MediaStore.Images.Media.DISPLAY_NAME)
         context.contentResolver.query(
             uri,
@@ -73,7 +72,7 @@ internal class GalleryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun findMatchedUri(photoName: String): Uri? = withContext(Dispatchers.IO) {
+    override suspend fun findMatchedUri(photoName: String): Uri? = withContext(ioDispatcher) {
         val projection = arrayOf(MediaStore.Images.Media._ID)
         val selection = "${MediaStore.Images.Media.DISPLAY_NAME} = ?"
         val selectionArgs = arrayOf(photoName)
@@ -94,7 +93,7 @@ internal class GalleryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun findMatchedUris(photoNames: List<String>): List<Uri> = withContext(Dispatchers.IO) {
+    override suspend fun findMatchedUris(photoNames: List<String>): List<Uri> = withContext(ioDispatcher) {
         val allImages = mutableMapOf<String, Uri>()
         val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DISPLAY_NAME)
 
