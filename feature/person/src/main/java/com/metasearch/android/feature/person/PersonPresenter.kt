@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.common.utils.handleException
 import com.metasearch.android.core.data.api.repository.PersonRepository
 import com.metasearch.android.feature.screens.PersonDetailScreen

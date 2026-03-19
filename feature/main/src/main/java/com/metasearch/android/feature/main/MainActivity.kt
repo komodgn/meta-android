@@ -17,7 +17,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.metasearch.android.core.common.utils.EventHandler
 import com.metasearch.android.core.common.utils.MetaSearchDialogSpec
 import com.metasearch.android.core.common.utils.MetaSearchEvent
-import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.designsystem.component.MetaSearchToast
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.ui.component.MetaSearchDialog
