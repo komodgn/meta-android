@@ -106,9 +106,7 @@ class FocusingSearchPresenter @AssistedInject constructor(
                                 handleException(
                                     exception = exception,
                                     onError = { message ->
-                                        sideEffect = FocusingSearchSideEffect.ShowToast(
-                                            message = UiText.DynamicString(message),
-                                        )
+                                        sideEffect = FocusingSearchSideEffect.ShowToast(message)
                                     },
                                 )
                             }

@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
@@ -45,6 +46,7 @@ fun MetaSearchToast(
                         text = it,
                         color = LightPink,
                         style = MetaSearchTheme.typography.captionSmall,
+                        textAlign = TextAlign.Center,
                         modifier = Modifier.padding(
                             horizontal = MetaSearchTheme.spacing.spacing4,
                             vertical = MetaSearchTheme.spacing.spacing2,

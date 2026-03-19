@@ -7,7 +7,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
-import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.common.utils.handleException
 import com.metasearch.android.core.data.api.repository.GalleryRepository
 import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
@@ -68,9 +67,7 @@ class PhotoDetailPresenter @AssistedInject constructor(
                                 handleException(
                                     exception = exception,
                                     onError = { message ->
-                                        sideEffect = PhotoDetailSideEffect.ShowToast(
-                                            message = UiText.DynamicString(message),
-                                        )
+                                        sideEffect = PhotoDetailSideEffect.ShowToast(message)
                                     },
                                 )
                             }

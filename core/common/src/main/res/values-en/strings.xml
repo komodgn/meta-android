@@ -1,0 +1,7 @@
+<resources>
+    <string name="error_network_unstable">The network connection is unstable.\nPlease check your internet connection.</string>
+    <string name="error_wait_analysis">Please try again after completing the image analysis.</string>
+    <string name="error_unknown">An unknown error has occurred.</string>
+    <string name="error_server_with_code">A server error has occurred. (%d)</string>
+    <string name="confirm">OK</string>
+</resources>

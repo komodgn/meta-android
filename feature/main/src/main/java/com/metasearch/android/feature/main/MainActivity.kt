@@ -97,8 +97,8 @@ class MainActivity : ComponentActivity() {
                                 spec.onConfirm()
                                 dialogSpec.value = null
                             },
-                            dismissButtonText = spec.dismissText,
-                            confirmButtonText = spec.confirmText,
+                            dismissButtonText = spec.dismissText?.asString(),
+                            confirmButtonText = spec.confirmText.asString(),
                             title = spec.title,
                         )
                     }
