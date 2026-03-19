@@ -5,26 +5,12 @@
 //   ./gradlew :home:stabilityDump
 
 @Composable
-public fun com.metasearch.android.feature.home.HomePresenter.present(): com.metasearch.android.feature.home.HomeUiState
-  skippable: true
-  restartable: true
-  params:
-
-@Composable
-public fun com.metasearch.android.feature.home.HomeSideEffect(state: com.metasearch.android.feature.home.HomeUiState, eventSink: kotlin.Function1<com.metasearch.android.feature.home.HomeUiEvent, kotlin.Unit>): kotlin.Unit
-  skippable: false
-  restartable: true
-  params:
-    - state: RUNTIME (requires runtime check)
-    - eventSink: STABLE (function type)
-
-@Composable
 public fun com.metasearch.android.feature.home.HomeUi(modifier: androidx.compose.ui.Modifier, state: com.metasearch.android.feature.home.HomeUiState): kotlin.Unit
   skippable: false
   restartable: true
   params:
     - modifier: STABLE (marked @Stable or @Immutable)
-    - state: RUNTIME (requires runtime check)
+    - state: UNSTABLE (has mutable properties or unstable members)
 
 @Composable
 private fun com.metasearch.android.feature.home.HomeUiCollapsedPreview(): kotlin.Unit
@@ -37,7 +23,7 @@ private fun com.metasearch.android.feature.home.HomeUiContent(state: com.metasea
   skippable: false
   restartable: true
   params:
-    - state: RUNTIME (requires runtime check)
+    - state: UNSTABLE (has mutable properties or unstable members)
     - innerPadding: STABLE (marked @Stable or @Immutable)
 
 @Composable
@@ -48,37 +34,6 @@ private fun com.metasearch.android.feature.home.HomeUiLongClickPreview(): kotlin
 
 @Composable
 private fun com.metasearch.android.feature.home.HomeUiPreview(): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-
-@Composable
-public fun com.metasearch.android.feature.home.component.HomeHeader(modifier: androidx.compose.ui.Modifier, onUploadClick: kotlin.Function0<kotlin.Unit>, isAnalyzing: kotlin.Boolean): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-    - modifier: STABLE (marked @Stable or @Immutable)
-    - onUploadClick: STABLE (function type)
-    - isAnalyzing: STABLE (primitive type)
-
-@Composable
-public fun com.metasearch.android.feature.home.component.HomeHeaderPreview(): kotlin.Unit
-  skippable: true
-  restartable: true
-  params:
-
-@Composable
-internal fun com.metasearch.android.feature.home.component.PersonCircleItem(modifier: androidx.compose.ui.Modifier, name: kotlin.String, image: kotlin.ByteArray?, onClick: kotlin.Function0<kotlin.Unit>): kotlin.Unit
-  skippable: false
-  restartable: true
-  params:
-    - modifier: STABLE (marked @Stable or @Immutable)
-    - name: STABLE (String is immutable)
-    - image: UNSTABLE (has mutable properties or unstable members)
-    - onClick: STABLE (function type)
-
-@Composable
-private fun com.metasearch.android.feature.home.component.PersonCircleItemPreview(): kotlin.Unit
   skippable: true
   restartable: true
   params:

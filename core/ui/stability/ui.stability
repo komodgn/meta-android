@@ -118,12 +118,13 @@ private fun com.metasearch.android.core.ui.component.MetaSearchSearchBarPreview(
   params:
 
 @Composable
-public fun com.metasearch.android.core.ui.component.MetaSearchSquareImage(modifier: androidx.compose.ui.Modifier, model: kotlin.Any?, contentDescription: kotlin.String?, onClick: kotlin.Function0<kotlin.Unit>?, onLongClick: kotlin.Function0<kotlin.Unit>?): kotlin.Unit
+public fun com.metasearch.android.core.ui.component.MetaSearchSquareImage(modifier: androidx.compose.ui.Modifier, model: kotlin.Any?, contentScale: androidx.compose.ui.layout.ContentScale, contentDescription: kotlin.String?, onClick: kotlin.Function0<kotlin.Unit>?, onLongClick: kotlin.Function0<kotlin.Unit>?): kotlin.Unit
   skippable: false
   restartable: true
   params:
     - modifier: STABLE (marked @Stable or @Immutable)
     - model: UNSTABLE (has mutable properties or unstable members)
+    - contentScale: STABLE (marked @Stable or @Immutable)
     - contentDescription: STABLE (class with no mutable properties)
     - onClick: STABLE (function type)
     - onLongClick: STABLE (function type)
