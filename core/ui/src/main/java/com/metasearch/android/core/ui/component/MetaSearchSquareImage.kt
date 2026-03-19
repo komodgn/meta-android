@@ -16,6 +16,7 @@ import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 fun MetaSearchSquareImage(
     modifier: Modifier = Modifier,
     model: Any?,
+    contentScale: ContentScale = ContentScale.Crop,
     contentDescription: String? = null,
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
@@ -30,7 +31,7 @@ fun MetaSearchSquareImage(
                 onLongClick = { onLongClick?.invoke() },
             ),
         model = model,
-        contentScale = ContentScale.Crop,
+        contentScale = contentScale,
         contentDescription = contentDescription,
     )
 }

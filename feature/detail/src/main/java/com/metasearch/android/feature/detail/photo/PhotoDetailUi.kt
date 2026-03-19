@@ -3,6 +3,7 @@ package com.metasearch.android.feature.detail.photo
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomSheetDefaults
@@ -18,7 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import coil3.compose.AsyncImage
+import com.metasearch.android.core.common.extensions.clickableIfNotNull
 import com.metasearch.android.core.common.extensions.previewPlaceholder
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.LightPink
@@ -26,6 +27,7 @@ import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
+import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.detail.photo.component.ImageDescriptionBottomSheetContent
 import com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBar
@@ -115,13 +117,13 @@ private fun PhotoDetailUiContent(
                 state.eventSink(PhotoDetailUiEvent.OnBackClick)
             },
         )
-        AsyncImage(
+        MetaSearchSquareImage(
             model = state.imageUriString,
             contentDescription = "Photo Detail Screen Image",
+            contentScale = ContentScale.Fit,
             modifier = Modifier
                 .weight(1f)
                 .previewPlaceholder(),
-            contentScale = ContentScale.Crop,
         )
         Spacer(modifier = Modifier.height(MetaSearchTheme.spacing.spacing6))
     }

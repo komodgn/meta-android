@@ -26,12 +26,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import coil3.compose.AsyncImage
+import com.metasearch.android.core.common.extensions.previewPlaceholder
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
@@ -39,6 +38,7 @@ import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
+import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 import com.metasearch.android.core.ui.component.WebViewErrorUi
 import com.metasearch.android.core.webview.ui.MetaSearchWebViewClient
 import com.metasearch.android.core.webview.ui.MetaSearchWebViewContainer
@@ -173,14 +173,14 @@ private fun SelectedImagesList(state: GraphUiState) {
             horizontalArrangement = Arrangement.spacedBy(MetaSearchTheme.spacing.spacing2),
         ) {
             items(state.selectedImages) { uriString ->
-                AsyncImage(
+                MetaSearchSquareImage(
                     model = uriString,
                     contentDescription = null,
                     modifier = Modifier
                         .aspectRatio(1f)
                         .clip(RoundedCornerShape(8.dp))
-                        .clickable { state.eventSink(GraphUiEvent.OnImageClick(uriString)) },
-                    contentScale = ContentScale.Crop,
+                        .clickable { state.eventSink(GraphUiEvent.OnImageClick(uriString)) }
+                        .previewPlaceholder(),
                 )
             }
         }
