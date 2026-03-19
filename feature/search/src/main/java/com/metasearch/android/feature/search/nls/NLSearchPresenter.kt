@@ -74,9 +74,7 @@ class NLSearchPresenter @AssistedInject constructor(
                                 handleException(
                                     exception = exception,
                                     onError = { message ->
-                                        sideEffect = NLSearchSideEffect.ShowToast(
-                                            message = UiText.DynamicString(message),
-                                        )
+                                        sideEffect = NLSearchSideEffect.ShowToast(message)
                                     },
                                 )
                             }

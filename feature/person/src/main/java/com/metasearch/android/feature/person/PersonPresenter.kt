@@ -86,9 +86,7 @@ class PersonPresenter @AssistedInject constructor(
                                     handleException(
                                         exception = exception,
                                         onError = { message ->
-                                            sideEffect = PersonSideEffect.ShowToast(
-                                                message = UiText.DynamicString(message),
-                                            )
+                                            sideEffect = PersonSideEffect.ShowToast(message)
                                         },
                                     )
                                     showDeleteDialog = false

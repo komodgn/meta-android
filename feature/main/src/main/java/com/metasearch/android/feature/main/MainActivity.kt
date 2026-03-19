@@ -17,6 +17,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.metasearch.android.core.common.utils.EventHandler
 import com.metasearch.android.core.common.utils.MetaSearchDialogSpec
 import com.metasearch.android.core.common.utils.MetaSearchEvent
+import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.designsystem.component.MetaSearchToast
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.ui.component.MetaSearchDialog
@@ -97,8 +98,8 @@ class MainActivity : ComponentActivity() {
                                 spec.onConfirm()
                                 dialogSpec.value = null
                             },
-                            dismissButtonText = spec.dismissText,
-                            confirmButtonText = spec.confirmText,
+                            dismissButtonText = spec.dismissText?.asString(),
+                            confirmButtonText = spec.confirmText.asString(),
                             title = spec.title,
                         )
                     }

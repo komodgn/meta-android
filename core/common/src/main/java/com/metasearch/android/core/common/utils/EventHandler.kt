@@ -1,6 +1,8 @@
 package com.metasearch.android.core.common.utils
 
+import com.metasearch.android.core.common.R
 import com.metasearch.android.core.common.constants.ErrorScope
+import com.metasearch.android.core.common.extensions.isNetworkError
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import retrofit2.HttpException
@@ -26,9 +28,9 @@ sealed interface MetaSearchEvent {
 
 data class MetaSearchDialogSpec(
     val title: String? = null,
-    val description: String,
-    val confirmText: String,
-    val dismissText: String? = null,
+    val description: UiText,
+    val confirmText: UiText = UiText.StringResource(R.string.confirm),
+    val dismissText: UiText? = null,
     val onConfirm: () -> Unit,
     val onDismiss: () -> Unit = {},
 )
@@ -36,28 +38,28 @@ data class MetaSearchDialogSpec(
 fun showErrorDialog(
     errorScope: ErrorScope,
     exception: Throwable,
-    confirmText: String = "확인",
+    confirmText: UiText = UiText.StringResource(R.string.confirm),
     onConfirm: () -> Unit = {},
 ) {
     val (title, message) = when {
         exception.isNetworkError() -> {
-            null to "네트워크 연결이 불안정합니다.\n인터넷 연결을 확인해주세요."
+            null to UiText.StringResource(R.string.error_network_unstable)
         }
 
         exception is HttpException -> {
             when (errorScope) {
                 ErrorScope.GLOBAL -> {
-                    null to "알 수 없는 문제가 발생했습니다.\n잠시 후 다시 시도해주세요."
+                    null to UiText.StringResource(R.string.error_unknown)
                 }
 
                 ErrorScope.IMAGE_ANALYSIS -> {
-                    null to "이미지 분석 완료 후 다시 시도해주세요."
+                    null to UiText.StringResource(R.string.error_wait_analysis)
                 }
             }
         }
 
         else -> {
-            null to "알 수 없는 문제가 발생했습니다.\n잠시 후 다시 시도해주세요."
+            null to UiText.StringResource(R.string.error_unknown)
         }
     }
 
