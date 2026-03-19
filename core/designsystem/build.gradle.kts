@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.metasearch.android.core.designsystem"
 }
+
+dependencies {
+    implementation(libs.coil.compose)
+}
