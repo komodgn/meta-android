@@ -1,47 +1,51 @@
-package com.metasearch.android.core.ui.component
+package com.metasearch.android.core.designsystem.component
 
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.metasearch.android.core.common.extensions.previewPlaceholder
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 
 @Composable
-fun MetaSearchSquareImage(
+fun NetworkImage(
+    imageUrl: String?,
     modifier: Modifier = Modifier,
-    model: Any?,
-    contentScale: ContentScale = ContentScale.Crop,
     contentDescription: String? = null,
+    contentScale: ContentScale = ContentScale.Crop,
+    ratio: Float? = null,
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
 ) {
     AsyncImage(
+        model = imageUrl,
+        contentDescription = contentDescription,
+        contentScale = contentScale,
         modifier = modifier
-            .aspectRatio(1f)
-            .padding(1.dp)
-            .previewPlaceholder()
+            .then(
+                if (ratio != null) Modifier.aspectRatio(ratio) else Modifier,
+            )
             .combinedClickable(
                 onClick = { onClick?.invoke() },
                 onLongClick = { onLongClick?.invoke() },
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
             ),
-        model = model,
-        contentScale = contentScale,
-        contentDescription = contentDescription,
     )
 }
 
 @ComponentPreview
 @Composable
-private fun MetaSearchSquareImagePreview() {
+private fun NetworkImagePreview() {
     MetaSearchTheme {
-        MetaSearchSquareImage(
-            model = "",
+        NetworkImage(
+            imageUrl = "",
+            onClick = {},
+            onLongClick = {},
         )
     }
 }

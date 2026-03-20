@@ -15,5 +15,4 @@ dependencies {
     implementation(projects.core.notification)
 
     implementation(libs.androidx.work.runtime)
-    implementation(libs.coil.compose)
 }

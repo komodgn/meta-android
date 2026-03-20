@@ -37,6 +37,19 @@ public fun com.metasearch.android.core.designsystem.component.MetaSearchToast(mo
     - isVisible: STABLE (primitive type)
 
 @Composable
+public fun com.metasearch.android.core.designsystem.component.NetworkImage(imageUrl: kotlin.String?, modifier: androidx.compose.ui.Modifier, contentDescription: kotlin.String?, contentScale: androidx.compose.ui.layout.ContentScale, ratio: kotlin.Float?, onClick: kotlin.Function0<kotlin.Unit>?, onLongClick: kotlin.Function0<kotlin.Unit>?): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - imageUrl: STABLE (class with no mutable properties)
+    - modifier: STABLE (marked @Stable or @Immutable)
+    - contentDescription: STABLE (class with no mutable properties)
+    - contentScale: STABLE (marked @Stable or @Immutable)
+    - ratio: STABLE (class with no mutable properties)
+    - onClick: STABLE (function type)
+    - onLongClick: STABLE (function type)
+
+@Composable
 public fun com.metasearch.android.core.designsystem.theme.MetaSearchTheme(content: @[Composable] androidx.compose.runtime.internal.ComposableFunction0<kotlin.Unit>): kotlin.Unit
   skippable: true
   restartable: true

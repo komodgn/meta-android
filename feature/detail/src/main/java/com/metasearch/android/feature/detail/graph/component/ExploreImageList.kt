@@ -16,13 +16,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import com.metasearch.android.core.common.extensions.previewPlaceholder
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
+import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.detail.graph.GraphDetailUiEvent
 import com.metasearch.android.feature.detail.graph.GraphDetailUiState
@@ -44,14 +44,14 @@ fun ExploreImageList(
             horizontalArrangement = Arrangement.spacedBy(MetaSearchTheme.spacing.spacing2),
         ) {
             items(state.selectedImages) { uriString ->
-                AsyncImage(
+                MetaSearchSquareImage(
                     model = uriString,
                     contentDescription = null,
                     modifier = Modifier
                         .aspectRatio(1f)
                         .clip(RoundedCornerShape(8.dp))
-                        .clickable { state.eventSink(GraphDetailUiEvent.OnImageClick(uriString)) },
-                    contentScale = ContentScale.Crop,
+                        .clickable { state.eventSink(GraphDetailUiEvent.OnImageClick(uriString)) }
+                        .previewPlaceholder(),
                 )
             }
         }

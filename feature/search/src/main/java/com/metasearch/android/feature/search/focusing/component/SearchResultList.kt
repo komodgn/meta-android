@@ -15,13 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import com.metasearch.android.core.common.extensions.previewPlaceholder
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.model.SearchResult
+import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 
 @Composable
 internal fun SearchResultList(
@@ -57,17 +55,15 @@ internal fun SearchResultList(
                     val hasMore = group.photoNames.size > displayLimit
 
                     items(itemsToShow) { photoName ->
-                        AsyncImage(
+                        MetaSearchSquareImage(
                             model = photoName,
                             contentDescription = null,
                             modifier = Modifier
                                 .size(100.dp)
-                                .previewPlaceholder()
                                 .clip(RoundedCornerShape(MetaSearchTheme.radius.sm))
                                 .clickable {
                                     onImageClick(photoName)
                                 },
-                            contentScale = ContentScale.Crop,
                         )
                     }
 

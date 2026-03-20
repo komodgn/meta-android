@@ -12,6 +12,4 @@ ksp {
 
 dependencies {
     implementation(projects.core.data.api)
-
-    implementation(libs.coil.compose)
 }

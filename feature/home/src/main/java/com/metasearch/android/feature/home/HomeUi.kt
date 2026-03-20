@@ -35,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.res.painterResource
@@ -46,7 +45,6 @@ import androidx.compose.ui.zIndex
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import coil3.compose.AsyncImage
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
@@ -131,7 +129,7 @@ fun HomeUi(
                                 state.eventSink(HomeUiEvent.OnShareRelease(uri))
                             },
                     )
-                    AsyncImage(
+                    MetaSearchSquareImage(
                         model = uri,
                         modifier = Modifier
                             .align(Alignment.TopStart)
@@ -147,7 +145,6 @@ fun HomeUi(
                                 scaleY = 1.2f
                                 rotationZ = -4f
                             },
-                        contentScale = ContentScale.Crop,
                         contentDescription = null,
                     )
                 }

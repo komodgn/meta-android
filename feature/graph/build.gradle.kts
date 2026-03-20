@@ -13,6 +13,4 @@ ksp {
 dependencies {
     implementation(projects.core.data.api)
     implementation(projects.core.webview)
-
-    implementation(libs.coil.compose)
 }

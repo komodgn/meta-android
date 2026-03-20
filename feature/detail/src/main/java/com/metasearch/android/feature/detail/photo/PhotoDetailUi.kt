@@ -18,9 +18,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import coil3.compose.AsyncImage
 import com.metasearch.android.core.common.extensions.previewPlaceholder
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
+import com.metasearch.android.core.designsystem.component.NetworkImage
 import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.ui.MetaSearchScaffold
@@ -115,13 +115,13 @@ private fun PhotoDetailUiContent(
                 state.eventSink(PhotoDetailUiEvent.OnBackClick)
             },
         )
-        AsyncImage(
-            model = state.imageUriString,
+        NetworkImage(
+            imageUrl = state.imageUriString,
             contentDescription = "Photo Detail Screen Image",
+            contentScale = ContentScale.Fit,
             modifier = Modifier
                 .weight(1f)
                 .previewPlaceholder(),
-            contentScale = ContentScale.Crop,
         )
         Spacer(modifier = Modifier.height(MetaSearchTheme.spacing.spacing6))
     }
