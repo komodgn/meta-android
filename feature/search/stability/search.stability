@@ -11,26 +11,128 @@ public fun com.metasearch.android.feature.search.focusing.FocusingSearchPresente
   params:
 
 @Composable
+public fun com.metasearch.android.feature.search.focusing.FocusingSearchSideEffect(state: com.metasearch.android.feature.search.focusing.FocusingSearchUiState, eventSink: kotlin.Function1<com.metasearch.android.feature.search.focusing.FocusingSearchUiEvent, kotlin.Unit>): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - state: STABLE (marked @Stable or @Immutable)
+    - eventSink: STABLE (function type)
+
+@Composable
+public fun com.metasearch.android.feature.search.focusing.FocusingSearchUi(modifier: androidx.compose.ui.Modifier, state: com.metasearch.android.feature.search.focusing.FocusingSearchUiState): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - modifier: STABLE (marked @Stable or @Immutable)
+    - state: STABLE (marked @Stable or @Immutable)
+
+@Composable
+private fun com.metasearch.android.feature.search.focusing.FocusingSearchUiContent(state: com.metasearch.android.feature.search.focusing.FocusingSearchUiState, innerPadding: androidx.compose.foundation.layout.PaddingValues): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - state: STABLE (marked @Stable or @Immutable)
+    - innerPadding: STABLE (marked @Stable or @Immutable)
+
+@Composable
+private fun com.metasearch.android.feature.search.focusing.FocusingSearchUiLoadingPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
+private fun com.metasearch.android.feature.search.focusing.FocusingSearchUiPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
+private fun com.metasearch.android.feature.search.focusing.component.BottomBarItem(tab: com.metasearch.android.feature.search.focusing.component.FocusingSearchBottomBarItem, isSelected: kotlin.Boolean, onClick: kotlin.Function0<kotlin.Unit>): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - tab: STABLE (class with no mutable properties)
+    - isSelected: STABLE (primitive type)
+    - onClick: STABLE (function type)
+
+@Composable
+public fun com.metasearch.android.feature.search.focusing.component.DrawingCanvas(circles: kotlinx.collections.immutable.ImmutableList<com.metasearch.android.core.model.CircleModel>?, isDrawing: kotlin.Boolean, currentCenter: androidx.compose.ui.geometry.Offset, currentRadius: kotlin.Float, canvasSize: androidx.compose.ui.unit.IntSize): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - circles: STABLE (known stable type)
+    - isDrawing: STABLE (primitive type)
+    - currentCenter: STABLE (marked @Stable or @Immutable)
+    - currentRadius: STABLE (primitive type)
+    - canvasSize: STABLE (marked @Stable or @Immutable)
+
+@Composable
+public fun com.metasearch.android.feature.search.focusing.component.FocusingSearchBottomBar(modifier: androidx.compose.ui.Modifier, currentTab: com.metasearch.android.feature.search.focusing.component.FocusingSearchBottomBarItem?, onTabClick: kotlin.Function1<com.metasearch.android.feature.search.focusing.component.FocusingSearchBottomBarItem, kotlin.Unit>): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - modifier: STABLE (marked @Stable or @Immutable)
+    - currentTab: STABLE (class with no mutable properties)
+    - onTabClick: STABLE (function type)
+
+@Composable
+public fun com.metasearch.android.feature.search.focusing.component.FocusingSearchBottomBarPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
+public fun com.metasearch.android.feature.search.focusing.component.MoreButton(onClick: kotlin.Function0<kotlin.Unit>): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - onClick: STABLE (function type)
+
+@Composable
+private fun com.metasearch.android.feature.search.focusing.component.MoreButtonPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
+internal fun com.metasearch.android.feature.search.focusing.component.SearchResultList(modifier: androidx.compose.ui.Modifier, result: com.metasearch.android.core.model.SearchResult, onImageClick: kotlin.Function1<kotlin.String, kotlin.Unit>, onMoreClick: kotlin.Function1<kotlin.String, kotlin.Unit>): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - modifier: STABLE (marked @Stable or @Immutable)
+    - result: STABLE (marked @Stable or @Immutable)
+    - onImageClick: STABLE (function type)
+    - onMoreClick: STABLE (function type)
+
+@Composable
 public fun com.metasearch.android.feature.search.nls.NLSearchPresenter.present(): com.metasearch.android.feature.search.nls.NLSearchUiState
   skippable: true
   restartable: true
   params:
 
 @Composable
+public fun com.metasearch.android.feature.search.nls.NLSearchSideEffect(state: com.metasearch.android.feature.search.nls.NLSearchUiState, eventSink: kotlin.Function1<com.metasearch.android.feature.search.nls.NLSearchUiEvent, kotlin.Unit>): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - state: STABLE (class with no mutable properties)
+    - eventSink: STABLE (function type)
+
+@Composable
 public fun com.metasearch.android.feature.search.nls.NLSearchUi(modifier: androidx.compose.ui.Modifier, state: com.metasearch.android.feature.search.nls.NLSearchUiState): kotlin.Unit
-  skippable: false
+  skippable: true
   restartable: true
   params:
     - modifier: STABLE (marked @Stable or @Immutable)
-    - state: UNSTABLE (has mutable properties or unstable members)
+    - state: STABLE (class with no mutable properties)
 
 @Composable
 private fun com.metasearch.android.feature.search.nls.NLSearchUiContent(modifier: androidx.compose.ui.Modifier, state: com.metasearch.android.feature.search.nls.NLSearchUiState, innerPadding: androidx.compose.foundation.layout.PaddingValues): kotlin.Unit
-  skippable: false
+  skippable: true
   restartable: true
   params:
     - modifier: STABLE (marked @Stable or @Immutable)
-    - state: UNSTABLE (has mutable properties or unstable members)
+    - state: STABLE (class with no mutable properties)
     - innerPadding: STABLE (marked @Stable or @Immutable)
 
 @Composable
@@ -41,6 +143,21 @@ private fun com.metasearch.android.feature.search.nls.NLSearchUiLoadingPreview()
 
 @Composable
 private fun com.metasearch.android.feature.search.nls.NLSearchUiPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
+public fun com.metasearch.android.feature.search.nls.component.NLSearchTextField(modifier: androidx.compose.ui.Modifier, inputString: kotlin.String, onSearchClick: kotlin.Function1<kotlin.String, kotlin.Unit>): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - modifier: STABLE (marked @Stable or @Immutable)
+    - inputString: STABLE (String is immutable)
+    - onSearchClick: STABLE (function type)
+
+@Composable
+private fun com.metasearch.android.feature.search.nls.component.NLSearchTextFieldPreview(): kotlin.Unit
   skippable: true
   restartable: true
   params:
