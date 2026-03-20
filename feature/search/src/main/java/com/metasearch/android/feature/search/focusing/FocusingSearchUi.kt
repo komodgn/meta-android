@@ -20,8 +20,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
-import coil3.compose.AsyncImage
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
+import com.metasearch.android.core.designsystem.component.NetworkImage
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.model.CircleModel
 import com.metasearch.android.core.ui.MetaSearchScaffold
@@ -135,8 +135,8 @@ private fun FocusingSearchUiContent(
                     )
                 },
         ) {
-            AsyncImage(
-                model = state.imageUriString,
+            NetworkImage(
+                imageUrl = state.imageUriString,
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Fit,
