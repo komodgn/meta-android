@@ -181,6 +181,7 @@ private fun SelectedImagesList(state: GraphUiState) {
                         .clip(RoundedCornerShape(8.dp))
                         .clickable { state.eventSink(GraphUiEvent.OnImageClick(uriString)) }
                         .previewPlaceholder(),
+                    onClick = { state.eventSink(GraphUiEvent.OnImageClick(uriString)) },
                 )
             }
         }

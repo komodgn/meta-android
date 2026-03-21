@@ -2,8 +2,8 @@ package com.metasearch.android.feature.search.focusing
 
 import androidx.compose.runtime.Immutable
 import com.metasearch.android.core.common.utils.UiText
-import com.metasearch.android.core.model.CircleModel
-import com.metasearch.android.core.model.SearchResult
+import com.metasearch.android.core.model.Circle
+import com.metasearch.android.core.model.DragSearchResult
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import kotlinx.collections.immutable.ImmutableList
@@ -14,11 +14,13 @@ import java.util.UUID
 data class FocusingSearchUiState(
     val isLoading: Boolean = false,
     val imageUriString: String,
-    val circles: ImmutableList<CircleModel> = persistentListOf(),
-    val searchResult: SearchResult? = null,
+    val circles: ImmutableList<Circle> = persistentListOf(),
+    val searchResult: DragSearchResult? = null,
     val sideEffect: FocusingSearchSideEffect? = null,
     val eventSink: (FocusingSearchUiEvent) -> Unit,
-) : CircuitUiState
+) : CircuitUiState {
+    companion object
+}
 
 @Immutable
 sealed interface FocusingSearchSideEffect {
@@ -35,7 +37,7 @@ sealed interface FocusingSearchUiEvent : CircuitUiEvent {
      * 드래그 완료 시, 원 추가
      */
     data class OnCircleAdded(
-        val circle: CircleModel,
+        val circle: Circle,
     ) : FocusingSearchUiEvent
 
     /**

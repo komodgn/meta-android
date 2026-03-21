@@ -2,6 +2,7 @@ package com.metasearch.android.feature.person
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +20,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -40,13 +42,14 @@ class PersonPresenter @AssistedInject constructor(
         var sideEffect by rememberRetained { mutableStateOf<PersonSideEffect?>(null) }
         var inputPersonNameString by rememberRetained { mutableStateOf("") }
         val allPeople by personRepository.getAllPersons().collectAsState(initial = emptyList())
-        val filteredPeople = rememberRetained(inputPersonNameString, allPeople) {
-            if (inputPersonNameString.isBlank()) {
-                allPeople
-            } else {
-                allPeople.filter { person ->
-                    person.inputName.contains(inputPersonNameString, ignoreCase = true)
+        val filteredPeople by remember(inputPersonNameString, allPeople) {
+            derivedStateOf {
+                val list = if (inputPersonNameString.isBlank()) {
+                    allPeople
+                } else {
+                    allPeople.filter { it.inputName.contains(inputPersonNameString, ignoreCase = true) }
                 }
+                list.toPersistentList()
             }
         }
         var showDeleteDialog by remember { mutableStateOf(false) }

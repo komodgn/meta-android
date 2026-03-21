@@ -10,7 +10,7 @@ import com.metasearch.android.core.data.api.repository.DatabaseNameRepository
 import com.metasearch.android.core.data.api.repository.PersonRepository
 import com.metasearch.android.core.data.impl.di.IoDispatcher
 import com.metasearch.android.core.data.impl.mapper.toModel
-import com.metasearch.android.core.model.PersonModel
+import com.metasearch.android.core.model.Person
 import com.metasearch.android.core.network.request.ChangeNameRequest
 import com.metasearch.android.core.network.request.DeleteEntityRequest
 import com.metasearch.android.core.network.request.PersonFrequencyRequest
@@ -32,6 +32,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
+import kotlin.collections.map
 
 class PersonRepositoryImpl @Inject constructor(
     private val personDao: PersonDao,
@@ -71,7 +72,7 @@ class PersonRepositoryImpl @Inject constructor(
         return callLogDuration
     }
 
-    private fun normalizeScores(people: List<PersonModel>): List<PersonModel> {
+    private fun normalizeScores(people: List<Person>): List<Person> {
         if (people.isEmpty()) return emptyList()
         val maxPhotoCount = people.maxOf { it.photoCount }.coerceAtLeast(1)
         val maxDuration = people.maxOf { it.totalDuration }.coerceAtLeast(1L)
@@ -82,14 +83,14 @@ class PersonRepositoryImpl @Inject constructor(
         }.sortedByDescending { it.normalizedScore }
     }
 
-    override fun getAllPersons(): Flow<List<PersonModel>> = personDao
+    override fun getAllPersons(): Flow<List<Person>> = personDao
         .getAllPersonsWithFaces().map { personWithFacesList ->
             val callDurations = getCallDurations()
 
             personWithFacesList.map { it.toModel(callDurations) }
         }
 
-    override fun getHomeDisplayPersons(): Flow<List<PersonModel>> = personDao
+    override fun getHomeDisplayPersons(): Flow<List<Person>> = personDao
         .getPersonsWithFaces().map { personWithFacesList ->
             val callDurations = getCallDurations()
 
@@ -100,7 +101,7 @@ class PersonRepositoryImpl @Inject constructor(
             normalizeScores(models)
         }
 
-    override fun getPersonById(personId: Long): Flow<PersonModel?> =
+    override fun getPersonById(personId: Long): Flow<Person?> =
         personDao.getPersonWithFacesFlow(personId)
             .map { it?.toModel(emptyMap()) }
             .flowOn(Dispatchers.IO)
@@ -131,7 +132,7 @@ class PersonRepositoryImpl @Inject constructor(
         personDao.insertPersonAndFace(imageName, imageBytes)
     }
 
-    override suspend fun fetchAndSyncPhotoCount(localModels: List<PersonModel>): List<PersonModel> =
+    override suspend fun fetchAndSyncPhotoCount(localModels: List<Person>): List<Person> =
         runSuspendCatching {
             val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
             val response = webService.getPersonFrequency(
@@ -154,7 +155,7 @@ class PersonRepositoryImpl @Inject constructor(
             it.serverName to it.actualName
         }
 
-    override suspend fun deleteAnalyzedPerson(person: PersonModel): Result<Unit> = withContext(ioDispatcher) {
+    override suspend fun deleteAnalyzedPerson(person: Person): Result<Unit> = withContext(ioDispatcher) {
         runSuspendCatching {
             val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 

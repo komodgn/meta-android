@@ -16,15 +16,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
-import com.metasearch.android.core.model.SearchResult
+import com.metasearch.android.core.model.DragSearchResult
+import com.metasearch.android.core.model.fakes
 import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 
 @Composable
 internal fun SearchResultList(
     modifier: Modifier = Modifier,
-    result: SearchResult,
+    result: DragSearchResult,
     onImageClick: (String) -> Unit,
     onMoreClick: (String) -> Unit,
 ) {
@@ -64,6 +66,7 @@ internal fun SearchResultList(
                                 .clickable {
                                     onImageClick(photoName)
                                 },
+                            onClick = { onImageClick(photoName) },
                         )
                     }
 
@@ -77,5 +80,17 @@ internal fun SearchResultList(
                 }
             }
         }
+    }
+}
+
+@ComponentPreview
+@Composable
+private fun SearchResultListPreview() {
+    MetaSearchTheme {
+        SearchResultList(
+            result = DragSearchResult.fakes(),
+            onMoreClick = {},
+            onImageClick = {},
+        )
     }
 }

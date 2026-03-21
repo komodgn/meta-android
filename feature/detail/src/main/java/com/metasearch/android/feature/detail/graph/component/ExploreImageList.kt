@@ -26,7 +26,7 @@ import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.detail.graph.GraphDetailUiEvent
 import com.metasearch.android.feature.detail.graph.GraphDetailUiState
-import com.metasearch.android.feature.detail.graph.mock.graphDetailUiStateMock
+import com.metasearch.android.feature.detail.graph.mock.mock
 
 @Composable
 fun ExploreImageList(
@@ -52,6 +52,7 @@ fun ExploreImageList(
                         .clip(RoundedCornerShape(8.dp))
                         .clickable { state.eventSink(GraphDetailUiEvent.OnImageClick(uriString)) }
                         .previewPlaceholder(),
+                    onClick = { state.eventSink(GraphDetailUiEvent.OnImageClick(uriString)) },
                 )
             }
         }
@@ -64,7 +65,7 @@ fun ExploreImageList(
 fun ExploreImageListPreview() {
     MetaSearchTheme {
         ExploreImageList(
-            state = graphDetailUiStateMock,
+            state = GraphDetailUiState.mock(),
         )
     }
 }

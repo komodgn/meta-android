@@ -20,7 +20,9 @@ data class GraphDetailUiState(
     val selectedImages: ImmutableList<String> = persistentListOf(),
     val sideEffect: GraphDetailSideEffect? = null,
     val eventSink: (GraphDetailUiEvent) -> Unit,
-) : CircuitUiState
+) : CircuitUiState {
+    companion object
+}
 
 @Immutable
 sealed interface GraphDetailSideEffect {

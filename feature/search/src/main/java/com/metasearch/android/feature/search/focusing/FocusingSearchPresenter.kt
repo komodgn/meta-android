@@ -12,8 +12,8 @@ import com.metasearch.android.core.common.extensions.toFile
 import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.common.utils.handleException
 import com.metasearch.android.core.data.api.repository.SearchRepository
-import com.metasearch.android.core.model.CircleModel
-import com.metasearch.android.core.model.SearchResult
+import com.metasearch.android.core.model.Circle
+import com.metasearch.android.core.model.DragSearchResult
 import com.metasearch.android.feature.screens.FocusingSearchScreen
 import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
@@ -65,10 +65,10 @@ class FocusingSearchPresenter @AssistedInject constructor(
             mutableStateOf(screen.imageUriString)
         }
         var circles by rememberRetained {
-            mutableStateOf<PersistentList<CircleModel>>(persistentListOf())
+            mutableStateOf<PersistentList<Circle>>(persistentListOf())
         }
         var searchResult by rememberRetained {
-            mutableStateOf<SearchResult?>(null)
+            mutableStateOf<DragSearchResult?>(null)
         }
 
         fun handleEvent(event: FocusingSearchUiEvent) {

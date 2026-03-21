@@ -1,15 +1,12 @@
 package com.metasearch.android.feature.search.nls.mock
 
+import com.metasearch.android.core.model.NLSearchResult
+import com.metasearch.android.core.model.fake
 import com.metasearch.android.feature.search.nls.NLSearchUiState
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
-internal val fakeResultImages = listOf(
-    "uri1",
-    "uri2",
-)
-
-internal val nlSearchUiStateMock = NLSearchUiState(
+fun NLSearchUiState.Companion.mock() = NLSearchUiState(
     isLoading = false,
-    resultImages = fakeResultImages.toImmutableList(),
+    resultImages = NLSearchResult.fake().matchedUris.toPersistentList(),
     eventSink = {},
 )

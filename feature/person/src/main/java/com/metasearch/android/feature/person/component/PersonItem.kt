@@ -23,14 +23,14 @@ import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.Black
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.model.PersonModel
+import com.metasearch.android.core.model.Person
+import com.metasearch.android.core.model.fake
 import com.metasearch.android.core.ui.component.MetaSearchCircleImage
 import com.metasearch.android.feature.person.R
-import com.metasearch.android.feature.person.mock.fakePerson
 
 @Composable
 internal fun PersonItem(
-    person: PersonModel,
+    person: Person,
     onClick: () -> Unit,
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -90,7 +90,7 @@ internal fun PersonItem(
 private fun PersonItemPreview() {
     MetaSearchTheme {
         PersonItem(
-            person = fakePerson,
+            person = Person.fake(),
             onDeleteClick = {},
             onClick = {},
         )

@@ -12,26 +12,26 @@ public fun com.metasearch.android.feature.person.PersonPresenter.present(): com.
 
 @Composable
 public fun com.metasearch.android.feature.person.PersonSideEffect(state: com.metasearch.android.feature.person.PersonUiState, eventSink: kotlin.Function1<com.metasearch.android.feature.person.PersonUiEvent, kotlin.Unit>): kotlin.Unit
-  skippable: false
+  skippable: true
   restartable: true
   params:
-    - state: RUNTIME (requires runtime check)
+    - state: STABLE (class with no mutable properties)
     - eventSink: STABLE (function type)
 
 @Composable
 public fun com.metasearch.android.feature.person.PersonUi(modifier: androidx.compose.ui.Modifier, state: com.metasearch.android.feature.person.PersonUiState): kotlin.Unit
-  skippable: false
+  skippable: true
   restartable: true
   params:
     - modifier: STABLE (marked @Stable or @Immutable)
-    - state: RUNTIME (requires runtime check)
+    - state: STABLE (class with no mutable properties)
 
 @Composable
 private fun com.metasearch.android.feature.person.PersonUiContent(state: com.metasearch.android.feature.person.PersonUiState, innerPadding: androidx.compose.foundation.layout.PaddingValues): kotlin.Unit
-  skippable: false
+  skippable: true
   restartable: true
   params:
-    - state: RUNTIME (requires runtime check)
+    - state: STABLE (class with no mutable properties)
     - innerPadding: STABLE (marked @Stable or @Immutable)
 
 @Composable
@@ -47,7 +47,7 @@ private fun com.metasearch.android.feature.person.PersonUiPreview(): kotlin.Unit
   params:
 
 @Composable
-internal fun com.metasearch.android.feature.person.component.PersonItem(person: com.metasearch.android.core.model.PersonModel, onClick: kotlin.Function0<kotlin.Unit>, onDeleteClick: kotlin.Function0<kotlin.Unit>, modifier: androidx.compose.ui.Modifier): kotlin.Unit
+internal fun com.metasearch.android.feature.person.component.PersonItem(person: com.metasearch.android.core.model.Person, onClick: kotlin.Function0<kotlin.Unit>, onDeleteClick: kotlin.Function0<kotlin.Unit>, modifier: androidx.compose.ui.Modifier): kotlin.Unit
   skippable: true
   restartable: true
   params:
