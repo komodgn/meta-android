@@ -1,15 +1,15 @@
 package com.metasearch.android.core.data.api.repository
 
-import com.metasearch.android.core.model.CircleModel
+import com.metasearch.android.core.model.Circle
+import com.metasearch.android.core.model.DragSearchResult
 import com.metasearch.android.core.model.NLSearchResult
-import com.metasearch.android.core.model.SearchResult
 import java.io.File
 
 interface SearchRepository {
     suspend fun focusingSearch(
         imageFile: File,
-        circles: List<CircleModel>,
-    ): Result<SearchResult>
+        circles: List<Circle>,
+    ): Result<DragSearchResult>
 
     /**
      * Analyzes natural language queries and searches for corresponding photos using a cache.

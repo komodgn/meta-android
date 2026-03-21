@@ -10,7 +10,7 @@ import androidx.paging.PagingData
 import com.metasearch.android.core.data.api.repository.GalleryRepository
 import com.metasearch.android.core.data.impl.datasource.GalleryPagingSource
 import com.metasearch.android.core.data.impl.di.IoDispatcher
-import com.metasearch.android.core.model.GalleryImageModel
+import com.metasearch.android.core.model.GalleryImage
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +24,7 @@ internal class GalleryRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : GalleryRepository {
 
-    override fun getGalleryPagingData(): Flow<PagingData<GalleryImageModel>> {
+    override fun getGalleryPagingData(): Flow<PagingData<GalleryImage>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 30,

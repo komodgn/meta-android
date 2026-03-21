@@ -54,7 +54,7 @@ import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
 import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 import com.metasearch.android.feature.home.component.HomeHeader
 import com.metasearch.android.feature.home.component.PersonCircleItem
-import com.metasearch.android.feature.home.mock.homeUiStateMock
+import com.metasearch.android.feature.home.mock.mock
 import com.metasearch.android.feature.screens.HomeScreen
 import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
 import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
@@ -286,7 +286,7 @@ private fun HomeUiContent(
 private fun HomeUiPreview() {
     MetaSearchTheme {
         HomeUi(
-            state = homeUiStateMock,
+            state = HomeUiState.mock(),
         )
     }
 }
@@ -296,7 +296,7 @@ private fun HomeUiPreview() {
 private fun HomeUiCollapsedPreview() {
     MetaSearchTheme {
         HomeUi(
-            state = homeUiStateMock.copy(isExpanded = false),
+            state = HomeUiState.mock().copy(isExpanded = false),
         )
     }
 }
@@ -306,7 +306,7 @@ private fun HomeUiCollapsedPreview() {
 private fun HomeUiLongClickPreview() {
     MetaSearchTheme {
         HomeUi(
-            state = homeUiStateMock.copy(
+            state = HomeUiState.mock().copy(
                 selectedLongClickImage = "https://picsum.photos/200",
                 selectedOffset = Offset(200f, 800f),
             ),

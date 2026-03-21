@@ -8,9 +8,9 @@ import com.metasearch.android.core.data.api.repository.PersonRepository
 import com.metasearch.android.core.data.api.repository.SearchRepository
 import com.metasearch.android.core.data.impl.mapper.toModel
 import com.metasearch.android.core.data.impl.util.CypherQueryGenerator
-import com.metasearch.android.core.model.CircleModel
+import com.metasearch.android.core.model.Circle
+import com.metasearch.android.core.model.DragSearchResult
 import com.metasearch.android.core.model.NLSearchResult
-import com.metasearch.android.core.model.SearchResult
 import com.metasearch.android.core.network.request.DetectedObjectsRequest
 import com.metasearch.android.core.network.request.FocusingSearchRequest
 import com.metasearch.android.core.network.request.NLQueryRequest
@@ -50,8 +50,8 @@ internal class SearchRepositoryImpl @Inject constructor(
 
     override suspend fun focusingSearch(
         imageFile: File,
-        circles: List<CircleModel>,
-    ): Result<SearchResult> = runSuspendCatching {
+        circles: List<Circle>,
+    ): Result<DragSearchResult> = runSuspendCatching {
         coroutineScope {
             val dbNameDeferred = async { databaseNameRepository.getPersistentDeviceDatabaseName() }
             val imagePartDeferred = async {
@@ -81,7 +81,7 @@ internal class SearchRepositoryImpl @Inject constructor(
                 if (!inputName.isNullOrBlank()) inputName else systemName
             }.filter { it.isNotBlank() }.distinct()
 
-            if (mappedProperties.isEmpty()) return@coroutineScope SearchResult(groups = emptyList())
+            if (mappedProperties.isEmpty()) return@coroutineScope DragSearchResult(groups = emptyList())
 
             val finalResult = webService.sendDetectedObjects(
                 request = DetectedObjectsRequest(
@@ -90,7 +90,7 @@ internal class SearchRepositoryImpl @Inject constructor(
                 ),
             )
 
-            val searchResult = finalResult?.toModel() ?: SearchResult(emptyList())
+            val searchResult = finalResult?.toModel() ?: DragSearchResult(emptyList())
             val updatedGroups = searchResult.groups.map { group ->
                 async {
                     val matchedUris = galleryRepository.findMatchedUris(group.photoNames)
@@ -98,7 +98,7 @@ internal class SearchRepositoryImpl @Inject constructor(
                 }
             }.awaitAll().filter { it.photoNames.isNotEmpty() }
 
-            SearchResult(groups = updatedGroups)
+            DragSearchResult(groups = updatedGroups)
         }
     }
 

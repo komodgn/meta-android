@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.IntSize
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.component.NetworkImage
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.model.CircleModel
+import com.metasearch.android.core.model.Circle
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
@@ -33,7 +33,7 @@ import com.metasearch.android.feature.search.focusing.component.DrawingCanvas
 import com.metasearch.android.feature.search.focusing.component.FocusingSearchBottomBar
 import com.metasearch.android.feature.search.focusing.component.FocusingSearchBottomBarItem
 import com.metasearch.android.feature.search.focusing.component.SearchResultList
-import com.metasearch.android.feature.search.focusing.mock.focusingSearchUiStateMock
+import com.metasearch.android.feature.search.focusing.mock.mock
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
 import kotlin.math.sqrt
@@ -121,7 +121,7 @@ private fun FocusingSearchUiContent(
 
                                 state.eventSink(
                                     FocusingSearchUiEvent.OnCircleAdded(
-                                        CircleModel(
+                                        Circle(
                                             centerX = normalizedX,
                                             centerY = normalizedY,
                                             radius = normalizedRadius,
@@ -171,7 +171,7 @@ private fun FocusingSearchUiContent(
 private fun FocusingSearchUiPreview() {
     MetaSearchTheme {
         FocusingSearchUi(
-            state = focusingSearchUiStateMock,
+            state = FocusingSearchUiState.mock(),
         )
     }
 }
@@ -181,7 +181,9 @@ private fun FocusingSearchUiPreview() {
 private fun FocusingSearchUiLoadingPreview() {
     MetaSearchTheme {
         FocusingSearchUi(
-            state = focusingSearchUiStateMock.copy(isLoading = true),
+            state = FocusingSearchUiState.mock().copy(
+                isLoading = true,
+            ),
         )
     }
 }

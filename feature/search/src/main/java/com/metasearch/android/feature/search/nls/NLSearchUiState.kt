@@ -15,7 +15,9 @@ data class NLSearchUiState(
     val resultImages: ImmutableList<String> = persistentListOf(),
     val sideEffect: NLSearchSideEffect? = null,
     val eventSink: (NLSearchUiEvent) -> Unit,
-) : CircuitUiState
+) : CircuitUiState {
+    companion object
+}
 
 @Immutable
 sealed interface NLSearchSideEffect {
@@ -28,30 +30,18 @@ sealed interface NLSearchSideEffect {
 sealed interface NLSearchUiEvent : CircuitUiEvent {
     data object InitSideEffect : NLSearchUiEvent
 
-    /**
-     * 입력 텍스트 동기화
-     */
     data class OnInputChange(
         val inputString: String,
     ) : NLSearchUiEvent
 
-    /**
-     * 자연어 검색 버튼 클릭
-     */
     data class OnNLSearchClick(
         val inputString: String,
     ) : NLSearchUiEvent
 
-    /**
-     * 개별 이미지 클릭
-     */
     data class OnImageClick(
         val imageUriString: String,
     ) : NLSearchUiEvent
 
-    /**
-     * 하단 네비 탭 클릭
-     */
     data class OnTabClick(
         val screen: Screen,
     ) : NLSearchUiEvent

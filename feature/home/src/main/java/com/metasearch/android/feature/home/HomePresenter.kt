@@ -19,7 +19,7 @@ import androidx.work.WorkManager
 import com.metasearch.android.core.data.api.repository.GalleryRepository
 import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
 import com.metasearch.android.core.data.api.repository.PersonRepository
-import com.metasearch.android.core.model.PersonModel
+import com.metasearch.android.core.model.Person
 import com.metasearch.android.feature.home.worker.ImageAnalysisWorker
 import com.metasearch.android.feature.screens.HomeScreen
 import com.metasearch.android.feature.screens.PersonDetailScreen
@@ -32,6 +32,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.components.ActivityRetainedComponent
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
 class HomePresenter @AssistedInject constructor(
@@ -60,7 +62,7 @@ class HomePresenter @AssistedInject constructor(
         var isExpanded by rememberRetained { mutableStateOf(false) }
 
         val localPersons by personRepository.getHomeDisplayPersons().collectAsState(initial = emptyList())
-        var displayPersons by rememberRetained { mutableStateOf<List<PersonModel>>(emptyList()) }
+        var displayPersons by rememberRetained { mutableStateOf(persistentListOf<Person>()) }
 
         val galleryPagingFlow = rememberRetained {
             galleryRepository.getGalleryPagingData().cachedIn(scope)
@@ -69,7 +71,9 @@ class HomePresenter @AssistedInject constructor(
         var selectedOffset by remember { mutableStateOf(Offset.Zero) }
 
         LaunchedEffect(localPersons) {
-            displayPersons = localPersons
+            if (!isPersonLoading) {
+                displayPersons = localPersons.toPersistentList()
+            }
         }
 
         fun handleEvent(event: HomeUiEvent) {
@@ -100,7 +104,8 @@ class HomePresenter @AssistedInject constructor(
                     if (isExpanded) {
                         scope.launch {
                             isPersonLoading = true
-                            displayPersons = personRepository.fetchAndSyncPhotoCount(displayPersons)
+                            val syncedPersons = personRepository.fetchAndSyncPhotoCount(displayPersons)
+                            displayPersons = syncedPersons.toPersistentList()
                             isPersonLoading = false
                         }
                     }

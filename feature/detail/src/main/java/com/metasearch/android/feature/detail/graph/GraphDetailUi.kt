@@ -29,7 +29,7 @@ import com.metasearch.android.core.webview.ui.MetaSearchWebViewClient
 import com.metasearch.android.core.webview.ui.MetaSearchWebViewContainer
 import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.detail.graph.component.ExploreImageList
-import com.metasearch.android.feature.detail.graph.mock.graphDetailUiStateMock
+import com.metasearch.android.feature.detail.graph.mock.mock
 import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
@@ -138,7 +138,7 @@ private fun GraphDetailUiContent(
 private fun GraphDetailUiPreview() {
     MetaSearchTheme {
         GraphDetailUi(
-            state = graphDetailUiStateMock,
+            state = GraphDetailUiState.mock(),
         )
     }
 }

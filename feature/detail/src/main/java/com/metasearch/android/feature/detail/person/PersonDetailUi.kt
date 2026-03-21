@@ -34,7 +34,7 @@ import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.detail.person.component.PersonDetailHeader
 import com.metasearch.android.feature.detail.person.component.PersonEditDialogContent
-import com.metasearch.android.feature.detail.person.mock.personDetailUiStateMock
+import com.metasearch.android.feature.detail.person.mock.mock
 import com.metasearch.android.feature.screens.PersonDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
@@ -186,7 +186,7 @@ private fun PersonDetailContent(
 private fun PersonDetailUiPreview() {
     MetaSearchTheme {
         PersonDetailUi(
-            state = personDetailUiStateMock,
+            state = PersonDetailUiState.mock(),
         )
     }
 }
@@ -196,7 +196,7 @@ private fun PersonDetailUiPreview() {
 private fun PersonDetailUiEditDialogPreview() {
     MetaSearchTheme {
         PersonDetailUi(
-            state = personDetailUiStateMock.copy(showEditDialog = true),
+            state = PersonDetailUiState.mock().copy(showEditDialog = true),
         )
     }
 }
@@ -206,7 +206,7 @@ private fun PersonDetailUiEditDialogPreview() {
 private fun PersonDetailUiProfileSelectPreview() {
     MetaSearchTheme {
         PersonDetailUi(
-            state = personDetailUiStateMock.copy(showPhotoSelectDialog = true),
+            state = PersonDetailUiState.mock().copy(showPhotoSelectDialog = true),
         )
     }
 }

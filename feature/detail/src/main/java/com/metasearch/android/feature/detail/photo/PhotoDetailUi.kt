@@ -30,7 +30,7 @@ import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.detail.photo.component.ImageDescriptionBottomSheetContent
 import com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBar
 import com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBarItem
-import com.metasearch.android.feature.detail.photo.mock.photoDetailUiStateMock
+import com.metasearch.android.feature.detail.photo.mock.mock
 import com.metasearch.android.feature.screens.PhotoDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
@@ -132,7 +132,7 @@ private fun PhotoDetailUiContent(
 private fun PhotoDetailUiPreview() {
     MetaSearchTheme {
         PhotoDetailUi(
-            state = photoDetailUiStateMock,
+            state = PhotoDetailUiState.mock(),
         )
     }
 }

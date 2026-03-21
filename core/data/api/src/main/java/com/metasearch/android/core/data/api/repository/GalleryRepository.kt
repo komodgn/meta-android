@@ -2,11 +2,11 @@ package com.metasearch.android.core.data.api.repository
 
 import android.net.Uri
 import androidx.paging.PagingData
-import com.metasearch.android.core.model.GalleryImageModel
+import com.metasearch.android.core.model.GalleryImage
 import kotlinx.coroutines.flow.Flow
 
 interface GalleryRepository {
-    fun getGalleryPagingData(): Flow<PagingData<GalleryImageModel>>
+    fun getGalleryPagingData(): Flow<PagingData<GalleryImage>>
 
     suspend fun getAllGalleryImages(): List<Uri>
     suspend fun getFileName(uri: Uri): String?

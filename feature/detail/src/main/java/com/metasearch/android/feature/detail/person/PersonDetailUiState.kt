@@ -1,7 +1,7 @@
 package com.metasearch.android.feature.detail.person
 
 import android.net.Uri
-import com.metasearch.android.core.model.PersonModel
+import com.metasearch.android.core.model.Person
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import kotlinx.collections.immutable.ImmutableList
@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class PersonDetailUiState(
     val isLoading: Boolean = false,
-    val person: PersonModel? = null,
+    val person: Person? = null,
     val photoUris: ImmutableList<Uri> = persistentListOf(),
     val showEditDialog: Boolean = false,
     val showMergeConfirmDialog: Boolean = false,
@@ -19,7 +19,9 @@ data class PersonDetailUiState(
     val editRepresentativeFaceId: Long? = null,
     val showPhotoSelectDialog: Boolean = false,
     val eventSink: (PersonDetailUiEvent) -> Unit,
-) : CircuitUiState
+) : CircuitUiState {
+    companion object
+}
 
 sealed interface PersonDetailUiEvent : CircuitUiEvent {
     /**

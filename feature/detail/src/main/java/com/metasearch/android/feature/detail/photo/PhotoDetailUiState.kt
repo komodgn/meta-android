@@ -12,7 +12,9 @@ data class PhotoDetailUiState(
     val imageDescription: String? = null,
     val sideEffect: PhotoDetailSideEffect? = null,
     val eventSink: (PhotoDetailUiEvent) -> Unit,
-) : CircuitUiState
+) : CircuitUiState {
+    companion object
+}
 
 @Immutable
 sealed interface PhotoDetailSideEffect {

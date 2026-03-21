@@ -7,21 +7,21 @@ import android.os.Bundle
 import android.provider.MediaStore
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.metasearch.android.core.model.GalleryImageModel
+import com.metasearch.android.core.model.GalleryImage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
 class GalleryPagingSource(
     private val context: Context,
     private val ioDispatcher: CoroutineDispatcher,
-) : PagingSource<Int, GalleryImageModel>() {
+) : PagingSource<Int, GalleryImage>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, GalleryImageModel> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, GalleryImage> {
         return withContext(ioDispatcher) {
             try {
                 val offset = params.key ?: 0
                 val limit = params.loadSize
-                val imageList = mutableListOf<GalleryImageModel>()
+                val imageList = mutableListOf<GalleryImage>()
 
                 val projection = arrayOf(
                     MediaStore.Images.Media._ID,
@@ -48,7 +48,7 @@ class GalleryPagingSource(
                         val id = cursor.getLong(idColumn)
                         val date = cursor.getLong(dateColumn)
                         val uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-                        imageList.add(GalleryImageModel(id = id, uriString = uri.toString(), dateAdded = date))
+                        imageList.add(GalleryImage(id = id, uriString = uri.toString(), dateAdded = date))
                     }
                 }
 
@@ -63,7 +63,7 @@ class GalleryPagingSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, GalleryImageModel>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, GalleryImage>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(state.config.pageSize)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(state.config.pageSize)

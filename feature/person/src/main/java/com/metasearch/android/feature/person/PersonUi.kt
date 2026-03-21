@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.ui.MetaSearchScaffold
@@ -22,7 +21,7 @@ import com.metasearch.android.core.ui.component.MetaSearchDialog
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.feature.person.component.PersonItem
 import com.metasearch.android.feature.person.component.PersonSearchTextField
-import com.metasearch.android.feature.person.mock.personUiStateMock
+import com.metasearch.android.feature.person.mock.mock
 import com.metasearch.android.feature.screens.PersonScreen
 import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
 import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
@@ -108,9 +107,9 @@ private fun PersonUiContent(
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(MetaSearchTheme.spacing.spacing4),
+                horizontalArrangement = Arrangement.spacedBy(MetaSearchTheme.spacing.spacing3),
+                verticalArrangement = Arrangement.spacedBy(MetaSearchTheme.spacing.spacing3),
             ) {
                 items(
                     state.people,
@@ -132,7 +131,7 @@ private fun PersonUiContent(
 private fun PersonUiPreview() {
     MetaSearchTheme {
         PersonUi(
-            state = personUiStateMock,
+            state = PersonUiState.mock(),
         )
     }
 }
@@ -142,7 +141,7 @@ private fun PersonUiPreview() {
 private fun PersonUiDeleteDialogPreview() {
     MetaSearchTheme {
         PersonUi(
-            state = personUiStateMock.copy(showDeleteDialog = true),
+            state = PersonUiState.mock().copy(showDeleteDialog = true),
         )
     }
 }

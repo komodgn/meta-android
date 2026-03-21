@@ -3,13 +3,12 @@ package com.metasearch.android.feature.detail.graph.mock
 import com.metasearch.android.feature.detail.graph.GraphDetailUiState
 import kotlinx.collections.immutable.toPersistentList
 
-internal val fakeSelectedImages = listOf(
-    "sample_uri_1",
-    "sample_uri_2",
-)
+internal val fakeSelectedImages = (1..10).map { i ->
+    "https://picsum.photos/seed/$i/200/200"
+}.toPersistentList()
 
-internal val graphDetailUiStateMock = GraphDetailUiState(
+fun GraphDetailUiState.Companion.mock() = GraphDetailUiState(
     webViewUrl = "https://www.google.com",
-    selectedImages = fakeSelectedImages.toPersistentList(),
+    selectedImages = fakeSelectedImages,
     eventSink = {},
 )

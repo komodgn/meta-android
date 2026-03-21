@@ -26,9 +26,10 @@ import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
 import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
 import com.metasearch.android.feature.search.R
 import com.metasearch.android.feature.search.nls.component.NLSearchTextField
-import com.metasearch.android.feature.search.nls.mock.nlSearchUiStateMock
+import com.metasearch.android.feature.search.nls.mock.mock
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.android.components.ActivityRetainedComponent
+import kotlinx.collections.immutable.persistentListOf
 
 @CircuitInject(NLSearchScreen::class, ActivityRetainedComponent::class)
 @Composable
@@ -124,7 +125,7 @@ private fun NLSearchUiContent(
 private fun NLSearchUiPreview() {
     MetaSearchTheme {
         NLSearchUi(
-            state = nlSearchUiStateMock,
+            state = NLSearchUiState.mock(),
         )
     }
 }
@@ -134,8 +135,9 @@ private fun NLSearchUiPreview() {
 private fun NLSearchUiLoadingPreview() {
     MetaSearchTheme {
         NLSearchUi(
-            state = nlSearchUiStateMock.copy(
+            state = NLSearchUiState.mock().copy(
                 isLoading = true,
+                resultImages = persistentListOf(),
             ),
         )
     }

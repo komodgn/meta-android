@@ -1,17 +1,17 @@
 package com.metasearch.android.core.data.api.repository
 
-import com.metasearch.android.core.model.PersonModel
+import com.metasearch.android.core.model.Person
 import kotlinx.coroutines.flow.Flow
 
 interface PersonRepository {
-    fun getAllPersons(): Flow<List<PersonModel>>
+    fun getAllPersons(): Flow<List<Person>>
 
-    fun getHomeDisplayPersons(): Flow<List<PersonModel>>
+    fun getHomeDisplayPersons(): Flow<List<Person>>
 
     /**
      * ID로 단일 인물 정보 조회
      */
-    fun getPersonById(personId: Long): Flow<PersonModel?>
+    fun getPersonById(personId: Long): Flow<Person?>
 
     /**
      * 시스템 식별자로 인물 이름 조회
@@ -32,7 +32,7 @@ interface PersonRepository {
      */
     suspend fun addAnalyzedPerson(imageName: String, imageBytes: ByteArray)
 
-    suspend fun fetchAndSyncPhotoCount(localModels: List<PersonModel>): List<PersonModel>
+    suspend fun fetchAndSyncPhotoCount(localModels: List<Person>): List<Person>
 
     /**
      * 서버가 지정한 이름과 사용자가 지정한 이름이 다른 것 반환
@@ -42,7 +42,7 @@ interface PersonRepository {
     /**
      * 분석된 인물 삭제
      */
-    suspend fun deleteAnalyzedPerson(person: PersonModel): Result<Unit>
+    suspend fun deleteAnalyzedPerson(person: Person): Result<Unit>
 
     /**
      * @return 해당 인물이 포함된 사진 파일명 리스트
