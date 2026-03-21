@@ -63,7 +63,7 @@ class SearchRepositoryImplTest {
         // Given
         val query1 = "여름 밤에 먹은 음식 찾아줘"
         val query2 = "여름 밤에 찍은 음식 사진"
-        val entities = "밤, 여름, 음식"
+        val entities = "밤,여름,음식"
         val mockUri = mock(Uri::class.java)
 
         val mockOpenAIResponse = createMockOpenAIResponse(entities)

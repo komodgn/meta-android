@@ -2,7 +2,7 @@ package com.metasearch.android.core.data.impl.repository
 
 import android.content.Context
 import com.metasearch.android.core.data.api.repository.DatabaseNameRepository
-import com.metasearch.android.core.model.PersonModel
+import com.metasearch.android.core.model.Person
 import com.metasearch.android.core.network.service.AIService
 import com.metasearch.android.core.network.service.WebService
 import com.metasearch.android.core.room.api.dao.PersonDao
@@ -36,7 +36,7 @@ class PersonRepositoryImplTest {
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var repository: PersonRepositoryImpl
 
-    private val fakePerson = PersonModel(id = 1L, name = "test_uuid", inputName = "홍길동")
+    private val fakePerson = Person(id = 1L, name = "test_uuid", inputName = "홍길동")
 
     @BeforeEach
     fun setUp() {
