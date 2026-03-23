@@ -37,7 +37,7 @@
 - Accompanist Permissions
 
 ### DI
-- Dagger/Hilt
+- [Metro](https://github.com/ZacSweers/metro)
 
 ### Network And Image Loading
 - Retrofit
