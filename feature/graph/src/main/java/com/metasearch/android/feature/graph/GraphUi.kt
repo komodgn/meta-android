@@ -47,9 +47,9 @@ import com.metasearch.android.feature.screens.GraphScreen
 import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
 import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
 import com.slack.circuit.codegen.annotations.CircuitInject
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dev.zacsweers.metro.AppScope
 
-@CircuitInject(GraphScreen::class, ActivityRetainedComponent::class)
+@CircuitInject(GraphScreen::class, AppScope::class)
 @Composable
 fun GraphUi(
     modifier: Modifier = Modifier,

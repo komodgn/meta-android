@@ -37,9 +37,9 @@ import com.metasearch.android.feature.detail.person.component.PersonEditDialogCo
 import com.metasearch.android.feature.detail.person.mock.mock
 import com.metasearch.android.feature.screens.PersonDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dev.zacsweers.metro.AppScope
 
-@CircuitInject(PersonDetailScreen::class, ActivityRetainedComponent::class)
+@CircuitInject(PersonDetailScreen::class, AppScope::class)
 @Composable
 fun PersonDetailUi(
     modifier: Modifier = Modifier,

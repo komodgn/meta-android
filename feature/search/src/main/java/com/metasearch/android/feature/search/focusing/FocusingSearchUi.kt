@@ -35,10 +35,10 @@ import com.metasearch.android.feature.search.focusing.component.FocusingSearchBo
 import com.metasearch.android.feature.search.focusing.component.SearchResultList
 import com.metasearch.android.feature.search.focusing.mock.mock
 import com.slack.circuit.codegen.annotations.CircuitInject
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dev.zacsweers.metro.AppScope
 import kotlin.math.sqrt
 
-@CircuitInject(FocusingSearchScreen::class, ActivityRetainedComponent::class)
+@CircuitInject(FocusingSearchScreen::class, AppScope::class)
 @Composable
 fun FocusingSearchUi(
     modifier: Modifier = Modifier,

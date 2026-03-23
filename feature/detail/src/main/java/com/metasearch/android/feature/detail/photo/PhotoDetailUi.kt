@@ -33,10 +33,10 @@ import com.metasearch.android.feature.detail.photo.component.PhotoDetailBottomBa
 import com.metasearch.android.feature.detail.photo.mock.mock
 import com.metasearch.android.feature.screens.PhotoDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dev.zacsweers.metro.AppScope
 
 @OptIn(ExperimentalMaterial3Api::class)
-@CircuitInject(PhotoDetailScreen::class, ActivityRetainedComponent::class)
+@CircuitInject(PhotoDetailScreen::class, AppScope::class)
 @Composable
 fun PhotoDetailUi(
     modifier: Modifier = Modifier,

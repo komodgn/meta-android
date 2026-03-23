@@ -59,9 +59,9 @@ import com.metasearch.android.feature.screens.HomeScreen
 import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
 import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
 import com.slack.circuit.codegen.annotations.CircuitInject
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dev.zacsweers.metro.AppScope
 
-@CircuitInject(HomeScreen::class, ActivityRetainedComponent::class)
+@CircuitInject(HomeScreen::class, AppScope::class)
 @Composable
 fun HomeUi(
     modifier: Modifier = Modifier,

@@ -28,10 +28,10 @@ import com.metasearch.android.feature.search.R
 import com.metasearch.android.feature.search.nls.component.NLSearchTextField
 import com.metasearch.android.feature.search.nls.mock.mock
 import com.slack.circuit.codegen.annotations.CircuitInject
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dev.zacsweers.metro.AppScope
 import kotlinx.collections.immutable.persistentListOf
 
-@CircuitInject(NLSearchScreen::class, ActivityRetainedComponent::class)
+@CircuitInject(NLSearchScreen::class, AppScope::class)
 @Composable
 fun NLSearchUi(
     modifier: Modifier = Modifier,

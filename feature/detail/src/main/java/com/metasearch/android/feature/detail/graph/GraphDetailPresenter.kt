@@ -16,10 +16,10 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -31,7 +31,7 @@ class GraphDetailPresenter @AssistedInject constructor(
     private val graphRepository: GraphRepository,
 ) : Presenter<GraphDetailUiState> {
 
-    @CircuitInject(GraphDetailScreen::class, ActivityRetainedComponent::class)
+    @CircuitInject(GraphDetailScreen::class, AppScope::class)
     @AssistedFactory
     interface Factory {
         fun create(

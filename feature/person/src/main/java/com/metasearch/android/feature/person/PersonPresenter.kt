@@ -16,10 +16,10 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ class PersonPresenter @AssistedInject constructor(
     private val personRepository: PersonRepository,
 ) : Presenter<PersonUiState> {
 
-    @CircuitInject(PersonScreen::class, ActivityRetainedComponent::class)
+    @CircuitInject(PersonScreen::class, AppScope::class)
     @AssistedFactory
     fun interface Factory {
         fun create(navigator: Navigator): PersonPresenter

@@ -22,10 +22,10 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
@@ -37,7 +37,7 @@ class FocusingSearchPresenter @AssistedInject constructor(
     private val searchRepository: SearchRepository,
 ) : Presenter<FocusingSearchUiState> {
 
-    @CircuitInject(FocusingSearchScreen::class, ActivityRetainedComponent::class)
+    @CircuitInject(FocusingSearchScreen::class, AppScope::class)
     @AssistedFactory
     fun interface Factory {
         fun create(
