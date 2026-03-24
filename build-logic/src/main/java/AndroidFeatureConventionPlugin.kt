@@ -1,3 +1,4 @@
+import com.google.devtools.ksp.gradle.KspExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -6,6 +7,7 @@ import com.metasearch.android.convention.api
 import com.metasearch.android.convention.implementationProject
 import com.metasearch.android.convention.libs
 import com.metasearch.android.convention.ksp
+import org.gradle.kotlin.dsl.configure
 
 internal class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -13,7 +15,12 @@ internal class AndroidFeatureConventionPlugin : Plugin<Project> {
             pluginManager.run {
                 apply("metasearch.android.library")
                 apply("metasearch.android.library.compose")
-                apply("metasearch.android.hilt")
+                apply("com.google.devtools.ksp")
+                apply("dev.zacsweers.metro")
+            }
+
+            extensions.configure<KspExtension> {
+                arg("circuit.codegen.mode", "metro")
             }
 
             dependencies {
