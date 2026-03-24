@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.metasearch.android.library)
-    alias(libs.plugins.metasearch.android.hilt)
+    alias(libs.plugins.metro)
 }
 
 android {
@@ -9,4 +9,6 @@ android {
 
 dependencies {
     implementation(projects.core.common)
+
+    implementation(libs.androidx.core.ktx)
 }

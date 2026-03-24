@@ -6,12 +6,13 @@ import com.metasearch.android.core.data.api.repository.GalleryRepository
 import com.metasearch.android.core.data.api.repository.GraphRepository
 import com.metasearch.android.core.network.BuildConfig
 import com.metasearch.android.core.network.service.WebService
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import java.net.URLEncoder
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-internal class GraphRepositoryImpl @Inject constructor(
+@SingleIn(AppScope::class)
+class GraphRepositoryImpl @Inject constructor(
     private val databaseNameRepository: DatabaseNameRepository,
     private val galleryRepository: GalleryRepository,
     private val webService: WebService,

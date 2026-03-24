@@ -6,10 +6,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import com.metasearch.android.core.datastore.api.datasource.PersonIndexDataSource
 import com.metasearch.android.datastore.impl.di.DeviceDatastore
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 class PersonIndexDataSourceImpl @Inject constructor(
     @DeviceDatastore private val dataStore: DataStore<Preferences>,

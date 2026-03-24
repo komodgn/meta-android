@@ -19,6 +19,9 @@ import com.metasearch.android.core.network.request.OpenAIRequest
 import com.metasearch.android.core.network.service.AIService
 import com.metasearch.android.core.network.service.OpenAIService
 import com.metasearch.android.core.network.service.WebService
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -27,12 +30,10 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
-import javax.inject.Inject
-import javax.inject.Singleton
 import com.metasearch.android.core.network.request.Circle as RequestCircle
 
-@Singleton
-internal class SearchRepositoryImpl @Inject constructor(
+@SingleIn(AppScope::class)
+class SearchRepositoryImpl @Inject constructor(
     private val aiService: AIService,
     private val webService: WebService,
     private val openAIService: OpenAIService,

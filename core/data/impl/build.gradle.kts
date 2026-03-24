@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.metasearch.android.library)
-    alias(libs.plugins.metasearch.android.hilt)
     alias(libs.plugins.metasearch.kotlin.library.serialization)
+    alias(libs.plugins.metro)
 }
 
 android {
@@ -32,6 +32,7 @@ dependencies {
 
     implementation(libs.okhttp)
     implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.core.ktx)
 
     // 코루틴 테스트 유틸리티
     testImplementation(libs.kotlinx.coroutines.test)

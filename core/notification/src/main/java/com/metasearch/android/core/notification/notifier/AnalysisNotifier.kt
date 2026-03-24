@@ -9,13 +9,13 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
 import com.metasearch.android.core.common.utils.UiText
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Singleton
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 
-@Singleton
+@SingleIn(AppScope::class)
 class AnalysisNotifier @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val context: Context,
 ) {
     private val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

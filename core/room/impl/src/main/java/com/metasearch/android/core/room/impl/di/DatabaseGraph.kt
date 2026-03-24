@@ -5,22 +5,18 @@ import androidx.room.Room
 import com.metasearch.android.core.room.api.dao.AnalyzedImageDao
 import com.metasearch.android.core.room.api.dao.PersonDao
 import com.metasearch.android.core.room.impl.database.AppDatabase
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import kotlin.jvm.java
 
-@Module
-@InstallIn(SingletonComponent::class)
-object DatabaseModule {
-    private const val DATABASE_NAME = "METASEARCH_APP_DB"
+private const val DATABASE_NAME = "METASEARCH_APP_DB"
+
+@ContributesTo(AppScope::class)
+interface DatabaseGraph {
 
     @Provides
-    @Singleton
-    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+    fun provideAppDatabase(context: Context): AppDatabase {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
@@ -31,13 +27,11 @@ object DatabaseModule {
     }
 
     @Provides
-    @Singleton
     fun providePersonDao(appDatabase: AppDatabase): PersonDao {
         return appDatabase.personDao()
     }
 
     @Provides
-    @Singleton
     fun provideAnalyzedImageDao(appDatabase: AppDatabase): AnalyzedImageDao {
         return appDatabase.analyzedImageDao()
     }

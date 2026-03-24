@@ -2,8 +2,8 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
     alias(libs.plugins.metasearch.android.library)
-    alias(libs.plugins.metasearch.android.hilt)
     alias(libs.plugins.metasearch.android.retrofit)
+    alias(libs.plugins.metro)
 }
 
 android {

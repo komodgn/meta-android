@@ -2,12 +2,13 @@ package com.metasearch.android.core.data.impl.repository
 
 import com.metasearch.android.core.data.api.repository.DatabaseNameRepository
 import com.metasearch.android.core.datastore.api.datasource.DeviceIdDataSource
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import java.util.UUID
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-internal class DatabaseNameRepositoryImpl @Inject constructor(
+@SingleIn(AppScope::class)
+class DatabaseNameRepositoryImpl @Inject constructor(
     private val deviceIdDataSource: DeviceIdDataSource,
 ) : DatabaseNameRepository {
     override suspend fun getPersistentDeviceDatabaseName(): String {
