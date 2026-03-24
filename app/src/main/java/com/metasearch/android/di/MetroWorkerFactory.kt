@@ -17,10 +17,13 @@ class MetroWorkerFactory(
         workerClassName: String,
         workerParameters: WorkerParameters,
     ): ListenableWorker? {
-        val workerClass = Class.forName(workerClassName).kotlin
+        val workerClass = runCatching {
+            Class.forName(workerClassName, false, appContext.classLoader)
+                .asSubclass(ListenableWorker::class.java)
+                .kotlin
+        }.getOrElse { return null }
 
-        val factoryProvider = workerFactories[workerClass as KClass<out ListenableWorker>] ?: return null
-
-        return (factoryProvider.invoke() as? ChildWorkerFactory)?.create(appContext, workerParameters)
+        val factoryProvider = workerFactories[workerClass] ?: return null
+        return factoryProvider.invoke().create(appContext, workerParameters)
     }
 }

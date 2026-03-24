@@ -10,6 +10,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Named
 import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -32,6 +33,7 @@ private val jsonConverterFactory = jsonRule.asConverterFactory("application/json
 @ContributesTo(AppScope::class)
 interface NetworkGraph {
 
+    @SingleIn(AppScope::class)
     @Provides
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
@@ -46,6 +48,7 @@ interface NetworkGraph {
         return ChuckerInterceptor(context)
     }
 
+    @SingleIn(AppScope::class)
     @Provides
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
@@ -59,6 +62,7 @@ interface NetworkGraph {
     }
 
     @Named("AIOkHttpClient")
+    @SingleIn(AppScope::class)
     @Provides
     fun provideAIOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
@@ -74,6 +78,7 @@ interface NetworkGraph {
     }
 
     @Named("WebRetrofit")
+    @SingleIn(AppScope::class)
     @Provides
     fun provideWebRetrofit(
         @Named("AIOkHttpClient") okHttpClient: OkHttpClient,
@@ -91,6 +96,7 @@ interface NetworkGraph {
     }
 
     @Named("AIRetrofit")
+    @SingleIn(AppScope::class)
     @Provides
     fun provideAIRetrofit(
         @Named("AIOkHttpClient") okHttpClient: OkHttpClient,
@@ -108,6 +114,7 @@ interface NetworkGraph {
     }
 
     @Named("OpenAIOkHttpClient")
+    @SingleIn(AppScope::class)
     @Provides
     fun provideOpenAIOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
@@ -127,6 +134,7 @@ interface NetworkGraph {
     }
 
     @Named("OpenAIRetrofit")
+    @SingleIn(AppScope::class)
     @Provides
     fun provideOpenAIRetrofit(
         @Named("OpenAIOkHttpClient") okHttpClient: OkHttpClient,
