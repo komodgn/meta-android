@@ -12,36 +12,28 @@ import com.metasearch.android.core.data.impl.repository.GraphRepositoryImpl
 import com.metasearch.android.core.data.impl.repository.ImageAnalysisRepositoryImpl
 import com.metasearch.android.core.data.impl.repository.PersonRepositoryImpl
 import com.metasearch.android.core.data.impl.repository.SearchRepositoryImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class RepositoryModule {
-    @Binds
-    @Singleton
-    abstract fun bindDatabaseNameRepository(deviceIdRepositoryImpl: DatabaseNameRepositoryImpl): DatabaseNameRepository
+@ContributesTo(AppScope::class)
+interface DataGraph {
 
     @Binds
-    @Singleton
-    abstract fun bindSearchRepository(searchRepositoryImpl: SearchRepositoryImpl): SearchRepository
+    val DatabaseNameRepositoryImpl.bind: DatabaseNameRepository
 
     @Binds
-    @Singleton
-    abstract fun bindGalleryRepository(galleryRepositoryImpl: GalleryRepositoryImpl): GalleryRepository
+    val SearchRepositoryImpl.bind: SearchRepository
 
     @Binds
-    @Singleton
-    abstract fun bindPersonRepository(personRepositoryImpl: PersonRepositoryImpl): PersonRepository
+    val GalleryRepositoryImpl.bind: GalleryRepository
 
     @Binds
-    @Singleton
-    abstract fun bindGraphRepository(graphRepositoryImpl: GraphRepositoryImpl): GraphRepository
+    val PersonRepositoryImpl.bind: PersonRepository
 
     @Binds
-    @Singleton
-    abstract fun bindImageAnalysisRepository(imageAnalysisRepositoryImpl: ImageAnalysisRepositoryImpl): ImageAnalysisRepository
+    val GraphRepositoryImpl.bind: GraphRepository
+
+    @Binds
+    val ImageAnalysisRepositoryImpl.bind: ImageAnalysisRepository
 }

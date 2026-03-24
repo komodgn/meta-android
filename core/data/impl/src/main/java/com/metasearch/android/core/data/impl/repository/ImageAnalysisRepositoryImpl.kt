@@ -26,7 +26,9 @@ import com.metasearch.android.core.network.service.OpenAIService
 import com.metasearch.android.core.network.service.WebService
 import com.metasearch.android.core.room.api.dao.AnalyzedImageDao
 import com.metasearch.android.core.room.api.entity.AnalyzedImageEntity
-import dagger.hilt.android.qualifiers.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -39,9 +41,9 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import javax.inject.Inject
 
 @Suppress("LongParameterList")
+@SingleIn(AppScope::class)
 class ImageAnalysisRepositoryImpl @Inject constructor(
     private val analyzedImageDao: AnalyzedImageDao,
     private val galleryRepository: GalleryRepository,
@@ -52,7 +54,7 @@ class ImageAnalysisRepositoryImpl @Inject constructor(
     private val aiService: AIService,
     private val webService: WebService,
     private val openAIService: OpenAIService,
-    @ApplicationContext private val context: Context,
+    private val context: Context,
 ) : ImageAnalysisRepository {
     private val tag = "ImageAnalysisRepo"
     private val chunkSize = 10

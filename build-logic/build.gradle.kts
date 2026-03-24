@@ -5,6 +5,7 @@ plugins {
 dependencies {
     compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)
+    compileOnly(libs.ksp.gradle.plugin)
     compileOnly(libs.compose.compiler.gradle.plugin)
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
@@ -14,7 +15,6 @@ gradlePlugin {
         "android.application" to "AndroidApplicationConventionPlugin",
         "android.application.compose" to "AndroidApplicationComposeConventionPlugin",
         "android.feature" to "AndroidFeatureConventionPlugin",
-        "android.hilt" to "AndroidHiltConventionPlugin",
         "android.library" to "AndroidLibraryConventionPlugin",
         "android.library.compose" to "AndroidLibraryComposeConventionPlugin",
         "android.retrofit" to "AndroidRetrofitConventionPlugin",

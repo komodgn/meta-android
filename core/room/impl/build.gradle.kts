@@ -1,6 +1,10 @@
+import com.google.devtools.ksp.gradle.KspExtension
+import org.gradle.kotlin.dsl.configure
+
 plugins {
     alias(libs.plugins.metasearch.android.library)
-    alias(libs.plugins.metasearch.android.hilt)
+    alias(libs.plugins.metro)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -11,8 +15,8 @@ android {
     }
 }
 
-ksp {
-    arg("circuit.codegen.mode", "hilt")
+extensions.configure<KspExtension> {
+    arg("circuit.codegen.mode", "metro")
 }
 
 dependencies {

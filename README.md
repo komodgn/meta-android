@@ -37,7 +37,7 @@
 - Accompanist Permissions
 
 ### DI
-- Dagger/Hilt
+- [Metro](https://github.com/ZacSweers/metro)
 
 ### Network And Image Loading
 - Retrofit
@@ -59,7 +59,7 @@
 ## Project Structure
 ```text
 .
-├── app                     # 앱 실행 진입점 (Hilt Setup)
+├── app                     # 앱 실행 진입점 (Metro Setup)
 ├── build-logic             # Convention Plugins (Gradle 공통 설정 관리)
 ├── core                    # 공통 기능 모듈 (Shared Modules)
 │   ├── common              # 유틸리티, 상수, 공통 코드

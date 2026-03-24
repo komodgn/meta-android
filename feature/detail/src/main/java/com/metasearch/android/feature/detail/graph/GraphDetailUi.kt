@@ -32,9 +32,9 @@ import com.metasearch.android.feature.detail.graph.component.ExploreImageList
 import com.metasearch.android.feature.detail.graph.mock.mock
 import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dev.zacsweers.metro.AppScope
 
-@CircuitInject(GraphDetailScreen::class, ActivityRetainedComponent::class)
+@CircuitInject(GraphDetailScreen::class, AppScope::class)
 @Composable
 fun GraphDetailUi(
     modifier: Modifier = Modifier,

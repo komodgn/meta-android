@@ -1,5 +1,6 @@
 package com.metasearch.android.feature.main
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +20,7 @@ import com.metasearch.android.core.common.utils.MetaSearchDialogSpec
 import com.metasearch.android.core.common.utils.MetaSearchEvent
 import com.metasearch.android.core.designsystem.component.MetaSearchToast
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
+import com.metasearch.android.core.di.ActivityKey
 import com.metasearch.android.core.ui.component.MetaSearchDialog
 import com.metasearch.android.feature.main.deeplink.DeepLinkParser
 import com.metasearch.android.feature.screens.SplashScreen
@@ -28,15 +30,19 @@ import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecorationFactory
-import dagger.hilt.android.AndroidEntryPoint
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
 import kotlinx.coroutines.delay
 import tech.thdev.compose.exteions.system.ui.controller.rememberSystemUiController
-import javax.inject.Inject
 
-@AndroidEntryPoint
-class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var circuit: Circuit
+@ActivityKey(MainActivity::class)
+@ContributesIntoMap(AppScope::class, binding = binding<Activity>())
+@Inject
+class MainActivity(
+    private val circuit: Circuit,
+) : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()

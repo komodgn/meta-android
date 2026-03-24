@@ -6,11 +6,9 @@ android {
     namespace = "com.metasearch.android.feature.main"
 }
 
-ksp {
-    arg("circuit.codegen.mode", "hilt")
-}
-
 dependencies {
+    implementation(projects.core.di)
+
     implementation(libs.compose.system.ui.controller)
     implementation(libs.androidx.core.splashscreen)
 }

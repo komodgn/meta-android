@@ -5,20 +5,30 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
+import com.metasearch.android.core.di.ChildWorkerFactory
+import com.metasearch.android.core.di.WorkerKey
 import com.metasearch.android.core.notification.notifier.AnalysisNotifier
 import com.metasearch.android.feature.home.R
-import dagger.hilt.EntryPoint
-import dagger.hilt.EntryPoints
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
 
+@AssistedInject
 class ImageAnalysisWorker(
-    context: Context,
-    params: WorkerParameters,
+    @Assisted context: Context,
+    @Assisted params: WorkerParameters,
+    private val repository: ImageAnalysisRepository,
+    private val notifier: AnalysisNotifier,
 ) : CoroutineWorker(context, params) {
-    private val entryPoint = EntryPoints.get(applicationContext, AnalysisEntryPoint::class.java)
-    private val repository = entryPoint.repository()
-    private val notifier = entryPoint.notifier()
+
+    @AssistedFactory
+    @ContributesIntoMap(AppScope::class)
+    @WorkerKey(ImageAnalysisWorker::class)
+    interface Factory : ChildWorkerFactory {
+        override fun create(context: Context, workerParams: WorkerParameters): ImageAnalysisWorker
+    }
 
     override suspend fun doWork(): Result {
         return try {
@@ -34,32 +44,4 @@ class ImageAnalysisWorker(
             Result.failure()
         }
     }
-
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface AnalysisEntryPoint {
-        fun repository(): ImageAnalysisRepository
-        fun notifier(): AnalysisNotifier
-    }
 }
-
-// @HiltWorker
-// class ImageAnalysisWorker @AssistedInject constructor(
-//     @Assisted context: Context,
-//     @Assisted params: WorkerParameters,
-//     private val imageAnalysisRepository: ImageAnalysisRepository,
-// ) : CoroutineWorker(context, params) {
-//
-//     override suspend fun doWork(): Result {
-//         return try {
-//             imageAnalysisRepository.runFullAnalysis()
-//
-//             val notificationWork = OneTimeWorkRequestBuilder<NotificationWorker>().build()
-//
-//             WorkManager.getInstance(applicationContext).enqueue(notificationWork)
-//             Result.success()
-//         } catch (e: Exception) {
-//             Result.failure()
-//         }
-//     }
-// }

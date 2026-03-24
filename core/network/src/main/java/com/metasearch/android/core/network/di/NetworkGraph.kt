@@ -6,11 +6,11 @@ import com.metasearch.android.core.network.BuildConfig
 import com.metasearch.android.core.network.service.AIService
 import com.metasearch.android.core.network.service.OpenAIService
 import com.metasearch.android.core.network.service.WebService
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Named
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -18,26 +18,24 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.inject.Named
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object NetworkModule {
-    private const val MAX_TIMEOUT_MILLIS = 20_000L
-    private const val MAX_TIMEOUT_SECONDS_AI = 6000L
-    private const val OPENAI_SERVER_BASE_URL = "https://api.openai.com/"
+private const val MAX_TIMEOUT_MILLIS = 20_000L
+private const val MAX_TIMEOUT_SECONDS_AI = 6000L
+private const val OPENAI_SERVER_BASE_URL = "https://api.openai.com/"
 
-    private val jsonRule = Json {
-        encodeDefaults = true
-        ignoreUnknownKeys = true
-        prettyPrint = true
-    }
-    private val jsonConverterFactory = jsonRule.asConverterFactory("application/json".toMediaType())
+private val jsonRule = Json {
+    encodeDefaults = true
+    ignoreUnknownKeys = true
+    prettyPrint = true
+}
+private val jsonConverterFactory = jsonRule.asConverterFactory("application/json".toMediaType())
 
-    @Singleton
+@ContributesTo(AppScope::class)
+interface NetworkGraph {
+
+    @SingleIn(AppScope::class)
     @Provides
-    internal fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.HEADERS
         }
@@ -45,14 +43,14 @@ internal object NetworkModule {
 
     @Provides
     fun provideChuckerInterceptor(
-        @ApplicationContext context: Context,
+        context: Context,
     ): ChuckerInterceptor {
         return ChuckerInterceptor(context)
     }
 
-    @Singleton
+    @SingleIn(AppScope::class)
     @Provides
-    internal fun provideOkHttpClient(
+    fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient {
         return OkHttpClient.Builder()
@@ -64,9 +62,9 @@ internal object NetworkModule {
     }
 
     @Named("AIOkHttpClient")
-    @Singleton
+    @SingleIn(AppScope::class)
     @Provides
-    internal fun provideAIOkHttpClient(
+    fun provideAIOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         chuckerInterceptor: ChuckerInterceptor,
     ): OkHttpClient {
@@ -80,9 +78,9 @@ internal object NetworkModule {
     }
 
     @Named("WebRetrofit")
-    @Singleton
+    @SingleIn(AppScope::class)
     @Provides
-    internal fun provideWebRetrofit(
+    fun provideWebRetrofit(
         @Named("AIOkHttpClient") okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit.Builder()
@@ -92,16 +90,15 @@ internal object NetworkModule {
             .build()
     }
 
-    @Singleton
     @Provides
-    internal fun provideWebService(@Named("WebRetrofit") webRetrofit: Retrofit): WebService {
+    fun provideWebService(@Named("WebRetrofit") webRetrofit: Retrofit): WebService {
         return webRetrofit.create(WebService::class.java)
     }
 
     @Named("AIRetrofit")
-    @Singleton
+    @SingleIn(AppScope::class)
     @Provides
-    internal fun provideAIRetrofit(
+    fun provideAIRetrofit(
         @Named("AIOkHttpClient") okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit.Builder()
@@ -111,16 +108,15 @@ internal object NetworkModule {
             .build()
     }
 
-    @Singleton
     @Provides
-    internal fun provideAIService(@Named("AIRetrofit") aiRetrofit: Retrofit): AIService {
+    fun provideAIService(@Named("AIRetrofit") aiRetrofit: Retrofit): AIService {
         return aiRetrofit.create(AIService::class.java)
     }
 
     @Named("OpenAIOkHttpClient")
-    @Singleton
+    @SingleIn(AppScope::class)
     @Provides
-    internal fun provideOpenAIOkHttpClient(
+    fun provideOpenAIOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient {
         return OkHttpClient.Builder()
@@ -138,9 +134,9 @@ internal object NetworkModule {
     }
 
     @Named("OpenAIRetrofit")
-    @Singleton
+    @SingleIn(AppScope::class)
     @Provides
-    internal fun provideOpenAIRetrofit(
+    fun provideOpenAIRetrofit(
         @Named("OpenAIOkHttpClient") okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit.Builder()
@@ -150,9 +146,8 @@ internal object NetworkModule {
             .build()
     }
 
-    @Singleton
     @Provides
-    internal fun provideOpenAIService(@Named("OpenAIRetrofit") openAIRetrofit: Retrofit): OpenAIService {
+    fun provideOpenAIService(@Named("OpenAIRetrofit") openAIRetrofit: Retrofit): OpenAIService {
         return openAIRetrofit.create(OpenAIService::class.java)
     }
 }

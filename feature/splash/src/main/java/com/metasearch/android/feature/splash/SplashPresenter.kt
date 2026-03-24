@@ -12,16 +12,16 @@ import com.metasearch.android.feature.screens.SplashScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 
 class SplashPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
 ) : Presenter<SplashUiState> {
 
-    @CircuitInject(SplashScreen::class, ActivityRetainedComponent::class)
+    @CircuitInject(SplashScreen::class, AppScope::class)
     @AssistedFactory
     fun interface Factory {
         fun create(navigator: Navigator): SplashPresenter

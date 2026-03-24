@@ -6,10 +6,6 @@ android {
     namespace = "com.metasearch.android.feature.search"
 }
 
-ksp {
-    arg("circuit.codegen.mode", "hilt")
-}
-
 dependencies {
     implementation(projects.core.data.api)
 }

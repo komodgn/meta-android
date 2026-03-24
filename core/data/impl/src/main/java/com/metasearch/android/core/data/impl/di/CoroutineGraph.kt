@@ -1,24 +1,20 @@
 package com.metasearch.android.core.data.impl.di
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.Qualifier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Qualifier
-import javax.inject.Singleton
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class IoDispatcher
 
-@Module
-@InstallIn(SingletonComponent::class)
-object CoroutineModule {
+@ContributesTo(AppScope::class)
+interface CoroutineGraph {
 
     @Provides
-    @Singleton
     @IoDispatcher
     fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }

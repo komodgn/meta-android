@@ -11,17 +11,17 @@ import com.metasearch.android.core.data.api.repository.GalleryRepository
 import com.metasearch.android.core.data.impl.datasource.GalleryPagingSource
 import com.metasearch.android.core.data.impl.di.IoDispatcher
 import com.metasearch.android.core.model.GalleryImage
-import dagger.hilt.android.qualifiers.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-internal class GalleryRepositoryImpl @Inject constructor(
+@SingleIn(AppScope::class)
+class GalleryRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @ApplicationContext private val context: Context,
+    private val context: Context,
 ) : GalleryRepository {
 
     override fun getGalleryPagingData(): Flow<PagingData<GalleryImage>> {

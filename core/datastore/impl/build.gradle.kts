@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.metasearch.android.library)
-    alias(libs.plugins.metasearch.android.hilt)
     alias(libs.plugins.metasearch.kotlin.library.serialization)
+    alias(libs.plugins.metro)
 }
 
 android {
@@ -12,5 +12,5 @@ dependencies {
     implementation(projects.core.datastore.api)
     implementation(projects.core.model)
 
-    implementation(libs.androidx.datastore.preferences)
+    api(libs.androidx.datastore.preferences)
 }

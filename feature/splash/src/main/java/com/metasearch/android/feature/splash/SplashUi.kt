@@ -22,10 +22,10 @@ import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.ui.component.MetaSearchDialog
 import com.metasearch.android.feature.screens.SplashScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dev.zacsweers.metro.AppScope
 
 @OptIn(ExperimentalPermissionsApi::class)
-@CircuitInject(SplashScreen::class, ActivityRetainedComponent::class)
+@CircuitInject(SplashScreen::class, AppScope::class)
 @Composable
 fun SplashUi(
     modifier: Modifier = Modifier,

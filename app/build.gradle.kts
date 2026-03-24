@@ -1,7 +1,11 @@
+import com.google.devtools.ksp.gradle.KspExtension
+import org.gradle.kotlin.dsl.configure
+
 plugins {
     alias(libs.plugins.metasearch.android.application)
     alias(libs.plugins.metasearch.android.application.compose)
-    alias(libs.plugins.metasearch.android.hilt)
+    alias(libs.plugins.metro)
+    alias(libs.plugins.ksp)
     // -------------리팩토링 중
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
@@ -10,12 +14,12 @@ android {
     namespace = "com.metasearch.android"
 }
 
-ksp {
-    arg("circuit.codegen.mode", "hilt")
-}
-
 composeStabilityAnalyzer {
     enabled.set(true)
+}
+
+extensions.configure<KspExtension> {
+    arg("circuit.codegen.mode", "metro")
 }
 
 dependencies {
@@ -24,6 +28,7 @@ dependencies {
     implementation(projects.core.data.impl)
     implementation(projects.core.datastore.api)
     implementation(projects.core.datastore.impl)
+    implementation(projects.core.di)
     implementation(projects.core.room.api)
     implementation(projects.core.room.impl)
     implementation(projects.core.model)
@@ -42,6 +47,7 @@ dependencies {
     implementation(projects.feature.person)
     implementation(projects.feature.graph)
 
+    implementation(libs.androidx.work.runtime)
     implementation(libs.bundles.circuit)
 
     api(libs.circuit.codegen.annotation)

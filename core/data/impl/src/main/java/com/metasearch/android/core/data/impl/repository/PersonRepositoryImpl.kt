@@ -19,7 +19,9 @@ import com.metasearch.android.core.network.service.AIService
 import com.metasearch.android.core.network.service.WebService
 import com.metasearch.android.core.room.api.dao.PersonDao
 import com.metasearch.android.core.room.api.entity.FaceEntity
-import dagger.hilt.android.qualifiers.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -31,16 +33,16 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import javax.inject.Inject
 import kotlin.collections.map
 
+@SingleIn(AppScope::class)
 class PersonRepositoryImpl @Inject constructor(
     private val personDao: PersonDao,
     private val aiService: AIService,
     private val webService: WebService,
     private val databaseNameRepository: DatabaseNameRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    @ApplicationContext private val context: Context,
+    private val context: Context,
 ) : PersonRepository {
     private val tag = "PersonRepoImpl"
 

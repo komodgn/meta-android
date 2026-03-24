@@ -26,9 +26,9 @@ import com.metasearch.android.feature.screens.PersonScreen
 import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
 import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
 import com.slack.circuit.codegen.annotations.CircuitInject
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dev.zacsweers.metro.AppScope
 
-@CircuitInject(PersonScreen::class, ActivityRetainedComponent::class)
+@CircuitInject(PersonScreen::class, AppScope::class)
 @Composable
 fun PersonUi(
     modifier: Modifier = Modifier,

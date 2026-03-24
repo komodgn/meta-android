@@ -1,6 +1,6 @@
 package com.metasearch.android.datastore.impl.di
 
-import javax.inject.Qualifier
+import dev.zacsweers.metro.Qualifier
 
 @Qualifier
 annotation class DeviceDatastore
