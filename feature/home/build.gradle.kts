@@ -8,6 +8,7 @@ android {
 
 dependencies {
     implementation(projects.core.data.api)
+    implementation(projects.core.di)
     implementation(projects.core.notification)
 
     implementation(libs.androidx.work.runtime)

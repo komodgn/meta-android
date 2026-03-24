@@ -7,6 +7,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.di)
+
     implementation(libs.compose.system.ui.controller)
     implementation(libs.androidx.core.splashscreen)
 }
