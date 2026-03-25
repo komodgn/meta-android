@@ -31,7 +31,8 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class FocusingSearchPresenter @AssistedInject constructor(
+@AssistedInject
+class FocusingSearchPresenter(
     @Assisted private val navigator: Navigator,
     @Assisted private val screen: FocusingSearchScreen,
     private val searchRepository: SearchRepository,

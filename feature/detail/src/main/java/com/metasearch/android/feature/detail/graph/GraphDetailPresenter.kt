@@ -25,7 +25,8 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
-class GraphDetailPresenter @AssistedInject constructor(
+@AssistedInject
+class GraphDetailPresenter(
     @Assisted private val screen: GraphDetailScreen,
     @Assisted private val navigator: Navigator,
     private val graphRepository: GraphRepository,

@@ -26,7 +26,8 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
-class PersonDetailPresenter @AssistedInject constructor(
+@AssistedInject
+class PersonDetailPresenter(
     @Assisted private val navigator: Navigator,
     @Assisted private val screen: PersonDetailScreen,
     private val personRepository: PersonRepository,

@@ -17,7 +17,8 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 
-class SplashPresenter @AssistedInject constructor(
+@AssistedInject
+class SplashPresenter(
     @Assisted private val navigator: Navigator,
 ) : Presenter<SplashUiState> {
 

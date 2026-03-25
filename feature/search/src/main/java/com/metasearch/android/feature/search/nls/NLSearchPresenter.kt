@@ -24,7 +24,8 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
-class NLSearchPresenter @AssistedInject constructor(
+@AssistedInject
+class NLSearchPresenter(
     @Assisted private val navigator: Navigator,
     private val searchRepository: SearchRepository,
 ) : Presenter<NLSearchUiState> {
