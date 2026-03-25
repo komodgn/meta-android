@@ -23,7 +23,8 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
-class GraphPresenter @AssistedInject constructor(
+@AssistedInject
+class GraphPresenter(
     @Assisted private val navigator: Navigator,
     private val graphRepository: GraphRepository,
 ) : Presenter<GraphUiState> {

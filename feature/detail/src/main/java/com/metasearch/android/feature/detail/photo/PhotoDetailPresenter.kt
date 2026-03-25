@@ -23,7 +23,8 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.launch
 
-class PhotoDetailPresenter @AssistedInject constructor(
+@AssistedInject
+class PhotoDetailPresenter(
     @Assisted private val navigator: Navigator,
     @Assisted private val screen: PhotoDetailScreen,
     private val imageAnalysisRepository: ImageAnalysisRepository,

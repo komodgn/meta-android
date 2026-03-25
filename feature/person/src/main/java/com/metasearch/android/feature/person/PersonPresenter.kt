@@ -24,7 +24,8 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class PersonPresenter @AssistedInject constructor(
+@AssistedInject
+class PersonPresenter(
     @Assisted private val navigator: Navigator,
     private val personRepository: PersonRepository,
 ) : Presenter<PersonUiState> {
