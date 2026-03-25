@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.metasearch.android.core.common.extensions.previewPlaceholder
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
@@ -50,8 +49,7 @@ fun ExploreImageList(
                     modifier = Modifier
                         .aspectRatio(1f)
                         .clip(RoundedCornerShape(8.dp))
-                        .clickable { state.eventSink(GraphDetailUiEvent.OnImageClick(uriString)) }
-                        .previewPlaceholder(),
+                        .clickable { state.eventSink(GraphDetailUiEvent.OnImageClick(uriString)) },
                     onClick = { state.eventSink(GraphDetailUiEvent.OnImageClick(uriString)) },
                 )
             }
