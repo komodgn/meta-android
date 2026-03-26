@@ -17,6 +17,7 @@ androidGradlePlugin = "8.13.2"
 activityCompose = "1.12.1"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
+androidxTestCore = "1.6.1"
 androidxDataStore = "1.2.0"
 coreSplashscreen = "1.2.0"
 composePaging = "3.3.6"
@@ -89,16 +90,21 @@ detektPlugin = "1.23.8"
 appcompat = "1.7.1"
 material = "1.13.0"
 
+robolectric = "4.15.1"
+roborazzi = "1.48.0"
+
 [libraries]
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 compose-compiler-gradle-plugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
+roborazzi-gradle-plugin = { module = "io.github.takahirom.roborazzi:roborazzi-gradle-plugin", version.ref = "roborazzi" }
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDataStore" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-test-core = { module = "androidx.test:core", version.ref = "androidxTestCore" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -162,6 +168,11 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+
+roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
+roborazzi-compose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
+
 [bundles]
 androidx-compose = [
     "androidx-activity-compose",
@@ -196,6 +207,8 @@ metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintPlugin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detektPlugin" }
 stability-analyzer = { id = "com.github.skydoves.compose.stability.analyzer", version.ref = "stabilityAnalyzer" }
+
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 
 # Convention Plugin
 metasearch-android-application = { id = "metasearch.android.application", version = "unspecified" }
