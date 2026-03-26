@@ -27,3 +27,19 @@ fun DependencyHandler.debugImplementation(dependencyNotation: Any): Dependency? 
 fun DependencyHandler.implementationProject(path: String): Dependency? {
     return add("implementation", project(path))
 }
+
+fun DependencyHandler.testImplementation(dependencyNotation: Any): Dependency? {
+    return add("testImplementation", dependencyNotation)
+}
+
+fun DependencyHandler.androidTestImplementation(dependencyNotation: Any): Dependency? {
+    return add("androidTestImplementation", dependencyNotation)
+}
+
+fun DependencyHandler.testImplementationProject(path: String): Dependency? {
+    return add("testImplementation", project(path))
+}
+
+fun DependencyHandler.androidTestImplementationProject(path: String): Dependency? {
+    return add("androidTestImplementation", project(path))
+}
