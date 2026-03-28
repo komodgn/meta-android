@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.metro)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.roborazzi)
 }
 
 android {
@@ -48,6 +49,7 @@ dependencies {
     api(projects.core.common)
     api(projects.core.data.api)
     api(projects.core.model)
+
     implementation(projects.core.di)
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
