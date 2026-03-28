@@ -45,7 +45,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 @Suppress("LongParameterList")
 @SingleIn(DataScope::class)
 @Inject
-class ImageAnalysisRepositoryImpl (
+class ImageAnalysisRepositoryImpl(
     private val analyzedImageDao: AnalyzedImageDao,
     private val galleryRepository: GalleryRepository,
     private val databaseNameRepository: DatabaseNameRepository,

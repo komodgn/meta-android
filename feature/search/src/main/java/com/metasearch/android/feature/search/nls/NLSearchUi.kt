@@ -1,3 +1,5 @@
+@file:Suppress("TopLevelPropertyNaming")
+
 package com.metasearch.android.feature.search.nls
 
 import androidx.compose.foundation.layout.Box
