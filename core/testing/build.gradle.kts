@@ -51,6 +51,17 @@ dependencies {
     implementation(projects.core.di)
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
+    implementation(projects.core.data.impl)
+
+    implementation(projects.feature.detail)
+    implementation(projects.feature.graph)
+    implementation(projects.feature.home)
+    implementation(projects.feature.screens)
+    implementation(projects.feature.main)
+    implementation(projects.feature.person)
+    implementation(projects.feature.screens)
+    implementation(projects.feature.search)
+    implementation(projects.feature.splash)
 
     implementation(libs.coil.test)
     implementation(libs.coil.compose)
