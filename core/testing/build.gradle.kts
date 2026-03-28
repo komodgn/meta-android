@@ -52,5 +52,7 @@ dependencies {
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
 
+    implementation(libs.coil.test)
+    implementation(libs.coil.compose)
     implementation(libs.androidx.compose.material3)
 }
