@@ -8,18 +8,19 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.metasearch.android.core.data.api.repository.GalleryRepository
+import com.metasearch.android.core.data.impl.annotation.IoDispatcher
 import com.metasearch.android.core.data.impl.datasource.GalleryPagingSource
-import com.metasearch.android.core.data.impl.di.IoDispatcher
+import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.core.model.GalleryImage
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
-@SingleIn(AppScope::class)
-class GalleryRepositoryImpl @Inject constructor(
+@SingleIn(DataScope::class)
+@Inject
+class GalleryRepositoryImpl(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val context: Context,
 ) : GalleryRepository {

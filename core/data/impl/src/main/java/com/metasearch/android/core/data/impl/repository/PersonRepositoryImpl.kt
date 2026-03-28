@@ -8,8 +8,9 @@ import com.metasearch.android.core.common.utils.normalizePhoneNumber
 import com.metasearch.android.core.common.utils.runSuspendCatching
 import com.metasearch.android.core.data.api.repository.DatabaseNameRepository
 import com.metasearch.android.core.data.api.repository.PersonRepository
-import com.metasearch.android.core.data.impl.di.IoDispatcher
+import com.metasearch.android.core.data.impl.annotation.IoDispatcher
 import com.metasearch.android.core.data.impl.mapper.toModel
+import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.core.model.Person
 import com.metasearch.android.core.network.request.ChangeNameRequest
 import com.metasearch.android.core.network.request.DeleteEntityRequest
@@ -19,7 +20,6 @@ import com.metasearch.android.core.network.service.AIService
 import com.metasearch.android.core.network.service.WebService
 import com.metasearch.android.core.room.api.dao.PersonDao
 import com.metasearch.android.core.room.api.entity.FaceEntity
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineDispatcher
@@ -35,8 +35,9 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import kotlin.collections.map
 
-@SingleIn(AppScope::class)
-class PersonRepositoryImpl @Inject constructor(
+@SingleIn(DataScope::class)
+@Inject
+class PersonRepositoryImpl(
     private val personDao: PersonDao,
     private val aiService: AIService,
     private val webService: WebService,

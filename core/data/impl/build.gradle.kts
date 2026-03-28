@@ -28,6 +28,7 @@ dependencies {
     implementation(projects.core.network)
     implementation(projects.core.data.api)
     implementation(projects.core.datastore.api)
+    implementation(projects.core.di)
     implementation(projects.core.room.api)
 
     implementation(libs.okhttp)

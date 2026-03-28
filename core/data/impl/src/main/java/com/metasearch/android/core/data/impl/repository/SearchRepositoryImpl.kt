@@ -8,6 +8,7 @@ import com.metasearch.android.core.data.api.repository.PersonRepository
 import com.metasearch.android.core.data.api.repository.SearchRepository
 import com.metasearch.android.core.data.impl.mapper.toModel
 import com.metasearch.android.core.data.impl.util.CypherQueryGenerator
+import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.core.model.Circle
 import com.metasearch.android.core.model.DragSearchResult
 import com.metasearch.android.core.model.NLSearchResult
@@ -19,7 +20,6 @@ import com.metasearch.android.core.network.request.OpenAIRequest
 import com.metasearch.android.core.network.service.AIService
 import com.metasearch.android.core.network.service.OpenAIService
 import com.metasearch.android.core.network.service.WebService
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.async
@@ -32,8 +32,9 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import com.metasearch.android.core.network.request.Circle as RequestCircle
 
-@SingleIn(AppScope::class)
-class SearchRepositoryImpl @Inject constructor(
+@SingleIn(DataScope::class)
+@Inject
+class SearchRepositoryImpl(
     private val aiService: AIService,
     private val webService: WebService,
     private val openAIService: OpenAIService,
