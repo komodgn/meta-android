@@ -18,6 +18,7 @@ gradlePlugin {
         "android.library" to "AndroidLibraryConventionPlugin",
         "android.library.compose" to "AndroidLibraryComposeConventionPlugin",
         "android.retrofit" to "AndroidRetrofitConventionPlugin",
+        "android.roborazzi" to "AndroidRoborazziConventionPlugin",
         "jvm.library" to "JvmLibraryConventionPlugin",
         "kotlin.library.serialization" to "KotlinLibrarySerializationConventionPlugin",
     )

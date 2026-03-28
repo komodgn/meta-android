@@ -12,4 +12,5 @@ object Plugins {
     const val KSP = "com.google.devtools.ksp"
     const val METRO = "dev.zacsweers.metro"
     const val COMPOSE_STABILITY_ANALYZER = "com.github.skydoves.compose.stability.analyzer"
+    const val ROBORAZZI = "io.github.takahirom.roborazzi"
 }
