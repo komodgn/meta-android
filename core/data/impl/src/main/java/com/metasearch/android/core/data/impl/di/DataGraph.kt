@@ -12,11 +12,11 @@ import com.metasearch.android.core.data.impl.repository.GraphRepositoryImpl
 import com.metasearch.android.core.data.impl.repository.ImageAnalysisRepositoryImpl
 import com.metasearch.android.core.data.impl.repository.PersonRepositoryImpl
 import com.metasearch.android.core.data.impl.repository.SearchRepositoryImpl
-import dev.zacsweers.metro.AppScope
+import com.metasearch.android.core.di.scope.DataScope
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 
-@ContributesTo(AppScope::class)
+@ContributesTo(DataScope::class)
 interface DataGraph {
 
     @Binds

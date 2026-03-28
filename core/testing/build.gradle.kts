@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.metro)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.roborazzi)
 }
 
 android {
@@ -48,9 +49,23 @@ dependencies {
     api(projects.core.common)
     api(projects.core.data.api)
     api(projects.core.model)
+
     implementation(projects.core.di)
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
+    implementation(projects.core.data.impl)
 
+    implementation(projects.feature.detail)
+    implementation(projects.feature.graph)
+    implementation(projects.feature.home)
+    implementation(projects.feature.screens)
+    implementation(projects.feature.main)
+    implementation(projects.feature.person)
+    implementation(projects.feature.screens)
+    implementation(projects.feature.search)
+    implementation(projects.feature.splash)
+
+    implementation(libs.coil.test)
+    implementation(libs.coil.compose)
     implementation(libs.androidx.compose.material3)
 }

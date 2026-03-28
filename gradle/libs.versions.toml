@@ -68,7 +68,7 @@ coilCompose = "3.3.0"
 circuit = "0.33.1"
 
 ## Metro
-metro = "0.7.7"
+metro = "0.11.4"
 
 ## Room
 room = "2.8.4"
@@ -90,8 +90,8 @@ detektPlugin = "1.23.8"
 appcompat = "1.7.1"
 material = "1.13.0"
 
-robolectric = "4.15.1"
-roborazzi = "1.48.0"
+robolectric = "4.16.1"
+roborazzi = "1.59.0"
 
 [libraries]
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -163,6 +163,7 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+coil-test = { module = "io.coil-kt.coil3:coil-test", version.ref = "coilCompose" }
 
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detektPlugin" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -219,3 +220,4 @@ metasearch-android-feature = { id = "metasearch.android.feature", version = "uns
 metasearch-jvm-library = { id = "metasearch.jvm.library", version = "unspecified" }
 metasearch-kotlin-library-serialization = { id = "metasearch.kotlin.library.serialization", version = "unspecified" }
 metasearch-android-retrofit = { id = "metasearch.android.retrofit", version = "unspecified" }
+metasearch-android-roborazzi = { id = "metasearch.android.roborazzi", version = "unspecified" }

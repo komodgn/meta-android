@@ -27,7 +27,7 @@ class ImageAnalysisWorker(
     @ContributesIntoMap(AppScope::class)
     @WorkerKey(ImageAnalysisWorker::class)
     interface Factory : ChildWorkerFactory {
-        override fun create(context: Context, workerParams: WorkerParameters): ImageAnalysisWorker
+        override fun create(context: Context, params: WorkerParameters): ImageAnalysisWorker
     }
 
     override suspend fun doWork(): Result {

@@ -1,17 +1,13 @@
 package com.metasearch.android.core.data.impl.di
 
-import dev.zacsweers.metro.AppScope
+import com.metasearch.android.core.data.impl.annotation.IoDispatcher
+import com.metasearch.android.core.di.scope.DataScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.Qualifier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class IoDispatcher
-
-@ContributesTo(AppScope::class)
+@ContributesTo(DataScope::class)
 interface CoroutineGraph {
 
     @Provides

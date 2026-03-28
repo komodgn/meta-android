@@ -17,6 +17,7 @@ import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
 import com.metasearch.android.core.data.api.repository.PersonRepository
 import com.metasearch.android.core.data.api.repository.SearchRepository
 import com.metasearch.android.core.datastore.api.datasource.PersonIndexDataSource
+import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.core.network.request.ChangeNameRequest
 import com.metasearch.android.core.network.request.DeleteImageRequest
 import com.metasearch.android.core.network.request.OpenAIMessage
@@ -26,7 +27,6 @@ import com.metasearch.android.core.network.service.OpenAIService
 import com.metasearch.android.core.network.service.WebService
 import com.metasearch.android.core.room.api.dao.AnalyzedImageDao
 import com.metasearch.android.core.room.api.entity.AnalyzedImageEntity
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.Dispatchers
@@ -43,8 +43,9 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
 @Suppress("LongParameterList")
-@SingleIn(AppScope::class)
-class ImageAnalysisRepositoryImpl @Inject constructor(
+@SingleIn(DataScope::class)
+@Inject
+class ImageAnalysisRepositoryImpl(
     private val analyzedImageDao: AnalyzedImageDao,
     private val galleryRepository: GalleryRepository,
     private val databaseNameRepository: DatabaseNameRepository,

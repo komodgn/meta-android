@@ -1,4 +1,4 @@
-package com.metasearch.android.core.testing.annotations
+package com.metasearch.android.core.testing.annotation
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Test

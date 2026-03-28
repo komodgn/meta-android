@@ -36,7 +36,12 @@ buildscript {
 val excludeModules: String? by project
 
 allprojects {
-    if (excludeModules?.split(",")?.contains(project.name) != true) {
+    val skipQualityModules = listOf(":core:testing")
+
+    val isExcludedByProperty = excludeModules?.split(",")?.contains(project.name) == true
+    val isSkippedModule = skipQualityModules.contains(project.path)
+
+    if (!isExcludedByProperty && !isSkippedModule) {
         apply {
             plugin(rootProject.libs.plugins.detekt.get().pluginId)
             plugin(rootProject.libs.plugins.ktlint.get().pluginId)
