@@ -10,8 +10,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
@@ -30,6 +30,10 @@ import com.metasearch.android.feature.search.nls.mock.mock
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dev.zacsweers.metro.AppScope
 import kotlinx.collections.immutable.persistentListOf
+
+const val NLSearchResultGridTestTag = "NLSearch:ResultGrid"
+const val NLSearchResultItemTestTagPrefix = "NLSearch:Item:"
+const val NLSearchLoadingTestTag = "NLSearch:Loading"
 
 @CircuitInject(NLSearchScreen::class, AppScope::class)
 @Composable
@@ -99,11 +103,15 @@ private fun NLSearchUiContent(
             )
             Box(modifier = Modifier.fillMaxSize()) {
                 LazyVerticalGrid(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .testTag(NLSearchResultGridTestTag),
                     columns = GridCells.Fixed(5),
                 ) {
                     items(state.resultImages) { uriString ->
                         MetaSearchSquareImage(
+                            modifier = Modifier
+                                .testTag(NLSearchResultItemTestTagPrefix.plus(uriString)),
                             model = uriString,
                             onClick = {
                                 state.eventSink(NLSearchUiEvent.OnImageClick(uriString))
@@ -113,7 +121,9 @@ private fun NLSearchUiContent(
                 }
 
                 if (state.isLoading) {
-                    MetaSearchLoadingIndicator(modifier = Modifier.align(Alignment.Center))
+                    MetaSearchLoadingIndicator(
+                        modifier = Modifier.testTag(NLSearchLoadingTestTag),
+                    )
                 }
             }
         }
