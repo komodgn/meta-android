@@ -3,7 +3,7 @@ package com.metasearch.android.impl.usecase
 import androidx.lifecycle.Observer
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import com.metasearch.android.api.usecase.WorkerStatusUseCase
+import com.metasearch.android.core.worker.api.usecase.WorkerStatusUseCase
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.awaitClose
