@@ -3,8 +3,8 @@ package com.metasearch.android.impl.usecase
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkManager
-import com.metasearch.android.api.model.WorkOptions
-import com.metasearch.android.api.usecase.WorkScheduleUseCase
+import com.metasearch.android.core.worker.api.model.WorkOptions
+import com.metasearch.android.core.worker.api.usecase.WorkScheduleUseCase
 import dev.zacsweers.metro.Inject
 import kotlin.reflect.KClass
 

@@ -1,4 +1,4 @@
-package com.metasearch.android.api.model
+package com.metasearch.android.core.worker.api.model
 
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType

@@ -1,8 +1,8 @@
-package com.metasearch.android.api.usecase
+package com.metasearch.android.core.worker.api.usecase
 
 import androidx.work.CoroutineWorker
 import androidx.work.Data
-import com.metasearch.android.api.model.WorkOptions
+import com.metasearch.android.core.worker.api.model.WorkOptions
 import kotlin.reflect.KClass
 
 interface WorkScheduleUseCase {

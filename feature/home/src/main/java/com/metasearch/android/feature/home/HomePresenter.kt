@@ -11,11 +11,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.paging.cachedIn
 import androidx.work.WorkInfo
-import com.metasearch.android.api.usecase.WorkScheduleUseCase
-import com.metasearch.android.api.usecase.WorkerStatusUseCase
 import com.metasearch.android.core.data.api.repository.GalleryRepository
 import com.metasearch.android.core.data.api.repository.PersonRepository
 import com.metasearch.android.core.model.Person
+import com.metasearch.android.core.worker.api.usecase.WorkScheduleUseCase
+import com.metasearch.android.core.worker.api.usecase.WorkerStatusUseCase
 import com.metasearch.android.feature.home.worker.ImageAnalysisWorker
 import com.metasearch.android.feature.screens.HomeScreen
 import com.metasearch.android.feature.screens.PersonDetailScreen

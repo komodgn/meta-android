@@ -3,6 +3,8 @@ package com.metasearch.android.impl.di
 import android.content.Context
 import androidx.work.WorkManager
 import com.metasearch.android.core.di.scope.WorkerScope
+import com.metasearch.android.core.worker.api.usecase.WorkScheduleUseCase
+import com.metasearch.android.core.worker.api.usecase.WorkerStatusUseCase
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
@@ -19,10 +21,10 @@ interface WorkerGraph {
     @Binds
     fun bindWorkScheduleUseCase(
         impl: com.metasearch.android.impl.usecase.WorkScheduleUseCase,
-    ): com.metasearch.android.api.usecase.WorkScheduleUseCase
+    ): WorkScheduleUseCase
 
     @Binds
     fun bindWorkerStatusUseCase(
         impl: com.metasearch.android.impl.usecase.WorkerStatusUseCase,
-    ): com.metasearch.android.api.usecase.WorkerStatusUseCase
+    ): WorkerStatusUseCase
 }
