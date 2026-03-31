@@ -9,15 +9,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.platform.LocalContext
 import androidx.paging.cachedIn
-import androidx.work.Constraints
-import androidx.work.ExistingWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.WorkInfo
+import com.metasearch.android.api.usecase.WorkScheduleUseCase
+import com.metasearch.android.api.usecase.WorkerStatusUseCase
 import com.metasearch.android.core.data.api.repository.GalleryRepository
-import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
 import com.metasearch.android.core.data.api.repository.PersonRepository
 import com.metasearch.android.core.model.Person
 import com.metasearch.android.feature.home.worker.ImageAnalysisWorker
@@ -41,7 +37,8 @@ class HomePresenter(
     @Assisted private val navigator: Navigator,
     private val galleryRepository: GalleryRepository,
     private val personRepository: PersonRepository,
-    private val imageAnalysisRepository: ImageAnalysisRepository,
+    private val workScheduleUseCase: WorkScheduleUseCase,
+    private val workerStatusUseCase: WorkerStatusUseCase,
 ) : Presenter<HomeUiState> {
 
     @CircuitInject(HomeScreen::class, AppScope::class)
@@ -53,13 +50,12 @@ class HomePresenter(
     @Composable
     override fun present(): HomeUiState {
         val scope = rememberCoroutineScope()
-        val context = LocalContext.current
 
         var sideEffect by rememberRetained { mutableStateOf<HomeSideEffect?>(null) }
         var isPersonLoading by rememberRetained { mutableStateOf(false) }
-        val isAnalyzing by remember(context) {
-            imageAnalysisRepository.getAnalysisStatus(context)
-        }.collectAsState(initial = false)
+        val analisysStatus by workerStatusUseCase
+            .monitoringUniqueJobStatus("ImageAnalysisWork")
+            .collectAsState(initial = null)
         var isExpanded by rememberRetained { mutableStateOf(false) }
 
         val localPersons by personRepository.getHomeDisplayPersons().collectAsState(initial = emptyList())
@@ -84,18 +80,9 @@ class HomePresenter(
                 }
 
                 HomeUiEvent.OnStartAnalysisClicked -> {
-                    val constraints = Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build()
-
-                    val workRequest = OneTimeWorkRequestBuilder<ImageAnalysisWorker>()
-                        .setConstraints(constraints)
-                        .build()
-
-                    WorkManager.getInstance(context).enqueueUniqueWork(
-                        "ImageAnalysisWork",
-                        ExistingWorkPolicy.KEEP,
-                        workRequest,
+                    workScheduleUseCase.scheduleNow(
+                        workName = "ImageAnalysisWork",
+                        klass = ImageAnalysisWorker::class,
                     )
                 }
 
@@ -150,7 +137,7 @@ class HomePresenter(
 
         return HomeUiState(
             isPersonLoading = isPersonLoading,
-            isAnalyzing = isAnalyzing,
+            isAnalyzing = analisysStatus == WorkInfo.State.RUNNING,
             isExpanded = isExpanded,
             persons = displayPersons,
             images = galleryPagingFlow,

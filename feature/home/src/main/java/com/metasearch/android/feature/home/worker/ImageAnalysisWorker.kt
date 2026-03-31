@@ -7,9 +7,9 @@ import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
 import com.metasearch.android.core.di.ChildWorkerFactory
 import com.metasearch.android.core.di.WorkerKey
+import com.metasearch.android.core.di.scope.WorkerScope
 import com.metasearch.android.core.notification.notifier.AnalysisNotifier
 import com.metasearch.android.feature.home.R
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -24,7 +24,7 @@ class ImageAnalysisWorker(
 ) : CoroutineWorker(context, params) {
 
     @AssistedFactory
-    @ContributesIntoMap(AppScope::class)
+    @ContributesIntoMap(WorkerScope::class)
     @WorkerKey(ImageAnalysisWorker::class)
     interface Factory : ChildWorkerFactory {
         override fun create(context: Context, params: WorkerParameters): ImageAnalysisWorker
