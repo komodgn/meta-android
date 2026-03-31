@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.work.ListenableWorker
 import com.metasearch.android.core.di.ChildWorkerFactory
 import com.metasearch.android.core.di.scope.DataScope
+import com.metasearch.android.core.di.scope.WorkerScope
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Multibinds
@@ -14,7 +15,10 @@ import kotlin.reflect.KClass
 
 @DependencyGraph(
     scope = AppScope::class,
-    additionalScopes = [DataScope::class],
+    additionalScopes = [
+        DataScope::class,
+        WorkerScope::class,
+    ],
 )
 interface AndroidAppGraph {
 
