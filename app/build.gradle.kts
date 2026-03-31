@@ -37,6 +37,8 @@ dependencies {
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
     implementation(projects.core.webview)
+    implementation(projects.core.worker.api)
+    implementation(projects.core.worker.impl)
 
     implementation(projects.feature.screens)
     implementation(projects.feature.splash)
