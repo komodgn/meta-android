@@ -17,7 +17,7 @@ RELEASE_AI_SERVER_URL=
 ```
 
 ### 1.2. Just Open an Issue
-If you find a bug, have a feature idea, or even a tiny improvement, don't hesitate to open an issue. Just tell us what's on your mind! If you see an existing issue you'd like to work on, leave a comment so we can sync up.
+If you find a bug, have a feature idea, or even a tiny improvement, don't hesitate to open an issue. Just tell us what's on your mind! If you see an existing issue you'd like to work on ***especially those marked as `easy`***, leave a comment so we can sync up.
 
 ## 2. Technical Requirements
 - UI: 100% Jetpack Compose.
