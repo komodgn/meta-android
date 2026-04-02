@@ -11,21 +11,20 @@ public fun com.metasearch.android.feature.splash.SplashPresenter.present(): com.
   params:
 
 @Composable
-public fun com.metasearch.android.feature.splash.SplashSideEffectHandler(state: com.metasearch.android.feature.splash.SplashUiState, permissionState: com.google.accompanist.permissions.MultiplePermissionsState, context: android.content.Context): kotlin.Unit
-  skippable: false
+public fun com.metasearch.android.feature.splash.SplashSideEffectHandler(state: com.metasearch.android.feature.splash.SplashUiState, permissionState: com.metasearch.android.core.permissions.api.ui.PermissionsState): kotlin.Unit
+  skippable: true
   restartable: true
   params:
-    - state: RUNTIME (requires runtime check)
+    - state: STABLE (class with no mutable properties)
     - permissionState: STABLE (marked @Stable or @Immutable)
-    - context: RUNTIME (requires runtime check)
 
 @Composable
 public fun com.metasearch.android.feature.splash.SplashUi(modifier: androidx.compose.ui.Modifier, state: com.metasearch.android.feature.splash.SplashUiState): kotlin.Unit
-  skippable: false
+  skippable: true
   restartable: true
   params:
     - modifier: STABLE (marked @Stable or @Immutable)
-    - state: RUNTIME (requires runtime check)
+    - state: STABLE (class with no mutable properties)
 
 @Composable
 private fun com.metasearch.android.feature.splash.SplashUiPreview(): kotlin.Unit

@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.core.webview)
     implementation(projects.core.worker.api)
     implementation(projects.core.worker.impl)
+    implementation(projects.core.permissions.api)
 
     implementation(projects.feature.screens)
     implementation(projects.feature.splash)
@@ -49,7 +50,6 @@ dependencies {
     implementation(projects.feature.person)
     implementation(projects.feature.graph)
 
-    implementation(libs.androidx.work.runtime)
     implementation(libs.bundles.circuit)
 
     api(libs.circuit.codegen.annotation)

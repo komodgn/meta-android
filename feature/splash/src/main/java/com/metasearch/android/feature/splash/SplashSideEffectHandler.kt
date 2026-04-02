@@ -1,60 +1,71 @@
 package com.metasearch.android.feature.splash
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.MultiplePermissionsState
+import com.metasearch.android.core.common.extensions.openSettings
+import com.metasearch.android.core.permissions.api.ui.PermissionsState
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SplashSideEffectHandler(
     state: SplashUiState,
-    permissionState: MultiplePermissionsState,
-    context: Context = LocalContext.current,
+    permissionState: PermissionsState,
 ) {
+    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(permissionState.allPermissionsGranted, permissionState.shouldShowRationale) {
-        if (permissionState.allPermissionsGranted) {
-            delay(1000L)
-            state.eventSink(SplashUiEvent.PermissionResult(true))
-        } else if (permissionState.shouldShowRationale) {
-            state.eventSink(SplashUiEvent.PermissionResult(false))
-        } else {
-            permissionState.launchMultiplePermissionRequest()
-        }
-    }
-
-    LaunchedEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                /**
-                 * 현재 블록 실행 시 permissionState.allPermissionsGranted가
-                 * 자동 갱신된 후, 1번 LaunchedEffect가 반응
-                 */
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-    }
+    var hasReturnedFromSettings by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.navigateToSettings) {
         if (state.navigateToSettings) {
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = Uri.fromParts("package", context.packageName, null)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            context.startActivity(intent)
-
-            state.eventSink(SplashUiEvent.OnResetSettingsNavigation)
+            hasReturnedFromSettings = true
+            context.openSettings()
         }
+    }
+
+    LaunchedEffect(permissionState.canProceed, permissionState.internalState, hasReturnedFromSettings) {
+        if (permissionState.canProceed) {
+            if (hasReturnedFromSettings) {
+                state.eventSink(SplashUiEvent.OnResetSettingsNavigation)
+                hasReturnedFromSettings = false
+            }
+            delay(300L)
+            state.eventSink(SplashUiEvent.PermissionResult(true))
+            return@LaunchedEffect
+        }
+
+        if (permissionState.internalState != null) {
+            delay(200L)
+
+            permissionState.showRationale.value = true
+
+            if (hasReturnedFromSettings) {
+                state.eventSink(SplashUiEvent.OnResetSettingsNavigation)
+                hasReturnedFromSettings = false
+            }
+        }
+    }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                if (hasReturnedFromSettings && !permissionState.canProceed) {
+                    permissionState.askForPermissions()
+                }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 }

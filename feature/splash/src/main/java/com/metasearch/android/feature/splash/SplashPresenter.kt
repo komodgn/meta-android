@@ -16,6 +16,8 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 @AssistedInject
 class SplashPresenter(
@@ -30,9 +32,16 @@ class SplashPresenter(
 
     @Composable
     override fun present(): SplashUiState {
-        var showRationaleDialog by remember { mutableStateOf(false) }
         var navigateToSettings by remember { mutableStateOf(false) }
-        val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // API 34+
+            persistentListOf(
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED,
+                Manifest.permission.POST_NOTIFICATIONS,
+                Manifest.permission.READ_CALL_LOG,
+                Manifest.permission.READ_CONTACTS,
+            )
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // API 33
             listOf(
                 Manifest.permission.READ_MEDIA_IMAGES,
                 Manifest.permission.POST_NOTIFICATIONS,
@@ -45,7 +54,7 @@ class SplashPresenter(
                 Manifest.permission.READ_CALL_LOG,
                 Manifest.permission.READ_CONTACTS,
             )
-        }
+        }.toImmutableList()
 
         fun goToNextScreen() {
             navigator.resetRoot(HomeScreen)
@@ -54,8 +63,6 @@ class SplashPresenter(
         fun onPermissionsResult(allGranted: Boolean) {
             if (allGranted) {
                 goToNextScreen()
-            } else {
-                showRationaleDialog = true
             }
         }
 
@@ -66,7 +73,6 @@ class SplashPresenter(
                 }
 
                 SplashUiEvent.OnConfirmSettings -> {
-                    showRationaleDialog = false
                     navigateToSettings = true
                 }
 
@@ -78,7 +84,6 @@ class SplashPresenter(
 
         return SplashUiState(
             permissions = permissions,
-            showRationaleDialog = showRationaleDialog,
             navigateToSettings = navigateToSettings,
             eventSink = ::handleEvent,
         )
