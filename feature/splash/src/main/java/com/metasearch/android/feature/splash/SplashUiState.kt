@@ -2,13 +2,20 @@ package com.metasearch.android.feature.splash
 
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 data class SplashUiState(
-    val permissions: List<String> = emptyList(),
-    val showRationaleDialog: Boolean = false,
+    val permissions: ImmutableList<String> = persistentListOf(),
     val navigateToSettings: Boolean = false,
     val eventSink: (SplashUiEvent) -> Unit,
-) : CircuitUiState
+) : CircuitUiState {
+    companion object
+}
+
+fun SplashUiState.Companion.mock() = SplashUiState(
+    eventSink = {},
+)
 
 sealed interface SplashUiEvent : CircuitUiEvent {
     data class PermissionResult(

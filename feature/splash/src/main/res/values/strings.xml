@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="permission_dialog_title">권한 요청</string>
-    <string name="permission_dialog_content">앱의 기능을 사용하기 위해 사진, 연락처 등의 권한이 필요합니다. 설정에서 허용해 주세요.</string>
-    <string name="confirm_settings">설정으로 이동</string>
-</resources>
