@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.core.webview)
     implementation(projects.core.worker.api)
     implementation(projects.core.worker.impl)
+    implementation(projects.core.permissions.api)
 
     implementation(projects.feature.screens)
     implementation(projects.feature.splash)
