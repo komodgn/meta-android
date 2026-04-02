@@ -5,4 +5,5 @@
     <string name="home_screen_gallery_grid_view_title">Gallery photo (%d)</string>
     <string name="notification_analysis_complete_title">Gallery Image Analysis Completed</string>
     <string name="notification_analysis_complete_content">Explore the gallery.</string>
+    <string name="home_screen_partial_access_banner_title">Only some photos are shown. Manage</string>
 </resources>

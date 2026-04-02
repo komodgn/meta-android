@@ -51,6 +51,7 @@ internal class AndroidFeatureConventionPlugin : Plugin<Project> {
                 implementationProject(":core:designsystem")
                 implementationProject(":core:ui")
                 implementationProject(":core:model")
+                implementationProject(":core:permissions:api")
                 implementationProject(":feature:screens")
 
                 implementation(libs.compose.effects)
