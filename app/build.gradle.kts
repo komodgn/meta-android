@@ -49,7 +49,6 @@ dependencies {
     implementation(projects.feature.person)
     implementation(projects.feature.graph)
 
-    implementation(libs.androidx.work.runtime)
     implementation(libs.bundles.circuit)
 
     api(libs.circuit.codegen.annotation)
