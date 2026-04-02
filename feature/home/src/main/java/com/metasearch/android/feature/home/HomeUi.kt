@@ -1,5 +1,6 @@
 package com.metasearch.android.feature.home
 
+import android.Manifest
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -49,10 +50,12 @@ import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
+import com.metasearch.android.core.permissions.api.ui.PermissionsState
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
 import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 import com.metasearch.android.feature.home.component.HomeHeader
+import com.metasearch.android.feature.home.component.PartialAccessBanner
 import com.metasearch.android.feature.home.component.PersonCircleItem
 import com.metasearch.android.feature.home.mock.mock
 import com.metasearch.android.feature.screens.HomeScreen
@@ -60,6 +63,7 @@ import com.metasearch.android.feature.screens.component.MetaSearchMainBottomBar
 import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dev.zacsweers.metro.AppScope
+import kotlinx.collections.immutable.persistentListOf
 
 @CircuitInject(HomeScreen::class, AppScope::class)
 @Composable
@@ -67,6 +71,14 @@ fun HomeUi(
     modifier: Modifier = Modifier,
     state: HomeUiState,
 ) {
+    val permissionState = PermissionsState.rememberPermissionsState(
+        permissions = persistentListOf(
+            Manifest.permission.READ_MEDIA_IMAGES,
+            Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED, // API 34+
+        ),
+        onGoToSettings = {},
+    )
+
     HomeSideEffect(
         state = state,
         eventSink = state.eventSink,
@@ -90,6 +102,15 @@ fun HomeUi(
             HomeUiContent(
                 state = state,
                 innerPadding = innerPadding,
+                permissionState = permissionState,
+            )
+        }
+
+        if (!permissionState.allPermissionsGranted && permissionState.canProceed) {
+            PartialAccessBanner(
+                onClick = {
+                    permissionState.launchSystemRequest()
+                },
             )
         }
 
@@ -157,6 +178,7 @@ fun HomeUi(
 private fun HomeUiContent(
     state: HomeUiState,
     innerPadding: PaddingValues,
+    permissionState: PermissionsState,
 ) {
     val lazyPagingItems = state.images.collectAsLazyPagingItems()
 
@@ -171,6 +193,7 @@ private fun HomeUiContent(
             },
             isAnalyzing = state.isAnalyzing,
         )
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -239,6 +262,14 @@ private fun HomeUiContent(
             ),
             color = Neutral500,
         )
+        if (!permissionState.allPermissionsGranted && permissionState.canProceed) {
+            PartialAccessBanner(
+                modifier = Modifier
+                    .background(Color.Black.copy(alpha = 0.6f))
+                    .fillMaxWidth(),
+                onClick = { permissionState.launchSystemRequest() },
+            )
+        }
         Box(
             modifier = Modifier.weight(1f),
         ) {

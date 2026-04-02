@@ -33,12 +33,13 @@ private fun com.metasearch.android.feature.home.HomeUiCollapsedPreview(): kotlin
   params:
 
 @Composable
-private fun com.metasearch.android.feature.home.HomeUiContent(state: com.metasearch.android.feature.home.HomeUiState, innerPadding: androidx.compose.foundation.layout.PaddingValues): kotlin.Unit
+private fun com.metasearch.android.feature.home.HomeUiContent(state: com.metasearch.android.feature.home.HomeUiState, innerPadding: androidx.compose.foundation.layout.PaddingValues, permissionState: com.metasearch.android.core.permissions.api.ui.PermissionsState): kotlin.Unit
   skippable: false
   restartable: true
   params:
     - state: RUNTIME (requires runtime check)
     - innerPadding: STABLE (marked @Stable or @Immutable)
+    - permissionState: STABLE (marked @Stable or @Immutable)
 
 @Composable
 private fun com.metasearch.android.feature.home.HomeUiLongClickPreview(): kotlin.Unit
@@ -63,6 +64,20 @@ public fun com.metasearch.android.feature.home.component.HomeHeader(modifier: an
 
 @Composable
 public fun com.metasearch.android.feature.home.component.HomeHeaderPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
+public fun com.metasearch.android.feature.home.component.PartialAccessBanner(modifier: androidx.compose.ui.Modifier, onClick: kotlin.Function0<kotlin.Unit>): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - modifier: STABLE (marked @Stable or @Immutable)
+    - onClick: STABLE (function type)
+
+@Composable
+private fun com.metasearch.android.feature.home.component.PartialAccessBannerPreview(): kotlin.Unit
   skippable: true
   restartable: true
   params:
