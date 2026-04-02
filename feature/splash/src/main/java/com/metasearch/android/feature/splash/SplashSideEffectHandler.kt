@@ -36,6 +36,10 @@ fun SplashSideEffectHandler(
 
     LaunchedEffect(permissionState.canProceed, permissionState.internalState, hasReturnedFromSettings) {
         if (permissionState.canProceed) {
+            if (hasReturnedFromSettings) {
+                state.eventSink(SplashUiEvent.OnResetSettingsNavigation)
+                hasReturnedFromSettings = false
+            }
             delay(300L)
             state.eventSink(SplashUiEvent.PermissionResult(true))
             return@LaunchedEffect
