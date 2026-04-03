@@ -106,14 +106,6 @@ fun HomeUi(
             )
         }
 
-        if (!permissionState.allPermissionsGranted && permissionState.canProceed) {
-            PartialAccessBanner(
-                onClick = {
-                    permissionState.launchSystemRequest()
-                },
-            )
-        }
-
         AnimatedVisibility(
             visible = state.selectedLongClickImage != null,
             modifier = Modifier.zIndex(5f),
