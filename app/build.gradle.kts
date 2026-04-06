@@ -41,6 +41,8 @@ dependencies {
     implementation(projects.core.worker.impl)
     implementation(projects.core.permissions.api)
 
+    implementation(projects.domain.analysis.api)
+    implementation(projects.data.analysis.impl)
     implementation(projects.feature.screens)
     implementation(projects.feature.splash)
     implementation(projects.feature.home)
