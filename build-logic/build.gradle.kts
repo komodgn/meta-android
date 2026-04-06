@@ -21,6 +21,7 @@ gradlePlugin {
         "android.roborazzi" to "AndroidRoborazziConventionPlugin",
         "jvm.library" to "JvmLibraryConventionPlugin",
         "kotlin.library.serialization" to "KotlinLibrarySerializationConventionPlugin",
+        "test" to "TestConventionPlugin",
     )
 
     plugins {

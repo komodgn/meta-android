@@ -195,6 +195,13 @@ circuit = [
     "circuitx-gesture-navigation",
 ]
 
+test-unit = [
+    "kotlinx-coroutines-test",
+    "junit-jupiter-api",
+    "mockito-core",
+    "mockito-kotlin"
+]
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
@@ -224,3 +231,4 @@ metasearch-jvm-library = { id = "metasearch.jvm.library", version = "unspecified
 metasearch-kotlin-library-serialization = { id = "metasearch.kotlin.library.serialization", version = "unspecified" }
 metasearch-android-retrofit = { id = "metasearch.android.retrofit", version = "unspecified" }
 metasearch-android-roborazzi = { id = "metasearch.android.roborazzi", version = "unspecified" }
+metasearch-test = { id = "metasearch.test", version = "unspecified" }
