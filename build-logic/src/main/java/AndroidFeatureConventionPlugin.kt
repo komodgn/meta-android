@@ -50,7 +50,7 @@ internal class AndroidFeatureConventionPlugin : Plugin<Project> {
                 implementationProject(":core:common")
                 implementationProject(":core:designsystem")
                 implementationProject(":core:ui")
-                implementationProject(":core:model")
+                implementationProject(":data:domain")
                 implementationProject(":core:permissions:api")
                 implementationProject(":feature:screens")
 

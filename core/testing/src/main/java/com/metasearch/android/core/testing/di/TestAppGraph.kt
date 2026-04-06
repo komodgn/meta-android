@@ -8,7 +8,6 @@ import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
 import com.metasearch.android.core.data.api.repository.PersonRepository
 import com.metasearch.android.core.data.api.repository.SearchRepository
 import com.metasearch.android.core.data.impl.repository.GalleryRepositoryImpl
-import com.metasearch.android.core.data.impl.repository.GraphRepositoryImpl
 import com.metasearch.android.core.data.impl.repository.ImageAnalysisRepositoryImpl
 import com.metasearch.android.core.data.impl.repository.PersonRepositoryImpl
 import com.metasearch.android.core.data.impl.repository.SearchRepositoryImpl

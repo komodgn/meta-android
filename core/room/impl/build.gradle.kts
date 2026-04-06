@@ -20,7 +20,7 @@ extensions.configure<KspExtension> {
 }
 
 dependencies {
-    implementation(projects.core.model)
+    implementation(projects.data.domain)
     implementation(projects.core.room.api)
 
     ksp(libs.room.compiler)

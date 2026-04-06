@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.model)
+    implementation(projects.data.domain)
 
     implementation(libs.kotlinx.coroutines.core)
 }

@@ -10,7 +10,7 @@ android {
 
 dependencies {
     implementation(projects.core.datastore.api)
-    implementation(projects.core.model)
+    implementation(projects.data.domain)
 
     api(libs.androidx.datastore.preferences)
 }

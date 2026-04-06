@@ -24,14 +24,11 @@ extensions.configure<KspExtension> {
 
 dependencies {
     implementation(projects.core.common)
-    implementation(projects.core.data.api)
-    implementation(projects.core.data.impl)
     implementation(projects.core.datastore.api)
     implementation(projects.core.datastore.impl)
     implementation(projects.core.di)
     implementation(projects.core.room.api)
     implementation(projects.core.room.impl)
-    implementation(projects.core.model)
     implementation(projects.core.network)
     implementation(projects.core.notification)
     implementation(projects.core.ui)
@@ -41,6 +38,7 @@ dependencies {
     implementation(projects.core.worker.impl)
     implementation(projects.core.permissions.api)
 
+    implementation(projects.data.domain)
     implementation(projects.domain.person.api)
     implementation(projects.data.person.impl)
     implementation(projects.domain.search.api)
@@ -53,6 +51,7 @@ dependencies {
     implementation(projects.data.device.impl)
     implementation(projects.domain.analysis.api)
     implementation(projects.data.analysis.impl)
+
     implementation(projects.feature.screens)
     implementation(projects.feature.splash)
     implementation(projects.feature.home)
