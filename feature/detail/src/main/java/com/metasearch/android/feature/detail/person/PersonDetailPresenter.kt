@@ -29,6 +29,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
+@Suppress("LongParameterList")
 @AssistedInject
 class PersonDetailPresenter(
     @Assisted private val navigator: Navigator,

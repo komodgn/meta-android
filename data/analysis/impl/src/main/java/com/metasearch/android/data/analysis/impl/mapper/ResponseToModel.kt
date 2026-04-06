@@ -15,5 +15,5 @@ internal fun UploadResponse.toModel(): AnalysisResult = AnalysisResult(
             },
             isFaceExist = person.isFaceExit,
         )
-    }
+    },
 )

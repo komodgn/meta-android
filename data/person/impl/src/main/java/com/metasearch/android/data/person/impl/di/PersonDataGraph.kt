@@ -2,11 +2,11 @@ package com.metasearch.android.data.person.impl.di
 
 import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.data.person.impl.repository.ContactRepositoryImpl
-import com.metasearch.android.data.person.impl.usecase.DeletePersonUseCaseImpl
-import com.metasearch.android.data.person.impl.usecase.GetHomeDisplayPersonsUseCaseImpl
 import com.metasearch.android.data.person.impl.repository.PersonRepositoryImpl
 import com.metasearch.android.data.person.impl.usecase.CheckNameExistsUseCaseImpl
+import com.metasearch.android.data.person.impl.usecase.DeletePersonUseCaseImpl
 import com.metasearch.android.data.person.impl.usecase.GetAllPersonsUseCaseImpl
+import com.metasearch.android.data.person.impl.usecase.GetHomeDisplayPersonsUseCaseImpl
 import com.metasearch.android.data.person.impl.usecase.GetPersonDetailUseCaseImpl
 import com.metasearch.android.data.person.impl.usecase.GetPersonPhotosUseCaseImpl
 import com.metasearch.android.data.person.impl.usecase.UpdatePersonInfoUseCaseImpl

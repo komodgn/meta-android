@@ -23,10 +23,10 @@ import androidx.compose.ui.unit.IntSize
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.component.NetworkImage
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.data.domain.Circle
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
+import com.metasearch.android.data.domain.Circle
 import com.metasearch.android.feature.screens.FocusingSearchScreen
 import com.metasearch.android.feature.search.R
 import com.metasearch.android.feature.search.focusing.component.DrawingCanvas

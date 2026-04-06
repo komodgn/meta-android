@@ -64,7 +64,9 @@ class GalleryRepositoryImpl(
         )?.use { cursor ->
             if (cursor.moveToFirst()) {
                 cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME))
-            } else null
+            } else {
+                null
+            }
         }
     }
 
@@ -81,7 +83,9 @@ class GalleryRepositoryImpl(
             if (cursor.moveToFirst()) {
                 val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID))
                 ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id).toString()
-            } else null
+            } else {
+                null
+            }
         }
     }
 
@@ -92,7 +96,9 @@ class GalleryRepositoryImpl(
         context.contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             projection,
-            null, null, null
+            null,
+            null,
+            null,
         )?.use { cursor ->
             val idCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
             val nameCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)

@@ -30,5 +30,5 @@ fun Person.Companion.fake(id: Long = 1L): Person {
     )
 }
 
-fun Person.Companion.fakes()= (1..10)
+fun Person.Companion.fakes() = (1..10)
     .map { fake(it.toLong()) }

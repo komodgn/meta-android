@@ -6,6 +6,6 @@ interface UpdatePersonInfoUseCase {
         newName: String,
         newPhone: String,
         isHome: Boolean,
-        faceId: Long?
+        faceId: Long?,
     ): Result<Long>
 }

@@ -1,7 +1,6 @@
 package com.metasearch.android.data.analysis.impl.repository
 
 import android.content.Context
-import android.net.Uri
 import androidx.core.net.toUri
 import com.metasearch.android.core.common.extensions.toFile
 import com.metasearch.android.core.common.utils.runSuspendCatching
@@ -30,6 +29,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
+@Suppress("LongParameterList")
 @SingleIn(DataScope::class)
 @Inject
 class AnalysisRepositoryImpl(
@@ -43,7 +43,6 @@ class AnalysisRepositoryImpl(
 ) : AnalysisRepository {
 
     companion object {
-        private const val TAG = "AnalysisRepo"
         private const val AI_MODEL_NAME = "gpt-3.5-turbo"
     }
 
@@ -121,7 +120,7 @@ class AnalysisRepositoryImpl(
     override suspend fun getAiCompletion(prompt: String): Result<String> = runSuspendCatching {
         val request = OpenAIRequest(
             model = AI_MODEL_NAME,
-            messages = listOf(OpenAIMessage(role = "user", content = prompt))
+            messages = listOf(OpenAIMessage(role = "user", content = prompt)),
         )
         val response = openAIService.createChatCompletion(request)
         response.choices.firstOrNull()?.message?.content ?: error("AI response is empty")

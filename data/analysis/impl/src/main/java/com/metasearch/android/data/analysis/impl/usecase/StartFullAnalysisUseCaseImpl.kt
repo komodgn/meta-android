@@ -7,7 +7,6 @@ import com.metasearch.android.domain.analysis.api.usecase.StartFullAnalysisUseCa
 import com.metasearch.android.domain.device.api.repository.DatabaseNameRepository
 import com.metasearch.android.domain.gallery.api.repository.GalleryRepository
 import com.metasearch.android.domain.person.api.repository.PersonRepository
-import com.metasearch.android.domain.search.api.repository.SearchRepository
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,7 +21,6 @@ class StartFullAnalysisUseCaseImpl(
     private val personRepository: PersonRepository,
     private val databaseNameRepository: DatabaseNameRepository,
     private val processAnalysisResultUseCase: ProcessAnalysisResultUseCase,
-    private val searchRepository: SearchRepository,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : StartFullAnalysisUseCase {
 
@@ -45,7 +43,6 @@ class StartFullAnalysisUseCaseImpl(
                         analysisRepository.deleteLocalPath(path)
                     }
             }
-//            searchRepository.clearEntityCache()
         }
 
         val addUriStrings = currentUriStrings.filter { it !in alreadyAnalyzed }
@@ -59,14 +56,13 @@ class StartFullAnalysisUseCaseImpl(
 
             if (successfulData.isNotEmpty()) {
                 processAnalysisResultUseCase(dbName, successfulData)
-//                searchRepository.clearEntityCache()
             }
         }
 
-        syncMismatchedNames(dbName)
+        syncMismatchedNames()
     }
 
-    private suspend fun syncMismatchedNames(dbName: String) {
+    private suspend fun syncMismatchedNames() {
         val mismatches = personRepository.getMismatchedFaceNames()
 
         mismatches.forEach { (serverName, actualName) ->

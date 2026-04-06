@@ -41,7 +41,9 @@ class SearchRepositoryImpl(
         circles: List<Circle>,
     ): List<String> {
         val imagePart = MultipartBody.Part.createFormData(
-            "searchImage", imageFile.name, imageFile.asRequestBody("image/jpeg".toMediaType())
+            "searchImage",
+            imageFile.name,
+            imageFile.asRequestBody("image/jpeg".toMediaType()),
         )
         val dbNamePart = dbName.toRequestBody("text/plain".toMediaType())
         val requestCircles = circles.map { com.metasearch.android.core.network.request.Circle(it.centerX, it.centerY, it.radius) }
@@ -49,7 +51,7 @@ class SearchRepositoryImpl(
         val response = aiService.uploadImageAndCircles(
             image = imagePart,
             dbName = dbNamePart,
-            request = FocusingSearchRequest(requestCircles)
+            request = FocusingSearchRequest(requestCircles),
         )
         return response.detectedObjects
     }
@@ -58,8 +60,8 @@ class SearchRepositoryImpl(
         val response = openAIService.createChatCompletion(
             OpenAIRequest(
                 model = AI_MODEL_NAME,
-                messages = listOf(OpenAIMessage("user", PromptConstants.NL_SEARCH_BASIC_PROMPT + query))
-            )
+                messages = listOf(OpenAIMessage("user", PromptConstants.NL_SEARCH_BASIC_PROMPT + query)),
+            ),
         )
         val content = response.choices.firstOrNull()?.message?.content?.trim() ?: ""
         if (content == "0" || content.isEmpty()) return emptyList()
