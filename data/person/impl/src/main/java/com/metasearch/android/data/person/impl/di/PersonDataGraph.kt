@@ -17,6 +17,7 @@ import com.metasearch.android.domain.person.api.usecase.CheckNameExistsUseCase
 import com.metasearch.android.domain.person.api.usecase.DeletePersonUseCase
 import com.metasearch.android.domain.person.api.usecase.GetAllPersonsUseCase
 import com.metasearch.android.domain.person.api.usecase.GetHomeDisplayPersonsUseCase
+import com.metasearch.android.domain.person.api.usecase.GetPersonDetailUseCase
 import com.metasearch.android.domain.person.api.usecase.GetPersonPhotosUseCase
 import com.metasearch.android.domain.person.api.usecase.UpdatePersonInfoUseCase
 import com.metasearch.android.domain.person.api.usecase.UpdateRepresentativeFaceUseCase
@@ -44,7 +45,7 @@ interface PersonDataGraph {
     val GetHomeDisplayPersonsUseCaseImpl.bind: GetHomeDisplayPersonsUseCase
 
     @Binds
-    val GetPersonDetailUseCaseImpl.bind: GetAllPersonsUseCase
+    val GetPersonDetailUseCaseImpl.bind: GetPersonDetailUseCase
 
     @Binds
     val GetPersonPhotosUseCaseImpl.bind: GetPersonPhotosUseCase
