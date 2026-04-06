@@ -43,6 +43,8 @@ dependencies {
 
     implementation(projects.domain.person.api)
     implementation(projects.data.person.impl)
+    implementation(projects.domain.search.api)
+    implementation(projects.data.search.impl)
     implementation(projects.domain.graph.api)
     implementation(projects.data.graph.impl)
     implementation(projects.domain.gallery.api)
