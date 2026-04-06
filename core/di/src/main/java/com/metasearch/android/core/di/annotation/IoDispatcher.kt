@@ -1,4 +1,4 @@
-package com.metasearch.android.core.data.impl.annotation
+package com.metasearch.android.core.di.annotation
 
 import dev.zacsweers.metro.Qualifier
 

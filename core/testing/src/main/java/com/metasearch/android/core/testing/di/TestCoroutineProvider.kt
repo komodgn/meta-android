@@ -1,7 +1,7 @@
 package com.metasearch.android.core.testing.di
 
-import com.metasearch.android.core.data.impl.annotation.IoDispatcher
-import com.metasearch.android.core.data.impl.di.CoroutineGraph
+import com.metasearch.android.core.di.annotation.IoDispatcher
+import com.metasearch.android.core.di.graph.CoroutineGraph
 import com.metasearch.android.core.di.scope.DataScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides

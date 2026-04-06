@@ -1,6 +1,6 @@
-package com.metasearch.android.core.data.impl.di
+package com.metasearch.android.core.di.graph
 
-import com.metasearch.android.core.data.impl.annotation.IoDispatcher
+import com.metasearch.android.core.di.annotation.IoDispatcher
 import com.metasearch.android.core.di.scope.DataScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
