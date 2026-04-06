@@ -6,10 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.core.net.toUri
 import com.metasearch.android.core.common.utils.handleException
-import com.metasearch.android.core.data.api.repository.GalleryRepository
-import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
+import com.metasearch.android.domain.analysis.api.usecase.GetImageDescriptionUseCase
+import com.metasearch.android.domain.gallery.api.repository.GalleryRepository
 import com.metasearch.android.feature.screens.FocusingSearchScreen
 import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
@@ -27,7 +26,7 @@ import kotlinx.coroutines.launch
 class PhotoDetailPresenter(
     @Assisted private val navigator: Navigator,
     @Assisted private val screen: PhotoDetailScreen,
-    private val imageAnalysisRepository: ImageAnalysisRepository,
+    private val getImageDescriptionUseCase: GetImageDescriptionUseCase,
     private val galleryRepository: GalleryRepository,
 ) : Presenter<PhotoDetailUiState> {
 
@@ -58,19 +57,12 @@ class PhotoDetailPresenter(
                     isLoading = true
 
                     scope.launch {
-                        imageAnalysisRepository.getImageDescription(event.imageUriString)
+                        getImageDescriptionUseCase(event.imageUriString)
                             .onSuccess { description ->
-                                if (description != null) {
-                                    imageDescription = description
-                                }
+                                imageDescription = description
                             }
                             .onFailure { exception ->
-                                handleException(
-                                    exception = exception,
-                                    onError = { message ->
-                                        sideEffect = PhotoDetailSideEffect.ShowToast(message)
-                                    },
-                                )
+                                handleException(exception, onError = { sideEffect = PhotoDetailSideEffect.ShowToast(it) })
                             }
 
                         isLoading = false
@@ -79,7 +71,7 @@ class PhotoDetailPresenter(
 
                 is PhotoDetailUiEvent.OnGraphClick -> {
                     scope.launch {
-                        val fileName = galleryRepository.getFileName(screen.imageUriString.toUri()) ?: ""
+                        val fileName = galleryRepository.getFileName(screen.imageUriString) ?: ""
 
                         navigator.goTo(GraphDetailScreen(entityName = fileName))
                     }

@@ -8,7 +8,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.metasearch.android.core.common.utils.UiText
-import com.metasearch.android.core.data.api.repository.GraphRepository
+import com.metasearch.android.domain.graph.api.usecase.GetDetailGraphUrlUseCase
+import com.metasearch.android.domain.graph.api.usecase.GetGraphImageUriUseCase
 import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
@@ -29,7 +30,8 @@ import kotlinx.coroutines.launch
 class GraphDetailPresenter(
     @Assisted private val screen: GraphDetailScreen,
     @Assisted private val navigator: Navigator,
-    private val graphRepository: GraphRepository,
+    private val getDetailGraphUrlUseCase: GetDetailGraphUrlUseCase,
+    private val getGraphImageUriUseCase: GetGraphImageUriUseCase,
 ) : Presenter<GraphDetailUiState> {
 
     @CircuitInject(GraphDetailScreen::class, AppScope::class)
@@ -51,7 +53,7 @@ class GraphDetailPresenter(
         val maxImages = 10
 
         LaunchedEffect(Unit) {
-            webViewUrl = graphRepository.getDetailGraphWebViewUrl(screen.entityName)
+            webViewUrl = getDetailGraphUrlUseCase(screen.entityName)
         }
 
         fun handleEvent(event: GraphDetailUiEvent) {
@@ -76,15 +78,14 @@ class GraphDetailPresenter(
                     scope.launch {
                         uiState = UiState.Loading
                         webViewUrl = ""
-                        webViewUrl = graphRepository.getDetailGraphWebViewUrl(screen.entityName)
+                        webViewUrl = getDetailGraphUrlUseCase(screen.entityName)
                     }
                 }
 
                 is GraphDetailUiEvent.OnPhotoSelected -> {
                     scope.launch {
-                        val uri = graphRepository.findMatchedUri(event.photoName)
-                        if (uri != null) {
-                            val uriString = uri.toString()
+                        val uriString = getGraphImageUriUseCase(event.photoName)
+                        if (uriString != null) {
                             if (!selectedImages.contains(uriString)) {
                                 selectedImages = (listOf(uriString) + selectedImages).take(maxImages).toPersistentList()
                             }

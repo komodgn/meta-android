@@ -169,11 +169,11 @@ private fun PersonDetailContent(
             modifier = Modifier.fillMaxSize(),
             columns = GridCells.Fixed(5),
         ) {
-            items(state.photoUris) { uri ->
+            items(state.photoUris) { uriString ->
                 MetaSearchSquareImage(
-                    model = uri,
+                    model = uriString,
                     onClick = {
-                        state.eventSink(PersonDetailUiEvent.OnGridImageClick(uri))
+                        state.eventSink(PersonDetailUiEvent.OnGridImageClick(uriString))
                     },
                 )
             }
