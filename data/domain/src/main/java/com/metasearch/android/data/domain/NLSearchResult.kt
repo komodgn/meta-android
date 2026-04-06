@@ -5,3 +5,7 @@ data class NLSearchResult(
 ) {
     companion object
 }
+
+fun NLSearchResult.Companion.fake() = NLSearchResult(
+    matchedUris = listOf("uri1", "uri2"),
+)
