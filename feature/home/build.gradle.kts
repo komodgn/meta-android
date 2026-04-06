@@ -7,8 +7,12 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data.api)
+    implementation(projects.domain.analysis.api)
+    implementation(projects.domain.gallery.api)
+    implementation(projects.domain.person.api)
     implementation(projects.core.di)
     implementation(projects.core.notification)
     implementation(projects.core.worker.api)
+
+    implementation(libs.androidx.compose.paging)
 }

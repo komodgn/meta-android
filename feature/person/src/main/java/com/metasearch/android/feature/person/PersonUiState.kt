@@ -2,7 +2,7 @@ package com.metasearch.android.feature.person
 
 import androidx.compose.runtime.Immutable
 import com.metasearch.android.core.common.utils.UiText
-import com.metasearch.android.core.model.Person
+import com.metasearch.android.data.domain.Person
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen

@@ -7,7 +7,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.common.utils.handleException
-import com.metasearch.android.core.data.api.repository.SearchRepository
+import com.metasearch.android.domain.search.api.usecase.NLSearchUseCase
 import com.metasearch.android.feature.screens.NLSearchScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
 import com.metasearch.android.feature.search.R
@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 @AssistedInject
 class NLSearchPresenter(
     @Assisted private val navigator: Navigator,
-    private val searchRepository: SearchRepository,
+    private val nlSearchUseCase: NLSearchUseCase,
 ) : Presenter<NLSearchUiState> {
 
     @CircuitInject(NLSearchScreen::class, AppScope::class)
@@ -61,7 +61,7 @@ class NLSearchPresenter(
                     isLoading = true
 
                     scope.launch {
-                        searchRepository.nlSearch(inputString)
+                        nlSearchUseCase(inputString)
                             .onSuccess { result ->
                                 if (result.matchedUris.isEmpty()) {
                                     resultImages = persistentListOf()
@@ -72,12 +72,7 @@ class NLSearchPresenter(
                                     resultImages = result.matchedUris.toPersistentList()
                                 }
                             }.onFailure { exception ->
-                                handleException(
-                                    exception = exception,
-                                    onError = { message ->
-                                        sideEffect = NLSearchSideEffect.ShowToast(message)
-                                    },
-                                )
+                                handleException(exception, onError = { sideEffect = NLSearchSideEffect.ShowToast(it) })
                             }
                         isLoading = false
                     }

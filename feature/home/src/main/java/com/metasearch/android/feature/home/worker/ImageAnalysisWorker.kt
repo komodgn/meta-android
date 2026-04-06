@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.metasearch.android.core.common.utils.UiText
-import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
 import com.metasearch.android.core.di.ChildWorkerFactory
 import com.metasearch.android.core.di.WorkerKey
 import com.metasearch.android.core.di.scope.WorkerScope
 import com.metasearch.android.core.notification.notifier.AnalysisNotifier
+import com.metasearch.android.domain.analysis.api.usecase.StartFullAnalysisUseCase
 import com.metasearch.android.feature.home.R
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
@@ -19,7 +19,7 @@ import dev.zacsweers.metro.ContributesIntoMap
 class ImageAnalysisWorker(
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
-    private val repository: ImageAnalysisRepository,
+    private val startFullAnalysisUseCase: StartFullAnalysisUseCase,
     private val notifier: AnalysisNotifier,
 ) : CoroutineWorker(context, params) {
 
@@ -32,7 +32,7 @@ class ImageAnalysisWorker(
 
     override suspend fun doWork(): Result {
         return try {
-            repository.runFullAnalysis()
+            startFullAnalysisUseCase()
 
             notifier.notifyComplete(
                 UiText.StringResource(R.string.notification_analysis_complete_title),

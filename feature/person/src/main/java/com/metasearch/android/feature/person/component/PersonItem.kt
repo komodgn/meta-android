@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.Black
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.model.Person
-import com.metasearch.android.core.model.fake
 import com.metasearch.android.core.ui.component.MetaSearchCircleImage
+import com.metasearch.android.data.domain.Person
+import com.metasearch.android.data.domain.fake
 import com.metasearch.android.feature.person.R
 
 @Composable

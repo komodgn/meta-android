@@ -7,7 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.metasearch.android.core.common.utils.UiText
-import com.metasearch.android.core.data.api.repository.GraphRepository
+import com.metasearch.android.domain.graph.api.usecase.GetFullGraphUrlUseCase
+import com.metasearch.android.domain.graph.api.usecase.GetGraphImageUriUseCase
 import com.metasearch.android.feature.screens.GraphScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -26,7 +27,8 @@ import kotlinx.coroutines.launch
 @AssistedInject
 class GraphPresenter(
     @Assisted private val navigator: Navigator,
-    private val graphRepository: GraphRepository,
+    private val getFullGraphUrlUseCase: GetFullGraphUrlUseCase,
+    private val getGraphImageUriUseCase: GetGraphImageUriUseCase,
 ) : Presenter<GraphUiState> {
 
     @CircuitInject(GraphScreen::class, AppScope::class)
@@ -47,7 +49,7 @@ class GraphPresenter(
         val maxImages = 10
 
         LaunchedEffect(Unit) {
-            webViewUrl = graphRepository.getFullGraphWebViewUrl()
+            webViewUrl = getFullGraphUrlUseCase()
         }
 
         fun handleEvent(event: GraphUiEvent) {
@@ -72,15 +74,15 @@ class GraphPresenter(
                     coroutineScope.launch {
                         uiState = UiState.Loading
                         webViewUrl = ""
-                        webViewUrl = graphRepository.getFullGraphWebViewUrl()
+                        webViewUrl = getFullGraphUrlUseCase()
                     }
                 }
 
                 is GraphUiEvent.OnPhotoSelected -> {
                     coroutineScope.launch {
-                        val uri = graphRepository.findMatchedUri(event.photoName)
-                        if (uri != null) {
-                            val uriString = uri.toString()
+                        val uriString = getGraphImageUriUseCase(event.photoName)
+
+                        if (uriString != null) {
                             if (!selectedImages.contains(uriString)) {
                                 selectedImages = (listOf(uriString) + selectedImages).take(maxImages).toPersistentList()
                             }

@@ -7,6 +7,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data.api)
+    implementation(projects.domain.graph.api)
     implementation(projects.core.webview)
 }

@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.theme.White
-import com.metasearch.android.core.model.Circle
+import com.metasearch.android.data.domain.Circle
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable

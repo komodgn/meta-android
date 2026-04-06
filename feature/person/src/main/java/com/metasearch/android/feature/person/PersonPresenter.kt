@@ -9,7 +9,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.metasearch.android.core.common.utils.handleException
-import com.metasearch.android.core.data.api.repository.PersonRepository
+import com.metasearch.android.domain.person.api.usecase.DeletePersonUseCase
+import com.metasearch.android.domain.person.api.usecase.GetAllPersonsUseCase
 import com.metasearch.android.feature.screens.PersonDetailScreen
 import com.metasearch.android.feature.screens.PersonScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -27,7 +28,8 @@ import kotlinx.coroutines.launch
 @AssistedInject
 class PersonPresenter(
     @Assisted private val navigator: Navigator,
-    private val personRepository: PersonRepository,
+    private val getAllPersonsUseCase: GetAllPersonsUseCase,
+    private val deletePersonUseCase: DeletePersonUseCase,
 ) : Presenter<PersonUiState> {
 
     @CircuitInject(PersonScreen::class, AppScope::class)
@@ -42,7 +44,7 @@ class PersonPresenter(
         var deleteJob by remember { mutableStateOf<Job?>(null) }
         var sideEffect by rememberRetained { mutableStateOf<PersonSideEffect?>(null) }
         var inputPersonNameString by rememberRetained { mutableStateOf("") }
-        val allPeople by personRepository.getAllPersons().collectAsState(initial = emptyList())
+        val allPeople by getAllPersonsUseCase().collectAsState(initial = emptyList())
         val filteredPeople by remember(inputPersonNameString, allPeople) {
             derivedStateOf {
                 val list = if (inputPersonNameString.isBlank()) {
@@ -80,7 +82,7 @@ class PersonPresenter(
                     val personToDelete = allPeople.find { it.id == pendingDeletePersonId }
                     personToDelete?.let { person ->
                         deleteJob = scope.launch {
-                            personRepository.deleteAnalyzedPerson(person)
+                            deletePersonUseCase(person)
                                 .onSuccess {
                                     showDeleteDialog = false
                                     pendingDeletePersonId = null

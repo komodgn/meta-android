@@ -2,8 +2,8 @@ package com.metasearch.android.feature.search.focusing
 
 import androidx.compose.runtime.Immutable
 import com.metasearch.android.core.common.utils.UiText
-import com.metasearch.android.core.model.Circle
-import com.metasearch.android.core.model.DragSearchResult
+import com.metasearch.android.data.domain.Circle
+import com.metasearch.android.data.domain.DragSearchResult
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import kotlinx.collections.immutable.ImmutableList
