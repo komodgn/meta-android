@@ -56,7 +56,7 @@ private fun com.metasearch.android.feature.search.focusing.component.BottomBarIt
     - onClick: STABLE (function type)
 
 @Composable
-public fun com.metasearch.android.feature.search.focusing.component.DrawingCanvas(circles: kotlinx.collections.immutable.ImmutableList<com.metasearch.android.core.model.Circle>?, isDrawing: kotlin.Boolean, currentCenter: androidx.compose.ui.geometry.Offset, currentRadius: kotlin.Float, canvasSize: androidx.compose.ui.unit.IntSize): kotlin.Unit
+public fun com.metasearch.android.feature.search.focusing.component.DrawingCanvas(circles: kotlinx.collections.immutable.ImmutableList<com.metasearch.android.data.domain.Circle>?, isDrawing: kotlin.Boolean, currentCenter: androidx.compose.ui.geometry.Offset, currentRadius: kotlin.Float, canvasSize: androidx.compose.ui.unit.IntSize): kotlin.Unit
   skippable: true
   restartable: true
   params:
@@ -95,7 +95,7 @@ private fun com.metasearch.android.feature.search.focusing.component.MoreButtonP
   params:
 
 @Composable
-internal fun com.metasearch.android.feature.search.focusing.component.SearchResultList(modifier: androidx.compose.ui.Modifier, result: com.metasearch.android.core.model.DragSearchResult, onImageClick: kotlin.Function1<kotlin.String, kotlin.Unit>, onMoreClick: kotlin.Function1<kotlin.String, kotlin.Unit>): kotlin.Unit
+internal fun com.metasearch.android.feature.search.focusing.component.SearchResultList(modifier: androidx.compose.ui.Modifier, result: com.metasearch.android.data.domain.DragSearchResult, onImageClick: kotlin.Function1<kotlin.String, kotlin.Unit>, onMoreClick: kotlin.Function1<kotlin.String, kotlin.Unit>): kotlin.Unit
   skippable: true
   restartable: true
   params:

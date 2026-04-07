@@ -47,7 +47,7 @@ private fun com.metasearch.android.feature.person.PersonUiPreview(): kotlin.Unit
   params:
 
 @Composable
-internal fun com.metasearch.android.feature.person.component.PersonItem(person: com.metasearch.android.core.model.Person, onClick: kotlin.Function0<kotlin.Unit>, onDeleteClick: kotlin.Function0<kotlin.Unit>, modifier: androidx.compose.ui.Modifier): kotlin.Unit
+internal fun com.metasearch.android.feature.person.component.PersonItem(person: com.metasearch.android.data.domain.Person, onClick: kotlin.Function0<kotlin.Unit>, onDeleteClick: kotlin.Function0<kotlin.Unit>, modifier: androidx.compose.ui.Modifier): kotlin.Unit
   skippable: true
   restartable: true
   params:
