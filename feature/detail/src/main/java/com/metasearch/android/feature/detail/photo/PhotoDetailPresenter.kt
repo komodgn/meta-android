@@ -6,9 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.common.utils.handleException
 import com.metasearch.android.domain.analysis.api.usecase.GetImageDescriptionUseCase
 import com.metasearch.android.domain.gallery.api.repository.GalleryRepository
+import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.screens.FocusingSearchScreen
 import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
@@ -71,7 +73,13 @@ class PhotoDetailPresenter(
 
                 is PhotoDetailUiEvent.OnGraphClick -> {
                     scope.launch {
-                        val fileName = galleryRepository.getFileName(screen.imageUriString) ?: ""
+                        val fileName = galleryRepository.getFileName(screen.imageUriString)
+                        if (fileName.isNullOrBlank()) {
+                            sideEffect = PhotoDetailSideEffect.ShowToast(
+                                UiText.StringResource(R.string.photo_detail_screen_graph_load_failed),
+                            )
+                            return@launch
+                        }
 
                         navigator.goTo(GraphDetailScreen(entityName = fileName))
                     }
