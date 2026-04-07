@@ -39,10 +39,15 @@ class StartFullAnalysisUseCaseImpl(
         if (deletePaths.isNotEmpty()) {
             deletePaths.forEach { path ->
                 val fileName = analysisRepository.getFileNameByPath(path)
-                analysisRepository.deleteImage(fileName ?: "unknown.jpg", dbName)
-                    .onSuccess {
-                        analysisRepository.deleteLocalPath(path)
-                    }
+                if (fileName != null) {
+                    analysisRepository.deleteImage(fileName, dbName)
+                        .onSuccess {
+                            analysisRepository.deleteLocalPath(path)
+                        }
+                } else {
+                    // Cannot resolve filename, just clean up local path
+                    analysisRepository.deleteLocalPath(path)
+                }
             }
         }
 
