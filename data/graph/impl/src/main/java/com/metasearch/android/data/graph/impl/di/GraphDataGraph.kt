@@ -2,12 +2,10 @@ package com.metasearch.android.data.graph.impl.di
 
 import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.data.graph.impl.repository.GraphRepositoryImpl
-import com.metasearch.android.data.graph.impl.usecase.FetchTripleDataUseCaseImpl
 import com.metasearch.android.data.graph.impl.usecase.GetDetailGraphUrlUseCaseImpl
 import com.metasearch.android.data.graph.impl.usecase.GetFullGraphUrlUseCaseImpl
 import com.metasearch.android.data.graph.impl.usecase.GetGraphImageUriUseCaseImpl
 import com.metasearch.android.domain.graph.api.repository.GraphRepository
-import com.metasearch.android.domain.graph.api.usecase.FetchTripleDataUseCase
 import com.metasearch.android.domain.graph.api.usecase.GetDetailGraphUrlUseCase
 import com.metasearch.android.domain.graph.api.usecase.GetFullGraphUrlUseCase
 import com.metasearch.android.domain.graph.api.usecase.GetGraphImageUriUseCase
@@ -27,7 +25,4 @@ interface GraphDataGraph {
 
     @Binds
     val GetDetailGraphUrlUseCaseImpl.bind: GetDetailGraphUrlUseCase
-
-    @Binds
-    val FetchTripleDataUseCaseImpl.bind: FetchTripleDataUseCase
 }

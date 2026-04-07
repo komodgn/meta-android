@@ -25,8 +25,4 @@ public class FakeGraphRepository : GraphRepository {
     override suspend fun getDetailGraphWebViewUrl(entityName: String): String {
         TODO("Not yet implemented")
     }
-
-    override suspend fun fetchTripleData(photoName: String) {
-        TODO("Not yet implemented")
-    }
 }

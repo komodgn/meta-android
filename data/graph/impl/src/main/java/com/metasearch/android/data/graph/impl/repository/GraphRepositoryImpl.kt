@@ -28,9 +28,4 @@ class GraphRepositoryImpl(
 
         return "$webServerBaseUrl/entityTripleGraph/$dbName/$encodedName"
     }
-
-    override suspend fun fetchTripleData(photoName: String) {
-        val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
-        webService.fetchTripleData(dbName, photoName)
-    }
 }
