@@ -31,11 +31,11 @@ class GetHomeDisplayPersonsUseCaseImpl(
 
     override suspend fun syncAndGet(currentList: List<Person>): List<Person> {
         val frequencies = personRepository.fetchPhotoFrequencies(currentList.map { it.inputName })
-            .getOrDefault(emptyList())
+            .getOrElse { return normalizeScores(currentList) }
+            .associate { it.personName to it.frequency }
 
         val updatedModels = currentList.map { person ->
-            val matched = frequencies.find { it.personName == person.inputName }
-            person.copy(photoCount = matched?.frequency ?: 0)
+            person.copy(photoCount = frequencies[person.inputName] ?: person.photoCount)
         }
 
         return normalizeScores(updatedModels)
