@@ -1,5 +1,8 @@
 package com.metasearch.android.data.domain
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class PhotoGroup(
     val categoryName: String,
     val photoNames: List<String>,
@@ -7,6 +10,7 @@ data class PhotoGroup(
     companion object
 }
 
+@Immutable
 data class DragSearchResult(
     val groups: List<PhotoGroup>,
 ) {

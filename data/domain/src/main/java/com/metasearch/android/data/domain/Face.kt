@@ -1,5 +1,8 @@
 package com.metasearch.android.data.domain
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class Face(
     val id: Long,
     val personId: Long,

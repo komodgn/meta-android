@@ -1,8 +1,10 @@
 package com.metasearch.android.data.domain
 
+import androidx.compose.runtime.Immutable
 import kotlin.collections.find
 import kotlin.collections.firstOrNull
 
+@Immutable
 data class Person(
     val id: Long,
     val name: String, // Server label
