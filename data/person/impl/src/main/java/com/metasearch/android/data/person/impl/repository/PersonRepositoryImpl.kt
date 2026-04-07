@@ -1,6 +1,7 @@
 package com.metasearch.android.data.person.impl.repository
 
 import com.metasearch.android.core.common.utils.runSuspendCatching
+import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.core.network.request.ChangeNameRequest
 import com.metasearch.android.core.network.request.DeleteEntityRequest
 import com.metasearch.android.core.network.request.PersonFrequencyRequest
@@ -15,6 +16,7 @@ import com.metasearch.android.data.person.impl.mapper.toModel
 import com.metasearch.android.domain.device.api.repository.DatabaseNameRepository
 import com.metasearch.android.domain.person.api.repository.PersonRepository
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -23,8 +25,8 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 
-`@SingleIn`(DataScope::class)
-`@Inject`
+@SingleIn(DataScope::class)
+@Inject
 class PersonRepositoryImpl(
     private val personDao: PersonDao,
     private val databaseNameRepository: DatabaseNameRepository,
