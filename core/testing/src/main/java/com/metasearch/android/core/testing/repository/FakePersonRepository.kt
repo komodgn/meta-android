@@ -1,7 +1,8 @@
 package com.metasearch.android.core.testing.repository
 
-import com.metasearch.android.core.data.api.repository.PersonRepository
-import com.metasearch.android.core.model.Person
+import com.metasearch.android.data.domain.Person
+import com.metasearch.android.data.domain.PersonFrequency
+import com.metasearch.android.domain.person.api.repository.PersonRepository
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 
@@ -21,10 +22,6 @@ public class FakePersonRepository : PersonRepository {
     }
 
     override fun getAllPersons(): Flow<List<Person>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getHomeDisplayPersons(): Flow<List<Person>> {
         TODO("Not yet implemented")
     }
 
@@ -52,19 +49,7 @@ public class FakePersonRepository : PersonRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun fetchAndSyncPhotoCount(localModels: List<Person>): List<Person> {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun getMismatchedFaceNames(): List<Pair<String, String>> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun deleteAnalyzedPerson(person: Person): Result<Unit> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getPersonPhotoNames(personName: String): Result<List<String>> {
         TODO("Not yet implemented")
     }
 
@@ -72,7 +57,11 @@ public class FakePersonRepository : PersonRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updatePersonFullInfo(
+    override suspend fun updateRepresentativeFace(personId: Long, faceId: Long): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updatePersonInfo(
         personId: Long,
         newName: String,
         newPhone: String,
@@ -82,11 +71,27 @@ public class FakePersonRepository : PersonRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateRepresentativeFace(personId: Long, faceId: Long): Result<Unit> {
+    override suspend fun changePersonNameOnServer(oldName: String, newName: String): Result<Unit> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun changePersonNameOnServer(oldName: String, newName: String): Result<Unit> {
+    override suspend fun getPersonPhotoNames(personName: String): Result<List<String>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun fetchPhotoFrequencies(names: List<String>): Result<List<PersonFrequency>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteFromWebService(inputName: String): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteFromAiService(personName: String): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteFromLocalDb(personId: Long): Result<Unit> {
         TODO("Not yet implemented")
     }
 }

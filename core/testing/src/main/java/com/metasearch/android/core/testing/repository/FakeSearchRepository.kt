@@ -1,11 +1,8 @@
 package com.metasearch.android.core.testing.repository
 
-import com.metasearch.android.core.data.api.repository.SearchRepository
-import com.metasearch.android.core.model.Circle
-import com.metasearch.android.core.model.DragSearchResult
-import com.metasearch.android.core.model.NLSearchResult
-import com.metasearch.android.core.model.PhotoGroup
-import com.metasearch.android.core.model.fakes
+import com.metasearch.android.data.domain.Circle
+import com.metasearch.android.data.domain.DragSearchResult
+import com.metasearch.android.domain.search.api.repository.SearchRepository
 import dev.zacsweers.metro.Inject
 import java.io.File
 
@@ -24,20 +21,29 @@ public class FakeSearchRepository : SearchRepository {
         this.status = status
     }
 
-    override suspend fun focusingSearch(
+    override suspend fun analyzeFocusingImage(
+        dbName: String,
         imageFile: File,
         circles: List<Circle>,
-    ): Result<DragSearchResult> = when (status) {
-        is Status.Success -> Result.success(DragSearchResult(groups = PhotoGroup.fakes()))
-        is Status.Empty -> Result.success(DragSearchResult(groups = emptyList()))
-        is Status.Error -> Result.failure(Exception("Fake Search Error"))
+    ): List<String> {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun nlSearch(query: String): Result<NLSearchResult> = when (status) {
-        is Status.Success -> Result.success(NLSearchResult(matchedUris = listOf("uri1", "uri2")))
-        is Status.Empty -> Result.success(NLSearchResult(emptyList()))
-        is Status.Error -> Result.failure(Exception("Fake NL Error"))
+    override suspend fun searchPhotosByKeywords(
+        dbName: String,
+        keywords: List<String>,
+    ): List<String> {
+        TODO("Not yet implemented")
     }
 
-    override fun clearEntityCache() { /* Empty block */ }
+    override suspend fun extractKeywordsFromNL(query: String): List<String> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun findPhotosByDetectedObjects(
+        dbName: String,
+        properties: List<String>,
+    ): DragSearchResult {
+        TODO("Not yet implemented")
+    }
 }

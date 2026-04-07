@@ -2,15 +2,6 @@ package com.metasearch.android.core.testing.di
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import com.metasearch.android.core.data.api.repository.GalleryRepository
-import com.metasearch.android.core.data.api.repository.GraphRepository
-import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
-import com.metasearch.android.core.data.api.repository.PersonRepository
-import com.metasearch.android.core.data.api.repository.SearchRepository
-import com.metasearch.android.core.data.impl.repository.GalleryRepositoryImpl
-import com.metasearch.android.core.data.impl.repository.ImageAnalysisRepositoryImpl
-import com.metasearch.android.core.data.impl.repository.PersonRepositoryImpl
-import com.metasearch.android.core.data.impl.repository.SearchRepositoryImpl
 import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.core.testing.repository.FakeGalleryRepository
 import com.metasearch.android.core.testing.repository.FakeGraphRepository
@@ -19,6 +10,16 @@ import com.metasearch.android.core.testing.repository.FakePersonRepository
 import com.metasearch.android.core.testing.repository.FakeSearchRepository
 import com.metasearch.android.core.testing.robot.core.CaptureScreenRobot
 import com.metasearch.android.core.testing.robot.core.DefaultCaptureScreenRobot
+import com.metasearch.android.data.analysis.impl.repository.AnalysisRepositoryImpl
+import com.metasearch.android.data.gallery.impl.repository.GalleryRepositoryImpl
+import com.metasearch.android.data.graph.impl.repository.GraphRepositoryImpl
+import com.metasearch.android.data.person.impl.repository.PersonRepositoryImpl
+import com.metasearch.android.data.search.impl.repository.SearchRepositoryImpl
+import com.metasearch.android.domain.analysis.api.repository.AnalysisRepository
+import com.metasearch.android.domain.gallery.api.repository.GalleryRepository
+import com.metasearch.android.domain.graph.api.repository.GraphRepository
+import com.metasearch.android.domain.person.api.repository.PersonRepository
+import com.metasearch.android.domain.search.api.repository.SearchRepository
 import com.metasearch.android.feature.screens.context.NLSearchScreenContext
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Binds
@@ -35,7 +36,7 @@ import kotlinx.coroutines.CoroutineDispatcher
         CoroutineDispatcher::class,
         GalleryRepositoryImpl::class,
         GraphRepositoryImpl::class,
-        ImageAnalysisRepositoryImpl::class,
+        AnalysisRepositoryImpl::class,
         PersonRepositoryImpl::class,
         SearchRepositoryImpl::class,
     ],
@@ -59,7 +60,7 @@ internal interface TestAppGraph :
     val FakeGraphRepository.binds: GraphRepository
 
     @Binds
-    val FakeImageAnalisisRepository.binds: ImageAnalysisRepository
+    val FakeImageAnalisisRepository.binds: AnalysisRepository
 
     @Binds
     val FakePersonRepository.binds: PersonRepository

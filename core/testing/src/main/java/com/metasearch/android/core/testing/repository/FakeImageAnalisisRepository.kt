@@ -1,12 +1,11 @@
 package com.metasearch.android.core.testing.repository
 
-import android.content.Context
-import com.metasearch.android.core.data.api.repository.ImageAnalysisRepository
+import com.metasearch.android.data.domain.AnalysisResult
+import com.metasearch.android.domain.analysis.api.repository.AnalysisRepository
 import dev.zacsweers.metro.Inject
-import kotlinx.coroutines.flow.Flow
 
 @Inject
-public class FakeImageAnalisisRepository : ImageAnalysisRepository {
+public class FakeImageAnalisisRepository : AnalysisRepository {
 
     public sealed class Status {
         public data object Success : Status()
@@ -20,15 +19,45 @@ public class FakeImageAnalisisRepository : ImageAnalysisRepository {
         this.status = status
     }
 
-    override fun getAnalysisStatus(context: Context): Flow<Boolean> {
+    override suspend fun getAlreadyAnalyzedPaths(): List<String> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun runFullAnalysis() {
+    override suspend fun getFileNameByPath(path: String): String? {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getImageDescription(uriString: String): Result<String?> {
+    override suspend fun saveAnalyzedPath(path: String, fileName: String): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun uploadImages(
+        uriStrings: List<String>,
+        dbName: String,
+    ): List<Pair<String, String>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteLocalPath(path: String): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteImage(fileName: String, dbName: String): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun finishAnalysis(
+        dbName: String,
+        lastIndex: Int,
+    ): Result<AnalysisResult> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getImageTripleData(photoName: String): Result<String> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getAiCompletion(prompt: String): Result<String> {
         TODO("Not yet implemented")
     }
 }
