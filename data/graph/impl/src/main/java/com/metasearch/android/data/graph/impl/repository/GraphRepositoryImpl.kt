@@ -2,7 +2,6 @@ package com.metasearch.android.data.graph.impl.repository
 
 import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.core.network.BuildConfig
-import com.metasearch.android.core.network.service.WebService
 import com.metasearch.android.domain.device.api.repository.DatabaseNameRepository
 import com.metasearch.android.domain.graph.api.repository.GraphRepository
 import dev.zacsweers.metro.Inject
@@ -13,7 +12,6 @@ import java.net.URLEncoder
 @Inject
 class GraphRepositoryImpl(
     private val databaseNameRepository: DatabaseNameRepository,
-    private val webService: WebService,
 ) : GraphRepository {
     private val webServerBaseUrl = BuildConfig.WEB_SERVER_BASE_URL
 
