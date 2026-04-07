@@ -11,7 +11,7 @@ internal fun UploadResponse.toModel(): AnalysisResult = AnalysisResult(
         DetectedPerson(
             imageName = person.imageName,
             imageBytes = person.imageBytes?.let {
-                decode(it, Base64.DEFAULT)
+                runCatching { decode(it, Base64.DEFAULT) }.getOrNull()
             },
             isFaceExist = person.isFaceExit,
         )
