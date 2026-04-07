@@ -1,5 +1,4 @@
 import com.google.devtools.ksp.gradle.KspExtension
-import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.include
 import org.gradle.kotlin.dsl.configure
 
 plugins {
