@@ -81,20 +81,18 @@ class PersonDetailPresenter(
             }
         }
 
-        fun performSave() {
+        suspend fun performSave() {
             val currentPerson = person ?: return
-            scope.launch {
-                updatePersonInfoUseCase(
-                    personId = currentPerson.id,
-                    newName = editName,
-                    newPhone = editPhone,
-                    isHome = editIsHomeDisplay,
-                    faceId = editRepresentativeFaceId ?: currentPerson.representativeFaceId,
-                ).onSuccess { finalPersonId ->
-                    showEditDialog = false
-                    if (finalPersonId != currentPersonId) {
-                        currentPersonId = finalPersonId
-                    }
+            updatePersonInfoUseCase(
+                personId = currentPerson.id,
+                newName = editName,
+                newPhone = editPhone,
+                isHome = editIsHomeDisplay,
+                faceId = editRepresentativeFaceId ?: currentPerson.representativeFaceId,
+            ).onSuccess { finalPersonId ->
+                showEditDialog = false
+                if (finalPersonId != currentPersonId) {
+                    currentPersonId = finalPersonId
                 }
             }
         }
@@ -146,9 +144,12 @@ class PersonDetailPresenter(
                 PersonDetailUiEvent.OnConfirmMergeSave -> {
                     scope.launch {
                         isLoading = true
-                        performSave()
-                        showMergeConfirmDialog = false
-                        isLoading = false
+                        try {
+                            performSave()
+                            showMergeConfirmDialog = false
+                        } finally {
+                            isLoading = false
+                        }
                     }
                 }
 
