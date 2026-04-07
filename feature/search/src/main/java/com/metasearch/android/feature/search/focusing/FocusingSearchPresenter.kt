@@ -11,9 +11,9 @@ import androidx.core.net.toUri
 import com.metasearch.android.core.common.extensions.toFile
 import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.common.utils.handleException
-import com.metasearch.android.core.data.api.repository.SearchRepository
-import com.metasearch.android.core.model.Circle
-import com.metasearch.android.core.model.DragSearchResult
+import com.metasearch.android.data.domain.Circle
+import com.metasearch.android.data.domain.DragSearchResult
+import com.metasearch.android.domain.search.api.usecase.DragSearchUseCase
 import com.metasearch.android.feature.screens.FocusingSearchScreen
 import com.metasearch.android.feature.screens.GraphDetailScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 class FocusingSearchPresenter(
     @Assisted private val navigator: Navigator,
     @Assisted private val screen: FocusingSearchScreen,
-    private val searchRepository: SearchRepository,
+    private val dragSearchUseCase: DragSearchUseCase,
 ) : Presenter<FocusingSearchUiState> {
 
     @CircuitInject(FocusingSearchScreen::class, AppScope::class)
@@ -94,7 +94,7 @@ class FocusingSearchPresenter(
                         val uri = screen.imageUriString.toUri()
                         val file = uri.toFile(context)
 
-                        searchRepository.focusingSearch(file, circles)
+                        dragSearchUseCase(file, circles)
                             .onSuccess { result ->
                                 if (result.groups.isEmpty()) {
                                     sideEffect = FocusingSearchSideEffect.ShowToast(

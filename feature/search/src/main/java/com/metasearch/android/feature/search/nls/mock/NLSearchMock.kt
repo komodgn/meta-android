@@ -1,7 +1,7 @@
 package com.metasearch.android.feature.search.nls.mock
 
-import com.metasearch.android.core.model.NLSearchResult
-import com.metasearch.android.core.model.fake
+import com.metasearch.android.data.domain.NLSearchResult
+import com.metasearch.android.data.domain.fake
 import com.metasearch.android.feature.search.nls.NLSearchUiState
 import kotlinx.collections.immutable.toPersistentList
 

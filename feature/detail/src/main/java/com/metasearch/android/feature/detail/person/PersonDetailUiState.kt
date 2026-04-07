@@ -1,7 +1,6 @@
 package com.metasearch.android.feature.detail.person
 
-import android.net.Uri
-import com.metasearch.android.core.model.Person
+import com.metasearch.android.data.domain.Person
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import kotlinx.collections.immutable.ImmutableList
@@ -10,7 +9,7 @@ import kotlinx.collections.immutable.persistentListOf
 data class PersonDetailUiState(
     val isLoading: Boolean = false,
     val person: Person? = null,
-    val photoUris: ImmutableList<Uri> = persistentListOf(),
+    val photoUris: ImmutableList<String> = persistentListOf(),
     val showEditDialog: Boolean = false,
     val showMergeConfirmDialog: Boolean = false,
     val editName: String = "",
@@ -87,6 +86,6 @@ sealed interface PersonDetailUiEvent : CircuitUiEvent {
      * 그리드 영역 이미지 클릭 시, 사진 상세 화면으로 이동
      */
     data class OnGridImageClick(
-        val imageUri: Uri,
+        val imageUri: String,
     ) : PersonDetailUiEvent
 }

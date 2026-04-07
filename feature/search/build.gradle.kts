@@ -7,5 +7,5 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data.api)
+    implementation(projects.domain.search.api)
 }

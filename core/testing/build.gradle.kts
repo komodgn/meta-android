@@ -47,13 +47,25 @@ dependencies {
     api(libs.kotlinx.coroutines.test)
 
     api(projects.core.common)
-    api(projects.core.data.api)
-    api(projects.core.model)
+    api(projects.data.domain)
 
     implementation(projects.core.di)
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
-    implementation(projects.core.data.impl)
+
+    implementation(projects.domain.person.api)
+    implementation(projects.domain.search.api)
+    implementation(projects.domain.graph.api)
+    implementation(projects.domain.analysis.api)
+    implementation(projects.data.person.impl)
+    implementation(projects.data.domain)
+    implementation(projects.data.search.impl)
+    implementation(projects.data.graph.impl)
+    implementation(projects.domain.gallery.api)
+    implementation(projects.data.gallery.impl)
+    implementation(projects.domain.device.api)
+    implementation(projects.data.device.impl)
+    implementation(projects.data.analysis.impl)
 
     implementation(projects.feature.detail)
     implementation(projects.feature.graph)

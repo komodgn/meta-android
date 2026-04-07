@@ -3,8 +3,8 @@ package com.metasearch.android.feature.home
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.Offset
 import androidx.paging.PagingData
-import com.metasearch.android.core.model.GalleryImage
-import com.metasearch.android.core.model.Person
+import com.metasearch.android.data.domain.GalleryImage
+import com.metasearch.android.data.domain.Person
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen

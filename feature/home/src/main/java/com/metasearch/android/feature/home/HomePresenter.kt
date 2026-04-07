@@ -11,11 +11,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.paging.cachedIn
 import androidx.work.WorkInfo
-import com.metasearch.android.core.data.api.repository.GalleryRepository
-import com.metasearch.android.core.data.api.repository.PersonRepository
-import com.metasearch.android.core.model.Person
 import com.metasearch.android.core.worker.api.usecase.WorkScheduleUseCase
 import com.metasearch.android.core.worker.api.usecase.WorkerStatusUseCase
+import com.metasearch.android.data.domain.Person
+import com.metasearch.android.domain.gallery.api.repository.GalleryRepository
+import com.metasearch.android.domain.person.api.usecase.GetHomeDisplayPersonsUseCase
 import com.metasearch.android.feature.home.worker.ImageAnalysisWorker
 import com.metasearch.android.feature.screens.HomeScreen
 import com.metasearch.android.feature.screens.PersonDetailScreen
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 class HomePresenter(
     @Assisted private val navigator: Navigator,
     private val galleryRepository: GalleryRepository,
-    private val personRepository: PersonRepository,
+    private val getHomeDisplayPersonsUseCase: GetHomeDisplayPersonsUseCase,
     private val workScheduleUseCase: WorkScheduleUseCase,
     private val workerStatusUseCase: WorkerStatusUseCase,
 ) : Presenter<HomeUiState> {
@@ -58,7 +58,8 @@ class HomePresenter(
             .collectAsState(initial = null)
         var isExpanded by rememberRetained { mutableStateOf(false) }
 
-        val localPersons by personRepository.getHomeDisplayPersons().collectAsState(initial = emptyList())
+        val localPersons by getHomeDisplayPersonsUseCase()
+            .collectAsState(initial = emptyList())
         var displayPersons by rememberRetained { mutableStateOf(persistentListOf<Person>()) }
 
         val galleryPagingFlow = rememberRetained {
@@ -92,7 +93,8 @@ class HomePresenter(
                     if (isExpanded) {
                         scope.launch {
                             isPersonLoading = true
-                            val syncedPersons = personRepository.fetchAndSyncPhotoCount(displayPersons)
+                            val syncedPersons = getHomeDisplayPersonsUseCase.syncAndGet(displayPersons)
+
                             displayPersons = syncedPersons.toPersistentList()
                             isPersonLoading = false
                         }

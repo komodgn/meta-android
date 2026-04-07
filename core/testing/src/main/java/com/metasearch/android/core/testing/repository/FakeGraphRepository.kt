@@ -1,7 +1,6 @@
 package com.metasearch.android.core.testing.repository
 
-import android.net.Uri
-import com.metasearch.android.core.data.api.repository.GraphRepository
+import com.metasearch.android.domain.graph.api.repository.GraphRepository
 import dev.zacsweers.metro.Inject
 
 @Inject
@@ -24,14 +23,6 @@ public class FakeGraphRepository : GraphRepository {
     }
 
     override suspend fun getDetailGraphWebViewUrl(entityName: String): String {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getTripleData(photoName: String) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun findMatchedUri(photoName: String): Uri? {
         TODO("Not yet implemented")
     }
 }

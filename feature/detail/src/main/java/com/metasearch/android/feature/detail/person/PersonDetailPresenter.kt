@@ -10,8 +10,11 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import com.metasearch.android.core.data.api.repository.GalleryRepository
-import com.metasearch.android.core.data.api.repository.PersonRepository
+import com.metasearch.android.domain.person.api.usecase.CheckNameExistsUseCase
+import com.metasearch.android.domain.person.api.usecase.GetPersonDetailUseCase
+import com.metasearch.android.domain.person.api.usecase.GetPersonPhotosUseCase
+import com.metasearch.android.domain.person.api.usecase.UpdatePersonInfoUseCase
+import com.metasearch.android.domain.person.api.usecase.UpdateRepresentativeFaceUseCase
 import com.metasearch.android.feature.screens.PersonDetailScreen
 import com.metasearch.android.feature.screens.PhotoDetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -26,12 +29,16 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
+@Suppress("LongParameterList")
 @AssistedInject
 class PersonDetailPresenter(
     @Assisted private val navigator: Navigator,
     @Assisted private val screen: PersonDetailScreen,
-    private val personRepository: PersonRepository,
-    private val galleryRepository: GalleryRepository,
+    private val getPersonDetailUseCase: GetPersonDetailUseCase,
+    private val getPersonPhotosUseCase: GetPersonPhotosUseCase,
+    private val checkNameExistsUseCase: CheckNameExistsUseCase,
+    private val updatePersonInfoUseCase: UpdatePersonInfoUseCase,
+    private val updateRepresentativeFaceUseCase: UpdateRepresentativeFaceUseCase,
 ) : Presenter<PersonDetailUiState> {
 
     @CircuitInject(PersonDetailScreen::class, AppScope::class)
@@ -49,13 +56,11 @@ class PersonDetailPresenter(
 
         var isLoading by remember { mutableStateOf(false) }
         var currentPersonId by remember { mutableLongStateOf(screen.personId) }
-        val person by personRepository.getPersonById(currentPersonId).collectAsState(initial = null)
+        val person by getPersonDetailUseCase(currentPersonId).collectAsState(initial = null)
         val photoUris by produceState(initialValue = persistentListOf(), key1 = person?.inputName) {
-            val nameToSearch = person?.inputName
-            if (nameToSearch != null) {
-                personRepository.getPersonPhotoNames(nameToSearch).onSuccess { photoNames ->
-                    value = galleryRepository.findMatchedUris(photoNames).toPersistentList()
-                }
+            val name = person?.inputName ?: return@produceState
+            getPersonPhotosUseCase(name).onSuccess { uris ->
+                value = uris.toPersistentList()
             }
         }
         var showEditDialog by rememberRetained { mutableStateOf(false) }
@@ -76,10 +81,9 @@ class PersonDetailPresenter(
             }
         }
 
-        suspend fun savePersonInfo() {
+        suspend fun performSave() {
             val currentPerson = person ?: return
-
-            personRepository.updatePersonFullInfo(
+            updatePersonInfoUseCase(
                 personId = currentPerson.id,
                 newName = editName,
                 newPhone = editPhone,
@@ -87,7 +91,6 @@ class PersonDetailPresenter(
                 faceId = editRepresentativeFaceId ?: currentPerson.representativeFaceId,
             ).onSuccess { finalPersonId ->
                 showEditDialog = false
-
                 if (finalPersonId != currentPersonId) {
                     currentPersonId = finalPersonId
                 }
@@ -113,11 +116,11 @@ class PersonDetailPresenter(
                 is PersonDetailUiEvent.OnEditSaveClick -> {
                     val currentPerson = person ?: return
                     scope.launch {
-                        if (editName != person?.inputName && personRepository.isNameExists(editName)) {
+                        if (editName != person?.inputName && checkNameExistsUseCase(editName)) {
                             showEditDialog = false
                             showMergeConfirmDialog = true
                         } else {
-                            savePersonInfo()
+                            performSave()
                         }
                     }
                 }
@@ -141,9 +144,12 @@ class PersonDetailPresenter(
                 PersonDetailUiEvent.OnConfirmMergeSave -> {
                     scope.launch {
                         isLoading = true
-                        savePersonInfo()
-                        showMergeConfirmDialog = false
-                        isLoading = false
+                        try {
+                            performSave()
+                            showMergeConfirmDialog = false
+                        } finally {
+                            isLoading = false
+                        }
                     }
                 }
 
@@ -154,7 +160,7 @@ class PersonDetailPresenter(
                 is PersonDetailUiEvent.OnEditThumbnailClick -> {
                     val currentPerson = person ?: return
                     scope.launch {
-                        personRepository.updateRepresentativeFace(
+                        updateRepresentativeFaceUseCase(
                             personId = currentPerson.id,
                             faceId = event.faceId,
                         ).onSuccess {

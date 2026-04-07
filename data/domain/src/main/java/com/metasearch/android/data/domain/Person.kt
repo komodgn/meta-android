@@ -1,8 +1,10 @@
 package com.metasearch.android.data.domain
 
+import androidx.compose.runtime.Immutable
 import kotlin.collections.find
 import kotlin.collections.firstOrNull
 
+@Immutable
 data class Person(
     val id: Long,
     val name: String, // Server label
@@ -30,5 +32,5 @@ fun Person.Companion.fake(id: Long = 1L): Person {
     )
 }
 
-fun Person.Companion.fakes()= (1..10)
+fun Person.Companion.fakes() = (1..10)
     .map { fake(it.toLong()) }

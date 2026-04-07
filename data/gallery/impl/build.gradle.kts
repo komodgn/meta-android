@@ -1,0 +1,17 @@
+plugins {
+    alias(libs.plugins.metasearch.android.library)
+    alias(libs.plugins.metasearch.kotlin.library.serialization)
+    alias(libs.plugins.metro)
+    alias(libs.plugins.metasearch.test)
+}
+
+android {
+    namespace = "com.metasearch.android.data.gallery.impl"
+}
+
+dependencies {
+    implementation(projects.core.di)
+    implementation(projects.domain.gallery.api)
+
+    implementation(libs.androidx.core.ktx)
+}

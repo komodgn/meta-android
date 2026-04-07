@@ -23,6 +23,7 @@
     <string name="photo_detail_screen_header">Visualize Me By Photo</string>
     <string name="photo_detail_screen_bottom_item_openai">Description</string>
     <string name="photo_detail_screen_bottom_item_graph">Explore</string>
+    <string name="photo_detail_screen_graph_load_failed">Unable to retrieve graph information.</string>
     <string name="photo_detail_screen_bottom_item_focusing">Focusing Search</string>
     <string name="photo_detail_screen_bottom_item_share">Share</string>
     <string name="photo_detail_screen_openai_bottom_sheet_title">🐻 ❄️ AI image analysis results</string>

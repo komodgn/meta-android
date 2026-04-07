@@ -32,6 +32,10 @@ fun DependencyHandler.testImplementation(dependencyNotation: Any): Dependency? {
     return add("testImplementation", dependencyNotation)
 }
 
+fun DependencyHandler.testRuntimeOnly(dependencyNotation: Any): Dependency? {
+    return add("testRuntimeOnly", dependencyNotation)
+}
+
 fun DependencyHandler.androidTestImplementation(dependencyNotation: Any): Dependency? {
     return add("androidTestImplementation", dependencyNotation)
 }
