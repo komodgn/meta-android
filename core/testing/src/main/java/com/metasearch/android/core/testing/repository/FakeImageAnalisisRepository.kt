@@ -1,6 +1,7 @@
 package com.metasearch.android.core.testing.repository
 
 import com.metasearch.android.data.domain.AnalysisResult
+import com.metasearch.android.data.domain.UploadedImage
 import com.metasearch.android.domain.analysis.api.repository.AnalysisRepository
 import dev.zacsweers.metro.Inject
 
@@ -34,7 +35,7 @@ public class FakeImageAnalisisRepository : AnalysisRepository {
     override suspend fun uploadImages(
         uriStrings: List<String>,
         dbName: String,
-    ): List<Pair<String, String>> {
+    ): List<UploadedImage> {
         TODO("Not yet implemented")
     }
 
