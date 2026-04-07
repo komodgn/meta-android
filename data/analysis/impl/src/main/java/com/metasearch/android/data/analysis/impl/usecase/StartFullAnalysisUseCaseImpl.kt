@@ -1,6 +1,7 @@
 package com.metasearch.android.data.analysis.impl.usecase
 
 import com.metasearch.android.core.di.scope.DataScope
+import com.metasearch.android.data.domain.UploadedImage
 import com.metasearch.android.domain.analysis.api.repository.AnalysisRepository
 import com.metasearch.android.domain.analysis.api.usecase.ProcessAnalysisResultUseCase
 import com.metasearch.android.domain.analysis.api.usecase.StartFullAnalysisUseCase
@@ -47,7 +48,7 @@ class StartFullAnalysisUseCaseImpl(
 
         val addUriStrings = currentUriStrings.filter { it !in alreadyAnalyzed }
         if (addUriStrings.isNotEmpty()) {
-            val successfulData = mutableListOf<Pair<String, String>>()
+            val successfulData = mutableListOf<UploadedImage>()
 
             addUriStrings.chunked(CHUNK_SIZE).forEach { chunk ->
                 val results = analysisRepository.uploadImages(chunk, dbName)

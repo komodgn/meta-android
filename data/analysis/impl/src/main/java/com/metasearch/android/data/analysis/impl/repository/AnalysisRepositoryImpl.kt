@@ -15,6 +15,7 @@ import com.metasearch.android.core.room.api.dao.AnalyzedImageDao
 import com.metasearch.android.core.room.api.entity.AnalyzedImageEntity
 import com.metasearch.android.data.analysis.impl.mapper.toModel
 import com.metasearch.android.data.domain.AnalysisResult
+import com.metasearch.android.data.domain.UploadedImage
 import com.metasearch.android.domain.analysis.api.repository.AnalysisRepository
 import com.metasearch.android.domain.device.api.repository.DatabaseNameRepository
 import com.metasearch.android.domain.gallery.api.repository.GalleryRepository
@@ -59,7 +60,7 @@ class AnalysisRepositoryImpl(
     override suspend fun uploadImages(
         uriStrings: List<String>,
         dbName: String,
-    ): List<Pair<String, String>> = supervisorScope {
+    ): List<UploadedImage> = supervisorScope {
         uriStrings.map { uriString ->
             async {
                 runSuspendCatching {
@@ -77,7 +78,11 @@ class AnalysisRepositoryImpl(
 
                     awaitAll(webJob, aiJob)
                     file.delete()
-                    uri.toString() to fileName
+
+                    UploadedImage(
+                        uriString = uri.toString(),
+                        fileName = fileName,
+                    )
                 }.getOrNull()
             }
         }.awaitAll().filterNotNull()

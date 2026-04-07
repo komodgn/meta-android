@@ -7,6 +7,7 @@ import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.core.room.api.dao.AnalyzedImageDao
 import com.metasearch.android.data.domain.AnalysisResult
 import com.metasearch.android.data.domain.DetectedPerson
+import com.metasearch.android.data.domain.UploadedImage
 import com.metasearch.android.domain.analysis.api.repository.AnalysisRepository
 import com.metasearch.android.domain.analysis.api.usecase.ProcessAnalysisResultUseCase
 import com.metasearch.android.domain.person.api.repository.PersonRepository
@@ -32,7 +33,7 @@ class ProcessAnalysisResultUseCaseImpl(
 
     override suspend fun invoke(
         dbName: String,
-        successfulPaths: List<Pair<String, String>>,
+        successfulPaths: List<UploadedImage>,
     ): Result<AnalysisResult> = withContext(ioDispatcher) {
         val lastIndex = personIndexDataSource.getLastPersonIndex()
 
