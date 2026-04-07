@@ -1,6 +1,7 @@
 package com.metasearch.android.data.analysis.impl.usecase
 
 import com.metasearch.android.core.common.constants.PromptConstants
+import com.metasearch.android.core.common.utils.runSuspendCatching
 import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.domain.analysis.api.repository.AnalysisRepository
 import com.metasearch.android.domain.analysis.api.usecase.GetImageDescriptionUseCase
@@ -15,13 +16,13 @@ class GetImageDescriptionUseCaseImpl(
     private val galleryRepository: GalleryRepository,
 ) : GetImageDescriptionUseCase {
 
-    override suspend fun invoke(uriString: String): Result<String> {
-        val photoName = galleryRepository.getFileName(uriString) ?: error("File not found.")
+    override suspend fun invoke(uriString: String): Result<String> = runSuspendCatching {
+        val photoName = galleryRepository.getFileName(uriString) ?: throw IllegalArgumentException("File not found.")
 
         val tripleData = analysisRepository.getImageTripleData(photoName)
 
         val fullPrompt = PromptConstants.CREATE_IMAGE_BASIC_PROMPT + tripleData
 
-        return analysisRepository.getAiCompletion(fullPrompt)
+        analysisRepository.getAiCompletion(fullPrompt).getOrThrow()
     }
 }
