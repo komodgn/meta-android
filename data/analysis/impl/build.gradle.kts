@@ -17,6 +17,7 @@ dependencies {
     implementation(projects.domain.gallery.api)
     implementation(projects.domain.person.api)
     implementation(projects.domain.search.api)
+    implementation(projects.domain.file.api)
     implementation(projects.core.datastore.api)
     implementation(projects.core.di)
     implementation(projects.core.room.api)

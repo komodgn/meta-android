@@ -6,13 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.net.toUri
-import com.metasearch.android.core.common.extensions.toFile
 import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.common.utils.handleException
 import com.metasearch.android.data.domain.Circle
 import com.metasearch.android.data.domain.DragSearchResult
+import com.metasearch.android.domain.file.api.repository.FileRepository
 import com.metasearch.android.domain.search.api.usecase.DragSearchUseCase
 import com.metasearch.android.feature.screens.FocusingSearchScreen
 import com.metasearch.android.feature.screens.GraphDetailScreen
@@ -36,6 +34,7 @@ class FocusingSearchPresenter(
     @Assisted private val navigator: Navigator,
     @Assisted private val screen: FocusingSearchScreen,
     private val dragSearchUseCase: DragSearchUseCase,
+    private val fileRepository: FileRepository,
 ) : Presenter<FocusingSearchUiState> {
 
     @CircuitInject(FocusingSearchScreen::class, AppScope::class)
@@ -49,7 +48,6 @@ class FocusingSearchPresenter(
 
     @Composable
     override fun present(): FocusingSearchUiState {
-        val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
 
         var sideEffect by rememberRetained {
@@ -91,28 +89,34 @@ class FocusingSearchPresenter(
                     isLoading = true
 
                     searchJob = coroutineScope.launch {
-                        val uri = screen.imageUriString.toUri()
-                        val file = uri.toFile(context)
-
-                        dragSearchUseCase(file, circles)
-                            .onSuccess { result ->
-                                if (result.groups.isEmpty()) {
-                                    sideEffect = FocusingSearchSideEffect.ShowToast(
-                                        message = UiText.StringResource(R.string.search_screen_empty_result_message),
-                                    )
-                                } else {
-                                    searchResult = result
+                        fileRepository.createTempFileFromUri(screen.imageUriString)
+                            .onSuccess { file ->
+                                try {
+                                    dragSearchUseCase(file, circles)
+                                        .onSuccess { result ->
+                                            if (result.groups.isEmpty()) {
+                                                sideEffect = FocusingSearchSideEffect.ShowToast(
+                                                    message = UiText.StringResource(R.string.search_screen_empty_result_message),
+                                                )
+                                            } else {
+                                                searchResult = result
+                                            }
+                                        }.onFailure { exception ->
+                                            handleException(
+                                                exception,
+                                                onError = { sideEffect = FocusingSearchSideEffect.ShowToast(it) },
+                                            )
+                                        }
+                                } finally {
+                                    fileRepository.deleteFile(file)
                                 }
-                            }.onFailure { exception ->
-                                handleException(
-                                    exception = exception,
-                                    onError = { message ->
-                                        sideEffect = FocusingSearchSideEffect.ShowToast(message)
-                                    },
+                            }
+                            .onFailure { exception ->
+                                sideEffect = FocusingSearchSideEffect.ShowToast(
+                                    message = UiText.StringResource(R.string.focusing_search_screen_error_prepare_image_failed),
                                 )
                             }
 
-                        file.delete()
                         isLoading = false
                     }
                 }
