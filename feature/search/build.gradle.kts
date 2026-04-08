@@ -8,4 +8,5 @@ android {
 
 dependencies {
     implementation(projects.domain.search.api)
+    implementation(projects.domain.file.api)
 }

@@ -1,8 +1,5 @@
 package com.metasearch.android.data.analysis.impl.repository
 
-import android.content.Context
-import androidx.core.net.toUri
-import com.metasearch.android.core.common.extensions.toFile
 import com.metasearch.android.core.common.utils.runSuspendCatching
 import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.core.network.request.DeleteImageRequest
@@ -18,6 +15,7 @@ import com.metasearch.android.data.domain.AnalysisResult
 import com.metasearch.android.data.domain.UploadedImage
 import com.metasearch.android.domain.analysis.api.repository.AnalysisRepository
 import com.metasearch.android.domain.device.api.repository.DatabaseNameRepository
+import com.metasearch.android.domain.file.api.repository.FileRepository
 import com.metasearch.android.domain.gallery.api.repository.GalleryRepository
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -39,8 +37,8 @@ class AnalysisRepositoryImpl(
     private val openAIService: OpenAIService,
     private val databaseNameRepository: DatabaseNameRepository,
     private val galleryRepository: GalleryRepository,
+    private val fileRepository: FileRepository,
     private val analyzedImageDao: AnalyzedImageDao,
-    private val context: Context,
 ) : AnalysisRepository {
 
     companion object {
@@ -64,25 +62,24 @@ class AnalysisRepositoryImpl(
         uriStrings.map { uriString ->
             async {
                 runSuspendCatching {
-                    val uri = uriString.toUri()
                     val fileName = galleryRepository.getFileName(uriString) ?: "unknown.jpg"
-                    val file = uri.toFile(context)
-                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                    val tempFile = fileRepository.createTempFileFromUri(uriString).getOrThrow()
 
-                    val webImagePart = MultipartBody.Part.createFormData("image", fileName, requestFile)
-                    val aiImagePart = MultipartBody.Part.createFormData("addImage", fileName, requestFile)
-                    val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
+                    try {
+                        val requestFile = tempFile.asRequestBody("image/*".toMediaTypeOrNull())
+                        val webImagePart = MultipartBody.Part.createFormData("image", fileName, requestFile)
+                        val aiImagePart = MultipartBody.Part.createFormData("addImage", fileName, requestFile)
+                        val dbNameBody = dbName.toRequestBody("text/plain".toMediaTypeOrNull())
 
-                    val webJob = async { webService.uploadWebAddImage(webImagePart, dbName) }
-                    val aiJob = async { aiService.uploadAddImage(aiImagePart, dbNameBody) }
+                        val webJob = async { webService.uploadWebAddImage(webImagePart, dbName) }
+                        val aiJob = async { aiService.uploadAddImage(aiImagePart, dbNameBody) }
 
-                    awaitAll(webJob, aiJob)
-                    file.delete()
+                        awaitAll(webJob, aiJob)
 
-                    UploadedImage(
-                        uriString = uri.toString(),
-                        fileName = fileName,
-                    )
+                        UploadedImage(uriString = uriString, fileName = fileName)
+                    } finally {
+                        fileRepository.deleteFile(tempFile)
+                    }
                 }.getOrNull()
             }
         }.awaitAll().filterNotNull()
