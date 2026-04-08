@@ -91,23 +91,25 @@ class FocusingSearchPresenter(
                     searchJob = coroutineScope.launch {
                         fileRepository.createTempFileFromUri(screen.imageUriString)
                             .onSuccess { file ->
-                                dragSearchUseCase(file, circles)
-                                    .onSuccess { result ->
-                                        if (result.groups.isEmpty()) {
-                                            sideEffect = FocusingSearchSideEffect.ShowToast(
-                                                message = UiText.StringResource(R.string.search_screen_empty_result_message),
+                                try {
+                                    dragSearchUseCase(file, circles)
+                                        .onSuccess { result ->
+                                            if (result.groups.isEmpty()) {
+                                                sideEffect = FocusingSearchSideEffect.ShowToast(
+                                                    message = UiText.StringResource(R.string.search_screen_empty_result_message),
+                                                )
+                                            } else {
+                                                searchResult = result
+                                            }
+                                        }.onFailure { exception ->
+                                            handleException(
+                                                exception,
+                                                onError = { sideEffect = FocusingSearchSideEffect.ShowToast(it) },
                                             )
-                                        } else {
-                                            searchResult = result
                                         }
-                                    }.onFailure { exception ->
-                                        handleException(
-                                            exception,
-                                            onError = { sideEffect = FocusingSearchSideEffect.ShowToast(it) },
-                                        )
-                                    }
-
-                                fileRepository.deleteFile(file)
+                                } finally {
+                                    fileRepository.deleteFile(file)
+                                }
                             }
                             .onFailure { exception ->
                                 sideEffect = FocusingSearchSideEffect.ShowToast(
