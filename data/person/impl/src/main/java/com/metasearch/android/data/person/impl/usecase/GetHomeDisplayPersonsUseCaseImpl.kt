@@ -30,6 +30,10 @@ class GetHomeDisplayPersonsUseCaseImpl(
     }
 
     override suspend fun syncAndGet(currentList: List<Person>): List<Person> {
+        if (currentList.isEmpty() || personRepository.getPersonCount() == 0) {
+            return normalizeScores(currentList)
+        }
+
         val frequencies = personRepository.fetchPhotoFrequencies(currentList.map { it.inputName })
             .getOrElse { return normalizeScores(currentList) }
             .associate { it.personName to it.frequency }
