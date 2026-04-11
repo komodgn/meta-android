@@ -27,7 +27,6 @@ private val jsonRule = Json {
 }
 private val jsonConverterFactory = jsonRule.asConverterFactory("application/json".toMediaType())
 
-
 @ContributesTo(DataScope::class)
 interface NetworkGraph {
     @SingleIn(DataScope::class)
