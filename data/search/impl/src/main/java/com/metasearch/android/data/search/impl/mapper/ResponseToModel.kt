@@ -1,9 +1,9 @@
 package com.metasearch.android.data.search.impl.mapper
 
-import com.metasearch.android.core.network.response.PhotoNameResponse
-import com.metasearch.android.core.network.response.PhotoResponse
 import com.metasearch.android.data.domain.DragSearchResult
 import com.metasearch.android.data.domain.PhotoGroup
+import com.metasearch.android.data.remote.search.response.PhotoNameResponse
+import com.metasearch.android.data.remote.search.response.PhotoResponse
 
 internal fun PhotoResponse.toModel(): DragSearchResult {
     val commonList = photos.commonPhotos.distinct()

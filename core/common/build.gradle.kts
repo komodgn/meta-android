@@ -7,7 +7,3 @@ plugins {
 android {
     namespace = "com.metasearch.android.core.common"
 }
-
-dependencies {
-    implementation(projects.core.network)
-}

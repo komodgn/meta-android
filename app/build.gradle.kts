@@ -29,7 +29,6 @@ dependencies {
     implementation(projects.core.di)
     implementation(projects.core.room.api)
     implementation(projects.core.room.impl)
-    implementation(projects.core.network)
     implementation(projects.core.notification)
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
@@ -45,6 +44,7 @@ dependencies {
     implementation(projects.data.gallery.impl)
     implementation(projects.data.graph.impl)
     implementation(projects.data.person.impl)
+    implementation(projects.data.remote)
     implementation(projects.data.search.impl)
 
     implementation(projects.domain.analysis.api)

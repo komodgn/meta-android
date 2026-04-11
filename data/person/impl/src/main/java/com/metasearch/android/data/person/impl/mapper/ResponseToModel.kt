@@ -1,12 +1,12 @@
 package com.metasearch.android.data.person.impl.mapper
 
-import com.metasearch.android.core.network.response.PersonFrequencyResponse
 import com.metasearch.android.core.room.api.entity.FaceEntity
 import com.metasearch.android.core.room.api.entity.PersonEntity
 import com.metasearch.android.core.room.api.relations.PersonWithFaces
 import com.metasearch.android.data.domain.Face
 import com.metasearch.android.data.domain.Person
 import com.metasearch.android.data.domain.PersonFrequency
+import com.metasearch.android.data.remote.person.response.PersonFrequencyResponse
 import kotlin.collections.map
 
 internal fun PersonWithFaces.toModel(callDurations: Map<String, Long>): Person {
