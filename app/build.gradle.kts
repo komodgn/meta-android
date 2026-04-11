@@ -45,6 +45,7 @@ dependencies {
     implementation(projects.data.gallery.impl)
     implementation(projects.data.graph.impl)
     implementation(projects.data.person.impl)
+    implementation(projects.data.remote)
     implementation(projects.data.search.impl)
 
     implementation(projects.domain.analysis.api)

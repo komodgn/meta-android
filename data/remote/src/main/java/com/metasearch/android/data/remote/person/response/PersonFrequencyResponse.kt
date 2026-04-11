@@ -1,4 +1,4 @@
-package com.metasearch.android.core.network.response
+package com.metasearch.android.data.remote.person.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

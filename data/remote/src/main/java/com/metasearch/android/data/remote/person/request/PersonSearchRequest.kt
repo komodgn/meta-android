@@ -1,4 +1,4 @@
-package com.metasearch.android.core.network.request
+package com.metasearch.android.data.remote.person.request
 
 import kotlinx.serialization.Serializable
 

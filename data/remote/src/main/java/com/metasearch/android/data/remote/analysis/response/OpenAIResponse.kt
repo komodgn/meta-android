@@ -1,6 +1,6 @@
-package com.metasearch.android.core.network.response
+package com.metasearch.android.data.remote.analysis.response
 
-import com.metasearch.android.core.network.request.OpenAIMessage
+import com.metasearch.android.data.remote.analysis.request.OpenAIMessage
 import kotlinx.serialization.Serializable
 
 @Serializable
