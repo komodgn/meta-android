@@ -26,6 +26,5 @@ dependencies {
     implementation(projects.domain.device.api)
     implementation(projects.domain.gallery.api)
 
-    implementation(libs.okhttp)
     implementation(libs.androidx.core.ktx)
 }
