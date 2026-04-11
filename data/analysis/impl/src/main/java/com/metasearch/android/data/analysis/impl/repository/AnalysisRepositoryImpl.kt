@@ -53,7 +53,10 @@ class AnalysisRepositoryImpl(
                         analysisClient.uploadImage(dbName, fileName, tempFile)
                         UploadedImage(uriString = uriString, fileName = fileName)
                     } finally {
-                        fileRepository.deleteFile(tempFile)
+                        // TODO(Fix): Temporary workaround for 'Corrupt JPEG'/Race Condition.
+                        // The file is being deleted before OkHttp fully flushes the data to the server.
+                        // Long-term fix: Defer deletion until the use case finishes.
+                        // fileRepository.deleteFile(tempFile)
                     }
                 }.getOrNull()
             }
