@@ -13,7 +13,7 @@ interface SearchWebService {
         @Body request: DetectedObjectsRequest,
     ): PhotoResponse
 
-    @POST("/nlqsearch")
+    @POST("nlqsearch")
     suspend fun sendCypherQuery(
         @Body request: NLQueryRequest,
     ): PhotoNameResponse
