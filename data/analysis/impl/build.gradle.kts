@@ -11,7 +11,7 @@ android {
 
 dependencies {
     implementation(projects.core.common)
-    implementation(projects.core.network)
+    implementation(projects.data.remote)
     implementation(projects.domain.analysis.api)
     implementation(projects.domain.device.api)
     implementation(projects.domain.gallery.api)
@@ -22,6 +22,5 @@ dependencies {
     implementation(projects.core.di)
     implementation(projects.core.room.api)
 
-    implementation(libs.okhttp)
     implementation(libs.androidx.core.ktx)
 }

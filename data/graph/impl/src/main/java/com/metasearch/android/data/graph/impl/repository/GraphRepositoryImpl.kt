@@ -1,7 +1,7 @@
 package com.metasearch.android.data.graph.impl.repository
 
 import com.metasearch.android.core.di.scope.DataScope
-import com.metasearch.android.core.network.BuildConfig
+import com.metasearch.android.data.remote.BuildConfig
 import com.metasearch.android.domain.device.api.repository.DatabaseNameRepository
 import com.metasearch.android.domain.graph.api.repository.GraphRepository
 import dev.zacsweers.metro.Inject

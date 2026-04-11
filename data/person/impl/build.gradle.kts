@@ -13,12 +13,11 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.datastore.api)
     implementation(projects.core.di)
-    implementation(projects.core.network)
+    implementation(projects.data.remote)
     implementation(projects.core.room.api)
     implementation(projects.domain.person.api)
     implementation(projects.domain.device.api)
     implementation(projects.domain.gallery.api)
 
-    implementation(libs.okhttp)
     implementation(libs.androidx.core.ktx)
 }

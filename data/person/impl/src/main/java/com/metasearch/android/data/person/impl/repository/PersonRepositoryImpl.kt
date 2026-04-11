@@ -2,17 +2,12 @@ package com.metasearch.android.data.person.impl.repository
 
 import com.metasearch.android.core.common.utils.runSuspendCatching
 import com.metasearch.android.core.di.scope.DataScope
-import com.metasearch.android.core.network.request.ChangeNameRequest
-import com.metasearch.android.core.network.request.DeleteEntityRequest
-import com.metasearch.android.core.network.request.PersonFrequencyRequest
-import com.metasearch.android.core.network.request.PersonSearchRequest
-import com.metasearch.android.core.network.service.AIService
-import com.metasearch.android.core.network.service.WebService
 import com.metasearch.android.core.room.api.dao.PersonDao
 import com.metasearch.android.core.room.api.entity.FaceEntity
 import com.metasearch.android.data.domain.Person
 import com.metasearch.android.data.domain.PersonFrequency
 import com.metasearch.android.data.person.impl.mapper.toModel
+import com.metasearch.android.data.remote.person.PersonClient
 import com.metasearch.android.domain.device.api.repository.DatabaseNameRepository
 import com.metasearch.android.domain.person.api.repository.PersonRepository
 import dev.zacsweers.metro.Inject
@@ -22,16 +17,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
 
 @SingleIn(DataScope::class)
 @Inject
 class PersonRepositoryImpl(
     private val personDao: PersonDao,
     private val databaseNameRepository: DatabaseNameRepository,
-    private val webService: WebService,
-    private val aiService: AIService,
+    private val personClient: PersonClient,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : PersonRepository {
 
@@ -106,35 +98,30 @@ class PersonRepositoryImpl(
 
     override suspend fun changePersonNameOnServer(oldName: String, newName: String): Result<Unit> = runSuspendCatching {
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
-        webService.changePersonName(ChangeNameRequest(dbName, oldName, newName))
-        Unit
+        personClient.changePersonName(dbName, oldName, newName)
     }
 
     override suspend fun getPersonPhotoNames(personName: String): Result<List<String>> = runSuspendCatching {
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
-        webService.sendPersonData(PersonSearchRequest(dbName, personName))
+        personClient.getPersonPhotoNames(dbName, personName)
     }
 
     override suspend fun fetchPhotoFrequencies(names: List<String>): Result<List<PersonFrequency>> = runSuspendCatching {
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
-        val response = webService.getPersonFrequency(PersonFrequencyRequest(dbName, names))
+        val response = personClient.getPersonFrequency(dbName, names)
         response.toModel()
     }
 
     override suspend fun deleteFromWebService(inputName: String): Result<Unit> = runSuspendCatching {
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
-        webService.deleteEntity(DeleteEntityRequest(dbName, inputName))
-        Unit
+        personClient.deleteFromWeb(dbName, inputName)
     }
 
     override suspend fun deleteFromAiService(personName: String): Result<Unit> = runSuspendCatching {
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
-        aiService.deletePerson(
-            dbName.toRequestBody("text/plain".toMediaTypeOrNull()),
-            personName.toRequestBody("text/plain".toMediaTypeOrNull()),
-        )
+        personClient.deleteFromAi(dbName, personName)
     }
 
     override suspend fun deleteFromLocalDb(personId: Long): Result<Unit> = runSuspendCatching {
