@@ -15,10 +15,12 @@ class TestConventionPlugin : Plugin<Project> {
                     unitTests.all { test ->
                         test.useJUnitPlatform()
                     }
+                    unitTests.isReturnDefaultValues = true
                 }
             }
 
             dependencies {
+                testImplementation(libs.truth)
                 testImplementation(libs.bundles.test.unit)
 
                 testRuntimeOnly(libs.junit.jupiter.engine)
