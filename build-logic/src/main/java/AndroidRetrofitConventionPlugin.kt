@@ -3,6 +3,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import com.metasearch.android.convention.libs
 import com.metasearch.android.convention.implementation
+import com.metasearch.android.convention.testImplementation
 
 internal class AndroidRetrofitConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -15,6 +16,8 @@ internal class AndroidRetrofitConventionPlugin : Plugin<Project> {
                 implementation(libs.retrofit)
                 implementation(libs.retrofit.kotlinx.serialization.converter)
                 implementation(libs.okhttp.logging.interceptor)
+
+                testImplementation(libs.okhttp.mockwebserver)
             }
         }
     }
