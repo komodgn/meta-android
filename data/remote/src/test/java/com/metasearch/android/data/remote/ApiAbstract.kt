@@ -33,15 +33,21 @@ abstract class ApiAbstract<T> {
     }
 
     fun enqueueResponse(fileName: String, headers: Map<String, String> = emptyMap()) {
-        val inputStream = javaClass.classLoader!!.getResourceAsStream("response$fileName")
-        val source = inputStream.source().buffer()
+        val resourcePath = "response/${fileName.removePrefix("/")}"
+        val body = requireNotNull(javaClass.classLoader?.getResourceAsStream(resourcePath)) {
+            "Fixture not found: $resourcePath"
+        }.use { inputStream ->
+            inputStream.source().buffer().use { source ->
+                source.readString(Charsets.UTF_8)
+            }
+        }
         val mockResponse = MockResponse()
         for ((key, value) in headers) {
             mockResponse.addHeader(key, value)
         }
         mockWebServer.enqueue(
             mockResponse
-                .setBody(source.readString(Charsets.UTF_8)),
+                .setBody(body),
         )
     }
 

@@ -1,5 +1,4 @@
 import com.android.build.gradle.LibraryExtension
-import com.metasearch.android.convention.implementation
 import com.metasearch.android.convention.libs
 import com.metasearch.android.convention.testImplementation
 import com.metasearch.android.convention.testRuntimeOnly
@@ -21,8 +20,7 @@ class TestConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                implementation(libs.truth)
-
+                testImplementation(libs.truth)
                 testImplementation(libs.bundles.test.unit)
 
                 testRuntimeOnly(libs.junit.jupiter.engine)
