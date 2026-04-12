@@ -4,16 +4,15 @@ import com.google.common.truth.Truth.assertThat
 import com.metasearch.android.data.remote.person.request.PersonFrequencyRequest
 import com.metasearch.android.data.remote.person.service.PersonWebService
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
 
 class PersonWebServiceTest : ApiAbstract<PersonWebService>() {
 
     private lateinit var service: PersonWebService
 
-    @Before
+    @BeforeEach
     fun initService() {
-        super.createMockServer()
         service = createService(PersonWebService::class.java)
     }
 
