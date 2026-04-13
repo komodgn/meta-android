@@ -1,6 +1,7 @@
 package com.metasearch.android.data.gallery.impl
 
 import android.content.Context
+import android.net.Uri
 import androidx.test.core.app.ApplicationProvider
 import com.metasearch.android.data.gallery.impl.GalleryTestUtils.insertMockImage
 import com.metasearch.android.data.gallery.impl.repository.GalleryRepositoryImpl
@@ -8,6 +9,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -23,6 +25,7 @@ class GalleryRepositoryImplTest {
     private lateinit var context: Context
     private lateinit var repository: GalleryRepositoryImpl
     private val testDispatcher = StandardTestDispatcher()
+    private val insertedUris = mutableListOf<Uri>()
 
     @Before
     fun setUp() {
@@ -30,10 +33,16 @@ class GalleryRepositoryImplTest {
         repository = GalleryRepositoryImpl(testDispatcher, context)
     }
 
+    @After
+    fun tearDown() {
+        GalleryTestUtils.cleanup(context, insertedUris)
+        insertedUris.clear()
+    }
+
     @Test
     fun `getGalleryPagingData emits PagingData when subscribed`() = runTest(testDispatcher) {
         // given
-        insertMockImage(context, "test.jpg", dateAdded = 1000L)
+        insertMockImage(context, "test.jpg", dateAdded = 1000L, insertedUris = insertedUris)
 
         // when
         val flow = repository.getGalleryPagingData()
@@ -46,8 +55,8 @@ class GalleryRepositoryImplTest {
     @Test
     fun `getAllGalleryImageUris - returns all URI strings when photos exist in gallery`() = runTest(testDispatcher) {
         // given
-        insertMockImage(context, "image1.jpg")
-        insertMockImage(context, "image2.jpg")
+        insertMockImage(context, "image1.jpg", insertedUris = insertedUris)
+        insertMockImage(context, "image2.jpg", insertedUris = insertedUris)
 
         // when
         val result = repository.getAllGalleryImageUris()
@@ -60,7 +69,7 @@ class GalleryRepositoryImplTest {
     fun `getFileName - returns correct display name for a given URI string`() = runTest(testDispatcher) {
         // given
         val expectedName = "my_special_photo.jpg"
-        val uri = insertMockImage(context, expectedName)
+        val uri = insertMockImage(context, expectedName, insertedUris = insertedUris)
 
         // when
         val resultName = repository.getFileName(uri.toString())
@@ -86,8 +95,8 @@ class GalleryRepositoryImplTest {
         // given
         val targetName = "target_photo.jpg"
         // Store the actual Uri returned upon insertion to compare with the result string (e.g., content://media/external/images/media/1)
-        val expectedUri = insertMockImage(context, targetName)
-        insertMockImage(context, "other_photo.jpg")
+        val expectedUri = insertMockImage(context, targetName, insertedUris = insertedUris)
+        insertMockImage(context, "other_photo.jpg", insertedUris = insertedUris)
 
         // when
         val result = repository.findMatchedUri(targetName)
@@ -103,8 +112,8 @@ class GalleryRepositoryImplTest {
         val name2 = "photo_2.png"
         val name3 = "not_to_be_found.png"
 
-        val uri1 = insertMockImage(context, name1)
-        val uri2 = insertMockImage(context, name2)
+        val uri1 = insertMockImage(context, name1, insertedUris = insertedUris)
+        val uri2 = insertMockImage(context, name2, insertedUris = insertedUris)
 
         // when
         val searchNames = listOf(name1, name2, name3)
