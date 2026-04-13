@@ -55,14 +55,16 @@ class GalleryRepositoryImplTest {
     @Test
     fun `getAllGalleryImageUris - returns all URI strings when photos exist in gallery`() = runTest(testDispatcher) {
         // given
-        insertMockImage(context, "image1.jpg", insertedUris = insertedUris)
-        insertMockImage(context, "image2.jpg", insertedUris = insertedUris)
+        val uri1 = insertMockImage(context, "image1.jpg", insertedUris = insertedUris)
+        val uri2 = insertMockImage(context, "image2.jpg", insertedUris = insertedUris)
 
         // when
         val result = repository.getAllGalleryImageUris()
 
         // then
         assertEquals(2, result.size)
+        assertTrue(result.contains(uri1.toString()))
+        assertTrue(result.contains(uri2.toString()))
     }
 
     @Test
