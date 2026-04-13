@@ -1,9 +1,8 @@
 package com.metasearch.android.data.gallery.impl
 
-import android.content.ContentValues
 import android.content.Context
-import android.provider.MediaStore
 import androidx.test.core.app.ApplicationProvider
+import com.metasearch.android.data.gallery.impl.GalleryTestUtils.insertMockImage
 import com.metasearch.android.data.gallery.impl.repository.GalleryRepositoryImpl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -47,8 +46,8 @@ class GalleryRepositoryImplTest {
     @Test
     fun `getAllGalleryImageUris - returns all URI strings when photos exist in gallery`() = runTest(testDispatcher) {
         // given
-        insertMockImage("image1.jpg")
-        insertMockImage("image2.jpg")
+        insertMockImage(context, "image1.jpg")
+        insertMockImage(context, "image2.jpg")
 
         // when
         val result = repository.getAllGalleryImageUris()
@@ -61,7 +60,7 @@ class GalleryRepositoryImplTest {
     fun `getFileName - returns correct display name for a given URI string`() = runTest(testDispatcher) {
         // given
         val expectedName = "my_special_photo.jpg"
-        val uri = insertMockImageAndGetUri(expectedName)
+        val uri = insertMockImage(context, expectedName)
 
         // when
         val resultName = repository.getFileName(uri.toString())
@@ -87,8 +86,8 @@ class GalleryRepositoryImplTest {
         // given
         val targetName = "target_photo.jpg"
         // Store the actual Uri returned upon insertion to compare with the result string (e.g., content://media/external/images/media/1)
-        val expectedUri = insertMockImageAndGetUri(targetName)
-        insertMockImage("other_photo.jpg")
+        val expectedUri = insertMockImage(context, targetName)
+        insertMockImage(context, "other_photo.jpg")
 
         // when
         val result = repository.findMatchedUri(targetName)
@@ -104,8 +103,8 @@ class GalleryRepositoryImplTest {
         val name2 = "photo_2.png"
         val name3 = "not_to_be_found.png"
 
-        val uri1 = insertMockImageAndGetUri(name1)
-        val uri2 = insertMockImageAndGetUri(name2)
+        val uri1 = insertMockImage(context, name1)
+        val uri2 = insertMockImage(context, name2)
 
         // when
         val searchNames = listOf(name1, name2, name3)
@@ -115,28 +114,5 @@ class GalleryRepositoryImplTest {
         assertEquals(2, results.size)
         assertTrue(results.contains(uri1.toString()))
         assertTrue(results.contains(uri2.toString()))
-    }
-
-    /**
-     * Helper function to insert mock data and return its actual URI for verification.
-     */
-    private fun insertMockImageAndGetUri(fileName: String): android.net.Uri? {
-        val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-        }
-        return context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-    }
-
-    /**
-     * Helper function to insert mock data into Robolectric's ShadowContentResolver.
-     */
-    private fun insertMockImage(fileName: String) {
-        val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-            // Additional fields like DATE_ADDED can be added here if needed
-        }
-        context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
     }
 }
