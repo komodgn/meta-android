@@ -6,12 +6,14 @@ import android.provider.MediaStore
 import androidx.test.core.app.ApplicationProvider
 import com.metasearch.android.data.gallery.impl.repository.GalleryRepositoryImpl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
@@ -27,6 +29,19 @@ class GalleryRepositoryImplTest {
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
         repository = GalleryRepositoryImpl(testDispatcher, context)
+    }
+
+    @Test
+    fun `getGalleryPagingData emits PagingData when subscribed`() = runTest(testDispatcher) {
+        // given
+        insertMockImage(context, "test.jpg", dateAdded = 1000L)
+
+        // when
+        val flow = repository.getGalleryPagingData()
+
+        // then
+        val result = flow.first()
+        assertNotNull(result)
     }
 
     @Test

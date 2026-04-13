@@ -65,7 +65,9 @@ class GalleryPagingSourceTest {
         val result = pagingSource.load(params)
 
         // then
+        assertTrue(result is PagingSource.LoadResult.Page)
         val page = result as PagingSource.LoadResult.Page<Int, GalleryImage>
+
         assertEquals(2, page.data.size)
         assertEquals(null, page.nextKey)
     }
@@ -78,12 +80,10 @@ class GalleryPagingSourceTest {
 
         // when
         val params = PagingSource.LoadParams.Refresh<Int>(key = null, loadSize = 2, placeholdersEnabled = false)
-        val result = pagingSource.load(params) as PagingSource.LoadResult.Page
+        val result = pagingSource.load(params)
+        assertTrue(result is PagingSource.LoadResult.Page)
 
-        // then
-        assertEquals(2000L, result.data[0].dateAdded)
-        assertEquals(1000L, result.data[1].dateAdded)
-    }
+        val page = result as PagingSource.LoadResult.Page<Int, GalleryImage>
 
     private fun insertMockImage(fileName: String, dateAdded: Long) {
         val contentValues = ContentValues().apply {
@@ -92,5 +92,8 @@ class GalleryPagingSourceTest {
             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
         }
         context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        // then
+        assertEquals(2000L, page.data[0].dateAdded)
+        assertEquals(1000L, page.data[1].dateAdded)
     }
 }
