@@ -28,6 +28,7 @@ class ContactRepositoryImplTest {
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
+        context.contentResolver.delete(CallLog.Calls.CONTENT_URI, null, null)
         repository = ContactRepositoryImpl(context, testDispatcher)
     }
 
