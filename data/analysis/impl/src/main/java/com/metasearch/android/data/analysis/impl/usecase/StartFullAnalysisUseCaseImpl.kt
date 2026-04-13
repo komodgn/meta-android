@@ -32,7 +32,7 @@ class StartFullAnalysisUseCaseImpl(
     override suspend fun invoke() = withContext(ioDispatcher) {
         val dbName = databaseNameRepository.getPersistentDeviceDatabaseName()
 
-        val currentUriStrings = galleryRepository.getAllGalleryImages()
+        val currentUriStrings = galleryRepository.getAllGalleryImageUris()
         val alreadyAnalyzed = analysisRepository.getAlreadyAnalyzedPaths()
 
         val deletePaths = alreadyAnalyzed.filter { it !in currentUriStrings }
