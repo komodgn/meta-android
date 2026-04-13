@@ -9,6 +9,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -97,8 +98,8 @@ class GalleryRepositoryImplTest {
 
         // then
         assertEquals(2, results.size)
-        assert(results.contains(uri1.toString()))
-        assert(results.contains(uri2.toString()))
+        assertTrue(results.contains(uri1.toString()))
+        assertTrue(results.contains(uri2.toString()))
     }
 
     /**
