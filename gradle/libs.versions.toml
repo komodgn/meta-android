@@ -202,7 +202,9 @@ test-unit = [
     "kotlinx-coroutines-test",
     "junit-jupiter-api",
     "mockito-core",
-    "mockito-kotlin"
+    "mockito-kotlin",
+    "robolectric",
+    "androidx-test-core",
 ]
 
 [plugins]
