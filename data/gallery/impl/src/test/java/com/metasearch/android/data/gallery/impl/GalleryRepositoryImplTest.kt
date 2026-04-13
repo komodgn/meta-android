@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
