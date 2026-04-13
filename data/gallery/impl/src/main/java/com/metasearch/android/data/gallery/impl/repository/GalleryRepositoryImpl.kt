@@ -32,7 +32,7 @@ class GalleryRepositoryImpl(
         ).flow
     }
 
-    override suspend fun getAllGalleryImages(): List<String> = withContext(ioDispatcher) {
+    override suspend fun getAllGalleryImageUris(): List<String> = withContext(ioDispatcher) {
         val imageUris = mutableListOf<String>()
         val projection = arrayOf(MediaStore.Images.Media._ID)
 

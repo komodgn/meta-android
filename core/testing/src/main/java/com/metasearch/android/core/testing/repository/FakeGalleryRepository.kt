@@ -12,7 +12,7 @@ public class FakeGalleryRepository : GalleryRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getAllGalleryImages(): List<String> {
+    override suspend fun getAllGalleryImageUris(): List<String> {
         TODO("Not yet implemented")
     }
 
