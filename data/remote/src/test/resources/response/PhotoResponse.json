@@ -1,0 +1,12 @@
+{
+    "photos": {
+        "commonPhotos": [
+            "common_1.jpg",
+            "common_2.jpg"
+        ],
+        "individualPhotos": {
+            "안경": ["glass_1.jpg", "glass_2.jpg"],
+            "모자": ["hat_1.jpg"]
+        }
+    }
+}

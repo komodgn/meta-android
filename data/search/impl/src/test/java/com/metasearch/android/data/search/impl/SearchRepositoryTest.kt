@@ -1,19 +1,21 @@
 package com.metasearch.android.data.search.impl
 
+import com.google.common.truth.Truth.assertThat
 import com.metasearch.android.data.remote.search.SearchClient
 import com.metasearch.android.data.remote.search.response.CircleDetectionResponse
 import com.metasearch.android.data.remote.search.response.PhotoNameResponse
 import com.metasearch.android.data.remote.search.response.PhotoResponse
 import com.metasearch.android.data.remote.search.response.Photos
+import com.metasearch.android.data.remote.search.util.CypherQueryGenerator.generateQueryByKeywords
 import com.metasearch.android.data.search.impl.repository.SearchRepositoryImpl
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.atLeastOnce
+import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.io.File
@@ -113,5 +115,18 @@ class SearchRepositoryImplTest {
         val result = repository.searchPhotosByKeywords("dbabf1e5c83b8b485da6ba3b94ebf78dgs", listOf("keyword"))
 
         assertEquals(0, result.size)
+    }
+
+    @Test
+    fun `generateQueryByKeywords - should generate correct Cypher query for multiple keywords`() {
+        // given
+        val keywords = listOf("안경", "모자")
+
+        // when
+        val query = generateQueryByKeywords(keywords)
+
+        // then
+        val expected = "MATCH (photo)-[]->(a0 {name: '안경'}), (photo)-[]->(a1 {name: '모자'}) RETURN DISTINCT photo.name AS PhotoName"
+        assertThat(query).isEqualTo(expected)
     }
 }
