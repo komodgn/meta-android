@@ -18,7 +18,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.supervisorScope
 
-@Suppress("LongParameterList")
 @SingleIn(DataScope::class)
 @Inject
 class AnalysisRepositoryImpl(
