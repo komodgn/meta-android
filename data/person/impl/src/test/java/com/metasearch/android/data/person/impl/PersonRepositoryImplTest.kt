@@ -75,7 +75,7 @@ class PersonRepositoryImplTest {
         val result = repository.updatePersonInfo(personId, newName, "010-5678-0000", true, 10L)
 
         // then
-        verify(personDao).updatePersonFullInfo(personId, newName, "010-5678", true, 10L)
+        verify(personDao).updatePersonFullInfo(personId, newName, "010-5678-0000", true, 10L)
         verify(personClient).changePersonName(dbName, oldName, newName)
         assertEquals(personId, result.getOrNull())
     }
