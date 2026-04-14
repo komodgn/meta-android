@@ -1,6 +1,6 @@
-package com.metasearch.android.data.search.impl.util
+package com.metasearch.android.data.remote.search.util
 
-internal object CypherQueryGenerator {
+object CypherQueryGenerator {
 
     fun generateQueryByKeywords(keywords: List<String>): String {
         if (keywords.isEmpty()) return ""
