@@ -8,7 +8,10 @@ import com.metasearch.android.data.remote.search.response.PhotoResponse
 import com.metasearch.android.data.remote.search.response.Photos
 import com.metasearch.android.data.remote.search.util.CypherQueryGenerator.generateQueryByKeywords
 import com.metasearch.android.data.search.impl.repository.SearchRepositoryImpl
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
 import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.atLeastOnce
@@ -16,9 +19,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.io.File
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNotNull
-import org.junit.Before
 
 class SearchRepositoryImplTest {
 
