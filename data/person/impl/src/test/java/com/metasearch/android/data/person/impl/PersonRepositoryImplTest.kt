@@ -6,12 +6,12 @@ import com.metasearch.android.data.remote.person.PersonClient
 import com.metasearch.android.domain.device.api.repository.DatabaseNameRepository
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.Before
+import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import junit.framework.TestCase.assertEquals
 
 class PersonRepositoryImplTest {
 
@@ -21,7 +21,7 @@ class PersonRepositoryImplTest {
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var repository: PersonRepositoryImpl
 
-    @BeforeEach
+    @Before
     fun setUp() {
         repository = PersonRepositoryImpl(
             personDao,

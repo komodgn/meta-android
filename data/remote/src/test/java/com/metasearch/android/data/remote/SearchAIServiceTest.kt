@@ -8,14 +8,14 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.Before
+import org.junit.Test
 
 class SearchAIServiceTest : ApiAbstract<SearchAIService>() {
 
     private lateinit var service: SearchAIService
 
-    @BeforeEach
+    @Before
     fun initService() {
         service = createService(SearchAIService::class.java)
     }

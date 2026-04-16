@@ -6,8 +6,8 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okio.buffer
 import okio.source
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
+import org.junit.After
+import org.junit.Before
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
@@ -21,13 +21,13 @@ abstract class ApiAbstract<T> {
         prettyPrint = true
     }
 
-    @BeforeEach
+    @Before
     fun createMockServer() {
         mockWebServer = MockWebServer()
         mockWebServer.start()
     }
 
-    @AfterEach
+    @After
     fun stopServer() {
         mockWebServer.shutdown()
     }

@@ -3,14 +3,14 @@ package com.metasearch.android.data.remote
 import com.google.common.truth.Truth.assertThat
 import com.metasearch.android.data.remote.analysis.service.AnalysisWebService
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.Before
+import org.junit.Test
 
 class AnalysisWebServiceTest : ApiAbstract<AnalysisWebService>() {
 
     private lateinit var service: AnalysisWebService
 
-    @BeforeEach
+    @Before
     fun initService() {
         service = createService(AnalysisWebService::class.java)
     }

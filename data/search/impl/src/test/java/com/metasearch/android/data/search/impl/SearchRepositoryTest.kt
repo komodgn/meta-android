@@ -9,23 +9,23 @@ import com.metasearch.android.data.remote.search.response.Photos
 import com.metasearch.android.data.remote.search.util.CypherQueryGenerator.generateQueryByKeywords
 import com.metasearch.android.data.search.impl.repository.SearchRepositoryImpl
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.atLeastOnce
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.io.File
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
+import org.junit.Before
 
 class SearchRepositoryImplTest {
 
     private val searchClient: SearchClient = mock()
     private lateinit var repository: SearchRepositoryImpl
 
-    @BeforeEach
+    @Before
     fun setUp() {
         repository = SearchRepositoryImpl(searchClient)
     }
