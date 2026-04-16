@@ -1,4 +1,3 @@
-import com.android.build.gradle.LibraryExtension
 import com.google.devtools.ksp.gradle.KspExtension
 import com.metasearch.android.convention.androidTestImplementationProject
 import org.gradle.api.Plugin
@@ -11,7 +10,6 @@ import com.metasearch.android.convention.libs
 import com.metasearch.android.convention.ksp
 import com.metasearch.android.convention.testImplementationProject
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.withType
 
 internal class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -24,26 +22,8 @@ internal class AndroidFeatureConventionPlugin : Plugin<Project> {
                 apply("metasearch.android.roborazzi")
             }
 
-            tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-                compilerOptions {
-                    if (freeCompilerArgs.get().none { it == "-Xcontext-parameters" }) {
-                        freeCompilerArgs.add("-Xcontext-parameters")
-                    }
-
-                    if (freeCompilerArgs.get().none { it.contains("ExperimentalTestApi") }) {
-                        freeCompilerArgs.add("-opt-in=androidx.compose.ui.test.ExperimentalTestApi")
-                    }
-                }
-            }
-
             extensions.configure<KspExtension> {
                 arg("circuit.codegen.mode", "metro")
-            }
-
-            extensions.configure<LibraryExtension> {
-                testOptions {
-                    unitTests.isIncludeAndroidResources = true
-                }
             }
 
             dependencies {
