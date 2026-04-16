@@ -19,16 +19,14 @@ import org.mockito.kotlin.whenever
 
 class PersonPresenterTest {
 
-    private val navigator = FakeNavigator(PersonScreen)
+    private lateinit var navigator: FakeNavigator
+
     private val getAllPersonsUseCase: GetAllPersonsUseCase = mock()
     private val deletePersonUseCase: DeletePersonUseCase = mock()
 
-    private lateinit var presenter: PersonPresenter
-
     @Before
     fun setup() {
-        whenever(getAllPersonsUseCase()).thenReturn(flowOf(emptyList()))
-        presenter = PersonPresenter(navigator, getAllPersonsUseCase, deletePersonUseCase)
+        navigator = FakeNavigator(PersonScreen)
     }
 
     @Test
@@ -38,6 +36,8 @@ class PersonPresenterTest {
             Person(id = 2, name = "인물2", inputName = "Bob"),
         )
         whenever(getAllPersonsUseCase()).thenReturn(flowOf(mockPeople))
+
+        val presenter = createPresenter()
 
         presenter.test {
             var currentState = awaitItem()
@@ -55,6 +55,8 @@ class PersonPresenterTest {
     fun `should show delete dialog when delete button is clicked`() = runTest {
         val mockPeople = listOf(Person(id = 1, name = "인물1", inputName = "Alice"))
         whenever(getAllPersonsUseCase()).thenReturn(flowOf(mockPeople))
+
+        val presenter = createPresenter()
 
         presenter.test {
             var state = awaitItem()
@@ -74,15 +76,24 @@ class PersonPresenterTest {
     fun `should reset root when tab is clicked`() = runTest {
         val tabs = listOf(PersonScreen, HomeScreen, NLSearchScreen, GraphScreen)
 
+        whenever(getAllPersonsUseCase()).thenReturn(flowOf(emptyList()))
+
         tabs.forEach { targetScreen ->
-            presenter.test {
+            val testNavigator = FakeNavigator(PersonScreen)
+            val testPresenter = createPresenter(testNavigator)
+
+            testPresenter.test {
                 val initialState = awaitItem()
 
                 initialState.eventSink(PersonUiEvent.OnTabClick(targetScreen))
 
-                val resetEvent = navigator.awaitResetRoot()
+                val resetEvent = testNavigator.awaitResetRoot()
                 assertThat(resetEvent.newRoot).isEqualTo(targetScreen)
             }
         }
+    }
+
+    private fun createPresenter(testNavigator: FakeNavigator = navigator): PersonPresenter {
+        return PersonPresenter(testNavigator, getAllPersonsUseCase, deletePersonUseCase)
     }
 }
