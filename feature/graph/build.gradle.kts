@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.metasearch.android.feature)
+    alias(libs.plugins.metasearch.test)
 }
 
 android {

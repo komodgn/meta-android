@@ -16,7 +16,7 @@ class CoilRule : TestWatcher() {
     override fun starting(description: Description?) {
         super.starting(description)
         val engine = FakeImageLoaderEngine.Builder()
-            .default(ColorImage(Color.CYAN))
+            .default(ColorImage(Color.GRAY))
             .build()
         val imageLoader = ImageLoader.Builder(ApplicationProvider.getApplicationContext())
             .components { add(engine) }

@@ -6,14 +6,14 @@ import com.metasearch.android.data.remote.search.request.NLQueryRequest
 import com.metasearch.android.data.remote.search.service.SearchWebService
 import com.metasearch.android.data.remote.search.util.CypherQueryGenerator.generateQueryByKeywords
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.Before
+import org.junit.Test
 
 class SearchWebServiceTest : ApiAbstract<SearchWebService>() {
 
     private lateinit var service: SearchWebService
 
-    @BeforeEach
+    @Before
     fun initService() {
         service = createService(SearchWebService::class.java)
     }
