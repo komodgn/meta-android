@@ -1,0 +1,49 @@
+name: unit-test
+
+on:
+    pull_request:
+        paths-ignore:
+            - '**.md'
+
+run-name: "unit-test by ${{ github.actor }}"
+
+permissions:
+    contents: read
+    pull-requests: write
+    actions: write
+
+jobs:
+    unit-test:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Setup
+              uses: ./.github/actions/setup-android
+              env:
+                LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+
+            - name: Run Unit Tests and Record Screenshots
+              id: test
+              run: ./gradlew testDebugUnitTest --parallel --stacktrace
+
+            - name: Upload Test Reports and Screenshots
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: test-reports
+                  path: |
+                      **/build/reports/tests
+                      **/build/outputs/roborazzi
+                  retention-days: 7
+
+            - name: Post Roborazzi Comment
+              if: github.event_name == 'pull_request'
+              uses: takahirom/roborazzi-comment-action@v1
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                comment-identifier: "roborazzi-report"
+                report-dir: "**/build/outputs/roborazzi"
