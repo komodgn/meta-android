@@ -40,11 +40,3 @@ jobs:
                       **/build/reports/tests
                       **/build/outputs/roborazzi
                   retention-days: 7
-
-            - name: Post Roborazzi Comment
-              if: github.event_name == 'pull_request'
-              uses: takahirom/roborazzi-comment-action@v1
-              with:
-                github-token: ${{ secrets.GITHUB_TOKEN }}
-                comment-identifier: "roborazzi-report"
-                report-dir: "**/build/outputs/roborazzi"
