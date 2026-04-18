@@ -1,4 +1,5 @@
 name: 'Setup Android Environment'
+description: 'Installs JDK 21, Android SDK, configures Gradle caches, and generates local.properties for Android CI jobs.'
 
 runs:
     using: "composite"
