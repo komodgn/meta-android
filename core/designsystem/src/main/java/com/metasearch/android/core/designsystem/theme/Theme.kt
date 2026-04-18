@@ -13,9 +13,12 @@ private val LocalTypography = staticCompositionLocalOf { MetaSearchTypography() 
 
 @Composable
 fun MetaSearchTheme(content: @Composable () -> Unit) {
-    CompositionLocalProvider(
-        content = content,
-    )
+    CompositionLocalProvider {
+        androidx.compose.material3.Surface(
+            color = Neutral50,
+            content = content,
+        )
+    }
 }
 
 object MetaSearchTheme {
