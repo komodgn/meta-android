@@ -29,6 +29,7 @@ class MetaSearchPreviewTester :
                 .captureRoboImage("${preview.declaringClass.name}_${preview.methodName}.png")
         } catch (e: Exception) {
             println("Error ${preview.methodName}: ${e.message}")
+            throw e
         }
     }
 

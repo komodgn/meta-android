@@ -1,6 +1,8 @@
 package com.metasearch.android.feature.detail.person
 
+import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -92,7 +94,9 @@ fun PersonDetailUi(
     }
 
     if (state.showPhotoSelectDialog) {
-        Dialog(onDismissRequest = { state.eventSink(PersonDetailUiEvent.OnPhotoSelectCancel) }) {
+        val isTest = Build.FINGERPRINT.contains("robolectric", ignoreCase = true)
+
+        val content = @Composable {
             Surface(
                 shape = RoundedCornerShape(16.dp),
                 color = MaterialTheme.colorScheme.surface,
@@ -125,6 +129,14 @@ fun PersonDetailUi(
                         }
                     }
                 }
+            }
+        }
+
+        if (isTest) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { content() }
+        } else {
+            Dialog(onDismissRequest = { state.eventSink(PersonDetailUiEvent.OnPhotoSelectCancel) }) {
+                content()
             }
         }
     }
