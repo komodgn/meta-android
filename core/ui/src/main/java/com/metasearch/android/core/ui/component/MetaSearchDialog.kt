@@ -1,5 +1,6 @@
 package com.metasearch.android.core.ui.component
 
+import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,29 +39,20 @@ fun MetaSearchDialog(
     content: @Composable (() -> Unit)? = null,
     properties: DialogProperties = DialogProperties(),
 ) {
-    Dialog(
-        onDismissRequest = onDismissRequest,
-        properties = properties,
-    ) {
+    val isTest = Build.FINGERPRINT.contains("robolectric", ignoreCase = true)
+
+    val dialogContent = @Composable {
         Column(
             modifier = modifier
                 .fillMaxWidth()
-                .clip(
-                    RoundedCornerShape(
-                        MetaSearchTheme.radius.lg,
-                    ),
-                )
+                .clip(RoundedCornerShape(MetaSearchTheme.radius.lg))
                 .background(White)
                 .border(
                     width = MetaSearchTheme.border.border4,
                     color = LightPink,
-                    shape = RoundedCornerShape(
-                        MetaSearchTheme.radius.lg,
-                    ),
+                    shape = RoundedCornerShape(MetaSearchTheme.radius.lg),
                 )
-                .padding(
-                    MetaSearchTheme.spacing.spacing6,
-                ),
+                .padding(MetaSearchTheme.spacing.spacing6),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             title?.let {
@@ -69,26 +62,15 @@ fun MetaSearchDialog(
                     style = MetaSearchTheme.typography.titleLarge,
                 )
             }
-            Spacer(
-                modifier = Modifier.height(
-                    MetaSearchTheme.spacing.spacing4,
-                ),
-            )
+            Spacer(modifier = Modifier.height(MetaSearchTheme.spacing.spacing4))
             content?.let {
-                Box(
-                    modifier = Modifier.padding(
-                        bottom = MetaSearchTheme.spacing.spacing6,
-                    ),
-                ) {
+                Box(modifier = Modifier.padding(bottom = MetaSearchTheme.spacing.spacing6)) {
                     it()
                 }
             }
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(
-                    MetaSearchTheme.spacing.spacing3,
-                ),
+                horizontalArrangement = Arrangement.spacedBy(MetaSearchTheme.spacing.spacing3),
             ) {
                 dismissButtonText?.let {
                     MetaSearchButton(
@@ -98,13 +80,30 @@ fun MetaSearchDialog(
                         contentColor = Neutral500,
                     )
                 }
-
                 MetaSearchButton(
                     modifier = Modifier.weight(1f),
                     text = confirmButtonText,
                     onClick = onConfirmRequest,
                 )
             }
+        }
+    }
+
+    if (isTest) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(MetaSearchTheme.spacing.spacing6),
+            contentAlignment = Alignment.Center,
+        ) {
+            dialogContent()
+        }
+    } else {
+        Dialog(
+            onDismissRequest = onDismissRequest,
+            properties = properties,
+        ) {
+            dialogContent()
         }
     }
 }

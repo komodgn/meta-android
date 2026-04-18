@@ -63,6 +63,7 @@ composeStableMarker = "1.0.7"
 constraintlayoutCompose = "1.1.1"
 stabilityAnalyzer = "0.6.4"
 composeEffects = "0.1.4"
+composablePreviewScanner = "0.8.2"
 
 ## Coil
 coilCompose = "3.3.0"
@@ -157,6 +158,7 @@ circuit-test = { module = "com.slack.circuit:circuit-test", version.ref = "circu
 
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
@@ -183,6 +185,9 @@ robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectr
 
 roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
 roborazzi-compose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
+roborazzi-preview-scanner-support = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose-preview-scanner-support", version.ref = "roborazzi" }
+
+composable-preview-scanner = { group = "io.github.sergio-sastre.ComposablePreviewScanner", name = "android", version.ref = "composablePreviewScanner" }
 
 [bundles]
 androidx-compose = [

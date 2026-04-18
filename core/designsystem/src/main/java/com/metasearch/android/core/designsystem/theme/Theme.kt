@@ -1,5 +1,6 @@
 package com.metasearch.android.core.designsystem.theme
 
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -13,9 +14,12 @@ private val LocalTypography = staticCompositionLocalOf { MetaSearchTypography() 
 
 @Composable
 fun MetaSearchTheme(content: @Composable () -> Unit) {
-    CompositionLocalProvider(
-        content = content,
-    )
+    CompositionLocalProvider {
+        Surface(
+            color = Neutral50,
+            content = content,
+        )
+    }
 }
 
 object MetaSearchTheme {

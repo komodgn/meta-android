@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.metasearch.android.library)
     alias(libs.plugins.roborazzi)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -8,6 +9,10 @@ android {
 }
 
 dependencies {
+    api(libs.androidx.compose.runtime)
+    api(libs.androidx.compose.ui)
+    api(libs.androidx.compose.ui.tooling.preview)
+
     // Robolectric & JUnit
     api(libs.junit)
     api(libs.robolectric)
@@ -20,6 +25,9 @@ dependencies {
     // ScreenShot Test
     api(libs.roborazzi)
     api(libs.roborazzi.compose)
+
+    api(libs.roborazzi.preview.scanner.support)
+    api(libs.composable.preview.scanner)
 
     implementation(libs.coil.test)
     implementation(libs.coil.compose)

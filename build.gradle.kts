@@ -36,7 +36,7 @@ buildscript {
 val excludeModules: String? by project
 
 allprojects {
-    val skipQualityModules = listOf(":core:testing")
+    val skipQualityModules = listOf("")
 
     val isExcludedByProperty = excludeModules?.split(",")?.contains(project.name) == true
     val isSkippedModule = skipQualityModules.contains(project.path)
