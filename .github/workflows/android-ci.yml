@@ -20,38 +20,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: gradle
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-
-      - name: Cache Gradle Wrapper
-        uses: actions/cache@v4
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-wrapper-
-
-      - name: Cache Build Cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.gradle/caches/build-cache-1
-          key: ${{ runner.os }}-build-cache-${{ hashFiles('**/build.gradle*', '**/gradle-wrapper.properties') }}-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-cache-${{ hashFiles('**/build.gradle*', '**/gradle-wrapper.properties') }}
-            ${{ runner.os }}-build-cache-
-
-      - name: Generate local.properties
-        run: echo '${{ secrets.LOCAL_PROPERTIES }}' | base64 -d > ./local.properties
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Setup
+        uses: ./.github/actions/setup-android
+        env:
+          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
 
       - name: Code Style Check
         id: ktlint
