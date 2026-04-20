@@ -1,0 +1,100 @@
+name: screenshot-comparison-comment
+
+on:
+  workflow_run:
+    workflows: ["screenshot-comparison"]
+    types: [completed]
+
+jobs:
+  comment:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: read
+
+    steps:
+      - name: Download Diff Artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          name: screenshot-diff-reports
+          run_id: ${{ github.event.workflow_run.id }}
+          path: diff-reports
+
+      - id: get-pull-request-number
+        run: echo "pull_request_number=$(cat diff-reports/pr/NR)" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout Default Branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Push to Companion Branch
+        env:
+          BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
+        run: |
+          git checkout --orphan "$BRANCH_NAME"
+          git rm -rf .
+          find diff-reports -type f -name "*.png" -exec cp {} . \;
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git config --global user.name "ScreenshotBot"
+            git config --global user.email "bot@github.com"
+            git add .
+            git commit -m "Add screenshot diffs"
+            git push origin "$BRANCH_NAME" -f
+            echo "exists=true" >> "$GITHUB_ENV"
+          fi
+
+      - name: Generate Report Body
+        if: env.exists == 'true'
+        id: generate_report
+        run: |
+          BRANCH="companion_${{ github.event.workflow_run.head_branch }}"
+          REPO="${{ github.repository }}"
+
+          echo "REPORT_BODY<<EOF" >> $GITHUB_OUTPUT
+          echo "### Roborazzi Snapshot Diff Report" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "| File Name | Comparison |" >> $GITHUB_OUTPUT
+          echo "|---|---|" >> $GITHUB_OUTPUT
+
+          for file in $(ls *.png | grep _compare.png); do
+            URL="https://github.com/${REPO}/blob/${BRANCH}/${file}?raw=true"
+            DISPLAY_NAME=$(echo $file | sed -r 's/(.{20})/\1<br>/g')
+            echo "| $DISPLAY_NAME | ![]($URL) |" >> $GITHUB_OUTPUT
+          done
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Find Old Comment
+        if: env.exists == 'true'
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ steps.get-pull-request-number.outputs.pull_request_number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: 'Roborazzi Snapshot Diff Report'
+
+      - name: Add or Update Comment
+        if: env.exists == 'true'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ steps.get-pull-request-number.outputs.pull_request_number }}
+          body: ${{ steps.generate_report.outputs.REPORT_BODY }}
+          edit-mode: replace
+
+      - name: Cleanup outdated companion branches
+        shell: bash
+        run: |
+          git branch -r --format="%(refname:lstrip=3)" | grep companion_ | while read -r branch; do
+            last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
+            now_timestamp=$(date +%s)
+
+            # 30 days
+            if [ $((now_timestamp - last_commit_date_timestamp)) -gt 2592000 ]; then
+              echo "Deleting outdated branch: $branch"
+              git push origin --delete "$branch"
+            fi
+          done
