@@ -1,0 +1,66 @@
+name: screenshot-comparison
+
+on:
+  pull_request:
+    paths-ignore:
+      - '**.md'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  screenshot-comparison:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+      checks: read
+
+    steps:
+      - name: Checkout PR Branch
+        uses: actions/checkout@v4
+
+      - name: Get base branch HEAD commit
+        id: get_base_branch_head
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          echo "sha=$(git rev-parse origin/${{ github.base_ref }})" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Android
+        uses: ./.github/actions/setup-android
+        env:
+          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+
+      - name: Wait for base unit-test
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          ref: ${{ steps.get_base_branch_head.outputs.sha }}
+          check-name: 'unit-test'
+          repo-token: ${{ github.token }}
+          wait-interval: 10
+
+      - name: Download Base Screenshot
+        uses: dawidd6/action-download-artifact@v3
+        continue-on-error: true
+        with:
+          name: test-reports
+          workflow: unit-test.yml
+          commit: ${{ steps.get_base_branch_head.outputs.sha }}
+
+      - name: Run Comparison
+        run: ./gradlew compareRoborazziDebug --stacktrace
+
+      - name: Save PR number for comment
+        run: |
+          mkdir -p ./pr
+          echo ${{ github.event.number }} > ./pr/NR
+
+      - name: Upload Diff Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshot-diff-reports
+          path: |
+            **/build/outputs/roborazzi
+            ./pr/NR
