@@ -15,7 +15,7 @@ jobs:
       actions: read
 
     steps:
-      - name: Download Diff Artifact
+      - name: Download Artifact for PR Number
         uses: dawidd6/action-download-artifact@v3
         with:
           name: screenshot-diff-reports
@@ -23,28 +23,57 @@ jobs:
           path: diff-reports
 
       - id: get-pull-request-number
-        run: echo "pull_request_number=$(cat diff-reports/pr/NR)" >> "$GITHUB_OUTPUT"
+        run: |
+          NR_FILE=$(find diff-reports -name "NR" -print -quit)
+
+          if [ -z "$NR_FILE" ]; then
+            echo "Error: PR number file (NR) not found in artifacts"
+            exit 1
+          fi
+
+          PR_NUMBER=$(tr -d '[:space:]' < "$NR_FILE")
+          echo "pull_request_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
 
       - name: Checkout Default Branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98 # v6.0.2
         with:
           ref: ${{ github.event.repository.default_branch }}
+
+      - name: Switch to Companion Branch
+        env:
+          BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
+        run: |
+          git branch -D "$BRANCH_NAME" || true
+          git checkout --orphan "$BRANCH_NAME"
+          git rm -rf .
+
+      - name: Download Diff Artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          name: screenshot-diff-reports
+          run_id: ${{ github.event.workflow_run.id }}
+          path: diff-reports
 
       - name: Push to Companion Branch
         env:
           BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
         run: |
-          git checkout --orphan "$BRANCH_NAME"
-          git rm -rf .
-          find diff-reports -type f -name "*.png" -exec cp {} . \;
+          ls -R
+          find . -name "*_compare.png" -exec mv {} . \;
+          mapfile -d '' -t files_to_add < <(find . -type f -name "*_compare.png" -print0)
+
+          for file in "${files_to_add[@]}"; do
+            if [[ "$file" =~ ^([-0-9A-Z_a-z.\ \/]|\[|\])+$ ]]; then
+            git add "$file"
+            echo "exists=true" >> "$GITHUB_ENV"
+            fi
+          done
 
           if [ -n "$(git status --porcelain)" ]; then
             git config --global user.name "ScreenshotBot"
             git config --global user.email "bot@github.com"
-            git add .
             git commit -m "Add screenshot diffs"
-            git push origin "$BRANCH_NAME" -f
-            echo "exists=true" >> "$GITHUB_ENV"
+            git push origin HEAD:"$BRANCH_NAME" -f
           fi
 
       - name: Generate Report Body
@@ -54,18 +83,31 @@ jobs:
           BRANCH="companion_${{ github.event.workflow_run.head_branch }}"
           REPO="${{ github.repository }}"
 
-          echo "REPORT_BODY<<EOF" >> $GITHUB_OUTPUT
-          echo "### Roborazzi Snapshot Diff Report" >> $GITHUB_OUTPUT
-          echo "" >> $GITHUB_OUTPUT
-          echo "| File Name | Comparison |" >> $GITHUB_OUTPUT
-          echo "|---|---|" >> $GITHUB_OUTPUT
+          mapfile -d '' -t files < <(find . -type f -name "*_compare.png" -print0)
 
-          for file in $(ls *.png | grep _compare.png); do
-            URL="https://github.com/${REPO}/blob/${BRANCH}/${file}?raw=true"
-            DISPLAY_NAME=$(echo $file | sed -r 's/(.{20})/\1<br>/g')
-            echo "| $DISPLAY_NAME | ![]($URL) |" >> $GITHUB_OUTPUT
-          done
-          echo "EOF" >> $GITHUB_OUTPUT
+          {
+            echo "REPORT_BODY<<EOF"
+            echo "### Roborazzi Snapshot Diff Report"
+            echo ""
+            echo "| File Name | Comparison |"
+            echo "|---|---|"
+
+            for file in "${files[@]}"; do
+              fileName=$(basename "$file")
+
+              urlPart="${BRANCH//#/%23}/${fileName//#/%23}"
+              urlPart="${urlPart//[/%5B}"
+              urlPart="${urlPart//]/%5D}"
+              urlPart="${urlPart// /%20}"
+
+              URL="https://github.com/${REPO}/blob/${urlPart}?raw=true"
+
+              DISPLAY_NAME=$(echo "$fileName" | sed -r 's/(.{20})/\1<br>/g')
+
+              echo "| $DISPLAY_NAME | ![]($URL) |"
+            done
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Find Old Comment
         if: env.exists == 'true'
