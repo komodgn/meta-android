@@ -48,5 +48,7 @@ jobs:
                   path: |
                       **/build/reports/tests
                       **/build/outputs/roborazzi
+                      !**/build/outputs/roborazzi/**/*_compare.png
+                      !**/build/outputs/roborazzi/**/*_actual.png
                       ./pr/NR
                   retention-days: 7
