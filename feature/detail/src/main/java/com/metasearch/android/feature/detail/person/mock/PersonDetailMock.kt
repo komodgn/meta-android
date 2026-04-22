@@ -5,7 +5,7 @@ import com.metasearch.android.data.domain.fake
 import com.metasearch.android.feature.detail.person.PersonDetailUiState
 import kotlinx.collections.immutable.toPersistentList
 
-internal val fakePhotoUris = (1..28).map { i ->
+internal val fakePhotoUris = (1..29).map { i ->
     "https://picsum.photos/seed/$i/200/200"
 }.toPersistentList()
 
