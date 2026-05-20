@@ -1,4 +1,4 @@
-package com.metasearch.android.impl.di
+package com.metasearch.android.core.worker.impl.di
 
 import android.content.Context
 import androidx.work.WorkManager
@@ -20,11 +20,11 @@ interface WorkerGraph {
 
     @Binds
     fun bindWorkScheduleUseCase(
-        impl: com.metasearch.android.impl.usecase.WorkScheduleUseCase,
+        impl: com.metasearch.android.core.worker.impl.usecase.WorkScheduleUseCase,
     ): WorkScheduleUseCase
 
     @Binds
     fun bindWorkerStatusUseCase(
-        impl: com.metasearch.android.impl.usecase.WorkerStatusUseCase,
+        impl: com.metasearch.android.core.worker.impl.usecase.WorkerStatusUseCase,
     ): WorkerStatusUseCase
 }
