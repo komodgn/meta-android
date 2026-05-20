@@ -1,4 +1,4 @@
-package com.metasearch.android.impl.usecase
+package com.metasearch.android.core.worker.impl.usecase
 
 import androidx.lifecycle.Observer
 import androidx.work.WorkInfo

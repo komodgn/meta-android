@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.metasearch.android.impl"
+    namespace = "com.metasearch.android.core.worker.impl"
 }
 
 dependencies {
