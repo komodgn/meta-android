@@ -3,7 +3,9 @@ package com.metasearch.android.feature.home
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.Offset
 import androidx.paging.PagingData
+import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.data.domain.GalleryImage
+import com.metasearch.android.data.domain.Model
 import com.metasearch.android.data.domain.Person
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
@@ -13,6 +15,12 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.Flow
 
 data class HomeUiState(
+    val isModelAvailable: Boolean = false,
+    val downloadingModelId: String? = null,
+    val installedModelIds: Set<String> = setOf(),
+    val availableModels: ImmutableList<Model> = persistentListOf(),
+    val isDownloading: Boolean = false,
+    val downloadProgress: Float = 0f,
     val isPersonLoading: Boolean = false,
     val isAnalyzing: Boolean = false,
     val isExpanded: Boolean = false,
@@ -28,6 +36,10 @@ data class HomeUiState(
 
 @Immutable
 sealed interface HomeSideEffect {
+    data class ShowToast(
+        val message: UiText,
+    ) : HomeSideEffect
+
     data class ShareImage(
         val uriString: String,
     ) : HomeSideEffect
@@ -35,6 +47,10 @@ sealed interface HomeSideEffect {
 
 sealed interface HomeUiEvent : CircuitUiEvent {
     data object InitSideEffect : HomeUiEvent
+
+    data class OnDownloadModelClick(
+        val model: Model,
+    ) : HomeUiEvent
 
     data object OnStartAnalysisClicked : HomeUiEvent
 

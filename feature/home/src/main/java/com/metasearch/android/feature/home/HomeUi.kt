@@ -12,24 +12,33 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,9 +61,11 @@ import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.permissions.api.ui.PermissionsState
 import com.metasearch.android.core.ui.MetaSearchScaffold
+import com.metasearch.android.core.ui.component.MetaSearchDivider
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
 import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 import com.metasearch.android.feature.home.component.HomeHeader
+import com.metasearch.android.feature.home.component.ModelItem
 import com.metasearch.android.feature.home.component.PartialAccessBanner
 import com.metasearch.android.feature.home.component.PersonCircleItem
 import com.metasearch.android.feature.home.mock.mock
@@ -64,6 +75,7 @@ import com.metasearch.android.feature.screens.component.MetaSearchMainTabItem
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dev.zacsweers.metro.AppScope
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 
 @CircuitInject(HomeScreen::class, AppScope::class)
 @Composable
@@ -71,6 +83,9 @@ fun HomeUi(
     modifier: Modifier = Modifier,
     state: HomeUiState,
 ) {
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
     val permissionState = PermissionsState.rememberPermissionsState(
         permissions = persistentListOf(
             Manifest.permission.READ_MEDIA_IMAGES,
@@ -84,82 +99,127 @@ fun HomeUi(
         eventSink = state.eventSink,
     )
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        MetaSearchScaffold(
-            modifier = modifier.fillMaxSize(),
-            contentWindowInsets = WindowInsets(bottom = 0),
-            bottomBar = {
-                MetaSearchMainBottomBar(
-                    modifier = modifier
-                        .padding(bottom = MetaSearchTheme.spacing.spacing3),
-                    currentTab = MetaSearchMainTabItem.HOME,
-                    onTabSelected = {
-                        state.eventSink(HomeUiEvent.OnTabClick(it.screen))
-                    },
-                )
-            },
-        ) { innerPadding ->
-            HomeUiContent(
-                state = state,
-                innerPadding = innerPadding,
-                permissionState = permissionState,
-            )
-        }
-
-        AnimatedVisibility(
-            visible = state.selectedLongClickImage != null,
-            modifier = Modifier.zIndex(5f),
-            enter = fadeIn(),
-            exit = fadeOut(),
-        ) {
-            Box(
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.7f))
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                    ) {
-                        state.eventSink(HomeUiEvent.OnLongClickCancel)
-                    },
-                contentAlignment = Alignment.Center,
+                    .width(300.dp)
+                    .fillMaxHeight()
             ) {
-                state.selectedLongClickImage?.let { uri ->
-                    Icon(
-                        painter = painterResource(R.drawable.ic_image_share),
-                        contentDescription = null,
-                        tint = LightPink,
-                        modifier = Modifier
-                            .align(Alignment.TopStart)
-                            .offset {
-                                IntOffset(
-                                    x = (state.selectedOffset.x + 20).toInt(),
-                                    y = (state.selectedOffset.y - 120).toInt(),
-                                )
-                            }
-                            .size(50.dp)
-                            .clickable {
-                                state.eventSink(HomeUiEvent.OnShareRelease(uri))
-                            },
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(MetaSearchTheme.spacing.spacing4)
+                ) {
+                    Text(
+                        text = stringResource(R.string.home_drawer_ai_settings_title),
+                        modifier = Modifier.padding(bottom = MetaSearchTheme.spacing.spacing3)
                     )
-                    MetaSearchSquareImage(
-                        model = uri,
-                        modifier = Modifier
-                            .align(Alignment.TopStart)
-                            .offset {
-                                IntOffset(
-                                    x = state.selectedOffset.x.toInt(),
-                                    y = state.selectedOffset.y.toInt(),
-                                )
-                            }
-                            .size(80.dp)
-                            .graphicsLayer {
-                                scaleX = 1.2f
-                                scaleY = 1.2f
-                                rotationZ = -4f
-                            },
-                        contentDescription = null,
+                    MetaSearchDivider()
+                    Spacer(modifier = Modifier.size(MetaSearchTheme.spacing.spacing3))
+
+                    LazyColumn {
+                        items(state.availableModels) { model ->
+                            val isThisModelDownloading = state.isDownloading && state.downloadingModelId == model.modelId
+                            val isThisModelInstalled = state.installedModelIds.contains(model.modelId)
+
+                            ModelItem(
+                                model = model,
+                                state.isDownloading && (model.modelId == state.downloadingModelId),
+                                isInstalled = isThisModelInstalled,
+                                downloadProgress = if (isThisModelDownloading) state.downloadProgress else 0f,
+                                onDownloadClick = { selectedModel ->
+                                    state.eventSink(HomeUiEvent.OnDownloadModelClick(selectedModel))
+                                }
+                            )
+                            MetaSearchDivider(modifier = Modifier.padding(vertical = MetaSearchTheme.spacing.spacing2))
+                        }
+                    }
+                }
+            }
+        }
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            MetaSearchScaffold(
+                modifier = modifier.fillMaxSize(),
+                contentWindowInsets = WindowInsets(bottom = 0),
+                bottomBar = {
+                    MetaSearchMainBottomBar(
+                        modifier = modifier
+                            .padding(bottom = MetaSearchTheme.spacing.spacing3),
+                        currentTab = MetaSearchMainTabItem.HOME,
+                        onTabSelected = {
+                            state.eventSink(HomeUiEvent.OnTabClick(it.screen))
+                        },
                     )
+                },
+            ) { innerPadding ->
+                HomeUiContent(
+                    state = state,
+                    onMenuClick = {
+                        scope.launch { drawerState.open() }
+                    },
+                    innerPadding = innerPadding,
+                    permissionState = permissionState,
+                )
+            }
+
+            AnimatedVisibility(
+                visible = state.selectedLongClickImage != null,
+                modifier = Modifier.zIndex(5f),
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.7f))
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                        ) {
+                            state.eventSink(HomeUiEvent.OnLongClickCancel)
+                        },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    state.selectedLongClickImage?.let { uri ->
+                        Icon(
+                            painter = painterResource(R.drawable.ic_image_share),
+                            contentDescription = null,
+                            tint = LightPink,
+                            modifier = Modifier
+                                .align(Alignment.TopStart)
+                                .offset {
+                                    IntOffset(
+                                        x = (state.selectedOffset.x + 20).toInt(),
+                                        y = (state.selectedOffset.y - 120).toInt(),
+                                    )
+                                }
+                                .size(50.dp)
+                                .clickable {
+                                    state.eventSink(HomeUiEvent.OnShareRelease(uri))
+                                },
+                        )
+                        MetaSearchSquareImage(
+                            model = uri,
+                            modifier = Modifier
+                                .align(Alignment.TopStart)
+                                .offset {
+                                    IntOffset(
+                                        x = state.selectedOffset.x.toInt(),
+                                        y = state.selectedOffset.y.toInt(),
+                                    )
+                                }
+                                .size(80.dp)
+                                .graphicsLayer {
+                                    scaleX = 1.2f
+                                    scaleY = 1.2f
+                                    rotationZ = -4f
+                                },
+                            contentDescription = null,
+                        )
+                    }
                 }
             }
         }
@@ -169,6 +229,7 @@ fun HomeUi(
 @Composable
 private fun HomeUiContent(
     state: HomeUiState,
+    onMenuClick: () -> Unit,
     innerPadding: PaddingValues,
     permissionState: PermissionsState,
 ) {
@@ -180,6 +241,7 @@ private fun HomeUiContent(
             .statusBarsPadding(),
     ) {
         HomeHeader(
+            onMenuClick = onMenuClick,
             onUploadClick = {
                 state.eventSink(HomeUiEvent.OnStartAnalysisClicked)
             },

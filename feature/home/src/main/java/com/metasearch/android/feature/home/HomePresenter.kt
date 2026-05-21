@@ -3,6 +3,7 @@ package com.metasearch.android.feature.home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -11,11 +12,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.paging.cachedIn
 import androidx.work.WorkInfo
+import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.worker.api.usecase.WorkScheduleUseCase
 import com.metasearch.android.core.worker.api.usecase.WorkerStatusUseCase
 import com.metasearch.android.data.domain.Person
 import com.metasearch.android.domain.gallery.api.repository.GalleryRepository
 import com.metasearch.android.domain.person.api.usecase.GetHomeDisplayPersonsUseCase
+import com.metasearch.android.domain.search.api.repository.ModelRepository
+import com.metasearch.android.domain.search.api.repository.SearchRepository
+import com.metasearch.android.domain.search.api.usecase.StartModelDownloadUseCase
+import com.metasearch.android.feature.home.HomeSideEffect.*
 import com.metasearch.android.feature.home.worker.ImageAnalysisWorker
 import com.metasearch.android.feature.screens.HomeScreen
 import com.metasearch.android.feature.screens.PersonDetailScreen
@@ -39,6 +45,9 @@ class HomePresenter(
     private val getHomeDisplayPersonsUseCase: GetHomeDisplayPersonsUseCase,
     private val workScheduleUseCase: WorkScheduleUseCase,
     private val workerStatusUseCase: WorkerStatusUseCase,
+    private val searchRepository: SearchRepository,
+    private val startModelDownloadUseCase: StartModelDownloadUseCase,
+    private val modelRepository: ModelRepository,
 ) : Presenter<HomeUiState> {
 
     @CircuitInject(HomeScreen::class, AppScope::class)
@@ -56,6 +65,16 @@ class HomePresenter(
         val analisysStatus by workerStatusUseCase
             .monitoringUniqueJobStatus("ImageAnalysisWork")
             .collectAsState(initial = null)
+
+        val downloadWorkInfo by workerStatusUseCase
+            .monitorUniqueJob("GlobalModelDownload")
+            .collectAsState(initial = null)
+
+        val availableModels = rememberRetained { modelRepository.getAllModels().toPersistentList() }
+        val isModelAvailable by remember {
+            derivedStateOf { searchRepository.isLocalModelAvailable() }
+        }
+
         var isExpanded by rememberRetained { mutableStateOf(false) }
 
         val localPersons by getHomeDisplayPersonsUseCase()
@@ -78,6 +97,14 @@ class HomePresenter(
             when (event) {
                 HomeUiEvent.InitSideEffect -> {
                     sideEffect = null
+                }
+
+                is HomeUiEvent.OnDownloadModelClick -> {
+                    if (downloadWorkInfo?.state == WorkInfo.State.RUNNING) {
+                        sideEffect = ShowToast(UiText.StringResource(R.string.home_screen_ai_download_alert))
+                    } else {
+                        startModelDownloadUseCase.invoke(event.model)
+                    }
                 }
 
                 HomeUiEvent.OnStartAnalysisClicked -> {
@@ -127,7 +154,7 @@ class HomePresenter(
                 }
 
                 is HomeUiEvent.OnShareRelease -> {
-                    sideEffect = HomeSideEffect.ShareImage(event.imageUriString)
+                    sideEffect = ShareImage(event.imageUriString)
                     selectedLongClickImage = null
                 }
 
@@ -138,6 +165,12 @@ class HomePresenter(
         }
 
         return HomeUiState(
+            isModelAvailable = isModelAvailable,
+            availableModels = availableModels,
+            installedModelIds = if (isModelAvailable) setOf("Gemma-4-E2B-it") else emptySet(),
+            downloadingModelId = if (downloadWorkInfo?.state == WorkInfo.State.RUNNING) "Gemma-4-E2B-it" else null,
+            isDownloading = downloadWorkInfo?.state == WorkInfo.State.RUNNING,
+            downloadProgress = downloadWorkInfo?.progress?.getFloat("KEY_PROGRESS", 0f) ?: 0f,
             isPersonLoading = isPersonLoading,
             isAnalyzing = analisysStatus == WorkInfo.State.RUNNING,
             isExpanded = isExpanded,

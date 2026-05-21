@@ -25,6 +25,7 @@ import com.metasearch.android.feature.home.R
 @Composable
 fun HomeHeader(
     modifier: Modifier = Modifier,
+    onMenuClick: () -> Unit,
     onUploadClick: () -> Unit,
     isAnalyzing: Boolean,
 ) {
@@ -34,6 +35,15 @@ fun HomeHeader(
                 .padding(MetaSearchTheme.spacing.spacing4),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            IconButton(onClick = onMenuClick) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(R.drawable.ic_menu_burger),
+                    tint = Neutral800,
+                    contentDescription = "Menu Icon",
+                )
+            }
+
             Text(
                 text = stringResource(R.string.home_screen_header),
                 style = MetaSearchTheme.typography.headlineSmall,
@@ -67,6 +77,7 @@ fun HomeHeaderPreview() {
     MetaSearchTheme {
         HomeHeader(
             isAnalyzing = true,
+            onMenuClick = {},
             onUploadClick = {},
         )
     }
