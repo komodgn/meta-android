@@ -2,6 +2,7 @@
     <string name="nl_search_screen_header">Search</string>
     <string name="nl_search_text_field_placeholder">Food photos taken in Seoul on a summer night</string>
     <string name="nl_search_screen_result_label">Search results</string>
+    <string name="nl_search_screen_ondevice_toggle">Local Search</string>
 
     <string name="search_screen_empty_result_message">No search results.</string>
 
