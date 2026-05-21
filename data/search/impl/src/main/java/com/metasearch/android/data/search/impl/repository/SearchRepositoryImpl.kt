@@ -1,21 +1,32 @@
 package com.metasearch.android.data.search.impl.repository
 
+import android.util.Log
+import com.google.ai.edge.litertlm.Backend
+import com.google.ai.edge.litertlm.Engine
+import com.google.ai.edge.litertlm.EngineConfig
 import com.metasearch.android.core.common.utils.runSuspendCatching
 import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.data.domain.Circle
 import com.metasearch.android.data.domain.DragSearchResult
 import com.metasearch.android.data.remote.search.SearchClient
+import com.metasearch.android.data.remote.search.constant.PromptConstants
 import com.metasearch.android.data.remote.search.util.CypherQueryGenerator
 import com.metasearch.android.data.search.impl.mapper.toModel
+import com.metasearch.android.domain.file.api.repository.FileRepository
+import com.metasearch.android.domain.search.api.repository.ModelRepository
 import com.metasearch.android.domain.search.api.repository.SearchRepository
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import java.io.File
 
+private const val TAG = "SearchRepo"
+
 @SingleIn(DataScope::class)
 @Inject
 class SearchRepositoryImpl(
     private val searchClient: SearchClient,
+    private val fileRepository: FileRepository,
+    private val modelRepository: ModelRepository,
 ) : SearchRepository {
 
     override suspend fun analyzeFocusingImage(
@@ -30,6 +41,57 @@ class SearchRepositoryImpl(
     override suspend fun extractKeywordsFromNL(query: String): List<String> = runSuspendCatching {
         searchClient.extractKeywords(query)
     }.getOrDefault(emptyList())
+
+    override suspend fun extractKeywordsFromLocalNL(query: String): List<String> = runSuspendCatching {
+        val model = modelRepository.getModel("Gemma-4-E2B-it") ?: throw IllegalStateException("Model not found")
+
+        // Retrieve the path where the model was unzipped by the Worker
+        // Location structure: externalFilesDir + modelDir + version + unzippedDir
+        val externalFilesDir = fileRepository.getExternalFile("").absolutePath
+        val modelBaseDir = File(externalFilesDir, listOf(model.normalizedName, model.version).joinToString(File.separator))
+        val unzippedModelPath = File(modelBaseDir, model.unzipDir).absolutePath
+        val targetFileName = "gemma-4-E2B-it.litertlm"
+        val modelFile = File(unzippedModelPath, targetFileName)
+
+        if (!modelFile.exists()) {
+            Log.e(TAG, "ERROR: Model file not found at: ${modelFile.absolutePath}")
+            return@runSuspendCatching emptyList()
+        }
+        try {
+            val engineConfig = EngineConfig(
+                modelPath = modelFile.absolutePath,
+                backend = Backend.GPU(),
+                maxNumTokens = 512,
+            )
+
+            val engine = Engine(engineConfig)
+            engine.initialize()
+
+            Log.d(TAG, "DEBUG: Creating Conversation...")
+            val conversation = engine.createConversation()
+
+            Log.d(TAG, "DEBUG: Sending Message: $query")
+            val response = conversation.sendMessage(PromptConstants.NL_SEARCH_BASIC_PROMPT + query)
+
+            val rawResult = response?.toString() ?: "NULL_RESPONSE"
+            Log.d(TAG, "DEBUG: Raw Result: '$rawResult'")
+
+            engine.close()
+
+            return@runSuspendCatching rawResult.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+        } catch (e: Exception) {
+            Log.e(TAG, "ERROR: Exception during inference", e)
+            return@runSuspendCatching emptyList()
+        }
+    }.getOrDefault(emptyList())
+
+    override fun isLocalModelAvailable(): Boolean {
+        val model = modelRepository.getModel("Gemma-4-E2B-it") ?: return false
+        Log.d(TAG, model.name)
+        val path = modelRepository.getLocalFilePath(model, fileRepository.getExternalFile("").absolutePath, model.downloadFileName)
+        val file = File(path)
+        return file.exists() && file.length() > 0
+    }
 
     override suspend fun findPhotosByDetectedObjects(
         dbName: String,

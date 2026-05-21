@@ -19,6 +19,9 @@ dependencies {
     implementation(projects.domain.gallery.api)
     implementation(projects.domain.person.api)
     implementation(projects.domain.device.api)
+    implementation(projects.domain.file.api)
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.mlkit.genai.prompt)
+    implementation(libs.litertlm)
 }

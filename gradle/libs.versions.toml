@@ -21,6 +21,9 @@ androidxTestCore = "1.6.1"
 androidxDataStore = "1.2.0"
 coreSplashscreen = "1.2.0"
 
+mlkit-genai-prompt = "1.0.0-beta2"
+litertlm = "0.11.0"
+
 ## Paging
 paging = "3.3.6"
 
@@ -118,6 +121,9 @@ androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscree
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
 androidx-compose-paging = { module = "androidx.paging:paging-compose", version.ref = "paging" }
 androidx-paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
+
+litertlm = { group = "com.google.ai.edge.litertlm", name = "litertlm-android", version.ref = "litertlm" }
+mlkit-genai-prompt = { group = "com.google.mlkit", name = "genai-prompt", version.ref = "mlkit-genai-prompt" }
 
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 
