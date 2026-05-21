@@ -5,10 +5,12 @@ import com.metasearch.android.data.search.impl.repository.ModelRepositoryImpl
 import com.metasearch.android.data.search.impl.repository.SearchRepositoryImpl
 import com.metasearch.android.data.search.impl.usecase.DragSearchUseCaseImpl
 import com.metasearch.android.data.search.impl.usecase.NLSearchUseCaseImpl
+import com.metasearch.android.data.search.impl.usecase.StartModelDownloadUseCaseImpl
 import com.metasearch.android.domain.search.api.repository.ModelRepository
 import com.metasearch.android.domain.search.api.repository.SearchRepository
 import com.metasearch.android.domain.search.api.usecase.DragSearchUseCase
 import com.metasearch.android.domain.search.api.usecase.NLSearchUseCase
+import com.metasearch.android.domain.search.api.usecase.StartModelDownloadUseCase
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 
@@ -26,4 +28,7 @@ interface SearchDataGraph {
 
     @Binds
     val NLSearchUseCaseImpl.bind: NLSearchUseCase
+
+    @Binds
+    val StartModelDownloadUseCaseImpl.bind: StartModelDownloadUseCase
 }

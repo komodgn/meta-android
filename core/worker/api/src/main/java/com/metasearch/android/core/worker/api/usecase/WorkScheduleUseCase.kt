@@ -17,6 +17,13 @@ interface WorkScheduleUseCase {
         params: Data.Builder.() -> Data.Builder = { this },
     )
 
+    fun scheduleNow(
+        workName: String,
+        workerClassName: String,
+        options: WorkOptions = WorkOptions(),
+        params: Data.Builder.() -> Data.Builder = { this },
+    )
+
     fun cancelUniqueWork(workName: String)
 
     fun cancelAllScheduledWork()
