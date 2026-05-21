@@ -1,0 +1,50 @@
+{
+    "models": [
+        {
+            "name": "Gemma-4-E2B-it",
+            "modelId": "litert-community/gemma-4-E2B-it-litert-lm",
+            "modelFile": "gemma-4-E2B-it.litertlm",
+            "description": "A variant of Gemma 4 E2B ready for deployment on Android using [LiteRT-LM](https://github.com/google-ai-edge/LiteRT-LM/blob/main/docs/api/kotlin/getting_started.md). It supports multi-modality input, with up to 32K context length.",
+            "sizeInBytes": 2588147712,
+            "minDeviceMemoryInGb": 8,
+            "commitHash": "6e5c4f1e395deb959c494953478fa5cec4b8008f",
+            "llmSupportImage": true,
+            "llmSupportAudio": true,
+            "capabilities": ["llm_thinking", "speculative_decoding"],
+            "defaultConfig": {
+                "topK": 64,
+                "topP": 0.95,
+                "temperature": 1.0,
+                "maxContextLength": 32000,
+                "maxTokens": 4000,
+                "accelerators": "gpu,cpu",
+                "visionAccelerator": "gpu"
+            },
+            "taskTypes": [
+                "llm_chat",
+                "llm_prompt_lab",
+                "llm_agent_chat",
+                "llm_ask_image",
+                "llm_ask_audio"
+            ],
+            "bestForTaskTypes": [
+                "llm_chat",
+                "llm_prompt_lab",
+                "llm_agent_chat",
+                "llm_ask_image",
+                "llm_ask_audio"
+            ],
+            "capabilityToTaskTypes": {
+                "llm_thinking": ["llm_chat", "llm_ask_image", "llm_ask_audio"],
+                "speculative_decoding": ["llm_chat", "llm_ask_image", "llm_ask_audio", "llm_prompt_lab"]
+            },
+            "updatableModelFiles": [
+                {
+                    "fileName": "gemma-4-E2B-it.litertlm",
+                    "commitHash": "7fa1d78473894f7e736a21d920c3aa80f950c0db"
+                }
+            ],
+            "updateInfo": "The updated model now leverages Gemma 4's built-in Multi Token Prediction (MTP) for faster decode on select workloads. You can enable or disable MTP using a new toggle in chat configuration."
+        }
+    ]
+}
