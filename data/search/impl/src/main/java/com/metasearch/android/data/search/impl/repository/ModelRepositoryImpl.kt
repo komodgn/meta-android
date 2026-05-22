@@ -10,6 +10,9 @@ import com.metasearch.android.domain.search.api.repository.ModelRepository
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.json.Json
+import java.io.File
+
+private const val TAG = "ModelRepo"
 
 @SingleIn(DataScope::class)
 @Inject
@@ -41,5 +44,17 @@ class ModelRepositoryImpl(
 
     override fun getLocalFilePath(model: Model, basePath: String, fileName: String): String {
         return model.getPath(basePath, fileName)
+    }
+
+    override fun deleteModel(modelDir: String, version: String) {
+        val externalFilesDir = context.getExternalFilesDir(null) ?: return
+        val targetDir = File(externalFilesDir, listOf(modelDir, version).joinToString(File.separator))
+
+        if (targetDir.exists() && targetDir.absolutePath.startsWith(externalFilesDir.absolutePath)) {
+            targetDir.deleteRecursively()
+            Log.d(TAG, "Model deleted at: ${targetDir.absolutePath}")
+        } else {
+            Log.e(TAG, "Invalid path or model not found: ${targetDir.absolutePath}")
+        }
     }
 }

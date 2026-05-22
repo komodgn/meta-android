@@ -10,6 +10,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.metasearch.android.core.common.utils.UiText.StringResource
 import com.metasearch.android.core.common.utils.handleException
+import com.metasearch.android.domain.search.api.repository.ModelRepository
 import com.metasearch.android.domain.search.api.repository.SearchRepository
 import com.metasearch.android.domain.search.api.usecase.NLSearchUseCase
 import com.metasearch.android.feature.screens.NLSearchScreen
@@ -36,6 +37,7 @@ class NLSearchPresenter(
     @Assisted private val navigator: Navigator,
     private val nlSearchUseCase: NLSearchUseCase,
     private val searchRepository: SearchRepository,
+    private val modelRepository: ModelRepository,
 ) : Presenter<NLSearchUiState> {
 
     @CircuitInject(NLSearchScreen::class, AppScope::class)
@@ -52,8 +54,11 @@ class NLSearchPresenter(
         var inputString by rememberRetained { mutableStateOf("") }
         var resultImages by rememberRetained { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
 
-        val isLocalEngineReady by remember {
-            derivedStateOf { searchRepository.isLocalModelAvailable() }
+        val isLocalEngineReady by remember(modelRepository.getAllModels()) {
+            derivedStateOf {
+                val model = modelRepository.getModel("Gemma-4-E2B-it")
+                model != null && searchRepository.isLocalModelAvailable(model)
+            }
         }
         var isLocalSearchEnabled by remember { mutableStateOf(false) }
         Log.d(TAG, isLocalSearchEnabled.toString())

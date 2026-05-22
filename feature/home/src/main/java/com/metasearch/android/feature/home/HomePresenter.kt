@@ -21,7 +21,6 @@ import com.metasearch.android.domain.person.api.usecase.GetHomeDisplayPersonsUse
 import com.metasearch.android.domain.search.api.repository.ModelRepository
 import com.metasearch.android.domain.search.api.repository.SearchRepository
 import com.metasearch.android.domain.search.api.usecase.StartModelDownloadUseCase
-import com.metasearch.android.feature.home.HomeSideEffect.*
 import com.metasearch.android.feature.home.worker.ImageAnalysisWorker
 import com.metasearch.android.feature.screens.HomeScreen
 import com.metasearch.android.feature.screens.PersonDetailScreen
@@ -70,9 +69,13 @@ class HomePresenter(
             .monitorUniqueJob("GlobalModelDownload")
             .collectAsState(initial = null)
 
-        val availableModels = rememberRetained { modelRepository.getAllModels().toPersistentList() }
-        val isModelAvailable by remember {
-            derivedStateOf { searchRepository.isLocalModelAvailable() }
+        val installedModelIds by remember(downloadWorkInfo) {
+            derivedStateOf {
+                modelRepository.getAllModels()
+                    .filter { model -> searchRepository.isLocalModelAvailable(model) }
+                    .map { it.modelId }
+                    .toSet()
+            }
         }
 
         var isExpanded by rememberRetained { mutableStateOf(false) }
@@ -101,10 +104,17 @@ class HomePresenter(
 
                 is HomeUiEvent.OnDownloadModelClick -> {
                     if (downloadWorkInfo?.state == WorkInfo.State.RUNNING) {
-                        sideEffect = ShowToast(UiText.StringResource(R.string.home_screen_ai_download_alert))
+                        sideEffect = HomeSideEffect.ShowToast(UiText.StringResource(R.string.home_screen_ai_download_alert))
                     } else {
                         startModelDownloadUseCase.invoke(event.model)
                     }
+                }
+
+                is HomeUiEvent.OnDeleteModelClick -> {
+                    modelRepository.deleteModel(
+                        event.model.normalizedName,
+                        event.model.version,
+                    )
                 }
 
                 HomeUiEvent.OnStartAnalysisClicked -> {
@@ -154,7 +164,7 @@ class HomePresenter(
                 }
 
                 is HomeUiEvent.OnShareRelease -> {
-                    sideEffect = ShareImage(event.imageUriString)
+                    sideEffect = HomeSideEffect.ShareImage(event.imageUriString)
                     selectedLongClickImage = null
                 }
 
@@ -165,9 +175,8 @@ class HomePresenter(
         }
 
         return HomeUiState(
-            isModelAvailable = isModelAvailable,
-            availableModels = availableModels,
-            installedModelIds = if (isModelAvailable) setOf("Gemma-4-E2B-it") else emptySet(),
+            availableModels = modelRepository.getAllModels().toPersistentList(),
+            installedModelIds = installedModelIds,
             downloadingModelId = if (downloadWorkInfo?.state == WorkInfo.State.RUNNING) "Gemma-4-E2B-it" else null,
             isDownloading = downloadWorkInfo?.state == WorkInfo.State.RUNNING,
             downloadProgress = downloadWorkInfo?.progress?.getFloat("KEY_PROGRESS", 0f) ?: 0f,

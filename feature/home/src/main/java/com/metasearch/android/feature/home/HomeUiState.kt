@@ -52,6 +52,10 @@ sealed interface HomeUiEvent : CircuitUiEvent {
         val model: Model,
     ) : HomeUiEvent
 
+    data class OnDeleteModelClick(
+        val model: Model,
+    ) : HomeUiEvent
+
     data object OnStartAnalysisClicked : HomeUiEvent
 
     data object OnPersonSectionExpand : HomeUiEvent

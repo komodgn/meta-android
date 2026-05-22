@@ -9,6 +9,7 @@ import com.metasearch.android.core.di.annotation.IoDispatcher
 import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.data.domain.Circle
 import com.metasearch.android.data.domain.DragSearchResult
+import com.metasearch.android.data.domain.Model
 import com.metasearch.android.data.remote.search.SearchClient
 import com.metasearch.android.data.remote.search.constant.PromptConstants
 import com.metasearch.android.data.remote.search.util.CypherQueryGenerator
@@ -90,11 +91,16 @@ class SearchRepositoryImpl(
         }.getOrDefault(emptyList())
     }
 
-    override fun isLocalModelAvailable(): Boolean {
-        val model = modelRepository.getModel("Gemma-4-E2B-it") ?: return false
+    override fun isLocalModelAvailable(model: Model): Boolean {
+        val model = modelRepository.getModel(model.name) ?: return false
         Log.d(TAG, model.name)
-        val path = modelRepository.getLocalFilePath(model, fileRepository.getExternalFile("").absolutePath, model.downloadFileName)
+        val path = modelRepository.getLocalFilePath(
+            model,
+            fileRepository.getExternalFile("").absolutePath,
+            model.downloadFileName,
+        )
         val file = File(path)
+        Log.d(TAG, "file: $path")
         return file.exists() && file.length() > 0
     }
 

@@ -105,16 +105,16 @@ fun HomeUi(
             ModalDrawerSheet(
                 modifier = Modifier
                     .width(300.dp)
-                    .fillMaxHeight()
+                    .fillMaxHeight(),
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(MetaSearchTheme.spacing.spacing4)
+                        .padding(MetaSearchTheme.spacing.spacing4),
                 ) {
                     Text(
                         text = stringResource(R.string.home_drawer_ai_settings_title),
-                        modifier = Modifier.padding(bottom = MetaSearchTheme.spacing.spacing3)
+                        modifier = Modifier.padding(bottom = MetaSearchTheme.spacing.spacing3),
                     )
                     MetaSearchDivider()
                     Spacer(modifier = Modifier.size(MetaSearchTheme.spacing.spacing3))
@@ -126,11 +126,14 @@ fun HomeUi(
 
                             ModelItem(
                                 model = model,
-                                state.isDownloading && (model.modelId == state.downloadingModelId),
+                                isThisModelDownloading,
                                 isInstalled = isThisModelInstalled,
                                 downloadProgress = if (isThisModelDownloading) state.downloadProgress else 0f,
                                 onDownloadClick = { selectedModel ->
                                     state.eventSink(HomeUiEvent.OnDownloadModelClick(selectedModel))
+                                },
+                                onDeleteClick = { selectedModel ->
+                                    state.eventSink(HomeUiEvent.OnDeleteModelClick(selectedModel))
                                 }
                             )
                             MetaSearchDivider(modifier = Modifier.padding(vertical = MetaSearchTheme.spacing.spacing2))
@@ -138,7 +141,7 @@ fun HomeUi(
                     }
                 }
             }
-        }
+        },
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             MetaSearchScaffold(
