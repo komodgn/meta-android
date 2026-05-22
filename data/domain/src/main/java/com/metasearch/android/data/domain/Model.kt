@@ -16,7 +16,7 @@ data class Model(
 
     val localFileRelativeDirPathOverride: String = "",
     val localModelFilePathOverride: String = "",
-    val imported: Boolean = false
+    val imported: Boolean = false,
 ) {
     var normalizedName: String = ""
     var totalBytes: Long = 0L

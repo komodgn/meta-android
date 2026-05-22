@@ -108,7 +108,7 @@ private fun NLSearchUiContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MetaSearchTheme.spacing.spacing2),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = stringResource(R.string.nl_search_screen_result_label),
@@ -118,7 +118,7 @@ private fun NLSearchUiContent(
                 Text(
                     text = stringResource(R.string.nl_search_screen_ondevice_toggle),
                     color = Neutral500,
-                    modifier = Modifier.padding(end = MetaSearchTheme.spacing.spacing1)
+                    modifier = Modifier.padding(end = MetaSearchTheme.spacing.spacing1),
                 )
                 Spacer(modifier = Modifier.width(MetaSearchTheme.spacing.spacing2))
                 Switch(

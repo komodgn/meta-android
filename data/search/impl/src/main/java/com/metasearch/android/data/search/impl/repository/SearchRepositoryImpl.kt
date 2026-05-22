@@ -49,15 +49,20 @@ class SearchRepositoryImpl(
 
     override suspend fun extractKeywordsFromLocalNL(query: String): List<String> = withContext(ioDispatcher) {
         runSuspendCatching {
-            val model = modelRepository.getModel("Gemma-4-E2B-it") ?: throw IllegalStateException("Model not found")
-
+            val model = checkNotNull(modelRepository.getModel("Gemma-4-E2B-it")) {
+                "Model not found"
+            }
             // Retrieve the path where the model was unzipped by the Worker
             // Location structure: externalFilesDir + modelDir + version + unzippedDir
             val externalFilesDir = fileRepository.getExternalFile("").absolutePath
-            val modelBaseDir = File(externalFilesDir, listOf(model.normalizedName, model.version).joinToString(File.separator))
+            val modelBaseDir = File(
+                externalFilesDir,
+                listOf(model.normalizedName, model.version).joinToString(File.separator),
+            )
             val unzippedModelPath = File(modelBaseDir, model.unzipDir).absolutePath
             val modelFile = File(unzippedModelPath, model.downloadFileName)
-
+            Log.d(TAG, "DEBUG: Checking file at: ${modelFile.absolutePath}")
+            Log.d(TAG, "DEBUG: File exists? ${modelFile.exists()}")
             if (!modelFile.exists()) {
                 Log.e(TAG, "ERROR: Model file not found at: ${modelFile.absolutePath}")
                 return@runSuspendCatching emptyList()

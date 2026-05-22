@@ -27,7 +27,7 @@ class StartModelDownloadUseCaseImpl(
             options = WorkOptions(
                 networkRequirement = NetworkType.CONNECTED,
                 requiresCharging = false,
-                existingWorkPolicy = ExistingWorkPolicy.KEEP
+                existingWorkPolicy = ExistingWorkPolicy.KEEP,
             ),
             params = {
                 putString(ModelDownloadKeys.KEY_MODEL_NAME, model.name)
@@ -38,7 +38,7 @@ class StartModelDownloadUseCaseImpl(
                 putBoolean(ModelDownloadKeys.KEY_MODEL_IS_ZIP, model.isZip)
                 putString(ModelDownloadKeys.KEY_MODEL_UNZIPPED_DIR, model.unzipDir)
                 putLong(ModelDownloadKeys.KEY_MODEL_TOTAL_BYTES, safeTotalBytes)
-            }
+            },
         )
     }
 }

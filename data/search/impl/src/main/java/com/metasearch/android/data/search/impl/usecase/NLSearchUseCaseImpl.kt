@@ -33,7 +33,6 @@ class NLSearchUseCaseImpl(
             searchRepository.extractKeywordsFromNL(query)
         }
 
-
         if (entities.isEmpty()) return@runSuspendCatching NLSearchResult(emptyList())
 
         val entityKey = entities.joinToString(",")

@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ModelListResponse(
-    @SerialName("models") val models: List<ModelResponse>
+    @SerialName("models") val models: List<ModelResponse>,
 )
 
 @Serializable
@@ -25,7 +25,7 @@ data class ModelResponse(
     @SerialName("bestForTaskTypes") val bestForTaskTypes: List<String>,
     @SerialName("capabilityToTaskTypes") val capabilityToTaskTypes: Map<String, List<String>>,
     @SerialName("updatableModelFiles") val updatableModelFiles: List<ModelFileResponse>,
-    @SerialName("updateInfo") val updateInfo: String
+    @SerialName("updateInfo") val updateInfo: String,
 )
 
 @Serializable
@@ -36,11 +36,11 @@ data class DefaultConfigResponse(
     @SerialName("maxContextLength") val maxContextLength: Int,
     @SerialName("maxTokens") val maxTokens: Int,
     @SerialName("accelerators") val accelerators: String,
-    @SerialName("visionAccelerator") val visionAccelerator: String
+    @SerialName("visionAccelerator") val visionAccelerator: String,
 )
 
 @Serializable
 data class ModelFileResponse(
     @SerialName("fileName") val fileName: String,
-    @SerialName("commitHash") val commitHash: String
+    @SerialName("commitHash") val commitHash: String,
 )
