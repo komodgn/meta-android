@@ -3,6 +3,7 @@ package com.metasearch.android.data.search.impl.usecase
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import com.metasearch.android.core.di.scope.DataScope
+import com.metasearch.android.core.worker.api.constants.ModelDownloadKeys
 import com.metasearch.android.core.worker.api.model.WorkOptions
 import com.metasearch.android.core.worker.api.usecase.WorkScheduleUseCase
 import com.metasearch.android.data.domain.Model
@@ -29,14 +30,14 @@ class StartModelDownloadUseCaseImpl(
                 existingWorkPolicy = ExistingWorkPolicy.KEEP
             ),
             params = {
-                putString("KEY_MODEL_NAME", model.name)
-                putString("KEY_MODEL_URL", model.downloadUrl)
-                putString("KEY_MODEL_COMMIT_HASH", model.version)
-                putString("KEY_MODEL_DOWNLOAD_FILE_NAME", model.downloadFileName)
-                putString("KEY_MODEL_DOWNLOAD_MODEL_DIR", model.normalizedName)
-                putBoolean("KEY_MODEL_IS_ZIP", model.isZip)
-                putString("KEY_MODEL_UNZIPPED_DIR", model.unzipDir)
-                putLong("KEY_MODEL_TOTAL_BYTES", safeTotalBytes)
+                putString(ModelDownloadKeys.KEY_MODEL_NAME, model.name)
+                putString(ModelDownloadKeys.KEY_MODEL_URL, model.downloadUrl)
+                putString(ModelDownloadKeys.KEY_MODEL_COMMIT_HASH, model.version)
+                putString(ModelDownloadKeys.KEY_MODEL_DOWNLOAD_FILE_NAME, model.downloadFileName)
+                putString(ModelDownloadKeys.KEY_MODEL_DOWNLOAD_MODEL_DIR, model.normalizedName)
+                putBoolean(ModelDownloadKeys.KEY_MODEL_IS_ZIP, model.isZip)
+                putString(ModelDownloadKeys.KEY_MODEL_UNZIPPED_DIR, model.unzipDir)
+                putLong(ModelDownloadKeys.KEY_MODEL_TOTAL_BYTES, safeTotalBytes)
             }
         )
     }

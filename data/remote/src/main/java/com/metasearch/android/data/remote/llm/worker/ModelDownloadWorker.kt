@@ -8,6 +8,7 @@ import androidx.work.WorkerParameters
 import com.metasearch.android.core.di.ChildWorkerFactory
 import com.metasearch.android.core.di.WorkerKey
 import com.metasearch.android.core.di.scope.WorkerScope
+import com.metasearch.android.core.worker.api.constants.ModelDownloadKeys
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -41,12 +42,12 @@ class ModelDownloadWorker(
     }
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        val fileUrl = inputData.getString("KEY_MODEL_URL")
-        val version = inputData.getString("KEY_MODEL_COMMIT_HASH") ?: "v1"
-        val fileName = inputData.getString("KEY_MODEL_DOWNLOAD_FILE_NAME")
-        val modelDir = inputData.getString("KEY_MODEL_DOWNLOAD_MODEL_DIR") ?: "models"
-        val isZip = inputData.getBoolean("KEY_MODEL_IS_ZIP", false)
-        val unzippedDir = inputData.getString("KEY_MODEL_UNZIPPED_DIR")
+        val fileUrl = inputData.getString(ModelDownloadKeys.KEY_MODEL_URL)
+        val version = inputData.getString(ModelDownloadKeys.KEY_MODEL_COMMIT_HASH) ?: "v1"
+        val fileName = inputData.getString(ModelDownloadKeys.KEY_MODEL_DOWNLOAD_FILE_NAME)
+        val modelDir = inputData.getString(ModelDownloadKeys.KEY_MODEL_DOWNLOAD_MODEL_DIR) ?: "models"
+        val isZip = inputData.getBoolean(ModelDownloadKeys.KEY_MODEL_IS_ZIP, false)
+        val unzippedDir = inputData.getString(ModelDownloadKeys.KEY_MODEL_UNZIPPED_DIR)
 
         if (fileUrl == null || fileName == null) {
             return@withContext Result.failure()
@@ -89,7 +90,7 @@ class ModelDownloadWorker(
                 throw IOException("HTTP error code: ${connection.responseCode}")
             }
 
-            val totalBytes = inputData.getLong("KEY_MODEL_TOTAL_BYTES", 2253150000L)
+            val totalBytes = inputData.getLong(ModelDownloadKeys.KEY_MODEL_TOTAL_BYTES, 2253150000L)
             var bytesWritten = outputFileBytes
 
             val inputStream = connection.inputStream
