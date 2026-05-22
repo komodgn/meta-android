@@ -50,8 +50,7 @@ class SearchRepositoryImpl(
         val externalFilesDir = fileRepository.getExternalFile("").absolutePath
         val modelBaseDir = File(externalFilesDir, listOf(model.normalizedName, model.version).joinToString(File.separator))
         val unzippedModelPath = File(modelBaseDir, model.unzipDir).absolutePath
-        val targetFileName = "gemma-4-E2B-it.litertlm"
-        val modelFile = File(unzippedModelPath, targetFileName)
+        val modelFile = File(unzippedModelPath, model.downloadFileName)
 
         if (!modelFile.exists()) {
             Log.e(TAG, "ERROR: Model file not found at: ${modelFile.absolutePath}")
