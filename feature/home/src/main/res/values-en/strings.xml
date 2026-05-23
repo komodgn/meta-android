@@ -12,5 +12,5 @@
     <string name="home_drawer_download_button">⬇ Download %1$s</string>
     <string name="home_drawer_model_description">Size: (approx. %1$.1f GB)</string>
     <string name="home_drawer_downloading_percent">Downloading... %1$d%%</string>
-    <string name="home_screen_ai_download_alert">Other models are already available for download.</string>
+    <string name="home_screen_ai_download_alert">Another model is already downloading.</string>
 </resources>
