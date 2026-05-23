@@ -36,7 +36,7 @@ fun ModelItem(
     Column(modifier = modifier.padding(vertical = MetaSearchTheme.spacing.spacing2)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(text = model.name, style = MetaSearchTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
 
@@ -45,7 +45,7 @@ fun ModelItem(
                     Icon(
                         painter = painterResource(R.drawable.ic_trash_xmark),
                         contentDescription = "Delete Model",
-                        tint = Neutral500
+                        tint = Neutral500,
                     )
                 }
             }

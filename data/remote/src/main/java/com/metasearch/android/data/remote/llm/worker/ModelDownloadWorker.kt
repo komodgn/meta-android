@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.metasearch.android.core.di.ChildWorkerFactory
 import com.metasearch.android.core.di.WorkerKey
 import com.metasearch.android.core.di.scope.WorkerScope
@@ -73,13 +74,36 @@ class ModelDownloadWorker(
         } ?: throw IOException("External files dir not found")
     }
 
-    private fun downloadModelFile(fileUrl: String, outputDir: File, fileName: String) {
+    private suspend fun downloadModelFile(fileUrl: String, outputDir: File, fileName: String) {
         val tmpFile = File(outputDir, "$fileName.$TMP_FILE_EXT")
         val connection = createConnection(fileUrl, tmpFile.length())
+        val totalBytes = inputData.getLong(ModelDownloadKeys.KEY_MODEL_TOTAL_BYTES, 1L)
+        val modelName = inputData.getString(ModelDownloadKeys.KEY_MODEL_NAME) ?: "Unknown"
 
         connection.inputStream.use { input ->
             FileOutputStream(tmpFile, true).use { output ->
-                input.copyTo(output)
+                val buffer = ByteArray(8192)
+                var bytesRead: Int
+                var totalBytesRead = tmpFile.length()
+
+                var lastProgressUpdate = 0L
+                while (input.read(buffer).also { bytesRead = it } != -1) {
+                    output.write(buffer, 0, bytesRead)
+                    totalBytesRead += bytesRead
+
+                    val currentTime = System.currentTimeMillis()
+                    if (currentTime - lastProgressUpdate > 1000) {
+                        val progress = totalBytesRead.toFloat() / totalBytes.toFloat()
+
+                        setProgress(
+                            workDataOf(
+                                "KEY_PROGRESS" to progress,
+                                ModelDownloadKeys.KEY_MODEL_NAME to modelName,
+                            ),
+                        )
+                        lastProgressUpdate = currentTime
+                    }
+                }
             }
         }
 

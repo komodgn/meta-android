@@ -121,7 +121,7 @@ fun HomeUi(
 
                     LazyColumn {
                         items(state.availableModels) { model ->
-                            val isThisModelDownloading = state.isDownloading && state.downloadingModelId == model.modelId
+                            val isThisModelDownloading = state.isDownloading && state.downloadingModelId == model.name
                             val isThisModelInstalled = state.installedModelIds.contains(model.modelId)
 
                             ModelItem(
@@ -134,7 +134,7 @@ fun HomeUi(
                                 },
                                 onDeleteClick = { selectedModel ->
                                     state.eventSink(HomeUiEvent.OnDeleteModelClick(selectedModel))
-                                }
+                                },
                             )
                             MetaSearchDivider(modifier = Modifier.padding(vertical = MetaSearchTheme.spacing.spacing2))
                         }

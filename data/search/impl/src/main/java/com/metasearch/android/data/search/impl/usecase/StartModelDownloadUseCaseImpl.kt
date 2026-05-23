@@ -19,6 +19,8 @@ class StartModelDownloadUseCaseImpl(
 ) : StartModelDownloadUseCase {
 
     override fun invoke(model: Model) {
+        model.preProcess()
+
         val safeTotalBytes = if (model.totalBytes > 0) model.totalBytes else 1024L * 1024 * 1024
 
         workScheduleUseCase.scheduleNow(

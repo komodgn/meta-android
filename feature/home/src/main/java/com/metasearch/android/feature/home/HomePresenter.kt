@@ -13,6 +13,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.paging.cachedIn
 import androidx.work.WorkInfo
 import com.metasearch.android.core.common.utils.UiText
+import com.metasearch.android.core.worker.api.constants.ModelDownloadKeys
 import com.metasearch.android.core.worker.api.usecase.WorkScheduleUseCase
 import com.metasearch.android.core.worker.api.usecase.WorkerStatusUseCase
 import com.metasearch.android.data.domain.Person
@@ -69,6 +70,16 @@ class HomePresenter(
         val downloadWorkInfo by workerStatusUseCase
             .monitorUniqueJob("GlobalModelDownload")
             .collectAsState(initial = null)
+
+        val downloadingModelId by remember(downloadWorkInfo) {
+            derivedStateOf {
+                if (downloadWorkInfo?.state == WorkInfo.State.RUNNING) {
+                    downloadWorkInfo?.progress?.getString(ModelDownloadKeys.KEY_MODEL_NAME)
+                } else {
+                    null
+                }
+            }
+        }
 
         val installedModelIds by remember(downloadWorkInfo) {
             derivedStateOf {
@@ -178,7 +189,7 @@ class HomePresenter(
         return HomeUiState(
             availableModels = modelRepository.getAllModels().toPersistentList(),
             installedModelIds = installedModelIds,
-            downloadingModelId = if (downloadWorkInfo?.state == WorkInfo.State.RUNNING) "Gemma-4-E2B-it" else null,
+            downloadingModelId = downloadingModelId,
             isDownloading = downloadWorkInfo?.state == WorkInfo.State.RUNNING,
             downloadProgress = downloadWorkInfo?.progress?.getFloat("KEY_PROGRESS", 0f) ?: 0f,
             isPersonLoading = isPersonLoading,
