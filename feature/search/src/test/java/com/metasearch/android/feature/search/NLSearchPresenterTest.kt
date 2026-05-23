@@ -1,6 +1,8 @@
 package com.metasearch.android.feature.search
 
 import com.google.common.truth.Truth.assertThat
+import com.metasearch.android.domain.search.api.repository.ModelRepository
+import com.metasearch.android.domain.search.api.repository.SearchRepository
 import com.metasearch.android.domain.search.api.usecase.NLSearchUseCase
 import com.metasearch.android.feature.screens.GraphScreen
 import com.metasearch.android.feature.screens.HomeScreen
@@ -19,12 +21,19 @@ class NLSearchPresenterTest {
 
     private val navigator = FakeNavigator(NLSearchScreen)
     private val nlSearchUseCase: NLSearchUseCase = mock()
+    private val searchRepository = mock<SearchRepository>()
+    private val modelRepository = mock<ModelRepository>()
 
     private lateinit var presenter: NLSearchPresenter
 
     @Before
     fun setup() {
-        presenter = NLSearchPresenter(navigator, nlSearchUseCase)
+        presenter = NLSearchPresenter(
+            navigator = navigator,
+            nlSearchUseCase = nlSearchUseCase,
+            searchRepository = searchRepository,
+            modelRepository = modelRepository,
+        )
     }
 
     @Test

@@ -8,8 +8,13 @@ import com.metasearch.android.data.remote.search.response.PhotoResponse
 import com.metasearch.android.data.remote.search.response.Photos
 import com.metasearch.android.data.remote.search.util.CypherQueryGenerator.generateQueryByKeywords
 import com.metasearch.android.data.search.impl.repository.SearchRepositoryImpl
+import com.metasearch.android.domain.file.api.repository.FileRepository
+import com.metasearch.android.domain.search.api.repository.ModelRepository
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -24,10 +29,20 @@ class SearchRepositoryImplTest {
 
     private val searchClient: SearchClient = mock()
     private lateinit var repository: SearchRepositoryImpl
+    private val fileRepository: FileRepository = mock()
+    private val modelRepository: ModelRepository = mock()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val ioDispatcher: CoroutineDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setUp() {
-        repository = SearchRepositoryImpl(searchClient)
+        repository = SearchRepositoryImpl(
+            searchClient,
+            fileRepository = fileRepository,
+            modelRepository = modelRepository,
+            ioDispatcher = ioDispatcher,
+        )
     }
 
     @Test
