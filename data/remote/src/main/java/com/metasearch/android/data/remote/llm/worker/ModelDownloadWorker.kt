@@ -126,10 +126,14 @@ class ModelDownloadWorker(
 
     private fun unzipModelFile(zipFile: File, destDir: File) {
         if (!destDir.exists()) destDir.mkdirs()
+        val canonicalDestDir = destDir.canonicalFile
         ZipInputStream(BufferedInputStream(FileInputStream(zipFile))).use { zis ->
             var entry = zis.nextEntry
             while (entry != null) {
-                val target = File(destDir, entry.name)
+                val target = File(destDir, entry.name).canonicalFile
+                if (!target.path.startsWith(canonicalDestDir.path + File.separator)) {
+                    throw IOException("Zip entry escapes destination: ${entry.name}")
+                }
                 if (entry.isDirectory) {
                     target.mkdirs()
                 } else {
