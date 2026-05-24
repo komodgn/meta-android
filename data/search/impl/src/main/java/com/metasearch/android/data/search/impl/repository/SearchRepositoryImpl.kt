@@ -74,7 +74,15 @@ class SearchRepositoryImpl(
                     maxNumTokens = 512,
                 )
 
-                val engine = Engine(engineConfig)
+            var engine: Engine? = null
+            try {
+                val engineConfig = EngineConfig(
+                    modelPath = modelFile.absolutePath,
+                    backend = Backend.GPU(),
+                    maxNumTokens = 512,
+                )
+
+                engine = Engine(engineConfig)
                 engine.initialize()
 
                 Log.d(TAG, "DEBUG: Creating Conversation...")
@@ -86,12 +94,12 @@ class SearchRepositoryImpl(
                 val rawResult = response?.toString() ?: "NULL_RESPONSE"
                 Log.d(TAG, "DEBUG: Raw Result: '$rawResult'")
 
-                engine.close()
-
                 return@runSuspendCatching rawResult.split(",").map { it.trim() }.filter { it.isNotEmpty() }
             } catch (e: Exception) {
                 Log.e(TAG, "ERROR: Exception during inference", e)
                 return@runSuspendCatching emptyList()
+            } finally {
+                engine?.close()
             }
         }.getOrDefault(emptyList())
     }
