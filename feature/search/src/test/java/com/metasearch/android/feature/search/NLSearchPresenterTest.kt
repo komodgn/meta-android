@@ -15,7 +15,9 @@ import com.slack.circuit.test.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 class NLSearchPresenterTest {
 
@@ -28,6 +30,9 @@ class NLSearchPresenterTest {
 
     @Before
     fun setup() {
+        whenever(modelRepository.getAllModels()).thenReturn(emptyList())
+        whenever(searchRepository.isLocalModelAvailable(any())).thenReturn(false)
+
         presenter = NLSearchPresenter(
             navigator = navigator,
             nlSearchUseCase = nlSearchUseCase,
