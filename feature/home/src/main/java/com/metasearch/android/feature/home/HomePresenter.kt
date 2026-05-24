@@ -14,6 +14,7 @@ import androidx.paging.cachedIn
 import androidx.work.WorkInfo
 import com.metasearch.android.core.common.utils.UiText
 import com.metasearch.android.core.worker.api.constants.ModelDownloadKeys
+import com.metasearch.android.core.worker.api.constants.WorkerNames
 import com.metasearch.android.core.worker.api.usecase.WorkScheduleUseCase
 import com.metasearch.android.core.worker.api.usecase.WorkerStatusUseCase
 import com.metasearch.android.data.domain.Person
@@ -64,11 +65,11 @@ class HomePresenter(
         var sideEffect by rememberRetained { mutableStateOf<HomeSideEffect?>(null) }
         var isPersonLoading by rememberRetained { mutableStateOf(false) }
         val analisysStatus by workerStatusUseCase
-            .monitoringUniqueJobStatus("ImageAnalysisWork")
+            .monitoringUniqueJobStatus(WorkerNames.IMAGE_ANALYSIS_WORK)
             .collectAsState(initial = null)
 
         val downloadWorkInfo by workerStatusUseCase
-            .monitorUniqueJob("GlobalModelDownload")
+            .monitorUniqueJob(WorkerNames.GLOBAL_MODEL_DOWNLOAD)
             .collectAsState(initial = null)
 
         val downloadingModelId by remember(downloadWorkInfo) {
@@ -131,7 +132,7 @@ class HomePresenter(
 
                 HomeUiEvent.OnStartAnalysisClicked -> {
                     workScheduleUseCase.scheduleNow(
-                        workName = "ImageAnalysisWork",
+                        workName = WorkerNames.IMAGE_ANALYSIS_WORK,
                         klass = ImageAnalysisWorker::class,
                     )
                 }

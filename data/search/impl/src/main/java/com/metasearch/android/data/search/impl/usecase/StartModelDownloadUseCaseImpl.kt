@@ -4,6 +4,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.core.worker.api.constants.ModelDownloadKeys
+import com.metasearch.android.core.worker.api.constants.WorkerNames
 import com.metasearch.android.core.worker.api.model.WorkOptions
 import com.metasearch.android.core.worker.api.usecase.WorkScheduleUseCase
 import com.metasearch.android.data.domain.Model
@@ -24,7 +25,7 @@ class StartModelDownloadUseCaseImpl(
         val safeTotalBytes = if (model.totalBytes > 0) model.totalBytes else 1024L * 1024 * 1024
 
         workScheduleUseCase.scheduleNow(
-            workName = "GlobalModelDownload",
+            workName = WorkerNames.GLOBAL_MODEL_DOWNLOAD,
             klass = ModelDownloadWorker::class,
             options = WorkOptions(
                 networkRequirement = NetworkType.CONNECTED,
