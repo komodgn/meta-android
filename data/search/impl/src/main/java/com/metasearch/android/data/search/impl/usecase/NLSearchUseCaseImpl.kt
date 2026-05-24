@@ -24,10 +24,15 @@ class NLSearchUseCaseImpl(
 
     private val entityCache = androidx.collection.LruCache<String, List<String>>(CACHE_SIZE)
 
-    override suspend fun invoke(query: String): Result<NLSearchResult> = runSuspendCatching {
+    override suspend fun invoke(query: String, isLocal: Boolean): Result<NLSearchResult> = runSuspendCatching {
         if (query.isBlank()) return@runSuspendCatching NLSearchResult(emptyList())
 
-        val entities = searchRepository.extractKeywordsFromNL(query)
+        val entities = if (isLocal) {
+            searchRepository.extractKeywordsFromLocalNL(query)
+        } else {
+            searchRepository.extractKeywordsFromNL(query)
+        }
+
         if (entities.isEmpty()) return@runSuspendCatching NLSearchResult(emptyList())
 
         val entityKey = entities.joinToString(",")

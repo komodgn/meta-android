@@ -36,6 +36,32 @@ class WorkScheduleUseCase(
         )
     }
 
+    override fun scheduleNow(
+        workName: String,
+        workerClassName: String,
+        options: WorkOptions,
+        params: Data.Builder.() -> Data.Builder,
+    ) {
+        val constraints = androidx.work.Constraints.Builder()
+            .setRequiredNetworkType(options.networkRequirement)
+            .setRequiresCharging(options.requiresCharging)
+            .build()
+
+        val workerClass = Class.forName(workerClassName)
+            .asSubclass(androidx.work.ListenableWorker::class.java)
+
+        val workRequest = androidx.work.OneTimeWorkRequest.Builder(workerClass)
+            .setConstraints(constraints)
+            .setInputData(params(Data.Builder()).build())
+            .build()
+
+        workManager.enqueueUniqueWork(
+            workName,
+            options.existingWorkPolicy,
+            workRequest,
+        )
+    }
+
     override fun cancelUniqueWork(workName: String) {
         workManager.cancelUniqueWork(workName)
     }

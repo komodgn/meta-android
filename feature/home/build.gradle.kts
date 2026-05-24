@@ -11,6 +11,7 @@ dependencies {
     implementation(projects.domain.analysis.api)
     implementation(projects.domain.gallery.api)
     implementation(projects.domain.person.api)
+    implementation(projects.domain.search.api)
     implementation(projects.core.di)
     implementation(projects.core.notification)
     implementation(projects.core.worker.api)

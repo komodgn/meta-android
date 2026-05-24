@@ -5,13 +5,19 @@ package com.metasearch.android.feature.search.nls
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -98,11 +104,31 @@ private fun NLSearchUiContent(
                 },
             )
 
-            Text(
-                modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
-                text = stringResource(R.string.nl_search_screen_result_label),
-                color = Neutral500,
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MetaSearchTheme.spacing.spacing2),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(R.string.nl_search_screen_result_label),
+                    color = Neutral500,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = stringResource(R.string.nl_search_screen_ondevice_toggle),
+                    color = Neutral500,
+                    modifier = Modifier.padding(end = MetaSearchTheme.spacing.spacing1),
+                )
+                Spacer(modifier = Modifier.width(MetaSearchTheme.spacing.spacing2))
+                Switch(
+                    checked = state.isLocalSearchEnabled,
+                    onCheckedChange = { isChecked ->
+                        state.eventSink(NLSearchUiEvent.OnToggleLocalSearch(isChecked))
+                    },
+                    enabled = state.isLocalEngineReady,
+                )
+            }
             Box(modifier = Modifier.fillMaxSize()) {
                 LazyVerticalGrid(
                     modifier = Modifier

@@ -1,6 +1,8 @@
 package com.metasearch.android.feature.search
 
 import com.google.common.truth.Truth.assertThat
+import com.metasearch.android.domain.search.api.repository.ModelRepository
+import com.metasearch.android.domain.search.api.repository.SearchRepository
 import com.metasearch.android.domain.search.api.usecase.NLSearchUseCase
 import com.metasearch.android.feature.screens.GraphScreen
 import com.metasearch.android.feature.screens.HomeScreen
@@ -13,18 +15,30 @@ import com.slack.circuit.test.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 class NLSearchPresenterTest {
 
     private val navigator = FakeNavigator(NLSearchScreen)
     private val nlSearchUseCase: NLSearchUseCase = mock()
+    private val searchRepository = mock<SearchRepository>()
+    private val modelRepository = mock<ModelRepository>()
 
     private lateinit var presenter: NLSearchPresenter
 
     @Before
     fun setup() {
-        presenter = NLSearchPresenter(navigator, nlSearchUseCase)
+        whenever(modelRepository.getAllModels()).thenReturn(emptyList())
+        whenever(searchRepository.isLocalModelAvailable(any())).thenReturn(false)
+
+        presenter = NLSearchPresenter(
+            navigator = navigator,
+            nlSearchUseCase = nlSearchUseCase,
+            searchRepository = searchRepository,
+            modelRepository = modelRepository,
+        )
     }
 
     @Test

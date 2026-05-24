@@ -6,4 +6,11 @@
     <string name="notification_analysis_complete_title">Gallery Image Analysis Completed</string>
     <string name="notification_analysis_complete_content">Explore the gallery.</string>
     <string name="home_screen_partial_access_banner_title">Only some photos are shown. Manage</string>
+    <string name="home_drawer_ai_settings_title">On-device AI settings</string>
+    <string name="home_drawer_download_installed">installed</string>
+    <string name="home_drawer_download_in_progress">⏳ Downloading...</string>
+    <string name="home_drawer_download_button">⬇ Download %1$s</string>
+    <string name="home_drawer_model_description">Size: (approx. %1$.1f GB)</string>
+    <string name="home_drawer_downloading_percent">Downloading... %1$d%%</string>
+    <string name="home_screen_ai_download_alert">Another model is already downloading.</string>
 </resources>

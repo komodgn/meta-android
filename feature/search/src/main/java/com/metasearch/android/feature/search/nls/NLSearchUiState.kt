@@ -13,6 +13,8 @@ data class NLSearchUiState(
     val isLoading: Boolean = false,
     val inputString: String = "",
     val resultImages: ImmutableList<String> = persistentListOf(),
+    val isLocalEngineReady: Boolean = false,
+    val isLocalSearchEnabled: Boolean = false,
     val sideEffect: NLSearchSideEffect? = null,
     val eventSink: (NLSearchUiEvent) -> Unit,
 ) : CircuitUiState {
@@ -44,5 +46,9 @@ sealed interface NLSearchUiEvent : CircuitUiEvent {
 
     data class OnTabClick(
         val screen: Screen,
+    ) : NLSearchUiEvent
+
+    data class OnToggleLocalSearch(
+        val isEnabled: Boolean,
     ) : NLSearchUiEvent
 }

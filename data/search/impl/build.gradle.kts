@@ -13,11 +13,15 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.datastore.api)
     implementation(projects.core.di)
+    implementation(projects.core.worker.api)
     implementation(projects.data.remote)
     implementation(projects.domain.search.api)
     implementation(projects.domain.gallery.api)
     implementation(projects.domain.person.api)
     implementation(projects.domain.device.api)
+    implementation(projects.domain.file.api)
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.mlkit.genai.prompt)
+    implementation(libs.litertlm)
 }

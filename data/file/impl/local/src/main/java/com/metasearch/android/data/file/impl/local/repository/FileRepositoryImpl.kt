@@ -47,4 +47,15 @@ class FileRepositoryImpl(
             false
         }
     }
+
+    override fun existsInExternalFiles(relativePath: String): Boolean {
+        val externalFilesDir = context.getExternalFilesDir(null) ?: return false
+        val targetFile = File(externalFilesDir, relativePath)
+        return targetFile.exists() && targetFile.length() > 0
+    }
+
+    override fun getExternalFile(relativePath: String): File {
+        val baseDir = context.getExternalFilesDir(null)
+        return File(baseDir, relativePath)
+    }
 }

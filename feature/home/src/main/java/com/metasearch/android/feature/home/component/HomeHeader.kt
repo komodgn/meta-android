@@ -1,5 +1,6 @@
 package com.metasearch.android.feature.home.component
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +26,7 @@ import com.metasearch.android.feature.home.R
 @Composable
 fun HomeHeader(
     modifier: Modifier = Modifier,
+    onMenuClick: () -> Unit,
     onUploadClick: () -> Unit,
     isAnalyzing: Boolean,
 ) {
@@ -34,26 +36,39 @@ fun HomeHeader(
                 .padding(MetaSearchTheme.spacing.spacing4),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
+                IconButton(onClick = onMenuClick) {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(R.drawable.ic_menu_burger),
+                        tint = Neutral800,
+                        contentDescription = "Menu Icon",
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
             Text(
                 text = stringResource(R.string.home_screen_header),
                 style = MetaSearchTheme.typography.headlineSmall,
                 color = Neutral800,
             )
-            Spacer(
-                modifier = Modifier.weight(1f),
-            )
-            if (isAnalyzing) {
-                CircularProgressIndicator(modifier = Modifier.size(20.dp))
-            } else {
-                IconButton(
-                    onClick = onUploadClick,
-                ) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(R.drawable.ic_upload),
-                        tint = Neutral800,
-                        contentDescription = "Upload Icon",
-                    )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
+                if (isAnalyzing) {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                } else {
+                    IconButton(onClick = onUploadClick) {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            painter = painterResource(R.drawable.ic_upload),
+                            tint = Neutral800,
+                            contentDescription = "Upload Icon",
+                        )
+                    }
                 }
             }
         }
@@ -67,6 +82,7 @@ fun HomeHeaderPreview() {
     MetaSearchTheme {
         HomeHeader(
             isAnalyzing = true,
+            onMenuClick = {},
             onUploadClick = {},
         )
     }

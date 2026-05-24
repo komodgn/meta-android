@@ -7,6 +7,9 @@ import com.metasearch.android.core.worker.api.usecase.WorkerStatusUseCase
 import com.metasearch.android.data.domain.Person
 import com.metasearch.android.domain.gallery.api.repository.GalleryRepository
 import com.metasearch.android.domain.person.api.usecase.GetHomeDisplayPersonsUseCase
+import com.metasearch.android.domain.search.api.repository.ModelRepository
+import com.metasearch.android.domain.search.api.repository.SearchRepository
+import com.metasearch.android.domain.search.api.usecase.StartModelDownloadUseCase
 import com.metasearch.android.feature.home.worker.ImageAnalysisWorker
 import com.metasearch.android.feature.screens.GraphScreen
 import com.metasearch.android.feature.screens.HomeScreen
@@ -33,6 +36,9 @@ class HomePresenterTest {
     private val getHomeDisplayPersonsUseCase: GetHomeDisplayPersonsUseCase = mock()
     private val workScheduleUseCase: WorkScheduleUseCase = mock()
     private val workerStatusUseCase: WorkerStatusUseCase = mock()
+    private val startModelDownloadUseCase: StartModelDownloadUseCase = mock()
+    private val searchRepository = mock<SearchRepository>()
+    private val modelRepository = mock<ModelRepository>()
 
     private lateinit var presenter: HomePresenter
 
@@ -41,6 +47,10 @@ class HomePresenterTest {
         whenever(galleryRepository.getGalleryPagingData()).thenReturn(flowOf(PagingData.empty()))
         whenever(getHomeDisplayPersonsUseCase()).thenReturn(flowOf(emptyList()))
         whenever(workerStatusUseCase.monitoringUniqueJobStatus(any())).thenReturn(flowOf(null))
+        whenever(workerStatusUseCase.monitoringUniqueJobStatus(any())).thenReturn(flowOf(null))
+        whenever(workerStatusUseCase.monitorUniqueJob(any())).thenReturn(flowOf(null))
+        whenever(modelRepository.getAllModels()).thenReturn(emptyList())
+        whenever(searchRepository.isLocalModelAvailable(any())).thenReturn(false)
 
         presenter = HomePresenter(
             navigator,
@@ -48,6 +58,9 @@ class HomePresenterTest {
             getHomeDisplayPersonsUseCase,
             workScheduleUseCase,
             workerStatusUseCase,
+            searchRepository = searchRepository,
+            startModelDownloadUseCase = startModelDownloadUseCase,
+            modelRepository = modelRepository,
         )
     }
 

@@ -6,4 +6,6 @@ interface FileRepository {
     suspend fun createTempFileFromUri(uriString: String): Result<File>
 
     fun deleteFile(file: File): Boolean
+    fun existsInExternalFiles(relativePath: String): Boolean
+    fun getExternalFile(relativePath: String): File
 }

@@ -33,11 +33,12 @@ private fun com.metasearch.android.feature.home.HomeUiCollapsedPreview(): kotlin
   params:
 
 @Composable
-private fun com.metasearch.android.feature.home.HomeUiContent(state: com.metasearch.android.feature.home.HomeUiState, innerPadding: androidx.compose.foundation.layout.PaddingValues, permissionState: com.metasearch.android.core.permissions.api.ui.PermissionsState): kotlin.Unit
+private fun com.metasearch.android.feature.home.HomeUiContent(state: com.metasearch.android.feature.home.HomeUiState, onMenuClick: kotlin.Function0<kotlin.Unit>, innerPadding: androidx.compose.foundation.layout.PaddingValues, permissionState: com.metasearch.android.core.permissions.api.ui.PermissionsState): kotlin.Unit
   skippable: false
   restartable: true
   params:
     - state: RUNTIME (requires runtime check)
+    - onMenuClick: STABLE (function type)
     - innerPadding: STABLE (marked @Stable or @Immutable)
     - permissionState: STABLE (marked @Stable or @Immutable)
 
@@ -54,16 +55,42 @@ private fun com.metasearch.android.feature.home.HomeUiPreview(): kotlin.Unit
   params:
 
 @Composable
-public fun com.metasearch.android.feature.home.component.HomeHeader(modifier: androidx.compose.ui.Modifier, onUploadClick: kotlin.Function0<kotlin.Unit>, isAnalyzing: kotlin.Boolean): kotlin.Unit
+public fun com.metasearch.android.feature.home.component.HomeHeader(modifier: androidx.compose.ui.Modifier, onMenuClick: kotlin.Function0<kotlin.Unit>, onUploadClick: kotlin.Function0<kotlin.Unit>, isAnalyzing: kotlin.Boolean): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - modifier: STABLE (marked @Stable or @Immutable)
+    - onMenuClick: STABLE (function type)
     - onUploadClick: STABLE (function type)
     - isAnalyzing: STABLE (primitive type)
 
 @Composable
 public fun com.metasearch.android.feature.home.component.HomeHeaderPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
+public fun com.metasearch.android.feature.home.component.ModelItem(model: com.metasearch.android.data.domain.Model, isDownloading: kotlin.Boolean, isInstalled: kotlin.Boolean, downloadProgress: kotlin.Float, onDownloadClick: kotlin.Function1<com.metasearch.android.data.domain.Model, kotlin.Unit>, onDeleteClick: kotlin.Function1<com.metasearch.android.data.domain.Model, kotlin.Unit>, modifier: androidx.compose.ui.Modifier): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - model: STABLE (marked @Stable or @Immutable)
+    - isDownloading: STABLE (primitive type)
+    - isInstalled: STABLE (primitive type)
+    - downloadProgress: STABLE (primitive type)
+    - onDownloadClick: STABLE (function type)
+    - onDeleteClick: STABLE (function type)
+    - modifier: STABLE (marked @Stable or @Immutable)
+
+@Composable
+private fun com.metasearch.android.feature.home.component.ModelItemInstalledPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
+private fun com.metasearch.android.feature.home.component.ModelItemPreview(): kotlin.Unit
   skippable: true
   restartable: true
   params:
