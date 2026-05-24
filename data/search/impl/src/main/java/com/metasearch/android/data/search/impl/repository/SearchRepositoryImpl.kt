@@ -67,13 +67,6 @@ class SearchRepositoryImpl(
                 Log.e(TAG, "ERROR: Model file not found at: ${modelFile.absolutePath}")
                 return@runSuspendCatching emptyList()
             }
-            try {
-                val engineConfig = EngineConfig(
-                    modelPath = modelFile.absolutePath,
-                    backend = Backend.GPU(),
-                    maxNumTokens = 512,
-                )
-
             var engine: Engine? = null
             try {
                 val engineConfig = EngineConfig(
