@@ -81,11 +81,11 @@ class SearchRepositoryImpl(
                 Log.d(TAG, "DEBUG: Creating Conversation...")
                 val conversation = engine.createConversation()
 
-                Log.d(TAG, "DEBUG: Sending Message: $query")
+                Log.d(TAG, "DEBUG: Sending local NL request")
                 val response = conversation.sendMessage(PromptConstants.NL_SEARCH_BASIC_PROMPT + query)
 
                 val rawResult = response?.toString() ?: "NULL_RESPONSE"
-                Log.d(TAG, "DEBUG: Raw Result: '$rawResult'")
+                Log.d(TAG, "DEBUG: Local NL response received")
 
                 return@runSuspendCatching rawResult.split(",").map { it.trim() }.filter { it.isNotEmpty() }
             } catch (e: Exception) {
