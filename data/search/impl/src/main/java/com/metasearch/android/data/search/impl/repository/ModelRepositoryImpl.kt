@@ -2,6 +2,7 @@ package com.metasearch.android.data.search.impl.repository
 
 import android.content.Context
 import android.util.Log
+import com.metasearch.android.core.di.annotation.IoDispatcher
 import com.metasearch.android.core.di.scope.DataScope
 import com.metasearch.android.data.domain.Model
 import com.metasearch.android.data.remote.llm.response.ModelListResponse
@@ -9,6 +10,8 @@ import com.metasearch.android.data.search.impl.mapper.toModelList
 import com.metasearch.android.domain.search.api.repository.ModelRepository
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.File
 
@@ -18,6 +21,7 @@ private const val TAG = "ModelRepo"
 @Inject
 class ModelRepositoryImpl(
     private val context: Context,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ModelRepository {
 
     private val models: List<Model> by lazy {
@@ -46,8 +50,8 @@ class ModelRepositoryImpl(
         return model.getPath(basePath, fileName)
     }
 
-    override fun deleteModel(modelDir: String, version: String) {
-        val externalFilesDir = context.getExternalFilesDir(null) ?: return
+    override suspend fun deleteModel(modelDir: String, version: String) = withContext(ioDispatcher) {
+        val externalFilesDir = context.getExternalFilesDir(null) ?: return@withContext
         val targetDir = File(externalFilesDir, listOf(modelDir, version).joinToString(File.separator))
 
         if (targetDir.exists() && targetDir.absolutePath.startsWith(externalFilesDir.absolutePath)) {

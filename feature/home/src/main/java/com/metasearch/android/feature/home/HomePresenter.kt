@@ -82,14 +82,7 @@ class HomePresenter(
             }
         }
 
-        val installedModelIds by remember(downloadWorkInfo) {
-            derivedStateOf {
-                modelRepository.getAllModels()
-                    .filter { model -> searchRepository.isLocalModelAvailable(model) }
-                    .map { it.modelId }
-                    .toSet()
-            }
-        }
+        var installedModelIds by rememberRetained { mutableStateOf(emptySet<String>()) }
 
         var isExpanded by rememberRetained { mutableStateOf(false) }
 
@@ -102,6 +95,17 @@ class HomePresenter(
         }
         var selectedLongClickImage by remember { mutableStateOf<String?>(null) }
         var selectedOffset by remember { mutableStateOf(Offset.Zero) }
+
+        fun refreshInstalledModelIds() {
+            installedModelIds = modelRepository.getAllModels()
+                .filter { model -> searchRepository.isLocalModelAvailable(model) }
+                .map { it.modelId }
+                .toSet()
+        }
+
+        LaunchedEffect(downloadWorkInfo?.state) {
+            refreshInstalledModelIds()
+        }
 
         LaunchedEffect(localPersons) {
             if (!isPersonLoading) {
@@ -124,10 +128,14 @@ class HomePresenter(
                 }
 
                 is HomeUiEvent.OnDeleteModelClick -> {
-                    modelRepository.deleteModel(
-                        event.model.normalizedName,
-                        event.model.version,
-                    )
+                    scope.launch {
+                        modelRepository.deleteModel(
+                            event.model.normalizedName,
+                            event.model.version,
+                        )
+
+                        refreshInstalledModelIds()
+                    }
                 }
 
                 HomeUiEvent.OnStartAnalysisClicked -> {

@@ -6,5 +6,5 @@ interface ModelRepository {
     fun getModel(name: String): Model?
     fun getAllModels(): List<Model>
     fun getLocalFilePath(model: Model, basePath: String, fileName: String): String
-    fun deleteModel(modelDir: String, version: String)
+    suspend fun deleteModel(modelDir: String, version: String)
 }
