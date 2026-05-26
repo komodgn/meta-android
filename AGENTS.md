@@ -12,8 +12,22 @@
 - **`core/*`**: Shared components, design system, and utilities.
 
 ## Global Rules for AI
-1. **Dependency Rule**: Direct dependencies between feature modules are prohibited. Communication between modules must occur via `domain` interfaces or `core` modules.
-2. **Domain Isolation**: `domain` modules must only contain pure Kotlin logic, with no dependencies on Android or Compose frameworks.
-3. **Data Flow**: Maintain dependency direction in the order of `feature` -> `domain` -> `data` -> `core`. All layers may depend on `core`.
-4. **Stability**: If `compose-stability-analyzer` reports stale data, use the `--rerun-tasks` option to force a baseline update.
-5. **Compose**: All UI must be written in a `Declarative` manner, and state transitions must be handled via `CircuitEvent`.
+1. **Dependency Rule (Code Dependency Direction)**:
+    - Communication must occur via `domain` interfaces or `core` modules.
+    - All modules may depend on `core`.
+    - `feature` and `data` modules may depend on `domain`.
+    - `domain` must not depend on `feature` or `data` layers (Pure Kotlin logic).
+    - Direct circular or peer dependencies between `feature` and `data` are strictly prohibited.
+
+2. **Data Flow (Data Transfer Path)**:
+    - Data propagates from the `data` layer, through the `domain` layer, and ultimately to the `feature` layer.
+    - Use **Domain Models** to decouple layers during data transfer; never leak DTOs outside the `data` layer.
+
+3. **Domain Isolation**:
+    - `domain` modules must only contain pure Kotlin logic, with no dependencies on Android or Compose frameworks.
+
+4. **Stability**:
+    - If `compose-stability-analyzer` reports stale data, use the `--rerun-tasks` option to force a baseline update.
+
+5. **Compose**:
+    - All UI must be written in a `Declarative` manner, and state transitions must be handled via `CircuitEvent`.
