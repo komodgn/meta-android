@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.LaunchedEffect
@@ -13,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.metasearch.android.core.common.utils.EventHandler
 import com.metasearch.android.core.common.utils.MetaSearchDialogSpec
@@ -35,7 +35,6 @@ import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import kotlinx.coroutines.delay
-import tech.thdev.compose.exteions.system.ui.controller.rememberSystemUiController
 
 @ActivityKey(MainActivity::class)
 @ContributesIntoMap(AppScope::class, binding = binding<Activity>())
@@ -52,16 +51,9 @@ class MainActivity(
         val intentData = intent?.data
 
         setContent {
-            val systemUiController = rememberSystemUiController()
+            val isDarkMode = isSystemInDarkTheme()
 
-            LaunchedEffect(Unit) {
-                systemUiController.setSystemBarsColor(
-                    color = Color.Transparent,
-                    darkIcons = true,
-                )
-            }
-
-            MetaSearchTheme {
+            MetaSearchTheme(isDarkMode = isDarkMode) {
                 val dialogSpec = remember { mutableStateOf<MetaSearchDialogSpec?>(null) }
                 var toastMessage by remember { mutableStateOf<String?>(null) }
 
