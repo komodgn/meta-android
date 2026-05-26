@@ -58,7 +58,6 @@ import androidx.paging.compose.itemKey
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.permissions.api.ui.PermissionsState
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchDivider
@@ -267,13 +266,13 @@ private fun HomeUiContent(
             Text(
                 modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
                 text = stringResource(R.string.home_screen_person_scroll_view_title),
-                color = Neutral500,
+                color = MetaSearchTheme.colors.contentPrimary,
             )
             Icon(
                 modifier = Modifier.size(20.dp),
                 painter = if (state.isExpanded) painterResource(R.drawable.ic_up) else painterResource(R.drawable.ic_down),
                 contentDescription = "Up And Down Arrow Icon",
-                tint = Neutral500,
+                tint = MetaSearchTheme.colors.contentPrimary,
             )
         }
 
@@ -287,7 +286,7 @@ private fun HomeUiContent(
                         modifier = Modifier.padding(MetaSearchTheme.spacing.spacing4),
                         text = stringResource(R.string.home_screen_person_scroll_view_empty_content),
                         style = MaterialTheme.typography.bodySmall,
-                        color = Neutral500,
+                        color = MetaSearchTheme.colors.contentPrimary,
                     )
                 } else {
                     LazyRow(
@@ -317,7 +316,7 @@ private fun HomeUiContent(
                 R.string.home_screen_gallery_grid_view_title,
                 lazyPagingItems.itemCount,
             ),
-            color = Neutral500,
+            color = MetaSearchTheme.colors.contentPrimary,
         )
         if (!permissionState.allPermissionsGranted && permissionState.canProceed) {
             PartialAccessBanner(
