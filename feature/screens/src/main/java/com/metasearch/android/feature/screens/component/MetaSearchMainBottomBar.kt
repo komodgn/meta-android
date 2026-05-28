@@ -103,7 +103,7 @@ private fun RowScope.BottomBarItem(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            val color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary
+            val color = if (isSelected) MetaSearchTheme.colors.brandContent else MetaSearchTheme.colors.brandContent.copy(alpha = 0.5f)
 
             Icon(
                 painter = painterResource(tab.iconResId),
