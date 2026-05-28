@@ -84,6 +84,12 @@ public fun com.metasearch.android.feature.home.component.ModelItem(model: com.me
     - modifier: STABLE (marked @Stable or @Immutable)
 
 @Composable
+private fun com.metasearch.android.feature.home.component.ModelItemDownLoadingPreview(): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+
+@Composable
 private fun com.metasearch.android.feature.home.component.ModelItemInstalledPreview(): kotlin.Unit
   skippable: true
   restartable: true

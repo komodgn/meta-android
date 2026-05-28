@@ -16,6 +16,16 @@ public fun com.metasearch.android.core.designsystem.component.MetaSearchButton(t
     - contentColor: STABLE (marked @Stable or @Immutable)
 
 @Composable
+public fun com.metasearch.android.core.designsystem.component.MetaSearchSwitch(checked: kotlin.Boolean, onCheckedChange: kotlin.Function1<kotlin.Boolean, kotlin.Unit>?, modifier: androidx.compose.ui.Modifier, enabled: kotlin.Boolean): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - checked: STABLE (primitive type)
+    - onCheckedChange: STABLE (function type)
+    - modifier: STABLE (marked @Stable or @Immutable)
+    - enabled: STABLE (primitive type)
+
+@Composable
 public fun com.metasearch.android.core.designsystem.component.MetaSearchTextField(modifier: androidx.compose.ui.Modifier, value: kotlin.String, onValueChange: kotlin.Function1<kotlin.String, kotlin.Unit>, label: kotlin.String, keyboardOptions: androidx.compose.foundation.text.KeyboardOptions, singleLine: kotlin.Boolean): kotlin.Unit
   skippable: true
   restartable: true
@@ -50,10 +60,11 @@ public fun com.metasearch.android.core.designsystem.component.NetworkImage(image
     - onLongClick: STABLE (function type)
 
 @Composable
-public fun com.metasearch.android.core.designsystem.theme.MetaSearchTheme(content: @[Composable] androidx.compose.runtime.internal.ComposableFunction0<kotlin.Unit>): kotlin.Unit
+public fun com.metasearch.android.core.designsystem.theme.MetaSearchTheme(isDarkMode: kotlin.Boolean, content: @[Composable] androidx.compose.runtime.internal.ComposableFunction0<kotlin.Unit>): kotlin.Unit
   skippable: true
   restartable: true
   params:
+    - isDarkMode: STABLE (primitive type)
     - content: STABLE (composable function type)
 
 @Composable
