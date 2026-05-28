@@ -12,7 +12,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.permissions.api.ui.PermissionsState
 import com.metasearch.android.feature.screens.SplashScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -37,7 +36,7 @@ fun SplashUi(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(White),
+            .background(MetaSearchTheme.colors.background),
         contentAlignment = Alignment.Center,
     ) {
         Image(

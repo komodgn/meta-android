@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,8 +22,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
+import com.metasearch.android.core.designsystem.component.MetaSearchSwitch
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
@@ -112,16 +111,16 @@ private fun NLSearchUiContent(
             ) {
                 Text(
                     text = stringResource(R.string.nl_search_screen_result_label),
-                    color = Neutral500,
+                    color = MetaSearchTheme.colors.contentSecondary,
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = stringResource(R.string.nl_search_screen_ondevice_toggle),
-                    color = Neutral500,
+                    color = MetaSearchTheme.colors.contentSecondary,
                     modifier = Modifier.padding(end = MetaSearchTheme.spacing.spacing1),
                 )
                 Spacer(modifier = Modifier.width(MetaSearchTheme.spacing.spacing2))
-                Switch(
+                MetaSearchSwitch(
                     checked = state.isLocalSearchEnabled,
                     onCheckedChange = { isChecked ->
                         state.eventSink(NLSearchUiEvent.OnToggleLocalSearch(isChecked))

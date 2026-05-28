@@ -28,6 +28,7 @@ internal fun ImageDescriptionBottomSheetContent(description: String) {
         Text(
             text = description,
             style = MetaSearchTheme.typography.bodyLarge,
+            color = MetaSearchTheme.colors.contentSecondary,
         )
     }
 }

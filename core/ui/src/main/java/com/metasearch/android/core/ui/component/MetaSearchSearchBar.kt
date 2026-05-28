@@ -17,13 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.R
 
 @Composable
@@ -40,7 +40,7 @@ fun MetaSearchSearchBar(
             .padding(MetaSearchTheme.spacing.spacing4)
             .border(
                 width = 1.dp,
-                color = Neutral500,
+                color = MetaSearchTheme.colors.contentSecondary,
                 shape = RoundedCornerShape(
                     MetaSearchTheme.radius.full,
                 ),
@@ -60,12 +60,13 @@ fun MetaSearchSearchBar(
             ),
             modifier = Modifier.weight(1f),
             singleLine = true,
-            textStyle = MetaSearchTheme.typography.bodyLarge,
+            textStyle = MetaSearchTheme.typography.bodyLarge.copy(color = MetaSearchTheme.colors.contentPrimary),
+            cursorBrush = SolidColor(MetaSearchTheme.colors.contentPrimary),
             decorationBox = { innerTextField ->
                 if (value.isEmpty()) {
                     Text(
                         text = placeholder,
-                        color = Neutral500,
+                        color = MetaSearchTheme.colors.contentSecondary,
                         style = MetaSearchTheme.typography.bodyMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -88,7 +89,7 @@ fun MetaSearchSearchBar(
                 ) {
                     onSearchClick()
                 },
-            tint = Neutral500,
+            tint = MetaSearchTheme.colors.contentSecondary,
         )
     }
 }

@@ -58,7 +58,12 @@ fun HomeHeader(
 
             Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
                 if (isAnalyzing) {
-                    CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(24.dp),
+                        strokeWidth = 2.dp,
+                        color = MetaSearchTheme.colors.contentPrimary,
+                    )
                 } else {
                     IconButton(onClick = onUploadClick) {
                         Icon(

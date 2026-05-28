@@ -17,7 +17,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral800
 import com.metasearch.android.core.ui.R
 
 @Composable
@@ -40,7 +39,7 @@ fun MetaSearchHeader(
                     Icon(
                         painter = painterResource(R.drawable.ic_arrow_back),
                         contentDescription = "Arrow Back Icon",
-                        tint = Neutral800,
+                        tint = MetaSearchTheme.colors.contentPrimary,
                     )
                 }
             }
@@ -49,7 +48,7 @@ fun MetaSearchHeader(
                     modifier = Modifier.weight(1f),
                     text = it,
                     style = textStyle,
-                    color = Neutral800,
+                    color = MetaSearchTheme.colors.contentPrimary,
                     textAlign = textAlign,
                 )
             }

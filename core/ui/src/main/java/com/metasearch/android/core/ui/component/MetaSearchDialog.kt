@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,11 +23,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.component.MetaSearchButton
-import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral500
-import com.metasearch.android.core.designsystem.theme.Rose
-import com.metasearch.android.core.designsystem.theme.White
 
 @Composable
 fun MetaSearchDialog(
@@ -46,10 +43,10 @@ fun MetaSearchDialog(
             modifier = modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(MetaSearchTheme.radius.lg))
-                .background(White)
+                .background(MetaSearchTheme.colors.surface)
                 .border(
                     width = MetaSearchTheme.border.border4,
-                    color = LightPink,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     shape = RoundedCornerShape(MetaSearchTheme.radius.lg),
                 )
                 .padding(MetaSearchTheme.spacing.spacing6),
@@ -58,7 +55,7 @@ fun MetaSearchDialog(
             title?.let {
                 Text(
                     text = title,
-                    color = Rose,
+                    color = MaterialTheme.colorScheme.tertiary,
                     style = MetaSearchTheme.typography.titleLarge,
                 )
             }
@@ -77,7 +74,7 @@ fun MetaSearchDialog(
                         modifier = Modifier.weight(1f),
                         text = it,
                         onClick = onDismissRequest,
-                        contentColor = Neutral500,
+                        contentColor = MetaSearchTheme.colors.contentSecondary,
                     )
                 }
                 MetaSearchButton(
@@ -117,6 +114,7 @@ private fun MetaSearchDialogPreview() {
             content = {
                 Text(
                     text = "앱을 이용하려면 권한 설정이 필요합니다.",
+                    color = MetaSearchTheme.colors.contentSecondary,
                 )
             },
             onConfirmRequest = {},

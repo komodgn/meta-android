@@ -16,7 +16,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral800
 import com.metasearch.android.core.ui.component.MetaSearchDivider
 import com.metasearch.android.feature.detail.R
 
@@ -37,7 +36,7 @@ fun PersonDetailHeader(
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_back),
                     contentDescription = "Arrow Back Icon",
-                    tint = Neutral800,
+                    tint = MetaSearchTheme.colors.contentPrimary,
                 )
             }
 
@@ -45,7 +44,7 @@ fun PersonDetailHeader(
                 modifier = Modifier.weight(1f),
                 text = personName ?: "",
                 style = MetaSearchTheme.typography.labelSmall,
-                color = Neutral800,
+                color = MetaSearchTheme.colors.contentPrimary,
                 textAlign = TextAlign.Center,
             )
 
@@ -54,7 +53,7 @@ fun PersonDetailHeader(
                     modifier = Modifier.size(20.dp),
                     painter = painterResource(R.drawable.ic_menu_dots),
                     contentDescription = "More Menu",
-                    tint = Neutral800,
+                    tint = MetaSearchTheme.colors.contentPrimary,
                 )
             }
         }

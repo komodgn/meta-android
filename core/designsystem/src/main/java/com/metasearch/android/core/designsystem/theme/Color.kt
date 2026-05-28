@@ -27,11 +27,13 @@ val Blue500 = Color(0xFF4493F8)
 
 @Immutable
 data class MetaSearchColorScheme(
-    val basePrimary: Color = White,
-    val bgPrimary: Color = Neutral900,
-    val bgPrimaryPressed: Color = Neutral700,
-    val bgDisabled: Color = Neutral200,
-    val contentPrimary: Color = Neutral800,
-    val borderPrimary: Color = Neutral200,
-    val divider: Color = Neutral200,
+    val background: Color = Color.White,
+    val surface: Color = Neutral50,
+    val surfaceVariant: Color = Neutral200,
+    val actionPrimary: Color = Pink,
+    val actionContent: Color = Color.White,
+    val contentPrimary: Color = Neutral900,
+    val contentSecondary: Color = Neutral700,
+    val outline: Color = Neutral400,
+    val divider: Color = Neutral50,
 )

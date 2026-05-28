@@ -20,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 import com.metasearch.android.feature.detail.R
 import com.metasearch.android.feature.detail.graph.GraphDetailUiEvent
@@ -33,9 +32,12 @@ fun ExploreImageList(
 ) {
     Column {
         Text(
-            modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
+            modifier = Modifier.padding(
+                horizontal = MetaSearchTheme.spacing.spacing4,
+                vertical = MetaSearchTheme.spacing.spacing2,
+            ),
             text = stringResource(R.string.graph_detail_screen_bottom_selected_image_label),
-            color = Neutral500,
+            color = MetaSearchTheme.colors.contentSecondary,
         )
         LazyRow(
             modifier = Modifier.fillMaxWidth().height(120.dp),

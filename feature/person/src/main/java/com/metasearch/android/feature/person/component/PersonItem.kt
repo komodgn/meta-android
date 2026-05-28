@@ -21,7 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
-import com.metasearch.android.core.designsystem.theme.Black
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.core.ui.component.MetaSearchCircleImage
 import com.metasearch.android.data.domain.Person
@@ -68,7 +67,7 @@ internal fun PersonItem(
                     ) {
                         onDeleteClick()
                     },
-                tint = Black.copy(alpha = 0.7f),
+                tint = MetaSearchTheme.colors.contentPrimary,
             )
         }
 
@@ -77,7 +76,7 @@ internal fun PersonItem(
         Text(
             text = person.inputName,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MetaSearchTheme.colors.contentPrimary,
             textAlign = TextAlign.Center,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

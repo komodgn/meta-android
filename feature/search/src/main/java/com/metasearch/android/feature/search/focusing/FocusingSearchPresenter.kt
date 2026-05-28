@@ -140,7 +140,11 @@ class FocusingSearchPresenter(
                     searchResult = null
                 }
 
-                FocusingSearchUiEvent.OnColorClick -> TODO()
+                FocusingSearchUiEvent.OnColorClick -> {
+                    sideEffect = FocusingSearchSideEffect.ShowToast(
+                        UiText.DynamicString("Implement your custom action!"),
+                    )
+                }
 
                 FocusingSearchUiEvent.OnBackClick -> {
                     searchJob?.cancel()

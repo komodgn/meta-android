@@ -1,5 +1,6 @@
 package com.metasearch.android.feature.home.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -17,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
-import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 import com.metasearch.android.feature.home.R
 
@@ -29,6 +29,7 @@ fun PartialAccessBanner(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .background(color = MetaSearchTheme.colors.surfaceVariant)
             .clickable(onClick = onClick)
             .padding(
                 horizontal = MetaSearchTheme.spacing.spacing4,
@@ -44,20 +45,20 @@ fun PartialAccessBanner(
             Icon(
                 painter = painterResource(R.drawable.ic_landscape),
                 contentDescription = null,
-                tint = LightPink,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(MetaSearchTheme.spacing.spacing5),
             )
             Spacer(modifier = Modifier.width(MetaSearchTheme.spacing.spacing3))
             Text(
                 text = stringResource(R.string.home_screen_partial_access_banner_title),
                 style = MaterialTheme.typography.bodyMedium,
-                color = LightPink,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
         Icon(
             painter = painterResource(id = R.drawable.ic_angle_right),
             contentDescription = null,
-            tint = LightPink,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(MetaSearchTheme.spacing.spacing4),
         )
     }

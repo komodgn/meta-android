@@ -2,6 +2,7 @@ package com.metasearch.android.core.designsystem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -23,10 +24,10 @@ private val LocalSpacing = staticCompositionLocalOf { DefaultSpacing }
 private val LocalTypography = staticCompositionLocalOf { DefaultTypography }
 
 private val DarkColors = darkColorScheme(
-    primary = Black,
+    primary = Neutral900,
     onPrimary = LightPink,
-    primaryContainer = Pink.copy(alpha = 0.2f),
-    onPrimaryContainer = Pink,
+    primaryContainer = LightPink.copy(alpha = 0.2f),
+    onPrimaryContainer = LightPink,
 
     secondary = Neutral900,
     onSecondary = Color.White,
@@ -39,8 +40,8 @@ private val DarkColors = darkColorScheme(
     background = Neutral950,
     onBackground = Neutral50,
 
-    surface = Neutral900,
-    onSurface = Neutral50,
+    surface = LightPink,
+    onSurface = Neutral900,
 
     surfaceVariant = Neutral800,
     onSurfaceVariant = Neutral300,
@@ -79,18 +80,26 @@ private val LightColors = lightColorScheme(
 )
 
 private val LightMetaSearchColors = MetaSearchColorScheme(
-    basePrimary = Color.White,
-    bgPrimary = Color.White,
+    background = Color.White,
+    surface = Neutral50,
+    surfaceVariant = Neutral200,
+    actionPrimary = Pink,
+    actionContent = Color.White,
     contentPrimary = Neutral900,
-    borderPrimary = Neutral200,
+    contentSecondary = Neutral700,
+    outline = Neutral400,
     divider = Neutral50,
 )
 
 private val DarkMetaSearchColors = MetaSearchColorScheme(
-    basePrimary = Black,
-    bgPrimary = Neutral950,
+    background = Neutral950,
+    surface = Neutral900,
+    surfaceVariant = Neutral800,
+    actionPrimary = LightPink,
+    actionContent = Neutral900,
     contentPrimary = Neutral50,
-    borderPrimary = Neutral700,
+    contentSecondary = Neutral300,
+    outline = Neutral700,
     divider = Neutral700,
 )
 
@@ -111,8 +120,11 @@ fun MetaSearchTheme(
     ) {
         MaterialTheme(
             colorScheme = colors,
-            content = content,
-        )
+        ) {
+            Surface(color = MetaSearchTheme.colors.background) {
+                content()
+            }
+        }
     }
 }
 

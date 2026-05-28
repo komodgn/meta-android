@@ -20,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.zIndex
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
@@ -67,6 +66,7 @@ private fun GraphDetailUiContent(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(MetaSearchTheme.colors.background)
                 .zIndex(1f),
             contentAlignment = Alignment.CenterStart,
         ) {
@@ -117,7 +117,7 @@ private fun GraphDetailUiContent(
             )
 
             if (state.uiState is UiState.Loading) {
-                Box(modifier = Modifier.fillMaxSize().background(White), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier.fillMaxSize().background(MetaSearchTheme.colors.surface), contentAlignment = Alignment.Center) {
                     MetaSearchLoadingIndicator()
                 }
             }

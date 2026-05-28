@@ -22,7 +22,7 @@ fun WebViewErrorUi(
     onRetryClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().background(MetaSearchTheme.colors.bgPrimary),
+        modifier = Modifier.fillMaxSize().background(MetaSearchTheme.colors.background),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -30,6 +30,7 @@ fun WebViewErrorUi(
             text = stringResource(R.string.webview_error_description),
             style = MetaSearchTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
+            color = MetaSearchTheme.colors.contentSecondary,
         )
         Spacer(modifier = Modifier.height(MetaSearchTheme.spacing.spacing4))
         MetaSearchButton(

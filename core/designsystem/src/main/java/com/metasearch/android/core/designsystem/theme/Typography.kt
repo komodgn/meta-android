@@ -27,7 +27,6 @@ private val baseTextStyle =
     TextStyle(
         fontFamily = fontFamily,
         lineHeightStyle = defaultLineHeightStyle,
-        color = Neutral800,
     )
 
 private fun style(

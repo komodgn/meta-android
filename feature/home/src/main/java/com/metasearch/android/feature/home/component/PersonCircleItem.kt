@@ -15,7 +15,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.component.MetaSearchCircleImage
 
 @Composable
@@ -44,7 +43,7 @@ internal fun PersonCircleItem(
         Text(
             text = name,
             style = MetaSearchTheme.typography.labelSmall,
-            color = Neutral500,
+            color = MetaSearchTheme.colors.contentSecondary,
             textAlign = TextAlign.Center,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
