@@ -158,7 +158,7 @@ class {Action}{Domain}UseCaseImpl(
 ```kotlin
 package com.metasearch.android.data.{domain}.impl.mapper
 
-import com.metasearch.android.data.domain.{DomainModel}
+import com.metasearch.android.data.domain.{DomainModel} // e.g., import com.metasearch.android.data.domain.PhotoTag
 import com.metasearch.android.data.remote.{domain}.response.{Domain}Response
 
 internal fun {Domain}Response.toModel(): {DomainModel} = {DomainModel}(
