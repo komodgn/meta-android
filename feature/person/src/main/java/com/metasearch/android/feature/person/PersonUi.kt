@@ -40,7 +40,8 @@ fun PersonUi(
     )
 
     MetaSearchScaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize(),
         bottomBar = {
             MetaSearchMainBottomBar(
                 modifier = modifier,
@@ -66,6 +67,7 @@ fun PersonUi(
                         R.string.person_delete_dialog_content,
                         state.pendingDeletePersonName,
                     ),
+                    color = MetaSearchTheme.colors.contentSecondary,
                 )
             },
             onConfirmRequest = {

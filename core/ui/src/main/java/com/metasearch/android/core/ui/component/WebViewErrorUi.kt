@@ -15,7 +15,6 @@ import androidx.compose.ui.text.style.TextAlign
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.component.MetaSearchButton
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.ui.R
 
 @Composable
@@ -23,7 +22,7 @@ fun WebViewErrorUi(
     onRetryClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().background(White),
+        modifier = Modifier.fillMaxSize().background(MetaSearchTheme.colors.background),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -31,6 +30,7 @@ fun WebViewErrorUi(
             text = stringResource(R.string.webview_error_description),
             style = MetaSearchTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
+            color = MetaSearchTheme.colors.contentSecondary,
         )
         Spacer(modifier = Modifier.height(MetaSearchTheme.spacing.spacing4))
         MetaSearchButton(

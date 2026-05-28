@@ -16,6 +16,7 @@ open class MetaSearchWebView @JvmOverloads constructor(
     }
 
     private fun setupDefaultSettings() {
+        setBackgroundColor(android.graphics.Color.TRANSPARENT)
         settings.apply {
             javaScriptEnabled = true
             domStorageEnabled = true

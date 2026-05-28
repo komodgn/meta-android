@@ -13,9 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
-import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral800
 import com.metasearch.android.feature.search.R
 
 @Composable
@@ -26,14 +24,14 @@ fun MoreButton(
         modifier = Modifier
             .size(100.dp)
             .clip(RoundedCornerShape(MetaSearchTheme.radius.sm))
-            .background(Neutral800)
+            .background(MetaSearchTheme.colors.brandSurface)
             .clickable { onClick() },
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = stringResource(R.string.focusing_search_more_button),
             style = MetaSearchTheme.typography.labelMedium,
-            color = LightPink,
+            color = MetaSearchTheme.colors.brandContent,
         )
     }
 }

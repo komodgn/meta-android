@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
-import com.metasearch.android.core.designsystem.theme.LightGrey
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 
 @Composable
@@ -17,7 +16,7 @@ fun MetaSearchDivider(
     Spacer(
         modifier = modifier.fillMaxWidth()
             .height(MetaSearchTheme.spacing.spacing05)
-            .background(LightGrey),
+            .background(MetaSearchTheme.colors.divider),
     )
 }
 

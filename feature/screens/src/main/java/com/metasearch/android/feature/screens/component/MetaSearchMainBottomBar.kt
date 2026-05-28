@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -26,11 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
-import com.metasearch.android.core.designsystem.theme.Black
-import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral800
-import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.ui.MetaSearchScaffold
 
 @Composable
@@ -52,7 +49,7 @@ fun MetaSearchMainBottomBar(
                     MetaSearchTheme.radius.lg,
                 ),
             )
-            .background(Black.copy(alpha = 0.8f)),
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)),
     ) {
         Column(
             modifier = Modifier
@@ -63,7 +60,7 @@ fun MetaSearchMainBottomBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp)
-                    .background(Neutral800),
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
             )
             Row(
                 modifier = Modifier
@@ -106,7 +103,7 @@ private fun RowScope.BottomBarItem(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            val color = if (isSelected) LightPink else White
+            val color = if (isSelected) MetaSearchTheme.colors.brandContent else MetaSearchTheme.colors.brandContent.copy(alpha = 0.5f)
 
             Icon(
                 painter = painterResource(tab.iconResId),

@@ -43,7 +43,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
@@ -56,9 +55,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
-import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.permissions.api.ui.PermissionsState
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchDivider
@@ -114,6 +111,7 @@ fun HomeUi(
                 ) {
                     Text(
                         text = stringResource(R.string.home_drawer_ai_settings_title),
+                        color = MetaSearchTheme.colors.contentPrimary,
                         modifier = Modifier.padding(bottom = MetaSearchTheme.spacing.spacing3),
                     )
                     MetaSearchDivider()
@@ -177,7 +175,7 @@ fun HomeUi(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.7f))
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f))
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null,
@@ -190,7 +188,7 @@ fun HomeUi(
                         Icon(
                             painter = painterResource(R.drawable.ic_image_share),
                             contentDescription = null,
-                            tint = LightPink,
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier
                                 .align(Alignment.TopStart)
                                 .offset {
@@ -267,13 +265,15 @@ private fun HomeUiContent(
             Text(
                 modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
                 text = stringResource(R.string.home_screen_person_scroll_view_title),
-                color = Neutral500,
+                color = MetaSearchTheme.colors.contentSecondary,
             )
             Icon(
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier
+                    .padding(MetaSearchTheme.spacing.spacing2)
+                    .size(20.dp),
                 painter = if (state.isExpanded) painterResource(R.drawable.ic_up) else painterResource(R.drawable.ic_down),
                 contentDescription = "Up And Down Arrow Icon",
-                tint = Neutral500,
+                tint = MetaSearchTheme.colors.contentSecondary,
             )
         }
 
@@ -287,7 +287,7 @@ private fun HomeUiContent(
                         modifier = Modifier.padding(MetaSearchTheme.spacing.spacing4),
                         text = stringResource(R.string.home_screen_person_scroll_view_empty_content),
                         style = MaterialTheme.typography.bodySmall,
-                        color = Neutral500,
+                        color = MetaSearchTheme.colors.contentSecondary,
                     )
                 } else {
                     LazyRow(
@@ -312,17 +312,20 @@ private fun HomeUiContent(
         }
 
         Text(
-            modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
+            modifier = Modifier.padding(
+                horizontal = MetaSearchTheme.spacing.spacing4,
+                vertical = MetaSearchTheme.spacing.spacing2,
+            ),
             text = stringResource(
                 R.string.home_screen_gallery_grid_view_title,
                 lazyPagingItems.itemCount,
             ),
-            color = Neutral500,
+            color = MetaSearchTheme.colors.contentSecondary,
         )
         if (!permissionState.allPermissionsGranted && permissionState.canProceed) {
             PartialAccessBanner(
                 modifier = Modifier
-                    .background(Color.Black.copy(alpha = 0.6f))
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.6f))
                     .fillMaxWidth(),
                 onClick = { permissionState.launchSystemRequest() },
             )

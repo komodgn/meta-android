@@ -16,10 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
-import com.metasearch.android.core.designsystem.theme.Black
-import com.metasearch.android.core.designsystem.theme.LightPink
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.data.domain.Model
 import com.metasearch.android.feature.home.R
 
@@ -33,19 +30,27 @@ fun ModelItem(
     onDeleteClick: (Model) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.padding(vertical = MetaSearchTheme.spacing.spacing2)) {
+    Column(
+        modifier = modifier
+            .padding(vertical = MetaSearchTheme.spacing.spacing2),
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = model.name, style = MetaSearchTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+            Text(
+                text = model.name,
+                style = MetaSearchTheme.typography.bodyLarge,
+                color = MetaSearchTheme.colors.contentPrimary,
+                modifier = Modifier.weight(1f),
+            )
 
             if (isInstalled) {
                 IconButton(onClick = { onDeleteClick(model) }) {
                     Icon(
                         painter = painterResource(R.drawable.ic_trash_xmark),
                         contentDescription = "Delete Model",
-                        tint = Neutral500,
+                        tint = MetaSearchTheme.colors.contentSecondary,
                     )
                 }
             }
@@ -56,13 +61,18 @@ fun ModelItem(
                 (model.sizeInBytes.toDouble() / (1024 * 1024 * 1024)).toFloat(),
             ),
             style = MetaSearchTheme.typography.bodyMedium,
+            color = MetaSearchTheme.colors.contentSecondary,
             modifier = Modifier.padding(vertical = MetaSearchTheme.spacing.spacing2),
         )
 
         if (isDownloading) {
             Column(modifier = Modifier.fillMaxWidth().padding(bottom = MetaSearchTheme.spacing.spacing2)) {
                 Text(text = stringResource(R.string.home_drawer_downloading_percent, (downloadProgress * 100).toInt()))
-                LinearProgressIndicator(progress = { downloadProgress }, modifier = Modifier.fillMaxWidth())
+                LinearProgressIndicator(
+                    progress = { downloadProgress },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                )
             }
         }
 
@@ -71,8 +81,10 @@ fun ModelItem(
             enabled = !isDownloading && !isInstalled,
             onClick = { onDownloadClick(model) },
             colors = ButtonDefaults.buttonColors(
-                containerColor = if (isInstalled) Neutral500 else Black,
-                contentColor = LightPink,
+                containerColor = MetaSearchTheme.colors.actionPrimary,
+                contentColor = MetaSearchTheme.colors.actionContent,
+                disabledContainerColor = MetaSearchTheme.colors.surfaceVariant,
+                disabledContentColor = MetaSearchTheme.colors.contentSecondary,
             ),
         ) {
             Text(
@@ -109,6 +121,21 @@ private fun ModelItemInstalledPreview() {
             model = Model(name = "Gemma-4-E2B-it", modelId = ""),
             isDownloading = false,
             isInstalled = true,
+            downloadProgress = 0f,
+            onDownloadClick = {},
+            onDeleteClick = {},
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+private fun ModelItemDownLoadingPreview() {
+    MetaSearchTheme {
+        ModelItem(
+            model = Model(name = "Gemma-4-E2B-it", modelId = ""),
+            isDownloading = true,
+            isInstalled = false,
             downloadProgress = 0f,
             onDownloadClick = {},
             onDeleteClick = {},

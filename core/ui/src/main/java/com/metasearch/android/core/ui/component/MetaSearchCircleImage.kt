@@ -14,7 +14,6 @@ import coil3.compose.AsyncImage
 import com.metasearch.android.core.common.extensions.clickableIfNotNull
 import com.metasearch.android.core.common.extensions.previewPlaceholder
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
-import com.metasearch.android.core.designsystem.theme.LightGrey
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 
 @Composable
@@ -24,14 +23,15 @@ fun MetaSearchCircleImage(
     contentDescription: String? = null,
     size: Dp = 100.dp,
     borderWidth: Dp = 2.dp,
-    borderColor: Color = LightGrey,
+    borderColor: Color = Color.Unspecified,
     onClick: (() -> Unit)? = null,
 ) {
+    val resolvedBorderColor = if (borderColor == Color.Unspecified) MetaSearchTheme.colors.outline else borderColor
     AsyncImage(
         modifier = modifier
             .size(size)
             .clip(CircleShape)
-            .border(borderWidth, borderColor, CircleShape)
+            .border(borderWidth, resolvedBorderColor, CircleShape)
             .previewPlaceholder()
             .clickableIfNotNull(onClick),
         model = model,

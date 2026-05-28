@@ -62,7 +62,10 @@ internal fun PersonEditDialogContent(
                 checked = editIsHomeDisplay,
                 onCheckedChange = { onEvent(PersonDetailUiEvent.OnEditHomeDisplayChange(it)) },
             )
-            Text(text = stringResource(R.string.person_detail_screen_is_home_display_label))
+            Text(
+                text = stringResource(R.string.person_detail_screen_is_home_display_label),
+                color = MetaSearchTheme.colors.contentPrimary,
+            )
         }
     }
 }

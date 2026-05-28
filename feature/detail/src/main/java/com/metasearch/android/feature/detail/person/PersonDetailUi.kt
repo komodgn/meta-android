@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchCircleImage
 import com.metasearch.android.core.ui.component.MetaSearchDialog
@@ -99,7 +98,7 @@ fun PersonDetailUi(
         val content = @Composable {
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surface,
+                color = MetaSearchTheme.colors.surfaceVariant,
                 modifier = Modifier.padding(16.dp),
             ) {
                 Column(
@@ -110,6 +109,7 @@ fun PersonDetailUi(
                         text = stringResource(R.string.person_detail_screen_profile_update_dialog_title),
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(bottom = 16.dp),
+                        color = MetaSearchTheme.colors.contentPrimary,
                     )
 
                     LazyRow(
@@ -175,7 +175,7 @@ private fun PersonDetailContent(
         Text(
             modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
             text = stringResource(R.string.person_detail_screen_grid_label),
-            color = Neutral500,
+            color = MetaSearchTheme.colors.contentSecondary,
         )
         LazyVerticalGrid(
             modifier = Modifier.fillMaxSize(),

@@ -18,7 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral500
 import com.metasearch.android.core.ui.component.MetaSearchSquareImage
 import com.metasearch.android.data.domain.DragSearchResult
 import com.metasearch.android.data.domain.fakes
@@ -47,7 +46,7 @@ internal fun SearchResultList(
 
                 Text(
                     text = displayTags,
-                    color = Neutral500,
+                    color = MetaSearchTheme.colors.contentSecondary,
                     modifier = Modifier.padding(bottom = MetaSearchTheme.spacing.spacing2),
                 )
                 LazyRow(

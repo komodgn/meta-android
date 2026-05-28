@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.metasearch.android.core.designsystem.annotation.ComponentPreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral800
 import com.metasearch.android.core.ui.component.MetaSearchDivider
 import com.metasearch.android.feature.home.R
 
@@ -41,7 +40,7 @@ fun HomeHeader(
                     Icon(
                         modifier = Modifier.size(24.dp),
                         painter = painterResource(R.drawable.ic_menu_burger),
-                        tint = Neutral800,
+                        tint = MetaSearchTheme.colors.contentPrimary,
                         contentDescription = "Menu Icon",
                     )
                 }
@@ -52,20 +51,25 @@ fun HomeHeader(
             Text(
                 text = stringResource(R.string.home_screen_header),
                 style = MetaSearchTheme.typography.headlineSmall,
-                color = Neutral800,
+                color = MetaSearchTheme.colors.contentPrimary,
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
             Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
                 if (isAnalyzing) {
-                    CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(24.dp),
+                        strokeWidth = 2.dp,
+                        color = MetaSearchTheme.colors.contentPrimary,
+                    )
                 } else {
                     IconButton(onClick = onUploadClick) {
                         Icon(
                             modifier = Modifier.size(24.dp),
                             painter = painterResource(R.drawable.ic_upload),
-                            tint = Neutral800,
+                            tint = MetaSearchTheme.colors.contentPrimary,
                             contentDescription = "Upload Icon",
                         )
                     }

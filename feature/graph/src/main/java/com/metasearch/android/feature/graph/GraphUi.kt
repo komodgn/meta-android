@@ -33,8 +33,6 @@ import androidx.compose.ui.zIndex
 import com.metasearch.android.core.common.extensions.previewPlaceholder
 import com.metasearch.android.core.designsystem.annotation.DevicePreview
 import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
-import com.metasearch.android.core.designsystem.theme.Neutral500
-import com.metasearch.android.core.designsystem.theme.White
 import com.metasearch.android.core.ui.MetaSearchScaffold
 import com.metasearch.android.core.ui.component.MetaSearchHeader
 import com.metasearch.android.core.ui.component.MetaSearchLoadingIndicator
@@ -94,6 +92,7 @@ private fun GraphUiContent(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(MetaSearchTheme.colors.background)
                 .zIndex(1f),
             contentAlignment = Alignment.CenterStart,
         ) {
@@ -143,7 +142,7 @@ private fun GraphUiContent(
             )
 
             if (state.uiState is UiState.Loading) {
-                Box(modifier = Modifier.fillMaxSize().background(White), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier.fillMaxSize().background(MetaSearchTheme.colors.surface), contentAlignment = Alignment.Center) {
                     MetaSearchLoadingIndicator()
                 }
             }
@@ -165,7 +164,7 @@ private fun SelectedImagesList(state: GraphUiState) {
         Text(
             modifier = Modifier.padding(MetaSearchTheme.spacing.spacing2),
             text = stringResource(R.string.graph_screen_bottom_selected_image_label),
-            color = Neutral500,
+            color = MetaSearchTheme.colors.contentSecondary,
         )
         LazyRow(
             modifier = Modifier.fillMaxWidth().height(120.dp),

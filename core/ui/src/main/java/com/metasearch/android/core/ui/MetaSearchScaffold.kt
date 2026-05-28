@@ -7,7 +7,7 @@ import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.metasearch.android.core.designsystem.theme.Neutral50
+import com.metasearch.android.core.designsystem.theme.MetaSearchTheme
 
 @Composable
 fun MetaSearchScaffold(
@@ -16,7 +16,7 @@ fun MetaSearchScaffold(
     bottomBar: @Composable () -> Unit = {},
     snackbarHost: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
-    containerColor: Color = Neutral50,
+    containerColor: Color = MetaSearchTheme.colors.background,
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (PaddingValues) -> Unit,
 ) {
