@@ -36,4 +36,6 @@ data class MetaSearchColorScheme(
     val contentSecondary: Color = Neutral700,
     val outline: Color = Neutral400,
     val divider: Color = Neutral50,
+    val brandSurface: Color = Neutral800,
+    val brandContent: Color = LightPink,
 )

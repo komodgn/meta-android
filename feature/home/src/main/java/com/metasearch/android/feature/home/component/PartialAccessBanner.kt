@@ -29,7 +29,7 @@ fun PartialAccessBanner(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = MetaSearchTheme.colors.surfaceVariant)
+            .background(color = MetaSearchTheme.colors.brandSurface)
             .clickable(onClick = onClick)
             .padding(
                 horizontal = MetaSearchTheme.spacing.spacing4,
@@ -45,20 +45,20 @@ fun PartialAccessBanner(
             Icon(
                 painter = painterResource(R.drawable.ic_landscape),
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = MetaSearchTheme.colors.brandContent,
                 modifier = Modifier.size(MetaSearchTheme.spacing.spacing5),
             )
             Spacer(modifier = Modifier.width(MetaSearchTheme.spacing.spacing3))
             Text(
                 text = stringResource(R.string.home_screen_partial_access_banner_title),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MetaSearchTheme.colors.brandContent,
             )
         }
         Icon(
             painter = painterResource(id = R.drawable.ic_angle_right),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            tint = MetaSearchTheme.colors.brandContent,
             modifier = Modifier.size(MetaSearchTheme.spacing.spacing4),
         )
     }

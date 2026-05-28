@@ -89,6 +89,8 @@ private val LightMetaSearchColors = MetaSearchColorScheme(
     contentSecondary = Neutral700,
     outline = Neutral400,
     divider = Neutral50,
+    brandSurface = Neutral800,
+    brandContent = LightPink,
 )
 
 private val DarkMetaSearchColors = MetaSearchColorScheme(
@@ -101,6 +103,8 @@ private val DarkMetaSearchColors = MetaSearchColorScheme(
     contentSecondary = Neutral300,
     outline = Neutral700,
     divider = Neutral700,
+    brandSurface = Neutral800,
+    brandContent = LightPink,
 )
 
 @Composable

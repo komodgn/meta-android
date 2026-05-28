@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,14 +24,14 @@ fun MoreButton(
         modifier = Modifier
             .size(100.dp)
             .clip(RoundedCornerShape(MetaSearchTheme.radius.sm))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(MetaSearchTheme.colors.brandSurface)
             .clickable { onClick() },
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = stringResource(R.string.focusing_search_more_button),
             style = MetaSearchTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MetaSearchTheme.colors.brandContent,
         )
     }
 }
