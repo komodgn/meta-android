@@ -170,6 +170,7 @@ include(":feature:{module}")
 ./gradlew :feature:{module}:compileDebugKotlin
 ```
 ## Naming & Architecture Rules
+
 | Item                 | Convention                                 | Example(module=`person_detail`)                |
 |:---------------------|:-------------------------------------------|:-----------------------------------------------|
 | **Module Directory** | snake_case                                 | `person_detail`                                |
