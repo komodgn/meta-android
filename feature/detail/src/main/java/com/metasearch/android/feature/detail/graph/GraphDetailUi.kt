@@ -45,7 +45,7 @@ fun GraphDetailUi(
     )
 
     MetaSearchScaffold(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
     ) { innerPadding ->
         GraphDetailUiContent(
             state = state,
