@@ -58,7 +58,6 @@ dependencies {
     implementation(projects.feature.screens)
     implementation(projects.feature.splash)
     implementation(projects.feature.home)
-    implementation(projects.feature.detail)
     implementation(projects.feature.graphDetail)
     implementation(projects.feature.personDetail)
     implementation(projects.feature.photoDetail)

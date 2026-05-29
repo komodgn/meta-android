@@ -39,7 +39,6 @@ include(":core:worker:api")
 include(":core:worker:impl")
 
 include(":feature:screens")
-include(":feature:detail")
 include(":feature:graph")
 include(":feature:graph_detail")
 include(":feature:home")
