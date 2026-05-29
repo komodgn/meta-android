@@ -124,8 +124,6 @@ class PersonDetailPresenter(
                         }
                     }
                 }
-                    }
-                }
 
                 is PersonDetailUiEvent.OnEditHomeDisplayChange -> {
                     editIsHomeDisplay = event.isHomeDisplay
