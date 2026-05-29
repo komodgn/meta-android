@@ -115,12 +115,15 @@ class PersonDetailPresenter(
 
                 is PersonDetailUiEvent.OnEditSaveClick -> {
                     scope.launch {
-                        if (editName != person?.inputName && checkNameExistsUseCase(editName)) {
+                        val currentPerson = person ?: return@launch
+                        if (editName != currentPerson.inputName && checkNameExistsUseCase(editName)) {
                             showEditDialog = false
                             showMergeConfirmDialog = true
                         } else {
                             performSave()
                         }
+                    }
+                }
                     }
                 }
 
