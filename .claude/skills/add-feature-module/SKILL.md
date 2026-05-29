@@ -160,12 +160,24 @@ sealed interface {Module}UiEvent : CircuitUiEvent {
 ```
 
 ### 3. Registration
-1. `settings.gradle.kts`: Add the new module to the feature modules block in alphabetical order:
+Add the new module to the project and link it to the `app` module.
+
+1. `settings.gradle.kts`
+Include the new module in the feature modules block (maintain alphabetical order):
 ```kotlin
 include(":feature:{module}")
 ```
 
-2. Sync & Verify:
+2. `app/build.gradle.kts`
+Add the dependency using the type-safe Gradle accessor.
+- Note: Gradle automatically generates a `camelCase` accessor for every `snake_case` module name you define in `settings.gradle.kts`.
+- Mapping Rule: `person_detail` (snake_case) → `personDetail` (camelCase)
+```kotlin
+// Always use the camelCase accessor (e.g., personDetail)
+implementation(projects.feature.{Module})
+```
+
+3. Sync & Verify:
 ```bash
 ./gradlew :feature:{module}:compileDebugKotlin
 ```
@@ -178,6 +190,7 @@ include(":feature:{module}")
 | **Namespace**        | `com.metasearch.android.feature.{module}`  | `com.metasearch.android.feature.person_detail` |
 | **Screen Reference** | Import from `feature.screens`              | `PersonDetailScreen`                           |
 | **Settings(Gradle)** | `:feature:{module}`                        | `:feature:person_detail`                       |
+| **Type-safe Accessor** | `projects.feature.{Module}` (camelCase)  | `projects.feature.personDetail`                |
 
 ## Best Practices
 - Screen Definition: Always define new `Screen` classes in `feature/screens/Screens.kt` first. Never define them inside feature modules.
