@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="photo_detail_screen_header">Visualize Me By Photo</string>
+    <string name="photo_detail_screen_bottom_item_openai">설명</string>
+    <string name="photo_detail_screen_bottom_item_graph">탐색</string>
+    <string name="photo_detail_screen_graph_load_failed">그래프 정보를 불러올 수 없습니다.</string>
+    <string name="photo_detail_screen_bottom_item_focusing">포커싱 검색</string>
+    <string name="photo_detail_screen_bottom_item_share">공유</string>
+    <string name="photo_detail_screen_openai_bottom_sheet_title">🐻‍❄️ AI 이미지 분석 결과</string>
+</resources>
