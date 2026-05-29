@@ -1,6 +1,5 @@
 package com.metasearch.android.feature.graph_detail.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -50,8 +49,7 @@ fun ExploreImageList(
                     contentDescription = null,
                     modifier = Modifier
                         .aspectRatio(1f)
-                        .clip(RoundedCornerShape(8.dp))
-                        .clickable { state.eventSink(GraphDetailUiEvent.OnImageClick(uriString)) },
+                        .clip(RoundedCornerShape(8.dp)),
                     onClick = { state.eventSink(GraphDetailUiEvent.OnImageClick(uriString)) },
                 )
             }
