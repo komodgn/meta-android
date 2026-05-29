@@ -1,0 +1,16 @@
+<resources>
+    <string name="person_detail_screen_grid_label">Related Photos</string>
+    <string name="person_detail_screen_person_info_update_dialog_title">Update Your Profile</string>
+    <string name="person_detail_screen_person_name_placeholder">Name</string>
+    <string name="person_detail_screen_phone_number_placeholder">Phone Number</string>
+    <string name="person_detail_screen_is_home_display_label">Who I Like</string>
+    <string name="person_detail_screen_save_button">Save</string>
+    <string name="person_detail_screen_cancel_button">Cancellation</string>
+    <string name="person_detail_merge_dialog_title">Check for duplicate names</string>
+    <string name="person_detail_merge_dialog_content">There is already a figure with the same name. Will you merge the two characters into one\?</string>
+    <string name="person_detail_merge_dialog_confirm">Merge</string>
+    <string name="person_detail_merge_dialog_dismiss">Cancellation</string>
+    <string name="person_detail_screen_edit_success_toast_message">Character information saved.</string>
+    <string name="person_detail_screen_profile_update_dialog_title">Change your profile picture</string>
+    <string name="person_detail_screen_profile_update_success_toast_message">Your profile picture has changed.</string>
+</resources>
