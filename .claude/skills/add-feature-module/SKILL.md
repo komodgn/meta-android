@@ -104,19 +104,19 @@ class {Module}Presenter(
 
     @Composable
     override fun present(): {Module}UiState {
-    val scope = rememberCoroutineScope()
+        val scope = rememberCoroutineScope()
 
-    // TODO: Define states (remember / rememberRetained)
+        // TODO: Define states (remember / rememberRetained)
 
-    fun handleEvent(event: {Module}UiEvent) {
-        when (event) {
-            // TODO: Handle events
+        fun handleEvent(event: {Module}UiEvent) {
+            when (event) {
+                // TODO: Handle events
+            }
         }
-    }
 
-    return {Module}UiState(
-        eventSink = ::handleEvent,
-        // TODO: Assign states
+        return {Module}UiState(
+            eventSink = ::handleEvent,
+            // TODO: Assign states
         )
     }
 }
@@ -150,7 +150,7 @@ import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 
 data class {Module}UiState(
-    val eventSink: ( {Module}UiEvent ) -> Unit,
+    val eventSink: ({Module}UiEvent) -> Unit,
     // TODO: Add state properties
 ) : CircuitUiState
 

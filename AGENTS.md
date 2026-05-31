@@ -31,3 +31,9 @@
 
 5. **Compose**:
     - All UI must be written in a `Declarative` manner, and state transitions must be handled via `CircuitEvent`.
+
+6. **Code Generation**:
+    - Every generated file must end with a trailing newline.
+    - No wildcard imports (`import foo.*` is banned).
+    - Trailing comma required on both call site and declaration site.
+    - Blank line required between `package` declaration and `import` block.
