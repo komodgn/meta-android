@@ -24,7 +24,7 @@ plugins {
      * generateProjectDependencyGraph
      * https://github.com/vanniktech/gradle-dependency-graph-generator-plugin
      */
-    id("com.vanniktech.dependency.graph.generator") version "0.7.0"
+    id("com.vanniktech.dependency.graph.generator") version "0.8.0"
 }
 
 buildscript {
