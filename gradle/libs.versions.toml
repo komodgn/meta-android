@@ -82,7 +82,7 @@ room = "2.8.4"
 
 accompanistSystemUiController = "0.36.0"
 
-jetbrainsKotlinJvm = "2.2.21"
+jetbrainsKotlinJvm = "2.3.21"
 
 ## Lint
 ktlintPlugin = "11.6.1"
