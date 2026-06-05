@@ -61,7 +61,7 @@ mockitoCore = "5.21.0"
 mockitoKotlin = "6.1.0"
 
 ## Compose
-composeBom = "2025.12.00"
+composeBom = "2025.12.01"
 composeStableMarker = "1.0.7"
 constraintlayoutCompose = "1.1.1"
 stabilityAnalyzer = "0.6.4"
