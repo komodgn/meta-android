@@ -17,7 +17,7 @@ androidGradlePlugin = "8.13.2"
 activityCompose = "1.13.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
-androidxTestCore = "1.6.1"
+androidxTestCore = "1.7.0"
 androidxDataStore = "1.2.0"
 coreSplashscreen = "1.2.0"
 
