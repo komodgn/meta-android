@@ -75,7 +75,7 @@ coilCompose = "3.4.0"
 circuit = "0.33.1"
 
 ## Metro
-metro = "0.11.4"
+metro = "0.13.2"
 
 ## Room
 room = "2.8.4"
