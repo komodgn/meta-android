@@ -28,7 +28,7 @@ litertlm = "0.11.0"
 paging = "3.3.6"
 
 ## Work
-workRuntime = "2.11.0"
+workRuntime = "2.11.2"
 
 ## Permisson
 accompanistPermissions = "0.37.3"
