@@ -34,7 +34,7 @@ workRuntime = "2.11.0"
 accompanistPermissions = "0.37.3"
 
 ## Kotlin Symbol Processing
-ksp = "2.2.20-2.0.3"
+ksp = "2.3.11"
 
 ## Kotlin
 kotlin = "2.2.21"
