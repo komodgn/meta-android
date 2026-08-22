@@ -64,7 +64,7 @@ mockitoKotlin = "6.1.0"
 composeBom = "2025.12.01"
 composeStableMarker = "1.0.7"
 constraintlayoutCompose = "1.1.1"
-stabilityAnalyzer = "0.6.4"
+stabilityAnalyzer = "0.13.0"
 composeEffects = "0.1.4"
 composablePreviewScanner = "0.9.0"
 
